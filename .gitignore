@@ -11,7 +11,6 @@ tmp/
 *.swp
 *~.nib
 local.properties
-.settings/
 .loadpath
 .recommenders
 
@@ -58,7 +57,7 @@ local.properties
 .project
 
 # JDT-specific (Eclipse Java Development Tools)
-.classpath
+#.classpath
 
 # Annotation Processing
 .apt_generated
