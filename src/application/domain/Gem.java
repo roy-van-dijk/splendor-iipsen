@@ -1,4 +1,4 @@
-package application;
+package application.domain;
 
 public enum Gem {
 	DIAMOND,

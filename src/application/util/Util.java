@@ -1,4 +1,4 @@
-package application;
+package application.util;
 
 /* This is a generic helper class
  * Traditionally, this is against the OOP paradigm as it is procedural programming
@@ -18,4 +18,10 @@ public final class Util {
 		return Integer.parseInt(str);
 	}
 
+	
+	// TODO: to be removed
+	public static String randomNumberString(int min, int max)
+	{
+		return Integer.toString((int) (Math.random() * max + min));
+	}
 }

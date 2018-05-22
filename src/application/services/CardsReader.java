@@ -1,22 +1,35 @@
-package application;
+package application.services;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Stack;
 
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
+
+import application.domain.Card;
+import application.domain.CardImpl;
+import application.domain.CardLevel;
+import application.domain.Gem;
+import application.util.Util;
 
 public class CardsReader {
 
 	private final static String cardsFile = "resources/config/cards.csv";
 	private final static int bonusStartingIndex = 3; // At which index does the list of bonusses start
-	private final static Gem[] gemList = new Gem[] { Gem.DIAMOND, Gem.SAPPHIRE, Gem.EMERALD, Gem.RUBY, Gem.ONYX }; // Same order & count as in the cardsFile
+	private final static Gem[] gemList = new Gem[] { Gem.DIAMOND, Gem.SAPPHIRE, Gem.EMERALD, Gem.RUBY, Gem.ONYX }; // Follows the same order as in the cardsFile
+	
+	private List<Card> allCards;
 	
 	public CardsReader() throws IOException
 	{
+		this.allCards = new ArrayList<Card>();
 		this.generateCards();
 	}
 	
@@ -66,12 +79,28 @@ public class CardsReader {
 				// Thirdly, once again, should a Factory be reading/parsing files? -> No? (separation of concerns)
 				
 				Card card = readCard(cardRecord);
+				allCards.add(card);
 			}
 	    }
 	}
 	
-
-	// TODO: Rename 'read' to 'parse' for below functions?
+	
+	/**
+	 * @param level - CardLevel
+	 * @return Returns a stack of cards corresponding to the given level. 
+	 */
+	public Stack<Card> getCards(CardLevel level)
+	{
+		Stack<Card> cardsArray = new Stack<>(); 
+		
+		// Fill cardsArray with all cards with the corresponding level
+		for(Card card : allCards)
+		{
+			if(card.getLevel().equals(level)) cardsArray.add(card);
+		}
+		
+		return cardsArray;
+	}
 	
 	
 	// TODO: To add or not to add: private enum for record constants. e.g. [0] = CardRow.LEVEL_IDX, [1] = CardRow.PRESTIGE_IDX
@@ -85,7 +114,7 @@ public class CardsReader {
 		Gem bonus = readBonus(record);
 		Map<Gem, Integer> costs = readCosts(record);
 		
-		Card card =  new Card(cardLevel, prestigeValue, illustration, bonus, costs);
+		Card card = new CardImpl(cardLevel, prestigeValue, illustration, bonus, costs);
 		
 		return card;
 	}
