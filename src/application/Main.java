@@ -17,7 +17,8 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			StageManager.getInstance().showGameScreen(primaryStage);
+			StageManager.getInstance().showMainMenu(primaryStage);
+			StageManager.getInstance().showGameScreen();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
