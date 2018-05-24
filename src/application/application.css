@@ -6,11 +6,20 @@
     -fx-base: rgb(10, 10, 10);
     -fx-background: rgb(140, 140, 140);
     
-    -fx-background-image: url("../../resources/misc/bg_wood.jpg");
     -fx-background-size: cover;
     -fx-background-repeat: stretch;   
     -fx-background-position: center center;
     -fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0); 
+}
+
+.game-view
+{
+	-fx-background-image: url("../../resources/misc/bg_wood.jpg");
+}
+
+.home-view
+{
+	-fx-background-image: url("../../resources/misc/splendor.jpg");
 }
 
 .prestige
@@ -79,3 +88,21 @@
 	-fx-border-color: black;
 	-fx-border-width: 0;
 }
+
+.home-button {
+	-fx-text-fill: black;
+	-fx-background-color: #fdd734;
+	-fx-font-size: 45px;
+	-fx-border-radius: 0px;
+	-fx-border: none;
+	-fx-cursor: hand;
+}
+
+.home-button:hover {
+	-fx-background-color: #dab000;
+}
+
+.home-button:pressed {
+	-fx-background-color: #8c7100;
+}
+

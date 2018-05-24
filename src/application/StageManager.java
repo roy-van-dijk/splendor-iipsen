@@ -2,9 +2,15 @@ package application;
 
 import application.controllers.GameController;
 import application.controllers.GameControllerImpl;
+import application.controllers.LobbyController;
+import application.controllers.LobbyControllerImpl;
+import application.controllers.MenuController;
+import application.controllers.MenuControllerImpl;
 import application.domain.Game;
 import application.domain.GameImpl;
 import application.views.GameView;
+import application.views.HomeView;
+import application.views.LobbyView;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
@@ -33,15 +39,22 @@ public class StageManager {
 		primaryStage.getScene().setRoot(rootNode);
 	}
 	
-	public void showGameScreen(Stage stage)
+	public void showGameScreen()
 	{
-		primaryStage = stage;
-		
 		Game game = new GameImpl();
 		GameController gameController = new GameControllerImpl(game);
 		GameView gameView = new GameView(game, gameController);
 		
-		Scene scene = new Scene(gameView.asPane(), 1800, 1000);
+		this.switchScene(gameView.asPane());
+	}
+	
+	public void showMainMenu(Stage stage) {
+		primaryStage = stage;
+		
+		MenuController menuController = new MenuControllerImpl();
+		HomeView homeView = new HomeView(menuController);
+		
+		Scene scene = new Scene(homeView.asPane(), 1800, 1000);
 		scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 		
 		primaryStage.getIcons().add(new Image(("file:splendor.png")));
@@ -49,9 +62,18 @@ public class StageManager {
 		//primaryStage.initStyle(StageStyle.UNDECORATED); // borderless
 		//primaryStage.setMaximized(true);
 		
-		game.addObserver(gameView); // Ugly code. 
 		primaryStage.show();
 	}
+	
+	public void showLobbyScreen() {
+		
+		LobbyController lobbyController = new LobbyControllerImpl();
+		LobbyView lobbyView = new LobbyView(lobbyController);
+			
+		this.switchScene(lobbyView.asPane());
+	}
+	
+	
 	
 	
 }
