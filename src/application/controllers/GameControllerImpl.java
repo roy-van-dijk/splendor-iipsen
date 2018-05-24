@@ -17,6 +17,8 @@ public class GameControllerImpl implements GameController {
 		CardRow row = game.getPlayingField().getCardRows().get(1); // Second row
 		Card card = row.getCardSlots()[1]; // Second card
 		
+		//if(!card.equals(card2wantdezeisspeciaal)) return;
+		
 		game.reserveCardFromField(row, card);
 	}
 

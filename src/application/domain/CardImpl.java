@@ -25,6 +25,7 @@ public class CardImpl implements Card {
 		return reservedFromDeck;
 	}
 
+	// TODO: find a better way to make a card be a reserved card (perhaps separate class?)
 	public void setReservedFromDeck(boolean reservedFromDeck) {
 		this.reservedFromDeck = reservedFromDeck;
 	}

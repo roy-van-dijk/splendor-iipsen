@@ -5,6 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import application.controllers.GameController;
 import application.domain.CardRow;
 import application.domain.Gem;
 import application.domain.Noble;
@@ -14,25 +15,29 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 
 public class PlayingFieldPanel implements UIComponent {
 
+	public final static int CARDSPACING = 15, 
+							TOKENSPACING = 10,
+							TOKENSLABELSPACING = 25,
+							TOKENSCARDSPADDING = 20,
+							FIELDPADDING = 20;
+	
 	private PlayingField playingField;
-	private Pane root;
+	private HBox root;
 	
 	private List<CardRowView> cardRowViews;
 	private List<NobleView> nobleViews;
 	
-	private int cardsSpacing;
-	private int tokensSpacing;
+	private GameController gameController;
 
-	public PlayingFieldPanel(PlayingField playingField, int cardsSpacing, int tokensSpacing) {
+	public PlayingFieldPanel(PlayingField playingField, GameController gameController) {
 		this.playingField = playingField;
-		this.cardsSpacing = cardsSpacing;
-		this.tokensSpacing = tokensSpacing;
-		
+		this.gameController = gameController;
 		
 		this.cardRowViews = new ArrayList<>();
 		this.nobleViews = new ArrayList<>();
@@ -44,20 +49,24 @@ public class PlayingFieldPanel implements UIComponent {
 		VBox cardsAndNobles = buildCardsAndNoblesDisplay(); 
 		VBox tokens = buildTokensDisplay();
 		
-		this.root = new HBox(50, cardsAndNobles, tokens);
-		root.setPadding(new Insets(25));
+		
+		this.root = new HBox(TOKENSCARDSPADDING, cardsAndNobles, tokens);
+		this.root.setAlignment(Pos.CENTER);
+		this.root.setPadding(new Insets(FIELDPADDING));
 	}
 	
 	private VBox buildCardsAndNoblesDisplay()
 	{
-		VBox cardsAndNobles = new VBox(cardsSpacing);
+		VBox cardsAndNobles = new VBox(CARDSPACING);
+		HBox.setHgrow(cardsAndNobles, Priority.ALWAYS);
+		cardsAndNobles.setAlignment(Pos.CENTER);
 		
 		HBox nobles = this.createNobles();
 		cardsAndNobles.getChildren().add(nobles);
 		
 		for(CardRow cardRow : playingField.getCardRows())
 		{
-			CardRowView cardRowView = new CardRowView(cardRow, cardsSpacing);
+			CardRowView cardRowView = new CardRowView(cardRow, gameController, CARDSPACING);
 			cardRowViews.add(cardRowView);
 			cardsAndNobles.getChildren().add(cardRowView.asPane());
 		}
@@ -67,7 +76,8 @@ public class PlayingFieldPanel implements UIComponent {
 	
 	private HBox createNobles()
 	{
-		HBox nobles = new HBox(cardsSpacing);
+		HBox nobles = new HBox(CARDSPACING);
+		nobles.setAlignment(Pos.CENTER);
 		
 		for(Noble noble : playingField.getNobles())
 		{
@@ -80,9 +90,9 @@ public class PlayingFieldPanel implements UIComponent {
 	
 	private VBox buildTokensDisplay()
 	{
-		VBox tokens = new VBox(tokensSpacing);
-		tokens.setPadding(new Insets(GameView.cardSizeY / 2, 0, 0, 0));
-		
+		VBox tokens = new VBox(TOKENSPACING);
+		tokens.setAlignment(Pos.CENTER);
+		HBox.setHgrow(tokens, Priority.ALWAYS);
 		
 		LinkedHashMap<Gem, Integer> gemsCount = playingField.getTokenList().getTokenGemCount();
 		
@@ -98,15 +108,14 @@ public class PlayingFieldPanel implements UIComponent {
 	private HBox createTokenGemCountDisplay(Gem gemType, int count, int radius)
 	{
 		TokenView tokenView = new TokenView(gemType, radius);
-        
+		
         Label tokenCountLabel = new Label(String.valueOf(count));
-        tokenCountLabel.setAlignment(Pos.CENTER);
         tokenCountLabel.getStyleClass().add("token-count");	
         tokenCountLabel.setFont(Font.font(radius * 2));
         
-		HBox tokenRow = new HBox(10, tokenView.asPane(), tokenCountLabel);
-		tokenRow.setAlignment(Pos.CENTER);
-		
+		HBox tokenRow = new HBox(15, tokenView.asPane(), tokenCountLabel);
+        tokenRow.setAlignment(Pos.CENTER);
+        
 		return tokenRow;
 	}
 	

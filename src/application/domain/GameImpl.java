@@ -32,6 +32,13 @@ public class GameImpl implements Game {
 		this.playingField = new PlayingField(players.size());
 	}
 	
+	public void nextTurn()
+	{
+		currentPlayerIdx++;
+		if(currentPlayerIdx >= players.size())
+			currentPlayerIdx = 0;			
+	}
+	
 	@Override
 	public void reserveCardFromField(CardRow cardRow, Card card) {
 		System.out.println(cardRow.getCardDeck().getAll().size());
@@ -42,6 +49,8 @@ public class GameImpl implements Game {
 		System.out.printf("%s has taken the card: %s", currentPlayer.getName() ,card.toString());
 		this.notifyObservers();
 	}
+	
+	
 	
 	public void notifyObservers() {
 		for (GameObserver observer : observers) {

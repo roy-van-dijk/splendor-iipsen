@@ -24,7 +24,7 @@ public class RearCardView extends CardView {
 	
 	private void buildUI()
 	{
-    	rect = new Rectangle(GameView.cardSizeX, GameView.cardSizeY);
+    	rect = new Rectangle(sizeX, sizeY);
     	
     	// Add image
         ImagePattern imagePattern = new ImagePattern(new Image(getImagePath()));

@@ -19,10 +19,10 @@ import javafx.scene.layout.VBox;
 
 public class GameView implements GameObserver, UIComponent  {
 	
-	public final static int cardSizeX = 120, cardSizeY = 190; // TODO: Make part of GameView
-	public final static int tokenSizeRadius = 40;
-	public final static int playingFieldCardSpacing = 15, playingFieldTokenSpacing = 10; // TODO: Probably make part of PlayingFieldView
-	public final static int opponentsSpacing = 10;
+	public final static int cardSizeX = 125, cardSizeY = 200; 
+	public final static int tokenSizeRadius = 50;
+	
+	public final static int opponentsSpacing = 20;
 	
 	private Game game;
 	private GameController gameController;
@@ -72,6 +72,7 @@ public class GameView implements GameObserver, UIComponent  {
 	private void buildUI()
 	{
 		root = new BorderPane();
+		root.getStyleClass().add("game-view");
 		
 		//HBox topLayout = new HBox(10);
 		playingField = buildPlayingField();
@@ -85,25 +86,29 @@ public class GameView implements GameObserver, UIComponent  {
 		root.setCenter(center);
 		root.setLeft(opponents);
 		root.setBottom(player);
-				
-		root.setPadding(new Insets(0));
+
+		//root.setPadding(new Insets(0));
 	}
 	
 	
 	
 	private Pane buildPlayingField()
 	{
-		Pane playingField = new PlayingFieldPanel(game.getPlayingField(), playingFieldCardSpacing, playingFieldTokenSpacing).asPane();
+		Pane playingField = new PlayingFieldPanel(game.getPlayingField(), gameController).asPane();
 		return playingField;
 	}
 	
 	private HBox buildButtons()
 	{
-		HBox buttons = new HBox(5);
+		HBox buttons = new HBox(20);
+		buttons.getStyleClass().add("button-view");
+		buttons.setAlignment(Pos.CENTER);
 		
 		btnReserveCard = new Button("Reserve card");
 		btnReserveCard.setOnAction(e -> gameController.reserveCard());
-		
+		//btnReserveCard.setOnAction(
+				
+				//);
 		btnPurchaseCard = new Button("Purchase card");
 		btnTakeTwoTokens = new Button("Take two tokens");
 		btnTakeThreeTokens = new Button("Take three tokens");

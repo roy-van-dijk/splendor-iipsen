@@ -18,7 +18,7 @@ public class TokenView implements UIComponent {
 	// private Token token; // Made irrelevant on 17:43 20-05-2018 TODO: pending definite removal
 	private Gem gemType;
 	
-	private Pane root;
+	private StackPane root;
 	private double radius;
 
 	public TokenView(Gem gem, double radius) {
@@ -38,7 +38,9 @@ public class TokenView implements UIComponent {
 	{
 		Circle circle = new Circle(radius);
 		String imagePath = String.format("file:resources/tokens/token_%s.png", getTokenImageFileName());
-        ImagePattern imagePattern = new ImagePattern(new Image(imagePath));
+		Image image = new Image(imagePath);
+		//Image image = ImageResources.getImage(imagePath);
+        ImagePattern imagePattern = new ImagePattern(image);
         circle.setFill(imagePattern);
         
 		root = new StackPane(circle);

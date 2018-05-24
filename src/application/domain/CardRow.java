@@ -34,7 +34,16 @@ public class CardRow {
 				fillCardSlots();
 			}
 		}
-	}
+		//notifyObservers();
+	}/*
+	
+	private void notifyObservers() {
+		for(Observer o : observers)
+		{
+			o.modelChanged(this);
+		}
+
+	}*/
 	
 	public void fillCardSlots()
 	{

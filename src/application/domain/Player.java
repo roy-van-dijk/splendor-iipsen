@@ -8,7 +8,6 @@ public class Player {
 	private String name;
 	
 	private List<Card> reservedCards;
-	
 	private List<Card> ownedCards;
 	private List<Noble> ownedNobles;
 	
@@ -21,15 +20,13 @@ public class Player {
 		this.reservedCards = new ArrayList<>();
 		this.ownedCards = new ArrayList<>();
 		this.ownedNobles = new ArrayList<>();
+		
 		this.tokenList = new TokenList();
 	}
 	
 	
 	public String getName() {
 		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
 	}
 	
 	public List<Card> getReservedCards() {
