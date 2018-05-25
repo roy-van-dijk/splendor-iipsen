@@ -21,13 +21,15 @@ public class LobbyView implements UIComponent  {
 	
 	private BorderPane root;
 	
-	private VBox buttons;
+	private Pane pane;
 	
-	private HBox panes;
-	private VBox leftPane;
-	private VBox rightPane;
+	private HBox hbox;
+	
 	
 	private Button btnReady;
+	
+	private Label lblUnassPlayers;
+	private Label lblAssPlayers;
 	
 	private Label lblLobbyIp;
 	private Label lblSpot1;
@@ -63,26 +65,41 @@ public class LobbyView implements UIComponent  {
 	
 	
 	private void buildUI()
-	{
-		Label lblUnassPlayers;
-		Label lblAssPlayers;
-		
+	{	
 		root = new BorderPane();
-		buttons = buildButtons();
+		pane = buildPane();
 		
-		root.setRight(buttons);
+		root.setRight(pane);
 		root.getStyleClass().add("home-view");
 		root.setPadding(new Insets(0));
 	}
 	
-	private VBox buildButtons()
+	private Pane buildPane()
 	{
+		VBox leftBox = new VBox();
+		VBox rightBox = new VBox();
+		hbox = new HBox();
 		
-		
-		VBox buttons = new VBox(3);
+		lblUnassPlayers = new Label("Unassigned Players");
+		lblAssPlayers = new Label("Assigned Players");
+			
+		lblLobbyIp = new Label("Lobby ip: 132.123.123.123");
+		lblSpot1 = new Label("Empty spot...");
+		lblSpot2 = new Label("Empty spot...");
+		lblSpot3 = new Label("Empty spot...");
+		lblSpot4 = new Label("Empty spot...");
+		lblPlayer1 = new Label("Player 1 - empty");
+		lblPlayer2 = new Label("Player 2 - empty");
+		lblPlayer3 = new Label("Player 3 - empty");
+		lblPlayer4 = new Label("Player 4 - empty");
 		
 		btnReady = new Button("Ready");
-
+		
+		
+		leftBox.getChildren().addAll(lblLobbyIp, lblUnassPlayers, lblSpot1, lblSpot2, lblSpot3, lblSpot4);
+		rightBox.getChildren().addAll(lblAssPlayers, lblPlayer1, lblPlayer2, lblPlayer3, lblPlayer4, btnReady);
+		
+		
 		
 //		btnJoinLobby.setOnAction(e -> menuController.joinLobby() );
 //		
@@ -90,13 +107,13 @@ public class LobbyView implements UIComponent  {
 //		
 //		btnNewGame.setOnAction(e -> menuController.hostNewGame() ); 
 		
-		buttons.setAlignment(Pos.CENTER_LEFT); 
-		buttons.setSpacing(10);
-		buttons.setTranslateX(-250);
-		buttons.setTranslateY(100);
+		hbox.setAlignment(Pos.CENTER_LEFT); 
+		hbox.setSpacing(10);
+		hbox.setTranslateX(-250);
+		hbox.setTranslateY(100);
 		
-		buttons.getChildren().addAll();
-		return buttons;
+		hbox.getChildren().addAll(leftBox, rightBox);
+		return hbox;
 	}	
 
 	public Pane asPane() {
