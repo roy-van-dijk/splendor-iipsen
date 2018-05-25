@@ -12,6 +12,22 @@
     -fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0); 
 }
 
+.button {
+	-fx-text-fill: black;
+	-fx-background-color: #fdd734;
+	-fx-font-size: 45px;
+	-fx-border-radius: 0px;
+	-fx-cursor: hand;
+}
+
+.button:hover {
+	-fx-background-color: #dab000;
+}
+
+.button:pressed {
+	-fx-background-color: #8c7100;
+}
+
 .buttons-view
 {
 	-fx-padding: 10px;
@@ -99,37 +115,41 @@
 }
 
 .move-button {
-	-fx-text-fill: black;
-	-fx-background-color: #fdd734;
 	-fx-font-size: 20px;
-	-fx-border-radius: 0px;
-	-fx-border: none;
-	-fx-cursor: hand;
 }
-
-.move-button:hover {
-	-fx-background-color: #dab000;
-}
-
-.move-button:pressed {
-	-fx-background-color: #8c7100;
-}
-
 
 .home-button {
-	-fx-text-fill: black;
-	-fx-background-color: #fdd734;
 	-fx-font-size: 45px;
-	-fx-border-radius: 0px;
-	-fx-border: none;
-	-fx-cursor: hand;
 }
 
-.home-button:hover {
-	-fx-background-color: #dab000;
+.manual-button {
+	-fx-background-radius: 0px 0px 0px 15px;
+	-fx-font-size: 30px;
 }
 
-.home-button:pressed {
-	-fx-background-color: #8c7100;
+.manual-navigation-button {
+	-fx-font-size: 25px;
 }
 
+.page-1 { -fx-background-image: url("../../resources/manual/page-1.png"); }
+.page-2 { -fx-background-image: url("../../resources/manual/page-2.png"); }
+.page-3 { -fx-background-image: url("../../resources/manual/page-3.png"); }
+.page-4 { -fx-background-image: url("../../resources/manual/page-4.png"); }
+
+.lobby-grid .label {
+	-fx-text-fill: gray;
+	-fx-background-color: white;
+	-fx-padding: 7px 12px;
+	-fx-font-size: 25px;
+	-fx-background-radius: 15px;
+	-fx-font-weight: bold;
+}
+
+.lobby-grid .label.active {
+	-fx-background-color: #fff584;
+}
+
+.join-panel .join-text {
+	-fx-font-size: 45px;
+	-fx-background-color: #fff584;
+}

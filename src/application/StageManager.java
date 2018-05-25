@@ -9,7 +9,7 @@ import application.controllers.MenuControllerImpl;
 import application.domain.Game;
 import application.domain.GameImpl;
 import application.views.GameView;
-import application.views.HomeView;
+import application.views.MainMenuView;
 import application.views.LobbyView;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -48,11 +48,12 @@ public class StageManager {
 		this.switchScene(gameView.asPane());
 	}
 	
-	public void showMainMenu(Stage stage) {
+	public void showMainMenu(Stage stage) 
+	{
 		primaryStage = stage;
 		
 		MenuController menuController = new MenuControllerImpl();
-		HomeView homeView = new HomeView(menuController);
+		MainMenuView homeView = new MainMenuView(menuController);
 		
 		Scene scene = new Scene(homeView.asPane(), 1800, 1000);
 		scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
@@ -60,14 +61,15 @@ public class StageManager {
 		primaryStage.getIcons().add(new Image(("file:splendor.png")));
 		primaryStage.setScene(scene);
 		//primaryStage.initStyle(StageStyle.UNDECORATED); // borderless
-		//primaryStage.setMaximized(true);
+//		primaryStage.setMaximized(true);
 		
+		primaryStage.setTitle("Splendor");
 		primaryStage.show();
 	}
 	
-	public void showLobbyScreen() {
-		
-		LobbyController lobbyController = new LobbyControllerImpl();
+	public void showLobbyScreen(String hostIp, String nickname) 
+	{
+		LobbyController lobbyController = new LobbyControllerImpl(hostIp, nickname);
 		LobbyView lobbyView = new LobbyView(lobbyController);
 			
 		this.switchScene(lobbyView.asPane());
