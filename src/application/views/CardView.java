@@ -3,7 +3,11 @@ package application.views;
 import application.domain.Card;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
-
+/**
+ * 
+ * @author Sanchez
+ *
+ */
 public abstract class CardView implements UIComponent {
 	
 	protected Pane root;

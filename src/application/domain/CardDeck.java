@@ -3,6 +3,10 @@ package application.domain;
 
 import java.util.Stack;
 
+/**
+ * @author Sanchez
+ *
+ */
 public class CardDeck implements Deck<Card> {
 	
 	private Stack<Card> cards;

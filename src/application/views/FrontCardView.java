@@ -8,7 +8,11 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
-
+/**
+ * 
+ * @author Sanchez
+ *
+ */
 public class FrontCardView extends CardView {
 	
 	private Card card;

@@ -1,7 +1,11 @@
 package application.domain;
 
 import java.util.Map;
-
+/**
+ * 
+ * @author Sanchez
+ *
+ */
 public class Noble {
 	private int prestigeValue;
 	private int illustrationID; // TODO: Replace with string read from nobles.csv instead. 

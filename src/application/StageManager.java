@@ -15,7 +15,11 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-
+/**
+ * 
+ * @author Sanchez
+ *
+ */
 public class StageManager {
 
 	private static StageManager instance;
@@ -47,7 +51,10 @@ public class StageManager {
 		
 		this.switchScene(gameView.asPane());
 	}
-	
+	/**
+	 * 
+	 * @param Stage stage
+	 */
 	public void showMainMenu(Stage stage) {
 		primaryStage = stage;
 		
@@ -69,6 +76,7 @@ public class StageManager {
 		
 		LobbyController lobbyController = new LobbyControllerImpl();
 		LobbyView lobbyView = new LobbyView(lobbyController);
+
 			
 		this.switchScene(lobbyView.asPane());
 	}

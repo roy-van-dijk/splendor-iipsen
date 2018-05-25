@@ -2,7 +2,11 @@ package application.domain;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * 
+ * @author Sanchez
+ *
+ */
 public class Player {
 	
 	private String name;

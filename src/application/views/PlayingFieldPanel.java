@@ -18,7 +18,11 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
-
+/**
+ * 
+ * @author Roy
+ *
+ */
 public class PlayingFieldPanel implements UIComponent {
 
 	public final static int CARDSPACING = 15, 
@@ -34,7 +38,11 @@ public class PlayingFieldPanel implements UIComponent {
 	private List<NobleView> nobleViews;
 	
 	private GameController gameController;
-
+	/**
+	 * 
+	 * @param PlayingField playingField
+	 * @param GameController gameController
+	 */
 	public PlayingFieldPanel(PlayingField playingField, GameController gameController) {
 		this.playingField = playingField;
 		this.gameController = gameController;

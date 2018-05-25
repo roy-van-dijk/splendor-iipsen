@@ -4,6 +4,10 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Sanchez
+ *
+ */
 public class GameImpl implements Game {
 	
 	private int currentPlayerIdx;

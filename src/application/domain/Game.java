@@ -5,6 +5,10 @@ import java.util.List;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
+/**
+ * @author Sanchez
+ *
+ */
 public interface Game {
 	
 	public void addPlayer(Player player);

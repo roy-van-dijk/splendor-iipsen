@@ -5,6 +5,10 @@ import java.util.Stack;
 
 import application.services.CardsReader;
 
+/**
+ * @author Sanchez
+ *
+ */
 public class DeckFactory {
 	private CardsReader cardsReader;
 	// TODO: add NoblesReader

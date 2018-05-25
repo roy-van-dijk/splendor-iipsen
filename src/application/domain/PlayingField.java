@@ -4,7 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import application.services.CardsReader;
-
+/**
+ * 
+ * @author Sanchez
+ *
+ */
 public class PlayingField {
 	
 	private final static int TOKEN_BASE_AMOUNT = 7;

@@ -4,6 +4,10 @@ import application.domain.Card;
 import application.domain.CardRow;
 import application.domain.Game;
 
+/**
+ * @author Sanchez
+ *
+ */
 public class GameControllerImpl implements GameController {
 	private Game game;
 

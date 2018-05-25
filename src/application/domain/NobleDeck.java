@@ -3,6 +3,10 @@ package application.domain;
 import java.util.List;
 import java.util.Stack;
 
+/**
+ * @author Sanchez
+ *
+ */
 public class NobleDeck implements Deck<Noble> {
 
 	private Stack<Noble> nobles;

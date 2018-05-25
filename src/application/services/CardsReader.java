@@ -19,6 +19,12 @@ import application.domain.CardLevel;
 import application.domain.Gem;
 import application.util.Util;
 
+/**
+ * This reads the cards from a csv file and converts it to objects
+ * 
+ * @author Sanchez
+ *
+ */
 public class CardsReader {
 
 	private final static String cardsFile = "resources/config/cards.csv";
@@ -27,12 +33,20 @@ public class CardsReader {
 	
 	private List<Card> allCards;
 	
+	/**
+	 * 
+	 * @throws IOException
+	 */
 	public CardsReader() throws IOException
 	{
 		this.allCards = new ArrayList<Card>();
 		this.generateCards();
 	}
-	
+	/**
+	 * 
+	 * @throws IOException
+	 * @return Nothing
+	 */
 	public void generateCards()  throws IOException
 	{
 		try (
@@ -87,7 +101,7 @@ public class CardsReader {
 	
 	/**
 	 * @param level - CardLevel
-	 * @return Returns a stack of cards corresponding to the given level. 
+	 * @return cardsArray [] Returns a stack of cards corresponding to the given level. 
 	 */
 	public Stack<Card> getCards(CardLevel level)
 	{
@@ -118,7 +132,11 @@ public class CardsReader {
 		
 		return card;
 	}
-	
+	/**
+	 * 
+	 * @param String[] record 
+	 * @return int costs
+	 */
 	private static Map<Gem, Integer> readCosts(String[] record)
 	{
 		Map<Gem, Integer> costs = new HashMap<>();
@@ -133,7 +151,11 @@ public class CardsReader {
 		
 		return costs;
 	}
-	
+	/**
+	 * 
+	 * @param String record
+	 * @return Gem[] gemList
+	 */
 	private static Gem readBonus(String[] record)
 	{
 		int idx = 0;

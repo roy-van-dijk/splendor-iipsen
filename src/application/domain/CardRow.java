@@ -5,9 +5,10 @@ import java.util.EmptyStackException;
 
 
 /**
- * @author Sanchez
  * This class acts like how you would expect CardDeck to act. This class makes sense as a View but it makes less sense as a model.
  * TODO: Consider pros/cons of merging it with CardDeck
+ * 
+ * @author Sanchez
  */
 public class CardRow {
 	

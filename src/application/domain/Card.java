@@ -2,6 +2,10 @@ package application.domain;
 
 import java.util.Map;
 
+/**
+ * @author Sanchez
+ *
+ */
 public interface Card {
 	public int getPrestigeValue();
 

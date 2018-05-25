@@ -12,7 +12,11 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
-
+/**
+ * 
+ * @author Roy
+ *
+ */
 public class LobbyView implements UIComponent  {
 	
 //	private Home home;

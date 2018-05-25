@@ -10,11 +10,20 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.shape.StrokeType;
-
+/**
+ * 
+ * @author Sanchez
+ *
+ */
 public class RearCardView extends CardView {	
 	
 	private Card card;
-	
+	/**
+	 * 
+	 * @param Card card 
+	 * @param double sizeX
+	 * @param double sizeY
+	 */
 	public RearCardView(Card card, double sizeX, double sizeY) {
 		super(sizeX, sizeY);
 		this.card = card;

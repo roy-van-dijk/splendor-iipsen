@@ -12,13 +12,18 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 
+/**
+ * @author Sanchez
+ *
+ *
+ */
 public class Main extends Application {
 	
 	@Override
 	public void start(Stage primaryStage) {
 		try {
 			StageManager.getInstance().showMainMenu(primaryStage);
-			StageManager.getInstance().showGameScreen();
+			//StageManager.getInstance().showGameScreen();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
