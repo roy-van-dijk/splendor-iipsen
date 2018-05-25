@@ -1,7 +1,7 @@
 package application.controllers;
 
 import application.domain.Card;
-import application.domain.CardRow;
+import application.domain.CardRowImpl;
 
 public interface GameController 
 {

@@ -3,6 +3,7 @@ package application.services;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -96,7 +97,11 @@ public class CardsReader {
 		// Fill cardsArray with all cards with the corresponding level
 		for(Card card : allCards)
 		{
-			if(card.getLevel().equals(level)) cardsArray.add(card);
+			try {
+				if(card.getLevel().equals(level)) cardsArray.add(card);
+			} catch (RemoteException e) {
+				e.printStackTrace();
+			}
 		}
 		
 		return cardsArray;

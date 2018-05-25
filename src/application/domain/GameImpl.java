@@ -10,7 +10,6 @@ public class GameImpl implements Game {
 	private int roundNr;
 	
 	private ArrayList<GameObserver> observers;
-	private int observerIndex;
 	
 	private List<Player> players;
 	
@@ -29,7 +28,7 @@ public class GameImpl implements Game {
 		Test_Create4Players();
 		
 		this.roundNr = 0;
-		this.currentPlayerIdx = 1; // First opponent (because 0 = Player in SP)
+		this.currentPlayerIdx = 1; // TODO: First opponent starts first for now (1 because 0 = Player in SP)
 		
 		this.playingField = new PlayingField(players.size());
 	}
@@ -42,14 +41,19 @@ public class GameImpl implements Game {
 	}
 	
 	@Override
-	public void reserveCardFromField(CardRow cardRow, Card card) {
-		System.out.println(cardRow.getCardDeck().getAll().size());
-		cardRow.removeCard(card);
-		Player currentPlayer = players.get(currentPlayerIdx);
-		currentPlayer.addReservedCard(card);
+	public void reserveCardFromField(CardRowImpl cardRowImpl, Card card) {
+		System.out.println(cardRowImpl.getCardDeck().getAll().size());
 		
-		System.out.printf("%s has taken the card: %s", currentPlayer.getName() ,card.toString());
-		this.notifyObservers();
+		Player currentPlayer = players.get(currentPlayerIdx);
+		
+		if(currentPlayer.getReservedCards().size() < 3) // Business rule: max 3 reserved cards
+		{
+			cardRowImpl.removeCard(card);
+			currentPlayer.addReservedCard(card);
+			
+			System.out.printf("%s has taken the card: %s", currentPlayer.getName() ,card.toString());
+			this.notifyObservers();
+		}
 	}
 	
 	

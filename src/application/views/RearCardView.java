@@ -1,6 +1,8 @@
 package application.views;
 
 
+import java.rmi.RemoteException;
+
 import application.domain.Card;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
@@ -41,7 +43,14 @@ public class RearCardView extends CardView {
 	@Override
 	protected String getImagePath()
 	{
-		return String.format("file:resources/cards/%s/%s.png", card.getLevel().name().toLowerCase(), card.getLevel().name().toLowerCase());
+		String path = "";
+		try {
+			path = String.format("file:resources/cards/%s/%s.png", card.getLevel().name().toLowerCase(), card.getLevel().name().toLowerCase());
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
+		
+		return path;
 	}
 
 }

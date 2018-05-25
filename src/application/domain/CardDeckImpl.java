@@ -3,12 +3,12 @@ package application.domain;
 
 import java.util.Stack;
 
-public class CardDeck implements Deck<Card> {
+public class CardDeckImpl implements Deck<Card> {
 	
 	private Stack<Card> cards;
 	private CardLevel level; // Probably useless
 	
-	public CardDeck(Stack<Card> cards, CardLevel level)
+	public CardDeckImpl(Stack<Card> cards, CardLevel level)
 	{
 		this.cards = cards;		
 		this.level = level;
@@ -31,5 +31,10 @@ public class CardDeck implements Deck<Card> {
 
 	public Stack<Card> getAll() {
 		return cards;
+	}
+
+	@Override
+	public void addObserver(Card observer) {
+		
 	}
 }

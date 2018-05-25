@@ -1,6 +1,8 @@
 package application.views;
 
 
+import java.rmi.RemoteException;
+
 import application.domain.Card;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
@@ -39,10 +41,17 @@ public class FrontCardView extends CardView {
 	}
 	
 	// TODO: Add actual image resources & replace "bg1" with Card model's assigned illustration. 
+	@Override
 	protected String getImagePath()
 	{
-		return String.format("file:resources/cards/%s/%s.png", card.getLevel().name().toLowerCase(), "bg1");
+		String path = "";
+		try {
+			path = String.format("file:resources/cards/%s/%s.png", card.getLevel().name().toLowerCase(), "bg1");
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
+		
+		return path;
 	}
-	
 
 }

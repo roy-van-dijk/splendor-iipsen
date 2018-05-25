@@ -1,9 +1,10 @@
 package application.domain;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 
-import application.services.CardsReader;
+
 
 public class PlayingField {
 	
@@ -11,9 +12,9 @@ public class PlayingField {
 	private final static int NOBLE_BASE_AMOUNT = 5;
 	
 	
-	private List<CardRow> cardRows;
-	
+	private List<CardRowImpl> cardRowImpls;
 	private List<Noble> nobles;
+	
 	private TokenList tokenList;
 	
 	//private NobleDeck noblesDeck; // Not necessary - is only used on round start.
@@ -22,7 +23,7 @@ public class PlayingField {
 
 	public PlayingField(int playerCount) {
 		this.nobles = new ArrayList<>();
-		this.cardRows = new ArrayList<>();
+		this.cardRowImpls = new ArrayList<>();
 		this.tokenList = new TokenList();
 		this.deckFactory = new DeckFactory();
 
@@ -65,8 +66,8 @@ public class PlayingField {
 		// Create 3 card rows (including decks)
 		for(CardLevel level : CardLevel.values())
 		{
-			CardDeck deck = deckFactory.createCardDeck(level);
-			cardRows.add(new CardRow(deck));
+			CardDeckImpl deck = deckFactory.createCardDeck(level);
+			cardRowImpls.add(new CardRowImpl(deck));
 		}
 	}
 	
@@ -98,17 +99,17 @@ public class PlayingField {
 	}
 	
 
-	public List<CardRow> getCardRows() {
-		return cardRows;
+	public List<CardRowImpl> getCardRows() {
+		return cardRowImpls;
 	}
 
 	public List<Noble> getNobles() {
 		return nobles;
 	}
 	
-	public TokenList getTokenList()
+	public LinkedHashMap<Gem, Integer> getTokenGemCount()
 	{
-		return tokenList;
+		return tokenList.getTokenGemCount();
 	}
 
 }

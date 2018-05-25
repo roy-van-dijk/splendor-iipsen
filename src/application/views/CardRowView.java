@@ -1,50 +1,41 @@
 package application.views;
 
+import java.rmi.RemoteException;
+
 import application.controllers.GameController;
 import application.domain.Card;
-import application.domain.CardRow;
+import application.domain.CardRowImpl;
+import application.domain.GenericObserver;
 import javafx.geometry.Pos;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 
-public class CardRowView implements UIComponent {
-
+public class CardRowView implements UIComponent, GenericObserver<CardRowImpl> {
 	
 	private Pane root;
-	private CardRow cardRow;
-	private int spacingBetweenCards;
+	private GridPane grid;
+	
 	private GameController gameController;
 	
-	public CardRowView(CardRow cardRow, GameController gameController ,int spacingBetweenCards) {
-		this.cardRow = cardRow;
-		this.spacingBetweenCards = spacingBetweenCards;
-		
+	public CardRowView(CardRowImpl cardRowImpl, GameController gameController) {
 
-		this.buildUI();
+		this.buildUI(cardRowImpl);
+		
+		try {
+			cardRowImpl.addObserver(this);
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
-	// POC
-	public void modelChanged(CardRow cardRow)
-	{
-		this.buildUI(); // POC
-	}
 	
-	private void buildUI()
+	@Override
+	public void modelChanged(CardRowImpl cardRowImpl) 
 	{
-		GridPane grid = new GridPane();
-		grid.setAlignment(Pos.CENTER);
-		grid.setHgap(spacingBetweenCards);
-		
-		// Create the deck view (Looks like the back side of a card)
-		CardDeckView cardDeckView = new CardDeckView(cardRow.getCardDeck(), GameView.cardSizeX, GameView.cardSizeY);
-		
-		// // Add the deck to the grid, make deck view first in row
-		GridPane.setConstraints(cardDeckView.asPane(), 0, 0);		
-		grid.getChildren().add(cardDeckView.asPane());
-		
 		// Fetch the cards
-		Card[] cardSlots = cardRow.getCardSlots();
+		Card[] cardSlots = cardRowImpl.getCardSlots();
 		
 		// Render each card if it exists
         for(int idx = 0; idx < cardSlots.length; idx++)
@@ -57,10 +48,25 @@ public class CardRowView implements UIComponent {
         	//cardView.asPane().setOnMouseClicked(e -> { gameController. });
         	
         	// Display cards by index
-        	GridPane.setConstraints(cardView.asPane(), idx + 1, 0);
-        	grid.getChildren().add(cardView.asPane());
+        	grid.add(cardView.asPane(), idx + 1, 0);
         }
         
+	}
+
+	
+	private void buildUI(CardRowImpl cardRowImpl)
+	{
+		grid = new GridPane();
+		grid.setAlignment(Pos.CENTER);
+		grid.setHgap(PlayingFieldPanel.CARDSPACING);
+		
+		// Create the deck view (Looks like the back side of a card)
+		CardDeckView cardDeckView = new CardDeckView(cardRowImpl.getCardDeck(), GameView.cardSizeX, GameView.cardSizeY);
+		
+		// // Add the deck to the grid, make deck view first in row
+		grid.add(cardDeckView.asPane(), 0, 0);
+		
+
         root = grid;
 	}
 

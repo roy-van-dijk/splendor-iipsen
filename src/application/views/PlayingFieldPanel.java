@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import application.controllers.GameController;
-import application.domain.CardRow;
+import application.domain.CardRowImpl;
 import application.domain.Gem;
 import application.domain.Noble;
 import application.domain.PlayingField;
@@ -64,9 +64,9 @@ public class PlayingFieldPanel implements UIComponent {
 		HBox nobles = this.createNobles();
 		cardsAndNobles.getChildren().add(nobles);
 		
-		for(CardRow cardRow : playingField.getCardRows())
+		for(CardRowImpl cardRowImpl : playingField.getCardRows())
 		{
-			CardRowView cardRowView = new CardRowView(cardRow, gameController, CARDSPACING);
+			CardRowView cardRowView = new CardRowView(cardRowImpl, gameController);
 			cardRowViews.add(cardRowView);
 			cardsAndNobles.getChildren().add(cardRowView.asPane());
 		}
@@ -94,7 +94,7 @@ public class PlayingFieldPanel implements UIComponent {
 		tokens.setAlignment(Pos.CENTER);
 		HBox.setHgrow(tokens, Priority.ALWAYS);
 		
-		LinkedHashMap<Gem, Integer> gemsCount = playingField.getTokenList().getTokenGemCount();
+		LinkedHashMap<Gem, Integer> gemsCount = playingField.getTokenGemCount();
 		
 		for(Map.Entry<Gem, Integer> entry : gemsCount.entrySet())
 		{	

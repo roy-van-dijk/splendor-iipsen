@@ -1,7 +1,9 @@
 package application.views;
 
+import java.rmi.RemoteException;
+
 import application.domain.Card;
-import application.domain.CardDeck;
+import application.domain.CardDeckImpl;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -13,9 +15,9 @@ import javafx.scene.shape.StrokeType;
 
 public class CardDeckView extends CardView {
 	
-	private CardDeck deck;
+	private CardDeckImpl deck;
 	
-	public CardDeckView(CardDeck deck, int sizeX, int sizeY) {
+	public CardDeckView(CardDeckImpl deck, int sizeX, int sizeY) {
 		super(sizeX, sizeY);
 		this.deck = deck;
 		
@@ -41,8 +43,16 @@ public class CardDeckView extends CardView {
         root = new StackPane(rect);
 	}
 	
+	@Override
 	protected String getImagePath()
 	{
-		return String.format("file:resources/cards/%s/%s.png", deck.top().getLevel().name().toLowerCase(), deck.top().getLevel().name().toLowerCase());
+		String path = "";
+		try {
+			path = String.format("file:resources/cards/%s/%s.png", deck.top().getLevel().name().toLowerCase(), deck.top().getLevel().name().toLowerCase());
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
+		
+		return path;
 	}
 }

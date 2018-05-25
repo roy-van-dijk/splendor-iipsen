@@ -1,20 +1,21 @@
 package application.domain;
 
+import java.rmi.RemoteException;
 import java.util.Map;
 
 public interface Card {
-	public int getPrestigeValue();
+	public int getPrestigeValue() throws RemoteException;
 
-	public String getIllustration();
+	public String getIllustration() throws RemoteException;
 
-	public Gem getBonusGem();
+	public Gem getBonusGem() throws RemoteException;
 
-	public Map<Gem, Integer> getCosts();
+	public Map<Gem, Integer> getCosts() throws RemoteException;
 
-	public CardLevel getLevel();
+	public CardLevel getLevel() throws RemoteException;
 	
-	public boolean isReservedFromDeck();
+	public boolean isReservedFromDeck() throws RemoteException;
 
-	public void setReservedFromDeck(boolean reservedFromDeck);
+	public void setReservedFromDeck(boolean reservedFromDeck) throws RemoteException;
 
 }

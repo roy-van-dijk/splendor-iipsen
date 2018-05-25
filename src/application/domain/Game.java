@@ -17,7 +17,7 @@ public interface Game {
 
 	public PlayingField getPlayingField();
 	
-	public void reserveCardFromField(CardRow cardRow, Card card);
+	public void reserveCardFromField(CardRowImpl cardRowImpl, Card card);
 	
 	
 	public void addObserver(GameObserver observer);

@@ -1,5 +1,6 @@
 package application.domain;
 
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,7 +58,12 @@ public class Player {
 		
 		for(Card ownedCard : ownedCards)
 		{
-			prestige += ownedCard.getPrestigeValue();
+			try {
+				prestige += ownedCard.getPrestigeValue();
+			} catch (RemoteException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		
 		for(Noble ownedNoble : ownedNobles)

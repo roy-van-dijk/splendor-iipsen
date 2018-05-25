@@ -1,7 +1,7 @@
 package application.controllers;
 
 import application.domain.Card;
-import application.domain.CardRow;
+import application.domain.CardRowImpl;
 import application.domain.Game;
 
 public class GameControllerImpl implements GameController {
@@ -14,7 +14,7 @@ public class GameControllerImpl implements GameController {
 	@Override
 	public void reserveCard() {
 		// Creating POC variables - basically specifying: Hey controller, I clicked on this card
-		CardRow row = game.getPlayingField().getCardRows().get(1); // Second row
+		CardRowImpl row = game.getPlayingField().getCardRows().get(1); // Second row
 		Card card = row.getCardSlots()[1]; // Second card
 		
 		//if(!card.equals(card2wantdezeisspeciaal)) return;

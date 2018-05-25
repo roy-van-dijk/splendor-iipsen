@@ -18,11 +18,11 @@ public class DeckFactory {
 		}
 	}
 	
-	public CardDeck createCardDeck(CardLevel level)
+	public CardDeckImpl createCardDeck(CardLevel level)
 	{
 		Stack<Card> cards = cardsReader.getCards(level);
 		
-		CardDeck deck = new CardDeck(cards, level);
+		CardDeckImpl deck = new CardDeckImpl(cards, level);
 		return deck;
 	}
 	
