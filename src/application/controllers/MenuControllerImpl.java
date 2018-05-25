@@ -14,7 +14,7 @@ public class MenuControllerImpl implements MenuController {
 
 	@Override
 	public void hostPreviousGame() {
-		// TODO Auto-generated method stub
+//		StageManager.getInstance().showLobbyScreen(hostIp, nickname);
 		
 	}
 

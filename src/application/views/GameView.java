@@ -109,7 +109,7 @@ public class GameView implements GameObserver, UIComponent  {
 		
 		// Make separate button class
 		btnReserveCard = new Button("Reserve card");
-		btnReserveCard.getStyleClass().add("move-button");
+		btnReserveCard.getStyleClass().addAll("button", "move-button");
 		btnReserveCard.setOnAction(e -> gameController.reserveCard());
 		//btnReserveCard.setOnAction(
 				

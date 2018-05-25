@@ -18,7 +18,7 @@ public class Main extends Application {
 	public void start(Stage primaryStage) {
 		try {
 			StageManager.getInstance().showMainMenu(primaryStage);
-			StageManager.getInstance().showGameScreen();
+//			StageManager.getInstance().showLobbyScreen();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
