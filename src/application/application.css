@@ -12,6 +12,11 @@
     -fx-effect: dropshadow(three-pass-box, black, 30, 0.5, 0, 0); 
 }
 
+.buttons-view
+{
+	-fx-padding: 10px;
+}
+
 .game-view
 {
 	-fx-background-image: url("../../resources/misc/bg_wood.jpg");
@@ -51,7 +56,6 @@
 
 .opponents
 {
-	
     -fx-background-color: rgb(113, 135, 146);
 }
 
@@ -68,12 +72,17 @@
 	-fx-padding: 0 0 0 5px;
 }
 
+.buttons-view {
+	-fx-background-color: rgb(43, 57, 63);
+}
+
 .opponent {
     -fx-border-color: black;
 }
 
 .opponent-header {
 	-fx-border-width: 3px 0 0 0;
+	-fx-background-color: rgb(43, 57, 63);
 }
 
 .player {
@@ -88,6 +97,24 @@
 	-fx-border-color: black;
 	-fx-border-width: 0;
 }
+
+.move-button {
+	-fx-text-fill: black;
+	-fx-background-color: #fdd734;
+	-fx-font-size: 20px;
+	-fx-border-radius: 0px;
+	-fx-border: none;
+	-fx-cursor: hand;
+}
+
+.move-button:hover {
+	-fx-background-color: #dab000;
+}
+
+.move-button:pressed {
+	-fx-background-color: #8c7100;
+}
+
 
 .home-button {
 	-fx-text-fill: black;

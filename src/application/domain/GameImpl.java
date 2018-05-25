@@ -27,7 +27,9 @@ public class GameImpl implements Game {
 		this.observers = new ArrayList<GameObserver>();
 		
 		Test_Create4Players();
-		currentPlayerIdx = 1; // First opponent (because 0 = Player in SP)
+		
+		this.roundNr = 0;
+		this.currentPlayerIdx = 1; // First opponent (because 0 = Player in SP)
 		
 		this.playingField = new PlayingField(players.size());
 	}
