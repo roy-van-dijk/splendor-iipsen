@@ -15,6 +15,7 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
 public class GameView implements GameObserver, UIComponent  {
@@ -47,7 +48,7 @@ public class GameView implements GameObserver, UIComponent  {
 		this.game = game;
 		this.gameController = gameController;
 		
-		// game.addObserver(this); // Causes modelChanged() to be called upon initialization, before the scene is even added to the primaryStage.
+		game.addObserver(this); // Causes modelChanged() to be called upon initialization, before the scene is even added to the primaryStage.
 		
 		this.buildUI();
 		
@@ -81,6 +82,7 @@ public class GameView implements GameObserver, UIComponent  {
 		player = buildPlayer();
 		
 		VBox center = new VBox(playingField, buttons);
+		VBox.setVgrow(playingField, Priority.ALWAYS);
 		
 		//gameLayout.setTop(topLayout);
 		root.setCenter(center);
@@ -101,17 +103,23 @@ public class GameView implements GameObserver, UIComponent  {
 	private HBox buildButtons()
 	{
 		HBox buttons = new HBox(20);
-		buttons.getStyleClass().add("button-view");
+		buttons.getStyleClass().add("buttons-view");
 		buttons.setAlignment(Pos.CENTER);
 		
+		
+		// Make separate button class
 		btnReserveCard = new Button("Reserve card");
+		btnReserveCard.getStyleClass().add("move-button");
 		btnReserveCard.setOnAction(e -> gameController.reserveCard());
 		//btnReserveCard.setOnAction(
 				
 				//);
 		btnPurchaseCard = new Button("Purchase card");
+		btnPurchaseCard.getStyleClass().add("move-button");
 		btnTakeTwoTokens = new Button("Take two tokens");
+		btnTakeTwoTokens.getStyleClass().add("move-button");
 		btnTakeThreeTokens = new Button("Take three tokens");
+		btnTakeThreeTokens.getStyleClass().add("move-button");
 		
 		
 		buttons.getChildren().addAll(btnReserveCard, btnPurchaseCard, btnTakeTwoTokens, btnTakeThreeTokens);
