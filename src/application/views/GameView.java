@@ -17,7 +17,11 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-
+/**
+ * 
+ * @author Sanchez
+ *
+ */
 public class GameView implements GameObserver, UIComponent  {
 	
 	public final static int cardSizeX = 125, cardSizeY = 200; 

@@ -6,7 +6,11 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
-
+/**
+ * 
+ * @author Sanchez
+ *
+ */
 public class NobleView implements UIComponent {
 	private Noble noble;
 	private Pane root;

@@ -3,6 +3,10 @@ package application.domain;
 import java.rmi.RemoteException;
 import java.util.Map;
 
+/**
+ * @author Sanchez
+ *
+ */
 public interface Card {
 	public int getPrestigeValue() throws RemoteException;
 

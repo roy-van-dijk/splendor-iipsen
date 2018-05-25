@@ -12,7 +12,11 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.shape.StrokeType;
-
+/**
+ * 
+ * @author Sanchez
+ *
+ */
 public class CardDeckView extends CardView {
 	
 	private CardDeckImpl deck;

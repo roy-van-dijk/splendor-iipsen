@@ -11,7 +11,13 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 
+/**
+ * 
+ * @author Sanchez
+ *
+ */
 public class CardRowView implements UIComponent, GenericObserver<CardRowImpl> {
+
 	
 	private Pane root;
 	private GridPane grid;

@@ -3,7 +3,11 @@ package application.domain;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * 
+ * @author Sanchez
+ *
+ */
 public class Player {
 	
 	private String name;

@@ -1,5 +1,9 @@
 package application.domain;
-
+/**
+ * 
+ * @author Sanchez
+ *
+ */
 public class Token {
 	private Gem gemType;
 

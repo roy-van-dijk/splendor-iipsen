@@ -5,6 +5,10 @@ import javafx.application.Platform;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
+/**
+ * @author Roy
+ *
+ */
 public class MenuControllerImpl implements MenuController {
 
 	@Override

@@ -12,6 +12,11 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 
+/**
+ * @author Sanchez
+ *
+ *
+ */
 public class Main extends Application {
 	
 	@Override

@@ -4,9 +4,11 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.Stack;
 
-/*
+/**
  * So far a Deck seems to just wrap around a List. Seems almost useless.
-*/
+ * 
+ * @author Sanchez
+ */
 
 public interface Deck<T>
 {

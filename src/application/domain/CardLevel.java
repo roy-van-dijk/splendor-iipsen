@@ -3,6 +3,10 @@ package application.domain;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @author Sanchez
+ *
+ */
 public enum CardLevel {
 	LEVEL1(1),
 	LEVEL2(2),

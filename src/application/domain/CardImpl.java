@@ -2,6 +2,10 @@ package application.domain;
 
 import java.util.Map;
 
+/**
+ * @author Sanchez
+ *
+ */
 public class CardImpl implements Card {
 
 	private boolean reservedFromDeck = false;

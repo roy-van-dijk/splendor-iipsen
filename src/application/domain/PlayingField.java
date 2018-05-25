@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-
-
+/**
+ * 
+ * @author Sanchez
+ *
+ */
 public class PlayingField {
 	
 	private final static int TOKEN_BASE_AMOUNT = 7;

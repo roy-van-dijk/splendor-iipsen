@@ -50,6 +50,7 @@ public class TokenView implements UIComponent {
 	/**
 	 *  This function is used to get the suffix of the image filename for a Token. This always equals the name of the token's gemType.  
 	 *  For example, If a token's gemType is Gem.DIAMOND, this function returns "diamond".
+	 *  
 	 * @return String The suffix of the token's image filename.
 	 */
 	private String getTokenImageFileName()
