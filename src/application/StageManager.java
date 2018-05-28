@@ -46,6 +46,7 @@ public class StageManager {
 	public void showGameScreen()
 	{
 		Game game = new GameImpl();
+		
 		GameController gameController = new GameControllerImpl(game);
 		GameView gameView = new GameView(game, gameController);
 		

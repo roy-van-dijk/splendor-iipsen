@@ -19,6 +19,8 @@ public class GameImpl implements Game {
 	
 	private PlayingField playingField;
 	
+	private Turn turn;
+	
 	/*
 	 * The Game object knows how many players there are
 	 * Therefore the game object determines how many tokens and nobles there need to be created. 
@@ -35,13 +37,15 @@ public class GameImpl implements Game {
 		this.currentPlayerIdx = 1; // TODO: First opponent starts first for now (1 because 0 = Player in SP)
 		
 		this.playingField = new PlayingField(players.size());
+		
+		this.turn = new Turn(getPlayers().get(currentPlayerIdx));
 	}
 	
 	public void nextTurn()
 	{
 		currentPlayerIdx++;
 		if(currentPlayerIdx >= players.size())
-			currentPlayerIdx = 0;			
+			currentPlayerIdx = 0;
 	}
 	
 	@Override
@@ -101,6 +105,10 @@ public class GameImpl implements Game {
 
 	public PlayingField getPlayingField() {
 		return playingField;
+	}
+	
+	public Turn getTurn() {
+		return this.turn;
 	}
 	
 }

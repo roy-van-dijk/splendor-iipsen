@@ -11,4 +11,6 @@ public interface GameController
 {
 	public void reserveCard();
 	
+	public void endTurn();
+	
 }
