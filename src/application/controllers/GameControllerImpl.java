@@ -25,6 +25,23 @@ public class GameControllerImpl implements GameController {
 		
 		game.reserveCardFromField(row, card);
 	}
+	
+	@Override
+	public void endTurn() {
+		if (game.getPlayers().get(game.getCurrentPlayerIdx()).getTokenList().getAll().size() + game.getTurn().getTokenList().getAll().size() > 10) {
+			//TODO: ReturnTokens
+		}
+		//game.getPlayers().get(game.getCurrentPlayerIdx()).getOwnedCards().add(game.getTurn().getBoughtCard());
+		//TODO: subtract tokens from player.
+		//game.getPlayers().get(game.getCurrentPlayerIdx()).getReservedCards().add(game.getTurn().getReservedCard());
+		//TODO: check for nobles
+		game.getTurn().emptyhand();
+		//TODO: Save Game
+		//TODO: Check win condition
+		//TODO: Determine next player
+		
+		game.nextTurn();
+	}
 
 	
 	

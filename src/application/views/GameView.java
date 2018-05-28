@@ -39,6 +39,8 @@ public class GameView implements GameObserver, UIComponent  {
 	private Button btnPurchaseCard;
 	private Button btnTakeTwoTokens;
 	private Button btnTakeThreeTokens;
+	private Button btnResetTurn;
+	private Button btnEndTurn;
 	
 	private Pane playingField;
 	private Pane buttons;
@@ -124,9 +126,17 @@ public class GameView implements GameObserver, UIComponent  {
 		btnTakeTwoTokens.getStyleClass().add("move-button");
 		btnTakeThreeTokens = new Button("Take three tokens");
 		btnTakeThreeTokens.getStyleClass().add("move-button");
+		btnResetTurn = new Button("Reset Turn");
+		btnResetTurn.getStyleClass().add("move-button");
+		btnEndTurn = new Button("End Turn");
+		btnEndTurn.getStyleClass().add("move-button");
+		btnEndTurn.setOnAction(e -> gameController.endTurn());
+		//btnEndTurn.setOnAction(
+				
+				//);
 		
 		
-		buttons.getChildren().addAll(btnReserveCard, btnPurchaseCard, btnTakeTwoTokens, btnTakeThreeTokens);
+		buttons.getChildren().addAll(btnReserveCard, btnPurchaseCard, btnTakeTwoTokens, btnTakeThreeTokens, btnResetTurn, btnEndTurn);
 		return buttons;
 	}
 	

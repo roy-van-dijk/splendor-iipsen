@@ -11,6 +11,8 @@ import java.rmi.RemoteException;
  */
 public interface Game {
 	
+	public void nextTurn();
+	
 	public void addPlayer(Player player);
 
 	public int getCurrentPlayerIdx();
@@ -23,6 +25,8 @@ public interface Game {
 	
 	public void reserveCardFromField(CardRowImpl cardRowImpl, Card card);
 	
-	
 	public void addObserver(GameObserver observer);
+	
+	public Turn getTurn();
+	
 }
