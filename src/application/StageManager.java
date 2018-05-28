@@ -13,6 +13,7 @@ import application.views.MainMenuView;
 import application.views.LobbyView;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.input.InputEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
@@ -69,7 +70,8 @@ public class StageManager {
 		// primaryStage.setMaximized(true);
 
 		primaryStage.setTitle("Splendor");
-
+		
+	   
 		primaryStage.show();
 	}
 

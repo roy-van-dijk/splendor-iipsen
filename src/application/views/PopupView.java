@@ -25,7 +25,7 @@ public class PopupView {
 
 BorderPane pane;
 	/**
-	 * Initialize a Popup screen
+	 * Initialize a Popup screen and shows it on the screen
 	 * @param paragraphText
 	 * @param title
 	 */

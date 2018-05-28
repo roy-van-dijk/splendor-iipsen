@@ -6,9 +6,13 @@ import application.domain.Game;
 import application.domain.GameImpl;
 import application.services.CardsReader;
 import application.views.GameView;
+import application.views.Manual;
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 
@@ -22,6 +26,15 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
+			primaryStage.addEventHandler(KeyEvent.ANY, new EventHandler<KeyEvent>() {
+
+		        @Override
+		        public void handle(KeyEvent keyEvent) {
+		          if(keyEvent.getCode() == KeyCode.F1) {
+		        	  new Manual();
+		          }
+		        }
+		    });
 			StageManager.getInstance().showMainMenu(primaryStage);
 //			StageManager.getInstance().showLobbyScreen();
 		} catch(Exception e) {
