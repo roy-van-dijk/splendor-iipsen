@@ -23,7 +23,7 @@ import javafx.stage.Stage;
  */
 public class PopupView {
 
-BorderPane pane;
+	BorderPane pane;
 	/**
 	 * Initialize a Popup screen and shows it on the screen
 	 * @param paragraphText
