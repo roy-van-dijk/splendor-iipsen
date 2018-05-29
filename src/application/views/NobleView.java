@@ -1,5 +1,7 @@
 package application.views;
 
+import java.rmi.RemoteException;
+
 import application.domain.Noble;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
@@ -26,7 +28,7 @@ public class NobleView implements UIComponent {
 	}
 	
 	// TODO: See comment @ Noble.illustrationID
-	public String getNobleImagePath()
+	public String getNobleImagePath() throws RemoteException
 	{
 		String pictureID = String.valueOf(noble.getIllustrationID());
 		return String.format("file:resources/nobles/noble%s.png", pictureID);

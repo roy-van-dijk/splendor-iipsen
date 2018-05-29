@@ -1,5 +1,7 @@
 package application.controllers;
 
+import java.rmi.RemoteException;
+
 import application.domain.Card;
 import application.domain.CardRowImpl;
 
@@ -9,8 +11,8 @@ import application.domain.CardRowImpl;
  */
 public interface GameController 
 {
-	public void reserveCard();
+	public void reserveCard() throws RemoteException;
 	
-	public void endTurn();
+	public void endTurn() throws RemoteException;
 	
 }

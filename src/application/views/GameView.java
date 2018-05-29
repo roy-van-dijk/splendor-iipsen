@@ -1,5 +1,6 @@
 package application.views;
 
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,8 +8,8 @@ import application.StageManager;
 import application.controllers.GameController;
 import application.domain.CardLevel;
 import application.domain.Game;
-import application.domain.GameObserver;
 import application.domain.Player;
+import application.domain.PlayerImpl;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -22,10 +23,10 @@ import javafx.scene.layout.VBox;
  * @author Sanchez
  *
  */
-public class GameView implements GameObserver, UIComponent  {
+public class GameView implements UIComponent  {
 	
-	public final static int cardSizeX = 125, cardSizeY = 200; 
-	public final static int tokenSizeRadius = 50;
+	public final static int cardSizeX = 120, cardSizeY = 180; 
+	public final static int tokenSizeRadius = 45;
 	
 	public final static int opponentsSpacing = 20;
 	
@@ -54,10 +55,7 @@ public class GameView implements GameObserver, UIComponent  {
 		this.game = game;
 		this.gameController = gameController;
 		
-		game.addObserver(this); // Causes modelChanged() to be called upon initialization, before the scene is even added to the primaryStage.
-		
 		this.buildUI();
-		
 	}
 	
 	
@@ -82,10 +80,16 @@ public class GameView implements GameObserver, UIComponent  {
 		root.getStyleClass().add("game-view");
 		
 		//HBox topLayout = new HBox(10);
-		playingField = buildPlayingField();
-		buttons = buildButtons();
-		opponents = buildOpponents();
-		player = buildPlayer();
+		try {
+			playingField = buildPlayingField();
+			buttons = buildButtons();
+			opponents = buildOpponents();
+			player = buildPlayer();
+
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		VBox center = new VBox(playingField, buttons);
 		VBox.setVgrow(playingField, Priority.ALWAYS);
@@ -100,7 +104,7 @@ public class GameView implements GameObserver, UIComponent  {
 	
 	
 	
-	private Pane buildPlayingField()
+	private Pane buildPlayingField() throws RemoteException
 	{
 		Pane playingField = new PlayingFieldPanel(game.getPlayingField(), gameController).asPane();
 		return playingField;
@@ -116,7 +120,14 @@ public class GameView implements GameObserver, UIComponent  {
 		// Make separate button class
 		btnReserveCard = new Button("Reserve Card");
 		btnReserveCard.getStyleClass().addAll("button", "move-button");
-		btnReserveCard.setOnAction(e -> gameController.reserveCard());
+		btnReserveCard.setOnAction(e -> {
+			try {
+				gameController.reserveCard();
+			} catch (RemoteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		});
 		//btnReserveCard.setOnAction(
 				
 				//);
@@ -130,14 +141,21 @@ public class GameView implements GameObserver, UIComponent  {
 		btnResetTurn.getStyleClass().add("move-button");
 		btnEndTurn = new Button("End Turn");
 		btnEndTurn.getStyleClass().add("move-button");
-		btnEndTurn.setOnAction(e -> gameController.endTurn());
+		btnEndTurn.setOnAction(e -> {
+			try {
+				gameController.endTurn();
+			} catch (RemoteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		});
 		btnEndTurn.getStyleClass().add("disabled");
 
 		buttons.getChildren().addAll(btnReserveCard, btnPurchaseCard, btnTakeTwoTokens, btnTakeThreeTokens, btnResetTurn, btnEndTurn);
 		return buttons;
 	}
 	
-	private Pane buildOpponents()
+	private Pane buildOpponents() throws RemoteException
 	{
 		VBox opponentsRows = new VBox(opponentsSpacing);
 
@@ -145,9 +163,10 @@ public class GameView implements GameObserver, UIComponent  {
 		opponentsRows.getStyleClass().add("opponents");
 		opponentsRows.setPrefWidth(600);
 		
-		for(Player player : game.getPlayers())
+		List<Player> players = game.getPlayers();
+		for(Player player : players)
 		{
-			if(player.equals(game.getPlayers().get(0))) continue; // For now we'll assume that the first player in the list is 'our' player
+			if(player.equals(players.get(0))) continue; // For now we'll assume that the first player in the list is 'our' player
 			
 			Pane opponentView = new OpponentPanel(player).asPane();
 			opponentsRows.getChildren().add(opponentView);
@@ -156,7 +175,7 @@ public class GameView implements GameObserver, UIComponent  {
 		return opponentsRows;
 	}
 	
-	private Pane buildPlayer()
+	private Pane buildPlayer() throws RemoteException
 	{
 		Pane player = new PlayerView(game.getPlayers().get(0)).asPane();
 		return player;

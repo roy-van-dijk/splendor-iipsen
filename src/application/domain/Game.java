@@ -9,24 +9,23 @@ import java.rmi.RemoteException;
  * @author Sanchez
  *
  */
-public interface Game {
-	
+public interface Game extends Remote {
+
 	public void nextTurn();
 	
-	public void addPlayer(Player player);
-
-	public int getCurrentPlayerIdx();
-
-	public int getRoundNr();
-
-	public List<Player> getPlayers();
-
-	public PlayingField getPlayingField();
+	public int getCurrentPlayerIdx() throws RemoteException;
 	
-	public void reserveCardFromField(CardRowImpl cardRowImpl, Card card);
-	
-	public void addObserver(GameObserver observer);
-	
+	/**
+	 * Convenience function
+	 */
+	public Player getCurrentPlayer() throws RemoteException;
+
+	public int getRoundNr() throws RemoteException;
+
+	public List<Player> getPlayers() throws RemoteException;
+
+
+	public PlayingField getPlayingField() throws RemoteException;
+
 	public Turn getTurn();
-	
 }

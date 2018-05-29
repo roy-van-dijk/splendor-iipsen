@@ -6,6 +6,7 @@ import java.util.Map;
 import application.domain.Card;
 import application.domain.Gem;
 import application.domain.Player;
+import application.domain.PlayerImpl;
 import application.domain.Token;
 import application.util.Util;
 import javafx.geometry.Insets;

@@ -10,7 +10,7 @@ import java.util.Stack;
  * @author Sanchez
  */
 
-public interface Deck<T>
+public interface Deck<T> extends Remote
 {
 	public void add(T item) throws RemoteException;
 	public T pull() throws RemoteException;
