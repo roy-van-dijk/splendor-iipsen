@@ -13,4 +13,6 @@ public interface GameController
 {
 	public void reserveCard() throws RemoteException;
 	
+	public void endTurn() throws RemoteException;
+	
 }

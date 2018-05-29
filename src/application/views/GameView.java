@@ -40,6 +40,8 @@ public class GameView implements UIComponent  {
 	private Button btnPurchaseCard;
 	private Button btnTakeTwoTokens;
 	private Button btnTakeThreeTokens;
+	private Button btnResetTurn;
+	private Button btnEndTurn;
 	
 	private Pane playingField;
 	private Pane buttons;
@@ -116,7 +118,7 @@ public class GameView implements UIComponent  {
 		
 		
 		// Make separate button class
-		btnReserveCard = new Button("Reserve card");
+		btnReserveCard = new Button("Reserve Card");
 		btnReserveCard.getStyleClass().addAll("button", "move-button");
 		btnReserveCard.setOnAction(e -> {
 			try {
@@ -129,15 +131,27 @@ public class GameView implements UIComponent  {
 		//btnReserveCard.setOnAction(
 				
 				//);
-		btnPurchaseCard = new Button("Purchase card");
+		btnPurchaseCard = new Button("Purchase Card");
 		btnPurchaseCard.getStyleClass().add("move-button");
-		btnTakeTwoTokens = new Button("Take two tokens");
+		btnTakeTwoTokens = new Button("Take Two Tokens");
 		btnTakeTwoTokens.getStyleClass().add("move-button");
-		btnTakeThreeTokens = new Button("Take three tokens");
+		btnTakeThreeTokens = new Button("Take Three Tokens");
 		btnTakeThreeTokens.getStyleClass().add("move-button");
-		
-		
-		buttons.getChildren().addAll(btnReserveCard, btnPurchaseCard, btnTakeTwoTokens, btnTakeThreeTokens);
+		btnResetTurn = new Button("Reset Turn");
+		btnResetTurn.getStyleClass().add("move-button");
+		btnEndTurn = new Button("End Turn");
+		btnEndTurn.getStyleClass().add("move-button");
+		btnEndTurn.setOnAction(e -> {
+			try {
+				gameController.endTurn();
+			} catch (RemoteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		});
+		btnEndTurn.getStyleClass().add("disabled");
+
+		buttons.getChildren().addAll(btnReserveCard, btnPurchaseCard, btnTakeTwoTokens, btnTakeThreeTokens, btnResetTurn, btnEndTurn);
 		return buttons;
 	}
 	
