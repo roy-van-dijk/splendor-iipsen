@@ -8,12 +8,12 @@ import java.util.Map;
  */
 public class Noble {
 	private int prestigeValue;
-	private int illustrationID; // TODO: Replace with string read from nobles.csv instead. 
+	private String illustration; 
 	private Map<Gem, Integer> requirements;
 	
-	public Noble(int prestigeValue, int illustrationID, Map<Gem, Integer> requirements) {
+	public Noble(int prestigeValue, String illustration, Map<Gem, Integer> requirements) {
 		this.prestigeValue = prestigeValue;
-		this.illustrationID = illustrationID;
+		this.illustration = illustration;
 		this.requirements = requirements;
 	}
 
@@ -25,8 +25,8 @@ public class Noble {
 		return requirements;
 	}
 
-	public int getIllustrationID() {
-		return illustrationID;
+	public String getIllustration() {
+		return illustration;
 	}
 	
 	
