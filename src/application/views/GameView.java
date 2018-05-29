@@ -130,13 +130,9 @@ public class GameView implements GameObserver, UIComponent  {
 		btnResetTurn.getStyleClass().add("move-button");
 		btnEndTurn = new Button("End Turn");
 		btnEndTurn.getStyleClass().add("move-button");
-		
-		// POC
+		btnEndTurn.setOnAction(e -> gameController.endTurn());
 		btnEndTurn.getStyleClass().add("disabled");
-		
-		
-		
-		
+
 		buttons.getChildren().addAll(btnReserveCard, btnPurchaseCard, btnTakeTwoTokens, btnTakeThreeTokens, btnResetTurn, btnEndTurn);
 		return buttons;
 	}

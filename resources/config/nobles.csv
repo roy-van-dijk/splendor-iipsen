@@ -1,13 +1,12 @@
-﻿,,,bonusCost,,,,,,
-,Prestige,Illustration,Diamond,Sapphire,Emerald,Ruby,Onyx,,
-Noble,3,noble1,3,3,,,3,,
-Noble,3,noble2,3,3,3,,,,
-Noble,3,noble3,,3,3,3,,,
-Noble,3,noble4,4,,,,4,,
-Noble,3,noble5,,,4,4,,,
-Noble,3,noble6,,4,4,,,,
-Noble,3,noble7,,,,4,4,,
-Noble,3,noble8,4,4,,,,,
-Noble,3,noble9,,,3,3,3,,
-Noble,3,noble,3,,,3,3,,
-,,,,,,,,,
+			bonusCost				
+	Prestige	Illustration	Diamond	Sapphire	Emerald	Ruby	Onyx
+Noble	3	noble1	3	3			3
+Noble	3	noble2	3	3	3		
+Noble	3	noble3		3	3	3	
+Noble	3	noble4	4				4
+Noble	3	noble5			4	4	
+Noble	3	noble6		4	4		
+Noble	3	noble7				4	4
+Noble	3	noble8	4	4			
+Noble	3	noble9			3	3	3
+Noble	3	noble10	3			3	3
