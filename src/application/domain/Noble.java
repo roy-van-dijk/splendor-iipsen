@@ -1,3 +1,4 @@
+
 package application.domain;
 
 import java.rmi.Remote;
@@ -16,3 +17,4 @@ public interface Noble extends Remote {
 	public int getIllustrationID() throws RemoteException;
 	
 }
+	
