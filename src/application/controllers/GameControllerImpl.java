@@ -1,5 +1,7 @@
 package application.controllers;
 
+import java.rmi.RemoteException;
+
 import application.domain.Card;
 import application.domain.CardRowImpl;
 import application.domain.Game;
@@ -16,14 +18,14 @@ public class GameControllerImpl implements GameController {
 	}
 
 	@Override
-	public void reserveCard() {
+	public void reserveCard() throws RemoteException {
 		// Creating POC variables - basically specifying: Hey controller, I clicked on this card
 		CardRowImpl row = game.getPlayingField().getCardRows().get(1); // Second row
 		Card card = row.getCardSlots()[1]; // Second card
 		
 		//if(!card.equals(card2wantdezeisspeciaal)) return;
 		
-		game.reserveCardFromField(row, card);
+		game.getCurrentPlayer().reserveCardFromField(row, card);
 	}
 
 	

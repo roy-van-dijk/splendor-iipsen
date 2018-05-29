@@ -1,8 +1,14 @@
 package application.views;
 
+import java.rmi.RemoteException;
+import java.util.List;
+
 import application.StageManager;
 import application.controllers.LobbyController;
 import application.controllers.MenuController;
+import application.domain.Lobby;
+import application.domain.LobbyObserver;
+import application.domain.Player;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -20,9 +26,10 @@ import javafx.scene.text.Text;
  * @author Roy
  *
  */
-public class LobbyView implements UIComponent  {
+public class LobbyView implements UIComponent, LobbyObserver  {
 	
-//	private Home home;
+	private final static int DEFAULT_MAX_PLAYERS = 4;
+	
 	private LobbyController lobbyController;
 	
 	private BorderPane root;
@@ -38,32 +45,46 @@ public class LobbyView implements UIComponent  {
 	private Label lblUnassPlayers;
 	private Label lblAssPlayers;
 	private Label lblLobbyIp;
-	private Label lblSpot1;
-	private Label lblSpot2;
-	private Label lblSpot3;
-	private Label lblSpot4;
-	private Label lblPlayer1;
-	private Label lblPlayer2;
-	private Label lblPlayer3;
-	private Label lblPlayer4;
 	
-	// POC var - see opt 2. @ this.modelChanged() 
-	//private List<UIComponent> comps = new ArrayList<>();
+	private Label[] lblsAssignedPlayerNames;
+	private Label[] lblsUnassignedPlayerNames;
 
-	public LobbyView(LobbyController lobbyController) {
-//		this.home = home;
+	public LobbyView(Lobby lobby, LobbyController lobbyController) {
 		this.lobbyController = lobbyController;
 		
-		
-		// home.addObserver(this); // Causes modelChanged() to be called upon initialization, before the scene is even added to the primaryStage.
-		
 		this.buildUI();
+		
+		try {
+			lobby.addObserver(this);
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
-	
-	// POC
-	public void modelChanged()
-	{
-//		lblPlayer1.setText(modeldiemeegegevenis.getPlayers().get(0).getName());
+
+	public void modelChanged(Lobby lobby) throws RemoteException {
+		int maxPlayers = lobby.getMaxPlayers();
+		
+		lblsAssignedPlayerNames = new Label[maxPlayers];
+		lblsUnassignedPlayerNames = new Label[maxPlayers];
+		
+		
+		// TODO: update ready status of each player;
+		List<Player> assignedPlayers = lobby.getAssignedPlayers();
+		for(int i = 0; i < assignedPlayers.size(); i++) 
+		{
+			Player player = assignedPlayers.get(i);
+			lblsAssignedPlayerNames[i].setText(player.getName());
+		}
+		
+		List<Player> unassignedPlayers = lobby.getUnassignedPlayers();
+		for(int i = 0; i < unassignedPlayers.size(); i++) 
+		{
+			Player player = unassignedPlayers.get(i);
+			lblsUnassignedPlayerNames[i].setText(player.getName());
+		}
+		
+		
 	}
 	
 	private void buildUI()
@@ -98,19 +119,16 @@ public class LobbyView implements UIComponent  {
 		hbox = new HBox();
 		gpane = new GridPane();
 		
+
+		
 		lblUnassPlayers = new Label("Unassigned Players");
 		lblAssPlayers 	= new Label("Assigned Players");
 			
-		lblLobbyIp 	= new Label("Lobby ip: 132.123.123.123");;
-		lblSpot1 	= new Label("Empty spot...");
-		lblSpot2 	= new Label("Empty spot...");
-		lblSpot3 	= new Label("Empty spot...");
-		lblSpot4 	= new Label("Empty spot...");
-		lblPlayer1 	= new Label("Player 1 - empty");
-		lblPlayer2 	= new Label("Player 2 - empty");
-		lblPlayer3 	= new Label("Player 3 - empty");
-		lblPlayer4 	= new Label("Player 4 - empty");
+		lblLobbyIp 	= new Label("Lobby ip: 132.123.123.123");
 		
+		lblsAssignedPlayerNames = new Label[DEFAULT_MAX_PLAYERS];
+		lblsUnassignedPlayerNames = new Label[DEFAULT_MAX_PLAYERS];
+
 		btnReady = new Button("Ready");		
 		
 		btnReady.setOnAction(e -> StageManager.getInstance().showGameScreen());
@@ -122,16 +140,16 @@ public class LobbyView implements UIComponent  {
 		gpane.add(lblLobbyIp, 0, 0, 2, 1);
 		
 		gpane.add(lblUnassPlayers, 0, 1);
-		gpane.add(lblSpot1, 0, 2);
-		gpane.add(lblSpot2, 0, 3);
-		gpane.add(lblSpot3, 0, 4);
-		gpane.add(lblSpot4, 0, 5);
+		for(int i = 0; i < lblsUnassignedPlayerNames.length; i++) {
+			lblsUnassignedPlayerNames[i] = new Label("Empty spot...");
+			gpane.add(lblsUnassignedPlayerNames[i], 0, i + 2);
+		}
 		
 		gpane.add(lblAssPlayers, 1, 1);
-		gpane.add(lblPlayer1, 1, 2);
-		gpane.add(lblPlayer2, 1, 3);
-		gpane.add(lblPlayer3, 1, 4);
-		gpane.add(lblPlayer4, 1, 5);
+		for(int i = 0; i < lblsAssignedPlayerNames.length; i++) {
+			lblsAssignedPlayerNames[i] = new Label(String.format("Player %d - empty", i));
+			gpane.add(lblsAssignedPlayerNames[i], 1, i + 2);
+		}
 		
 		gpane.add(btnReady, 1, 6);
 		
@@ -149,4 +167,5 @@ public class LobbyView implements UIComponent  {
 	public Pane asPane() {
 		return root;
 	}
+
 }

@@ -1,19 +1,14 @@
 package application.domain;
+
+import java.rmi.Remote;
+
 /**
  * 
  * @author Sanchez
  *
  */
-public class Token {
-	private Gem gemType;
-
-	public Gem getGemType() {
-		return gemType;
-	}
-
-	public Token(Gem gemType) {
-		this.gemType = gemType;
-	}
+public interface Token extends Remote {
 	
+	public Gem getGemType();
 	
 }

@@ -1,33 +1,18 @@
 package application.domain;
 
+import java.rmi.Remote;
+import java.rmi.RemoteException;
 import java.util.Map;
 /**
  * 
  * @author Sanchez
  *
  */
-public class Noble {
-	private int prestigeValue;
-	private int illustrationID; // TODO: Replace with string read from nobles.csv instead. 
-	private Map<Gem, Integer> requirements;
-	
-	public Noble(int prestigeValue, int illustrationID, Map<Gem, Integer> requirements) {
-		this.prestigeValue = prestigeValue;
-		this.illustrationID = illustrationID;
-		this.requirements = requirements;
-	}
+public interface Noble extends Remote {
+	public int getPrestigeValue() throws RemoteException;
 
-	public int getPrestigeValue() {
-		return prestigeValue;
-	}
+	public Map<Gem, Integer> getRequirements() throws RemoteException;
 
-	public Map<Gem, Integer> getRequirements() {
-		return requirements;
-	}
-
-	public int getIllustrationID() {
-		return illustrationID;
-	}
-	
+	public int getIllustrationID() throws RemoteException;
 	
 }

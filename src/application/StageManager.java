@@ -8,6 +8,8 @@ import application.controllers.MenuController;
 import application.controllers.MenuControllerImpl;
 import application.domain.Game;
 import application.domain.GameImpl;
+import application.domain.Lobby;
+import application.domain.LobbyImpl;
 import application.views.GameView;
 import application.views.MainMenuView;
 import application.views.LobbyView;
@@ -45,7 +47,7 @@ public class StageManager {
 	
 	public void showGameScreen()
 	{
-		Game game = new GameImpl();
+		Game game = new GameImpl(null);
 		GameController gameController = new GameControllerImpl(game);
 		GameView gameView = new GameView(game, gameController);
 		
@@ -75,8 +77,9 @@ public class StageManager {
 	
 	public void showLobbyScreen(String hostIp, String nickname) 
 	{
+		Lobby lobby = new LobbyImpl();
 		LobbyController lobbyController = new LobbyControllerImpl(hostIp, nickname);
-		LobbyView lobbyView = new LobbyView(lobbyController);
+		LobbyView lobbyView = new LobbyView(lobby, lobbyController);
 
 			
 		this.switchScene(lobbyView.asPane());

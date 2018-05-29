@@ -13,8 +13,6 @@ public class GameImpl implements Game {
 	private int currentPlayerIdx;
 	private int roundNr;
 	
-	private ArrayList<GameObserver> observers;
-	
 	private List<Player> players;
 	
 	private PlayingField playingField;
@@ -25,16 +23,15 @@ public class GameImpl implements Game {
 	 * This information is then passed onto the playingField, which generates those tokens and nobles.
 	 */
 
-	public GameImpl() {
-		this.players = new ArrayList<Player>();
-		this.observers = new ArrayList<GameObserver>();
+	public GameImpl(List<Player> players) {
+		this.players = new ArrayList<Player>(); // TODO: replace with: this.players = players;
 		
 		Test_Create4Players();
 		
 		this.roundNr = 0;
 		this.currentPlayerIdx = 1; // TODO: First opponent starts first for now (1 because 0 = Player in SP)
 		
-		this.playingField = new PlayingField(players.size());
+		this.playingField = new PlayingFieldImpl(this.players.size());
 	}
 	
 	public void nextTurn()
@@ -43,48 +40,14 @@ public class GameImpl implements Game {
 		if(currentPlayerIdx >= players.size())
 			currentPlayerIdx = 0;			
 	}
-	
-	@Override
-	public void reserveCardFromField(CardRowImpl cardRowImpl, Card card) {
-		System.out.println(cardRowImpl.getCardDeck().getAll().size());
-		
-		Player currentPlayer = players.get(currentPlayerIdx);
-		
-		if(currentPlayer.getReservedCards().size() < 3) // Business rule: max 3 reserved cards
-		{
-			cardRowImpl.removeCard(card);
-			currentPlayer.addReservedCard(card);
-			
-			System.out.printf("%s has taken the card: %s", currentPlayer.getName() ,card.toString());
-			this.notifyObservers();
-		}
-	}
-	
-	
-	
-	public void notifyObservers() {
-		for (GameObserver observer : observers) {
-			observer.modelChanged(this);
-		}
-	}
-	
-	public void addObserver(GameObserver observer) {
-		// NextObserver
-		this.observers.add(observer);
-		this.notifyObservers(); // Added bonus of triggering initialization for the recently-added observer. 
-	}
-	
+
+
 	private void Test_Create4Players()
 	{
-		this.addPlayer(new Player("Bob"));
-		this.addPlayer(new Player("Michael"));
-		this.addPlayer(new Player("Peter"));
-		this.addPlayer(new Player("Martin"));
-	}
-	
-	public void addPlayer(Player player)
-	{
-		players.add(player);
+		this.players.add(new PlayerImpl("Bob"));
+		this.players.add(new PlayerImpl("Michael"));
+		this.players.add(new PlayerImpl("Peter"));
+		this.players.add(new PlayerImpl("Martin"));
 	}
 
 	public int getCurrentPlayerIdx() {
@@ -101,6 +64,11 @@ public class GameImpl implements Game {
 
 	public PlayingField getPlayingField() {
 		return playingField;
+	}
+
+	
+	public Player getCurrentPlayer() {
+		return players.get(currentPlayerIdx);
 	}
 	
 }
