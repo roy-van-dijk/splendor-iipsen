@@ -117,6 +117,11 @@
 .move-button {
 	-fx-font-size: 20px;
 }
+.move-button.disabled {
+	-fx-background-color: gray;
+	-fx-text-fill:rgb(192,192,192);
+	-fx-cursor: default;
+}
 
 .home-button {
 	-fx-font-size: 45px;
@@ -124,6 +129,11 @@
 
 .manual-button {
 	-fx-background-radius: 0px 0px 0px 15px;
+	-fx-font-size: 30px;
+}
+
+.manual-button-game {
+	-fx-background-radius: 15px 0px 0px 0px;
 	-fx-font-size: 30px;
 }
 
