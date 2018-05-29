@@ -9,12 +9,12 @@ import java.util.Map;
  */
 public class NobleImpl implements Noble {
 	private int prestigeValue;
-	private String illustrationID; 
+	private String illustration; 
 	private Map<Gem, Integer> requirements;
 	
-	public NobleImpl(int prestigeValue, String illustrationID, Map<Gem, Integer> requirements) {
+	public NobleImpl(int prestigeValue, String illustration, Map<Gem, Integer> requirements) {
 		this.prestigeValue = prestigeValue;
-		this.illustrationID = illustrationID;
+		this.illustration = illustration;
 		this.requirements = requirements;
 	}
 
@@ -26,8 +26,8 @@ public class NobleImpl implements Noble {
 		return requirements;
 	}
 
-	public String getIllustrationID() throws RemoteException {
-		return illustrationID;
+	public String getIllustration() throws RemoteException {
+		return illustration;
 	}
 	
 	

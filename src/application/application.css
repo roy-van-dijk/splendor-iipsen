@@ -133,8 +133,8 @@
 }
 
 .manual-button-game {
-	-fx-background-radius: 15px 0px 0px 0px;
-	-fx-font-size: 30px;
+	-fx-background-radius: 50px;
+	-fx-font-size: 25px;
 }
 
 .manual-navigation-button {

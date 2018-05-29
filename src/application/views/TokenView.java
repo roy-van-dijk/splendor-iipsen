@@ -3,11 +3,17 @@ package application.views;
 import application.domain.Gem;
 import application.domain.Token;
 import javafx.geometry.Pos;
+import javafx.scene.Group;
+import javafx.scene.Node;
+import javafx.scene.effect.BlendMode;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 
 /**
  * @author Sanchez
@@ -42,6 +48,28 @@ public class TokenView implements UIComponent {
 		//Image image = ImageResources.getImage(imagePath);
         ImagePattern imagePattern = new ImagePattern(image);
         circle.setFill(imagePattern);
+        
+        
+        
+//        ColorAdjust colorAdjust = new ColorAdjust();
+//        colorAdjust.setContrast(0.1);
+//        colorAdjust.setHue(-30);
+//        
+//        circle.setEffect(colorAdjust);
+        
+        
+//        Circle c = new Circle();
+//        c.setFill(Color.PURPLE);
+//        c.setRadius(radius);
+// 
+//        Group g = new Group();
+//        g.setBlendMode(BlendMode.RED);
+//        g.getChildren().addAll(c, circle);
+        
+        
+        
+        
+        
         
 		root = new StackPane(circle);
 	}
