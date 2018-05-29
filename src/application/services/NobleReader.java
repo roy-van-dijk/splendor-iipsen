@@ -17,6 +17,7 @@ import application.domain.Card;
 import application.domain.CardImpl;
 import application.domain.Gem;
 import application.domain.Noble;
+import application.domain.NobleImpl;
 import application.util.Util;
 
 /**
@@ -69,7 +70,7 @@ public class NobleReader {
 	private Noble readNoble(String[] nobleRecord) {
 		String illustration = nobleRecord[0];
 		Map<Gem, Integer> bonusCosts = readBonusCosts(nobleRecord);
-		Noble noble = new Noble(prestigeValue, illustration, bonusCosts);
+		NobleImpl noble = new NobleImpl(prestigeValue, illustration, bonusCosts);
 		
 		return null;
 	}

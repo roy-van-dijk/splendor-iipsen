@@ -9,10 +9,10 @@ import java.util.Map;
  */
 public class NobleImpl implements Noble {
 	private int prestigeValue;
-	private int illustrationID; // TODO: Replace with string read from nobles.csv instead. 
+	private String illustrationID; 
 	private Map<Gem, Integer> requirements;
 	
-	public NobleImpl(int prestigeValue, int illustrationID, Map<Gem, Integer> requirements) {
+	public NobleImpl(int prestigeValue, String illustrationID, Map<Gem, Integer> requirements) {
 		this.prestigeValue = prestigeValue;
 		this.illustrationID = illustrationID;
 		this.requirements = requirements;
@@ -26,7 +26,7 @@ public class NobleImpl implements Noble {
 		return requirements;
 	}
 
-	public int getIllustrationID() throws RemoteException {
+	public String getIllustrationID() throws RemoteException {
 		return illustrationID;
 	}
 	
