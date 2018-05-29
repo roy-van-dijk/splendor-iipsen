@@ -3,7 +3,8 @@ package application.domain;
 import java.util.Map;
 /**
  * 
- * @author Sanchez
+ * @author 	Sanchez
+ * edit		Tom
  *
  */
 public class Noble {
@@ -21,6 +22,8 @@ public class Noble {
 		return prestigeValue;
 	}
 
+	//requirements are different from the cards requirements. 
+	//nobles are bought automatically at the end of a turn with only bonesus, not tokens.
 	public Map<Gem, Integer> getRequirements() {
 		return requirements;
 	}
