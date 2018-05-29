@@ -39,6 +39,8 @@ public class GameView implements GameObserver, UIComponent  {
 	private Button btnPurchaseCard;
 	private Button btnTakeTwoTokens;
 	private Button btnTakeThreeTokens;
+	private Button btnResetTurn;
+	private Button btnEndTurn;
 	
 	private Pane playingField;
 	private Pane buttons;
@@ -112,21 +114,30 @@ public class GameView implements GameObserver, UIComponent  {
 		
 		
 		// Make separate button class
-		btnReserveCard = new Button("Reserve card");
+		btnReserveCard = new Button("Reserve Card");
 		btnReserveCard.getStyleClass().addAll("button", "move-button");
 		btnReserveCard.setOnAction(e -> gameController.reserveCard());
 		//btnReserveCard.setOnAction(
 				
 				//);
-		btnPurchaseCard = new Button("Purchase card");
+		btnPurchaseCard = new Button("Purchase Card");
 		btnPurchaseCard.getStyleClass().add("move-button");
-		btnTakeTwoTokens = new Button("Take two tokens");
+		btnTakeTwoTokens = new Button("Take Two Tokens");
 		btnTakeTwoTokens.getStyleClass().add("move-button");
-		btnTakeThreeTokens = new Button("Take three tokens");
+		btnTakeThreeTokens = new Button("Take Three Tokens");
 		btnTakeThreeTokens.getStyleClass().add("move-button");
+		btnResetTurn = new Button("Reset Turn");
+		btnResetTurn.getStyleClass().add("move-button");
+		btnEndTurn = new Button("End Turn");
+		btnEndTurn.getStyleClass().add("move-button");
+		
+		// POC
+		btnEndTurn.getStyleClass().add("disabled");
 		
 		
-		buttons.getChildren().addAll(btnReserveCard, btnPurchaseCard, btnTakeTwoTokens, btnTakeThreeTokens);
+		
+		
+		buttons.getChildren().addAll(btnReserveCard, btnPurchaseCard, btnTakeTwoTokens, btnTakeThreeTokens, btnResetTurn, btnEndTurn);
 		return buttons;
 	}
 	
@@ -151,7 +162,7 @@ public class GameView implements GameObserver, UIComponent  {
 	
 	private Pane buildPlayer()
 	{
-		Pane player = new PlayerPanel(game.getPlayers().get(0)).asPane();
+		Pane player = new PlayerView(game.getPlayers().get(0)).asPane();
 		return player;
 	}
 	
