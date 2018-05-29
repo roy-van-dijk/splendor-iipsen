@@ -14,7 +14,7 @@ public interface Noble extends Remote {
 
 	public Map<Gem, Integer> getRequirements() throws RemoteException;
 
-	public int getIllustrationID() throws RemoteException;
+	public String getIllustrationID() throws RemoteException;
 	
 }
 	
