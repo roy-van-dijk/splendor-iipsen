@@ -7,17 +7,20 @@ import java.util.Map;
 
 import application.controllers.GameController;
 import application.domain.CardRowImpl;
+import application.domain.Game;
 import application.domain.Gem;
 import application.domain.Noble;
 import application.domain.PlayingField;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 /**
  * 
  * @author Roy
@@ -56,9 +59,10 @@ public class PlayingFieldPanel implements UIComponent {
 	{
 		VBox cardsAndNobles = buildCardsAndNoblesDisplay(); 
 		VBox tokens = buildTokensDisplay();
+		VBox exitgame =  buildExitGameDisplay();
 		
 		
-		this.root = new HBox(TOKENSCARDSPADDING, cardsAndNobles, tokens);
+		this.root = new HBox(TOKENSCARDSPADDING, cardsAndNobles, tokens, exitgame);
 		this.root.setAlignment(Pos.CENTER);
 		this.root.setPadding(new Insets(FIELDPADDING));
 	}
@@ -113,6 +117,8 @@ public class PlayingFieldPanel implements UIComponent {
 		return tokens;
 	}
 	
+	
+	
 	private HBox createTokenGemCountDisplay(Gem gemType, int count, int radius)
 	{
 		TokenView tokenView = new TokenView(gemType, radius);
@@ -127,6 +133,20 @@ public class PlayingFieldPanel implements UIComponent {
 		return tokenRow;
 	}
 	
+	private VBox buildExitGameDisplay()
+	{	
+		Button exit = new Button("X");
+
+		VBox vbox = new VBox();
+		vbox.getChildren().add(exit);
+		
+		exit.setOnAction(e -> {
+			
+			System.out.println("exit the game");
+			gameController.exitGame();
+		});
+		return vbox;
+	}
 
 	public Pane asPane() {
 		return root;
