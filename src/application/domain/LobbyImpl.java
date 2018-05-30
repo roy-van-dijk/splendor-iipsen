@@ -1,10 +1,16 @@
 package application.domain;
 
+import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LobbyImpl implements Lobby {
+public class LobbyImpl implements Lobby, Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	private final static int DEFAULT_MAX_PLAYERS = 4;
 	

@@ -59,7 +59,7 @@ public class PlayingFieldImpl implements PlayingField {
 		
 		for(int i = 0; i < baseAmount; i++)
 		{
-			Noble noble = new NobleImpl((int) (Math.random() * 5), (int) (Math.random() * 10), null); // read TODO above.
+			Noble noble = new NobleImpl((int) (Math.random() * 5), String.format("noble%d",(int) ((Math.random() * 9) + 1)), null); // read TODO above.
 			nobles.add(noble);
 		}
 	}
