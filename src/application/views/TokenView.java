@@ -1,5 +1,7 @@
 package application.views;
 
+import application.controllers.GameController;
+import application.domain.ColorBlindModes;
 import application.domain.Gem;
 import application.domain.Token;
 import javafx.geometry.Pos;
@@ -19,17 +21,20 @@ import javafx.scene.shape.Rectangle;
  * @author Sanchez
  *
  */
-public class TokenView implements UIComponent {
+public class TokenView implements UIComponent, ColorChangeable {
 	
 	// private Token token; // Made irrelevant on 17:43 20-05-2018 TODO: pending definite removal
 	private Gem gemType;
 	
 	private StackPane root;
 	private double radius;
+	private Circle circle;
 
 	public TokenView(Gem gem, double radius) {
 		this.gemType = gem;
 		this.radius = radius;
+		
+		GameView.colorBlindViews.add(this);
 		
 		this.buildUI();
 	}
@@ -42,36 +47,22 @@ public class TokenView implements UIComponent {
 	
 	private void buildUI()
 	{
-		Circle circle = new Circle(radius);
+		circle = new Circle(radius);
 		String imagePath = String.format("file:resources/tokens/token_%s.png", getTokenImageFileName());
 		Image image = new Image(imagePath);
 		//Image image = ImageResources.getImage(imagePath);
         ImagePattern imagePattern = new ImagePattern(image);
         circle.setFill(imagePattern);
         
-        
-        
-//        ColorAdjust colorAdjust = new ColorAdjust();
-//        colorAdjust.setContrast(0.1);
-//        colorAdjust.setHue(-30);
-//        
-//        circle.setEffect(colorAdjust);
-        
-        
-//        Circle c = new Circle();
-//        c.setFill(Color.PURPLE);
-//        c.setRadius(radius);
-// 
-//        Group g = new Group();
-//        g.setBlendMode(BlendMode.RED);
-//        g.getChildren().addAll(c, circle);
-        
-        
-        
-        
-        
-        
 		root = new StackPane(circle);
+	}
+	
+	public void switchAccessibiliyModes(ColorBlindModes mode) {
+		double hueOffset = this.gemType.hueOffset(this.gemType, mode);
+		
+		
+	    
+	    
 	}
 	
 	
@@ -90,6 +81,14 @@ public class TokenView implements UIComponent {
 	public Pane asPane() {
 		return root;
 	}
-	
+
+	@Override
+	public void updateView(ColorBlindModes mode) {
+		// Switches hue offset for color blind mode based on data in Gem class
+        double hueOffset = this.gemType.hueOffset(this.gemType, mode);
+        ColorAdjust colorAdjust = new ColorAdjust();
+	    colorAdjust.setHue(+hueOffset);
+	    circle.setEffect(colorAdjust);
+	}
 	
 }

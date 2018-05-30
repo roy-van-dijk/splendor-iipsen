@@ -35,7 +35,7 @@ public class Main extends Application {
 		          }
 		        });
 			StageManager.getInstance().showMainMenu(primaryStage);
-//			StageManager.getInstance().showLobbyScreen();
+//			StageManager.getInstance().showGameScreen();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
