@@ -50,7 +50,7 @@ public class FrontCardView extends CardView {
 	{
 		String path = "";
 		try {
-			path = String.format("file:resources/cards/%s/%s.png", card.getLevel().name().toLowerCase(), "bg1");
+			path = String.format("file:resources/cards/%s/%s.jpg", card.getLevel().name().toLowerCase(), card.getIllustration());
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
