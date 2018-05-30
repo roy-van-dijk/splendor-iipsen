@@ -37,11 +37,16 @@ public class PopupView {
 		Stage stage = new Stage();
 		VBox hbox = new VBox();
 		Text text = new Text(paragraphText);
+		Text titletext = new Text(title);
 		text.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
+		text.setFill(Color.WHITE);
+		
+		text.setFont(Font.font("Tahoma", FontWeight.NORMAL, 50));
 		text.setFill(Color.WHITE);
 				
 		scene.getStylesheets().add(getClass().getResource("../application.css").toExternalForm());
 	
+		hbox.getChildren().add(titletext);
 		hbox.getChildren().add(text);
 		hbox.setAlignment(Pos.CENTER);
 		
