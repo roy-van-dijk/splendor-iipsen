@@ -32,7 +32,7 @@ public class PlayingFieldPanel implements UIComponent {
 							TOKENSPACING = 10,
 							TOKENSLABELSPACING = 25,
 							TOKENSCARDSPADDING = 20,
-							FIELDPADDING = 20;
+							FIELDPADDING = 0;
 	
 	private PlayingField playingField;
 	private HBox root;
