@@ -93,7 +93,7 @@ public class PlayingFieldPanel implements UIComponent {
 		
 		for(Noble noble : playingField.getNobles())
 		{
-			NobleView nobleView = new NobleView(noble, GameView.cardSizeX, GameView.cardSizeY);
+			NobleView nobleView = new NobleView(noble, GameView.cardSizeX, GameView.cardSizeY / 1.5);
 			nobleViews.add(nobleView);
 			nobles.getChildren().add(nobleView.asPane());
 		}

@@ -1,6 +1,7 @@
 package application.domain;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -15,23 +16,20 @@ public class PlayingFieldImpl implements PlayingField {
 	private final static int NOBLE_BASE_AMOUNT = 5;
 	
 	
-	private List<CardRowImpl> cardRowImpls;
+	private List<CardRowImpl> cardRows;
 	private List<Noble> nobles;
 	
 	private TokenList tokenList;
-	
-	//private NobleDeck noblesDeck; // Not necessary - is only used on round start.
-	
 	private DeckFactory deckFactory;
 
 	public PlayingFieldImpl(int playerCount) {
 		this.nobles = new ArrayList<>();
-		this.cardRowImpls = new ArrayList<>();
+		this.cardRows = new ArrayList<>();
 		this.tokenList = new TokenList();
 		this.deckFactory = new DeckFactory();
 
 		this.createTokens(tokensAmount(playerCount));
-		this.Test_createNobles(noblesAmount(playerCount));
+		this.createNobles(noblesAmount(playerCount));
 		this.createCardRows();
 	}
 
@@ -53,14 +51,14 @@ public class PlayingFieldImpl implements PlayingField {
 		}
 	}
 	
-	private void Test_createNobles(int baseAmount)
+	private void createNobles(int amount)
 	{
-		// TODO: Utilize DeckFactory for this
+		NobleDeck deck = deckFactory.createNobleDeck();
+		Collections.shuffle(deck.getAll());
 		
-		for(int i = 0; i < baseAmount; i++)
+		for(int i = 0; i < amount; i++)
 		{
-			Noble noble = new NobleImpl((int) (Math.random() * 5), String.format("noble%d",(int) ((Math.random() * 9) + 1)), null); // read TODO above.
-			nobles.add(noble);
+			nobles.add(deck.getAll().pop());
 		}
 	}
 	
@@ -69,8 +67,9 @@ public class PlayingFieldImpl implements PlayingField {
 		// Create 3 card rows (including decks)
 		for(CardLevel level : CardLevel.values())
 		{
-			CardDeckImpl deck = deckFactory.createCardDeck(level);
-			cardRowImpls.add(new CardRowImpl(deck));
+			CardDeck deck = deckFactory.createCardDeck(level);
+			Collections.shuffle(deck.getAll());
+			cardRows.add(new CardRowImpl(deck));
 		}
 	}
 	
@@ -103,7 +102,7 @@ public class PlayingFieldImpl implements PlayingField {
 	
 
 	public List<CardRowImpl> getCardRows() {
-		return cardRowImpls;
+		return cardRows;
 	}
 
 	public List<Noble> getNobles() {

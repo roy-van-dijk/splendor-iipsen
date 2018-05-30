@@ -3,7 +3,7 @@ package application.views;
 import java.rmi.RemoteException;
 
 import application.domain.Card;
-import application.domain.CardDeckImpl;
+import application.domain.CardDeck;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -19,9 +19,9 @@ import javafx.scene.shape.StrokeType;
  */
 public class CardDeckView extends CardView {
 	
-	private CardDeckImpl deck;
+	private CardDeck deck;
 	
-	public CardDeckView(CardDeckImpl deck, int sizeX, int sizeY) {
+	public CardDeckView(CardDeck deck, int sizeX, int sizeY) {
 		super(sizeX, sizeY);
 		this.deck = deck;
 		

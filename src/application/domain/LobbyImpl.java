@@ -1,6 +1,8 @@
 package application.domain;
 
 import java.io.Serializable;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,11 +20,18 @@ public class LobbyImpl implements Lobby, Serializable {
 	private List<Player> unassignedPlayers;
 	private List<LobbyObserver> observers;
 	
+	private String hostIP;
 	
 	private int maxPlayers;
 	
 	public LobbyImpl(int maxPlayers) {
 		this.maxPlayers = maxPlayers;
+		
+		try {
+			this.hostIP  = InetAddress.getLocalHost().getHostAddress();
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
 		
 		this.observers = new ArrayList<LobbyObserver>();
 		this.assignedPlayers = new ArrayList<Player>();
@@ -70,9 +79,13 @@ public class LobbyImpl implements Lobby, Serializable {
 		return unassignedPlayers;
 	}
 
-	@Override
 	public int getMaxPlayers() throws RemoteException {
 		return maxPlayers;
 	}
+	
+	public String getHostIP() throws RemoteException {
+		return hostIP;
+	}
+	
 	
 }
