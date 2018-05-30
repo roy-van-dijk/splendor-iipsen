@@ -1,5 +1,6 @@
 package application.domain;
 
+import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.Map;
 
@@ -7,7 +8,7 @@ import java.util.Map;
  * @author Sanchez
  *
  */
-public interface Card {
+public interface Card extends Remote {
 	public int getPrestigeValue() throws RemoteException;
 
 	public String getIllustration() throws RemoteException;

@@ -69,13 +69,14 @@ public class StageManager {
 	 *            stage
 	 */
 	public void showMainMenu(Stage stage) {
-		primaryStage = stage;
-
+		
+		
 		MenuController menuController = new MenuControllerImpl();
 		MainMenuView homeView = new MainMenuView(menuController);
 
 		Scene scene = new Scene(homeView.asPane(), 1800, 1000);
 		scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+		primaryStage = stage;
 
 		primaryStage.getIcons().add(new Image(("file:resources/misc/splendor-icon.png")));
 		primaryStage.setScene(scene);
@@ -85,6 +86,20 @@ public class StageManager {
 		primaryStage.setTitle("Splendor");
 		primaryStage.setOnCloseRequest(e -> Platform.exit());
 	   
+		primaryStage.show();
+	}
+	
+	/**
+	 * Start the MainMenu
+	 */
+	public void startMainMenu() {
+		MenuController menuController = new MenuControllerImpl();
+		MainMenuView homeView = new MainMenuView(menuController);
+
+		Scene scene = new Scene(homeView.asPane(), 1800, 1000);
+		scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+		
+		primaryStage.setScene(scene);
 		primaryStage.show();
 	}
 

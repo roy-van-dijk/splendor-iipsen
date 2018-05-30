@@ -2,9 +2,12 @@ package application.controllers;
 
 import java.rmi.RemoteException;
 
+import application.StageManager;
 import application.domain.Card;
 import application.domain.CardRowImpl;
 import application.domain.Game;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
 /**
  * @author Sanchez
@@ -43,6 +46,9 @@ public class GameControllerImpl implements GameController {
 		//TODO: Determine next player
 		
 		game.nextTurn();
+	}
+	public void exitGame() {
+		StageManager.getInstance().startMainMenu();
 	}
 
 	

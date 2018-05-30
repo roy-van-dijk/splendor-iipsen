@@ -6,7 +6,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import application.controllers.GameController;
 import application.domain.Card;
+import application.domain.ColorBlindModes;
 import application.domain.Gem;
 import application.domain.Player;
 import javafx.geometry.Insets;
@@ -18,6 +20,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Separator;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -35,6 +38,8 @@ public class PlayerView implements UIComponent {
 
 	// Radio button toggle group
 	final private ToggleGroup group = new ToggleGroup();
+	
+	private GameController gamecontroller;
 	
 	private Pane root;
 	private Player player;
@@ -84,7 +89,8 @@ public class PlayerView implements UIComponent {
 	
 	private VBox buildAccessibilityMenu() 
 	{
-		VBox accessibility = new VBox();
+		VBox accessibility = new VBox(10);
+		accessibility.setPadding(new Insets(0, 22, 0, 0));
 		accessibility.setAlignment(Pos.BOTTOM_RIGHT);
 		
 		HBox btnManual 					= buildManualButton();
@@ -93,21 +99,25 @@ public class PlayerView implements UIComponent {
 		RadioButton rbAccProtanopia 	= new RadioButton();
 		RadioButton rbAccTritanopia 	= new RadioButton();
 		
-		btnManual.setPadding(new Insets(-5, 15, 0, 0));
+		btnManual.setPadding(new Insets(0, -8, 0, 0));
 		rbAccNormal.setOnAction(e -> {
 			System.out.println("Switching to normal accessiblity mode");
+			GameView.changeColorBlindMode(ColorBlindModes.NORMAL);
 		});
 		
 		rbAccDeuteranopia.setOnAction(e -> {
 			System.out.println("Switching to Deuteranopia accessiblity mode");
+			GameView.changeColorBlindMode(ColorBlindModes.DEUTERANOPIA);
 		});
 		
 		rbAccProtanopia.setOnAction(e -> {
 			System.out.println("Switching to Protanopia accessiblity mode");
+			GameView.changeColorBlindMode(ColorBlindModes.PROTANOPIA);
 		});
 		
 		rbAccTritanopia.setOnAction(e -> {
 			System.out.println("Switching to Tritanopia accessiblity mode");
+			GameView.changeColorBlindMode(ColorBlindModes.TRITANOPIA);
 		});
 		
 		ArrayList<RadioButton> radios = new ArrayList<RadioButton>();
@@ -121,8 +131,7 @@ public class PlayerView implements UIComponent {
 		
 		for(RadioButton radio : radios) {
 			radio.setToggleGroup(group);
-			radio.setPadding(new Insets(10, 26, 0, 0));
-			radio.setAlignment(Pos.BASELINE_CENTER);
+//			radio.setAlignment(Pos.BASELINE_CENTER);
 		}
 		
 		accessibility.getChildren().addAll(rbAccNormal, rbAccDeuteranopia, rbAccProtanopia, rbAccTritanopia, btnManual);
