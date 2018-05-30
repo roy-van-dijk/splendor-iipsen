@@ -100,7 +100,7 @@ public class StageManager {
 		scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 		
 		primaryStage.setScene(scene);
-		primaryStage.show();
+		//primaryStage.show();
 	}
 
 	public void hostNewGameLobby(String nickname) throws RemoteException {
