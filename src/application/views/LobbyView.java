@@ -142,7 +142,9 @@ public class LobbyView extends UnicastRemoteObject implements UIComponent, Lobby
 		Button manualButton = new Button("?");
 		
 		manualButton.getStyleClass().addAll("button", "manual-button");
-		manualButton.setOnAction(e -> new Manual());
+		//TODOveranderen naar (e -> new Manual() nu zo zodat tom kan testen
+		manualButton.setOnAction(e -> StageManager.getInstance().showGameScreen());
+		
 		
 		manualContainer.getChildren().add(manualButton);
 		manualContainer.setAlignment(Pos.TOP_RIGHT);
