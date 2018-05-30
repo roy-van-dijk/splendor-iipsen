@@ -37,7 +37,7 @@ public class NobleView implements UIComponent {
 	
 	private void buildUI()
 	{
-		Rectangle rect = new Rectangle(sizeX, sizeY / 1.5);
+		Rectangle rect = new Rectangle(sizeX, sizeY);
 
 		ImagePattern imagePattern = null;
 		try {

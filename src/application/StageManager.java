@@ -108,8 +108,8 @@ public class StageManager {
 	}
 	
 	public void hostPreviousGameLobby(String nickname) throws RemoteException {
-		Lobby lobby = new LobbyImpl(3);
-		Lobby lobbySkeleton  = (Lobby) UnicastRemoteObject.exportObject(lobby, 0); // cast to remote object
+		LobbyImpl lobby = new LobbyImpl(3);
+		Lobby lobbySkeleton = (Lobby) UnicastRemoteObject.exportObject(lobby, 0); // cast to remote object
 		System.out.println("Lobby skeleton created");
 		Registry registry = LocateRegistry.createRegistry(1099); // default port 1099 // run RMI registry on local host
 		System.out.println("RMI Registry starter");

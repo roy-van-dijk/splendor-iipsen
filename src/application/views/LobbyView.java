@@ -39,8 +39,6 @@ public class LobbyView extends UnicastRemoteObject implements UIComponent, Lobby
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
-	private final static int DEFAULT_MAX_PLAYERS = 4;
 	
 	private LobbyController lobbyController;
 	
@@ -56,7 +54,7 @@ public class LobbyView extends UnicastRemoteObject implements UIComponent, Lobby
 	
 	private Label lblUnassPlayers;
 	private Label lblAssPlayers;
-	private Label lblLobbyIp;
+	private Label lblLobbyIP;
 	
 
 	public LobbyView(Lobby lobby, LobbyController lobbyController) throws RemoteException {
@@ -91,6 +89,9 @@ public class LobbyView extends UnicastRemoteObject implements UIComponent, Lobby
 	private void updateUI(Lobby lobby) throws RemoteException
 	{
 		int maxPlayers = lobby.getMaxPlayers();
+		String hostIP = lobby.getHostIP();
+		
+		lblLobbyIP.setText(String.format("Lobby IP: %s", hostIP));
 		
 		// TODO: update ready status of each player;
 		
@@ -157,15 +158,9 @@ public class LobbyView extends UnicastRemoteObject implements UIComponent, Lobby
 		lblUnassPlayers = new Label("Unassigned Players");
 		lblAssPlayers 	= new Label("Assigned Players");
 		
-	    InetAddress localIP = null;
-		try {
-			localIP = InetAddress.getLocalHost();
-		} catch (UnknownHostException e1) {
-			e1.printStackTrace();
-		}
-		lblLobbyIp 	= new Label(String.format("Lobby ip: %s", localIP.getHostAddress()));
-		lblLobbyIp.setAlignment(Pos.CENTER);
-		lblLobbyIp.prefWidthProperty().bind(gpane.widthProperty());
+		lblLobbyIP = new Label();
+		lblLobbyIP.setAlignment(Pos.CENTER);
+		lblLobbyIP.prefWidthProperty().bind(gpane.widthProperty());
 			
 		btnReady = new Button("Ready");		
 		
@@ -175,7 +170,7 @@ public class LobbyView extends UnicastRemoteObject implements UIComponent, Lobby
 		gpane.setVgap(5); 
 		gpane.setHgap(5);
 		
-		gpane.add(lblLobbyIp, 0, 0, 2, 1);
+		gpane.add(lblLobbyIP, 0, 0, 2, 1);
 		
 		gpane.add(lblUnassPlayers, 0, 1);
 		gpane.add(lblAssPlayers, 1, 1);
