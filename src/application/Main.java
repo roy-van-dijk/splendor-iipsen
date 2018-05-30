@@ -48,7 +48,7 @@ public class Main extends Application {
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}
-		
 		launch(args);
+		System.exit(0); // TODO: shutdown gracefully. Currently force exits all threads (including RMI)
 	}
 }
