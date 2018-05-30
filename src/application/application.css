@@ -70,6 +70,12 @@
 	-fx-font-size: 120px;
 }
 
+.cards-prestige-bonus
+{
+	 -fx-background-color: rgba(200, 200, 200, 0.5);
+	 -fx-padding: 0 5px;
+}
+
 .opponents
 {
     -fx-background-color: rgb(113, 135, 146);
