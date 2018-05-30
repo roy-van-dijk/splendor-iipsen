@@ -139,6 +139,7 @@ public class PlayingFieldPanel implements UIComponent {
 
 		VBox vbox = new VBox();
 		vbox.getChildren().add(exit);
+		exit.getStyleClass().addAll("button", "manual-button");
 		
 		exit.setOnAction(e -> {
 			
