@@ -1,5 +1,8 @@
 package application;
 	
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
 import application.controllers.GameController;
 import application.controllers.GameControllerImpl;
 import application.domain.Game;
@@ -24,17 +27,13 @@ import javafx.stage.Stage;
 public class Main extends Application {
 	
 	@Override
-	public void start(Stage primaryStage) {
+	public void start(Stage primaryStage) {	
 		try {
-			primaryStage.addEventHandler(KeyEvent.ANY, new EventHandler<KeyEvent>() {
-
-		        @Override
-		        public void handle(KeyEvent keyEvent) {
-		          if(keyEvent.getCode() == KeyCode.F1) {
+			primaryStage.addEventHandler(KeyEvent.ANY, e -> {
+		          if(e.getCode() == KeyCode.F1) {
 		        	  new Manual();
 		          }
-		        }
-		    });
+		        });
 			StageManager.getInstance().showMainMenu(primaryStage);
 //			StageManager.getInstance().showLobbyScreen();
 		} catch(Exception e) {
@@ -43,6 +42,13 @@ public class Main extends Application {
 	}
 	
 	public static void main(String[] args) {
+		
+		try {
+			System.setProperty("java.rmi.server.hostname", InetAddress.getLocalHost().getHostAddress());
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
+		
 		launch(args);
 	}
 }
