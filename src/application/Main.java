@@ -34,7 +34,7 @@ public class Main extends Application {
 		        	  new ManualWindowView();
 		          }
 		        });
-			StageManager.getInstance().showMainMenu(primaryStage);
+			StageManager.getInstance().startSplendor(primaryStage);
 //			StageManager.getInstance().showGameScreen();
 		} catch(Exception e) {
 			e.printStackTrace();

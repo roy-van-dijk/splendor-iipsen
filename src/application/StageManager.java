@@ -64,43 +64,33 @@ public class StageManager {
 	}
 
 	/**
-	 * 
-	 * @param Stage
-	 *            stage
+	 * @param stage
 	 */
-	public void showMainMenu(Stage stage) {
-		
-		
-		MenuController menuController = new MenuControllerImpl();
-		MainMenuView homeView = new MainMenuView(menuController);
+	public void startSplendor(Stage stage) {
 
-		Scene scene = new Scene(homeView.asPane(), 1800, 1000);
+		Scene scene = new Scene(new Pane(), 1800, 1000);
 		scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+		
 		primaryStage = stage;
-
 		primaryStage.getIcons().add(new Image(("file:resources/misc/splendor-icon.png")));
-		primaryStage.setScene(scene);
 		// primaryStage.initStyle(StageStyle.UNDECORATED); // borderless
 		// primaryStage.setMaximized(true);
-
 		primaryStage.setTitle("Splendor");
-		primaryStage.setOnCloseRequest(e -> Platform.exit());
+		primaryStage.setScene(scene);
 	   
 		primaryStage.show();
+		
+		showMainMenu();
 	}
 	
 	/**
 	 * Start the MainMenu
 	 */
-	public void startMainMenu() {
+	public void showMainMenu() {
 		MenuController menuController = new MenuControllerImpl();
 		MainMenuView homeView = new MainMenuView(menuController);
-
-		Scene scene = new Scene(homeView.asPane(), 1800, 1000);
-		scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 		
-		primaryStage.setScene(scene);
-		primaryStage.show();
+		switchScene(homeView.asPane());
 	}
 
 	public void hostNewGameLobby(String nickname) throws RemoteException {

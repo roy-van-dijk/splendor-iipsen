@@ -2,10 +2,8 @@
 
     -fx-font-family: "Times New Roman";
     -fx-text-fill: lightgrey;
-    
     -fx-base: rgb(10, 10, 10);
     -fx-background: rgb(140, 140, 140);
-    
     -fx-background-size: cover;
     -fx-background-repeat: stretch;   
     -fx-background-position: center center;
@@ -50,7 +48,6 @@
 	-fx-font-weight: 900;
 	-fx-padding: 0 10px 0 0;
 }
-
 
 .player .separator{
     -fx-background-color: #70828C;
@@ -179,4 +176,9 @@
 }
 .radio-button .dot {
     -fx-padding: 5px;
+}
+
+.ReturnTokensView .button {
+	-fx-font-size: 4px;
+
 }

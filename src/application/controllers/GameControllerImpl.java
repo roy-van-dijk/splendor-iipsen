@@ -6,6 +6,7 @@ import application.StageManager;
 import application.domain.Card;
 import application.domain.CardRowImpl;
 import application.domain.Game;
+import application.views.PopUpWindowView;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
@@ -47,8 +48,9 @@ public class GameControllerImpl implements GameController {
 		
 		game.nextTurn();
 	}
-	public void exitGame() {
-		StageManager.getInstance().startMainMenu();
+	public void leaveGame() {
+		StageManager.getInstance().showMainMenu();
+		PopUpWindowView exitgame = new PopUpWindowView("Het spel is beëindigd door een van de spelers.", "Het spel is gestopt");
 	}
 
 	

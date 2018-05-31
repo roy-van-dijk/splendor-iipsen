@@ -23,7 +23,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 /**
  * 
- * @author Roy
+ * @author Sanchez
  *
  */
 public class PlayingFieldView implements UIComponent {
@@ -143,7 +143,7 @@ public class PlayingFieldView implements UIComponent {
 		exit.setOnAction(e -> {
 			
 			System.out.println("exit the game");
-			gameController.exitGame();
+			gameController.leaveGame();
 		});
 		return vbox;
 	}
@@ -151,6 +151,4 @@ public class PlayingFieldView implements UIComponent {
 	public Pane asPane() {
 		return root;
 	}
-	
-
 }

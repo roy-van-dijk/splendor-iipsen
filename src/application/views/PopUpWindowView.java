@@ -33,28 +33,29 @@ public class PopUpWindowView {
 		System.out.println("Showing PopupView");
 		
 		pane = new BorderPane();
-		Scene scene = new Scene(pane, 550, 550);
-		Stage stage = new Stage();
-		VBox hbox = new VBox();
+
+		VBox box = new VBox();
+		box.setAlignment(Pos.CENTER);
+		
 		Text text = new Text(paragraphText);
-		Text titletext = new Text(title);
+		text.setFill(Color.WHITE);
 		text.setFont(Font.font("Tahoma", FontWeight.NORMAL, 20));
-		text.setFill(Color.WHITE);
 		
-		text.setFont(Font.font("Tahoma", FontWeight.NORMAL, 50));
-		text.setFill(Color.WHITE);
-				
-		scene.getStylesheets().add(getClass().getResource("../application.css").toExternalForm());
-	
-		hbox.getChildren().add(titletext);
-		hbox.getChildren().add(text);
-		hbox.setAlignment(Pos.CENTER);
-		
-		pane.setCenter(hbox);
+		Text titletext = new Text(title);
+		titletext.setFill(Color.WHITE);
+		titletext.setFont(Font.font("Tahoma", FontWeight.NORMAL, 50));
+
+		box.getChildren().addAll(titletext, text);
+
+		pane.setCenter(box);
 		pane.getStyleClass().add("page-1");
 		pane.setPrefHeight(800);
 		pane.setPrefWidth(500);
-				
+
+		Scene scene = new Scene(pane, 550, 550);
+		scene.getStylesheets().add(getClass().getResource("../application.css").toExternalForm());
+		
+		Stage stage = new Stage();
 		stage.setScene(scene);
 		stage.setTitle(title);
 		stage.setResizable(false);

@@ -15,6 +15,6 @@ public interface GameController
 	
 	public void endTurn() throws RemoteException;
 	
-	public void exitGame();
+	public void leaveGame();
 	
 }
