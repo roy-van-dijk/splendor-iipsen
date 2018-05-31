@@ -7,12 +7,12 @@ import java.util.Stack;
  * @author Sanchez
  *
  */
-public class CardDeckImpl implements Deck<Card> {
+public class CardDeck implements Deck<Card> {
 	
 	private Stack<Card> cards;
 	private CardLevel level; // Probably useless
 	
-	public CardDeckImpl(Stack<Card> cards, CardLevel level)
+	public CardDeck(Stack<Card> cards, CardLevel level)
 	{
 		this.cards = cards;		
 		this.level = level;

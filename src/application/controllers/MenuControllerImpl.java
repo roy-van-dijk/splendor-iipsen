@@ -12,8 +12,8 @@ import javafx.stage.Stage;
 public class MenuControllerImpl implements MenuController {
 
 	@Override
-	public void joinLobby(Pane rootNode) {
-		StageManager.getInstance().switchScene(rootNode);
+	public void joinLobby() {
+		
 	}
 
 	@Override

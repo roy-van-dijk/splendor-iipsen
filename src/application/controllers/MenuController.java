@@ -8,7 +8,7 @@ import javafx.scene.layout.Pane;
  */
 public interface MenuController {
 	
-	void joinLobby(Pane rootNode);
+	void joinLobby();
 
 	void hostPreviousGame();
 

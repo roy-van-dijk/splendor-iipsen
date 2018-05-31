@@ -2,10 +2,8 @@
 
     -fx-font-family: "Times New Roman";
     -fx-text-fill: lightgrey;
-    
     -fx-base: rgb(10, 10, 10);
     -fx-background: rgb(140, 140, 140);
-    
     -fx-background-size: cover;
     -fx-background-repeat: stretch;   
     -fx-background-position: center center;
@@ -51,7 +49,6 @@
 	-fx-padding: 0 10px 0 0;
 }
 
-
 .player .separator{
     -fx-background-color: #70828C;
 	-fx-background-radius: 2;
@@ -68,6 +65,12 @@
 .player .prestige
 {
 	-fx-font-size: 120px;
+}
+
+.cards-prestige-bonus
+{
+	 -fx-background-color: rgba(200, 200, 200, 0.5);
+	 -fx-padding: 0 5px;
 }
 
 .opponents
@@ -133,8 +136,8 @@
 }
 
 .manual-button-game {
-	-fx-background-radius: 15px 0px 0px 0px;
-	-fx-font-size: 30px;
+	-fx-background-radius: 50px;
+	-fx-font-size: 25px;
 }
 
 .manual-navigation-button {
@@ -162,4 +165,20 @@
 .join-panel .join-text {
 	-fx-font-size: 45px;
 	-fx-background-color: #fff584;
+}
+
+.radio-button .radio {
+    -fx-border-width: 1px;
+    -fx-border-color: #000;
+    -fx-background-image: null;
+    -fx-border-radius: 15px;
+    -fx-padding: 4px;
+}
+.radio-button .dot {
+    -fx-padding: 5px;
+}
+
+.ReturnTokensView .button {
+	-fx-font-size: 4px;
+
 }

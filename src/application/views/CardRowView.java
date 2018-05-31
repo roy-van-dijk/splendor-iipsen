@@ -64,7 +64,7 @@ public class CardRowView implements UIComponent, GenericObserver<CardRowImpl> {
 	{
 		grid = new GridPane();
 		grid.setAlignment(Pos.CENTER);
-		grid.setHgap(PlayingFieldPanel.CARDSPACING);
+		grid.setHgap(PlayingFieldView.CARDSPACING);
 		
 		// Create the deck view (Looks like the back side of a card)
 		CardDeckView cardDeckView = new CardDeckView(cardRowImpl.getCardDeck(), GameView.cardSizeX, GameView.cardSizeY);

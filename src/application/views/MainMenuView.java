@@ -1,5 +1,8 @@
 package application.views;
 
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+
 import application.StageManager;
 import application.controllers.GameController;
 import application.controllers.MenuController;
@@ -63,7 +66,7 @@ public class MainMenuView implements UIComponent  {
 		Button manualButton = new Button("?");
 		
 		manualButton.getStyleClass().addAll("button", "manual-button");
-		manualButton.setOnAction(e -> new Manual());
+		manualButton.setOnAction(e -> new ManualWindowView());
 		
 		manualContainer.getChildren().add(manualButton);
 		manualContainer.setAlignment(Pos.TOP_RIGHT);
@@ -95,8 +98,18 @@ public class MainMenuView implements UIComponent  {
 		hostIp.getStyleClass().add("join-text");
 		nickname.getStyleClass().add("join-text");
 		
-		join.setOnAction(e -> StageManager.getInstance().showLobbyScreen(hostIp.getText(), nickname.getText()));
-		back.setOnAction(e -> menuController.joinLobby(buildMainPanel()));
+		join.setOnAction(e -> {
+			try {
+				StageManager.getInstance().showLobbyScreen(hostIp.getText(), nickname.getText());
+			} catch (RemoteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (NotBoundException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		});
+		back.setOnAction(e -> StageManager.getInstance().switchScene(buildMainPanel()));
 		
 		panel.setAlignment(Pos.CENTER_LEFT); 
 		panel.setSpacing(10);
@@ -132,11 +145,9 @@ public class MainMenuView implements UIComponent  {
 		btnPreviousGame.getStyleClass().add("home-button");
 		btnNewGame.getStyleClass().add("home-button");
 		
-		btnJoinLobby.setOnAction(e -> menuController.joinLobby(buildJoinPanel()) );
-		
-		btnPreviousGame.setOnAction(e -> menuController.hostPreviousGame() );
-		
-		btnNewGame.setOnAction(e -> menuController.hostNewGame() ); 
+		btnJoinLobby.setOnAction(e -> StageManager.getInstance().switchScene(buildJoinPanel()));
+		btnPreviousGame.setOnAction(e -> StageManager.getInstance().switchScene(buildHostPreviousGamePanel()));
+		btnNewGame.setOnAction(e -> StageManager.getInstance().switchScene(buildHostNewGamePanel()));
 		
 		panel.setAlignment(Pos.CENTER_LEFT); 
 		panel.setSpacing(10);
@@ -152,7 +163,8 @@ public class MainMenuView implements UIComponent  {
 		return root;
 	}	
 	
-	private BorderPane buildHostPanel()
+
+	private BorderPane buildHostNewGamePanel()
 	{
 		root = new BorderPane();
 		manualButton = buildManualButton();
@@ -171,8 +183,60 @@ public class MainMenuView implements UIComponent  {
 		nickname.setPromptText("Enter Nickname");
 		nickname.getStyleClass().add("join-text");
 		
-		join.setOnAction(e -> StageManager.getInstance().showLobbyScreen(hostIp.getText(), nickname.getText()));
-		back.setOnAction(e -> menuController.joinLobby(buildMainPanel()));
+		join.setOnAction(e -> {
+			try {
+				StageManager.getInstance().hostNewGameLobby(nickname.getText());
+			} catch (RemoteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		});
+		back.setOnAction(e -> StageManager.getInstance().switchScene(buildMainPanel()));
+		
+		panel.setAlignment(Pos.CENTER_LEFT); 
+		panel.setSpacing(10);
+		panel.setTranslateX(-250);
+		panel.setTranslateY(100);
+		panel.getChildren().addAll(nickname, join, back);
+		
+		root.setTop(manualButton);
+		root.setRight(panel);
+		root.getStyleClass().addAll("home-view", "join-panel");
+		root.setPadding(new Insets(0));
+		
+		return root;
+	}
+
+
+
+	private BorderPane buildHostPreviousGamePanel()
+	{
+		root = new BorderPane();
+		manualButton = buildManualButton();
+		
+		VBox panel = new VBox(3);
+
+		nickname = new TextField();
+		
+		Button join = new Button("Join");
+		Button back = new Button("Back");
+		
+		nickname.setPrefWidth(450);
+		join.setPrefWidth(450);
+		back.setPrefWidth(450);
+		
+		nickname.setPromptText("Enter Nickname");
+		nickname.getStyleClass().add("join-text");
+		
+		join.setOnAction(e -> {
+			try {
+				StageManager.getInstance().hostPreviousGameLobby(nickname.getText());
+			} catch (RemoteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		});
+		back.setOnAction(e -> StageManager.getInstance().switchScene(buildMainPanel()));
 		
 		panel.setAlignment(Pos.CENTER_LEFT); 
 		panel.setSpacing(10);

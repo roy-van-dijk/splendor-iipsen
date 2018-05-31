@@ -1,5 +1,11 @@
 package application;
 
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
+
 import application.controllers.GameController;
 import application.controllers.GameControllerImpl;
 import application.controllers.LobbyController;
@@ -10,9 +16,12 @@ import application.domain.Game;
 import application.domain.GameImpl;
 import application.domain.Lobby;
 import application.domain.LobbyImpl;
+import application.domain.Player;
+import application.domain.PlayerImpl;
 import application.views.GameView;
 import application.views.MainMenuView;
 import application.views.LobbyView;
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.input.InputEvent;
@@ -55,34 +64,89 @@ public class StageManager {
 	}
 
 	/**
-	 * 
-	 * @param Stage
-	 *            stage
+	 * @param stage
 	 */
-	public void showMainMenu(Stage stage) {
-		primaryStage = stage;
+	public void startSplendor(Stage stage) {
 
-		MenuController menuController = new MenuControllerImpl();
-		MainMenuView homeView = new MainMenuView(menuController);
-
-		Scene scene = new Scene(homeView.asPane(), 1800, 1000);
+		Scene scene = new Scene(new Pane(), 1800, 1000);
 		scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
-
+		
+		primaryStage = stage;
 		primaryStage.getIcons().add(new Image(("file:resources/misc/splendor-icon.png")));
-		primaryStage.setScene(scene);
 		// primaryStage.initStyle(StageStyle.UNDECORATED); // borderless
 		// primaryStage.setMaximized(true);
-
 		primaryStage.setTitle("Splendor");
-		
+		primaryStage.setScene(scene);
 	   
 		primaryStage.show();
+		
+		showMainMenu();
+	}
+	
+	/**
+	 * Start the MainMenu
+	 */
+	public void showMainMenu() {
+		MenuController menuController = new MenuControllerImpl();
+		MainMenuView homeView = new MainMenuView(menuController);
+		
+		switchScene(homeView.asPane());
 	}
 
-	public void showLobbyScreen(String hostIp, String nickname) {
+	public void hostNewGameLobby(String nickname) throws RemoteException {
 		Lobby lobby = new LobbyImpl();
-		LobbyController lobbyController = new LobbyControllerImpl(hostIp, nickname);
+		Lobby lobbySkeleton  = (Lobby) UnicastRemoteObject.exportObject(lobby, 0); // cast to remote object
+		System.out.println("Lobby skeleton created");
+		Registry registry = LocateRegistry.createRegistry(1099); // default port 1099 // run RMI registry on local host
+		System.out.println("RMI Registry starter");
+		registry.rebind("Lobby", lobbySkeleton); // bind calculator to RMI registry
+        System.out.println("Lobby skeleton bound");
+        System.out.println("Server running...");
+        
+        Player player = new PlayerImpl(nickname);
+        lobby.connectPlayer(player);
+        
+		LobbyController lobbyController = new LobbyControllerImpl();
 		LobbyView lobbyView = new LobbyView(lobby, lobbyController);
+
+		this.switchScene(lobbyView.asPane());
+	}
+	
+	public void hostPreviousGameLobby(String nickname) throws RemoteException {
+		LobbyImpl lobby = new LobbyImpl(3);
+		Lobby lobbySkeleton = (Lobby) UnicastRemoteObject.exportObject(lobby, 0); // cast to remote object
+		System.out.println("Lobby skeleton created");
+		Registry registry = LocateRegistry.createRegistry(1099); // default port 1099 // run RMI registry on local host
+		System.out.println("RMI Registry starter");
+		registry.rebind("Lobby", lobbySkeleton); // bind calculator to RMI registry
+        System.out.println("Lobby skeleton bound");
+        System.out.println("Server running...");
+        
+        Player player = new PlayerImpl(nickname);
+        lobby.connectPlayer(player);
+        
+		LobbyController lobbyController = new LobbyControllerImpl();
+		LobbyView lobbyView = new LobbyView(lobby, lobbyController);
+
+		this.switchScene(lobbyView.asPane());
+	}
+
+	public void showLobbyScreen(String hostIP, String nickname) throws RemoteException, NotBoundException {
+		
+		System.out.println("Getting access to the registry");
+		// get access to the RMI registry on the remote server
+		Registry registry = LocateRegistry.getRegistry(hostIP); // if server on another machine: provide that machine's IP address. Default port  1099				
+		System.out.println("Getting the Lobby stub from registry");
+		Lobby lobby = (Lobby) registry.lookup("Lobby");
+
+		LobbyController lobbyController = new LobbyControllerImpl();
+		LobbyView lobbyView = new LobbyView(lobby, lobbyController);
+		
+		Player player = new PlayerImpl(nickname);
+		lobby.connectPlayer(player);
+		
+
+		System.out.println("Done!");
 
 		this.switchScene(lobbyView.asPane());
 	}

@@ -11,11 +11,11 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
-public class Manual {
+public class ManualWindowView {
 		
 	BorderPane pane;
 	
-	public Manual() {
+	public ManualWindowView() {
 		System.out.println("Showing manual");
 		
 		pane  = new BorderPane();

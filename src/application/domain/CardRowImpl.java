@@ -17,12 +17,12 @@ public class CardRowImpl {
 	
 	private static final int MAX_OPEN_CARDS = 4;
 	
-	private CardDeckImpl cardDeckImpl;
+	private CardDeck cardDeckImpl;
 	private Card[] cardSlots;
 	private ArrayList<GenericObserver<CardRowImpl>> observers = new ArrayList<GenericObserver<CardRowImpl>>();
 	
 	
-	public CardRowImpl(CardDeckImpl cardDeckImpl) {
+	public CardRowImpl(CardDeck cardDeckImpl) {
 		this.cardDeckImpl = cardDeckImpl;
 		this.cardSlots = new Card[MAX_OPEN_CARDS];
 		
@@ -70,7 +70,7 @@ public class CardRowImpl {
 		}
 	}
 
-	public CardDeckImpl getCardDeck() {
+	public CardDeck getCardDeck() {
 		return cardDeckImpl;
 	}
 

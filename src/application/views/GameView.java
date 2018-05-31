@@ -2,11 +2,13 @@ package application.views;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import application.StageManager;
 import application.controllers.GameController;
 import application.domain.CardLevel;
+import application.domain.ColorBlindModes;
 import application.domain.Game;
 import application.domain.Player;
 import application.domain.PlayerImpl;
@@ -25,14 +27,15 @@ import javafx.scene.layout.VBox;
  */
 public class GameView implements UIComponent  {
 	
-	public final static int cardSizeX = 120, cardSizeY = 180; 
+	public final static int cardSizeX = 130, cardSizeY = 180; 
 	public final static int tokenSizeRadius = 45;
 	
 	public final static int opponentsSpacing = 20;
 	
-	private Game game;
-	private GameController gameController;
+	public static List<ColorChangeable> colorBlindViews;
 	
+	private Game game;
+	private GameController gameController;	
 	
 	private BorderPane root;
 	
@@ -55,9 +58,27 @@ public class GameView implements UIComponent  {
 		this.game = game;
 		this.gameController = gameController;
 		
+		colorBlindViews = new ArrayList<>();
+		
 		this.buildUI();
 	}
 	
+	public static void changeColorBlindMode(ColorBlindModes mode) {
+		Iterator<ColorChangeable> i = colorBlindViews.iterator();
+		while (i.hasNext()) {
+			ColorChangeable view = i.next(); 
+			if(view == null) {
+				i.remove();
+			}
+			else {
+				view.updateView(mode);
+			}
+		}
+	
+//		for(ColorChangeable colorBlindView : colorBlindViews) {
+//			colorBlindView.updateView(mode);
+//		}
+	}
 	
 	// POC
 	public void modelChanged(Game game)
@@ -106,7 +127,7 @@ public class GameView implements UIComponent  {
 	
 	private Pane buildPlayingField() throws RemoteException
 	{
-		Pane playingField = new PlayingFieldPanel(game.getPlayingField(), gameController).asPane();
+		Pane playingField = new PlayingFieldView(game.getPlayingField(), gameController).asPane();
 		return playingField;
 	}
 	
@@ -168,7 +189,7 @@ public class GameView implements UIComponent  {
 		{
 			if(player.equals(players.get(0))) continue; // For now we'll assume that the first player in the list is 'our' player
 			
-			Pane opponentView = new OpponentPanel(player).asPane();
+			Pane opponentView = new OpponentView(player).asPane();
 			opponentsRows.getChildren().add(opponentView);
 		}
 		

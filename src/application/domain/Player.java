@@ -1,5 +1,6 @@
 package application.domain;
 
+import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +9,7 @@ import java.util.List;
  * @author Sanchez
  *
  */
-public interface Player {
+public interface Player extends Remote {
 
 	public void reserveCardFromField(CardRowImpl cardRowImpl, Card card);
 

@@ -30,17 +30,23 @@ public class NobleView implements UIComponent {
 	// TODO: See comment @ Noble.illustrationID
 	public String getNobleImagePath() throws RemoteException
 	{
-		String pictureID = String.valueOf(noble.getIllustrationID());
-		return String.format("file:resources/nobles/noble%s.png", pictureID);
+		String illustration = String.valueOf(noble.getIllustration());
+		return String.format("file:resources/nobles/%s.png", illustration);
 	}
 	
 	
 	private void buildUI()
 	{
-		Rectangle rect = new Rectangle(sizeX, sizeY / 1.5);
+		Rectangle rect = new Rectangle(sizeX, sizeY);
 
-		//ImagePattern imagePattern = new ImagePattern(new Image(getNobleImagePath()));
-        //rect.setFill(imagePattern);
+		ImagePattern imagePattern = null;
+		try {
+			imagePattern = new ImagePattern(new Image(getNobleImagePath()));
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        rect.setFill(imagePattern);
         
         rect.setArcHeight(10);
         rect.setArcWidth(10);

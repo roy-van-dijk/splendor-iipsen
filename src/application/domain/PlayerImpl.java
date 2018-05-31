@@ -1,5 +1,6 @@
 package application.domain;
 
+import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,8 +9,13 @@ import java.util.List;
  * @author Sanchez
  *
  */
-public class PlayerImpl implements Player {
+public class PlayerImpl implements Player, Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	private String name;
 	
 	private List<Card> reservedCards;

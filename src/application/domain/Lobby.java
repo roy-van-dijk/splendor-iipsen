@@ -19,4 +19,6 @@ public interface Lobby extends Remote {
 	public List<Player> getUnassignedPlayers() throws RemoteException;
 	
 	public int getMaxPlayers() throws RemoteException;
+	
+	public String getHostIP() throws RemoteException;
 }
