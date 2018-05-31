@@ -6,6 +6,7 @@ import application.StageManager;
 import application.domain.Card;
 import application.domain.CardRowImpl;
 import application.domain.Game;
+import application.domain.Turn;
 import application.views.PopUpWindowView;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -16,6 +17,8 @@ import javafx.stage.Stage;
  */
 public class GameControllerImpl implements GameController {
 	private Game game;
+	
+	private Turn turn;
 
 	public GameControllerImpl(Game game) {
 		this.game = game;
@@ -48,9 +51,33 @@ public class GameControllerImpl implements GameController {
 		
 		game.nextTurn();
 	}
+	@Override
 	public void leaveGame() {
 		StageManager.getInstance().showMainMenu();
-		PopUpWindowView exitgame = new PopUpWindowView("Het spel is beëindigd door een van de spelers.", "Het spel is gestopt");
+		new PopUpWindowView("Het spel is beëindigd door een van de spelers.", "Het spel is gestopt");
+	}
+	@Override
+	public void resetTurn() {
+		game.getTurn().emptyHand();
+		
+	}
+
+	@Override
+	public void purchaseCard() {
+		//game.getCurrentPlayer().purchaseCard();
+		
+	}
+
+	@Override
+	public void takeTwoTokens() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void takeThreeTokens() {
+		// TODO Auto-generated method stub
+		
 	}
 
 	

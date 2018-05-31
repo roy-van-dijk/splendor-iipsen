@@ -170,6 +170,23 @@ public class GameView implements UIComponent  {
 				e1.printStackTrace();
 			}
 		});
+		
+		btnResetTurn.setOnAction(e ->{
+			gameController.resetTurn();
+		});
+		
+		btnPurchaseCard.setOnAction(e -> {
+			gameController.purchaseCard();
+		});
+		
+		btnTakeTwoTokens.setOnAction(e ->{
+			gameController.takeTwoTokens();
+		});
+		
+		btnTakeThreeTokens.setOnAction(e ->{
+			gameController.takeThreeTokens();
+		});
+		
 		btnEndTurn.getStyleClass().add("disabled");
 
 		buttons.getChildren().addAll(btnReserveCard, btnPurchaseCard, btnTakeTwoTokens, btnTakeThreeTokens, btnResetTurn, btnEndTurn);

@@ -19,6 +19,8 @@ public interface Player extends Remote {
 	
 	public void addReservedCard(Card card);
 	
+	public void purchaseCard(Card card);
+	
 	public List<Card> getOwnedCards();
 	public List<Noble> getOwnedNobles();
 

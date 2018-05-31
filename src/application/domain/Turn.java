@@ -49,12 +49,15 @@ public class Turn {
 	public TokenList getTokenList() {
 		return tokenList;
 	}
-	
+	/**
+	 * Clear the hand of the current player
+	 */
 	public void emptyHand() {
 		nobles.clear();
 		tokenList.getAll().clear();
 		reservedCard = null;
 		boughtCard = null;
+		System.out.printf("%s has empty his hand %s \n", player.getName());
 	}
 	
 }
