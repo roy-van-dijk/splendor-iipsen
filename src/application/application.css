@@ -184,6 +184,14 @@
 .radio-button .dot {
     -fx-padding: 5px;
 }
+.alert-dialog {
+	-fx-background-radius: 20px;
+	-fx-font-size: 25px;
+	-fx-effect: null;
+}
+.alert-dialog .button {
+	-fx-font-size: 30px;
+}
 
 .ReturnTokensView .button {
 	-fx-font-size: 4px;
