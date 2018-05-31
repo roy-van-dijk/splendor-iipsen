@@ -30,8 +30,8 @@ import javafx.scene.layout.VBox;
  */
 public class GameView implements UIComponent  {
 	
-	public final static int cardSizeX = 30, cardSizeY = 80; 
-	public final static int tokenSizeRadius = 15;
+	public final static int cardSizeX = 130, cardSizeY = 180; 
+	public final static int tokenSizeRadius = 45;
 	
 	public final static int opponentsSpacing = 20;
 	
