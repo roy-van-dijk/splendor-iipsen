@@ -26,7 +26,7 @@ public class AlertDialog extends javafx.scene.control.Alert {
 	
 	private void stylizeAlert() {
 		this.initStyle(StageStyle.TRANSPARENT);
-		this.setHeaderText(null);
+		this.setHeaderText("Error");
 		
 		DialogPane dialogPane = this.getDialogPane();
 		
