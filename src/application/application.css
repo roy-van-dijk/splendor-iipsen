@@ -193,6 +193,11 @@
 	-fx-font-size: 30px;
 }
 
+.popup-view {
+	-fx-background-image: url("../../resources/misc/splendor.jpg");
+	-fx-background-size: cover;
+}
+
 .ReturnTokensView .button {
 	-fx-font-size: 4px;
 
