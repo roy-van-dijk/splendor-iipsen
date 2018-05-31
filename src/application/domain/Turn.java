@@ -57,7 +57,7 @@ public class Turn {
 		tokenList.getAll().clear();
 		reservedCard = null;
 		boughtCard = null;
-		System.out.printf("%s has empty his hand %s \n", player.getName());
+		System.out.printf("%s has empty his hand \n", player.getName());
 	}
 	
 }

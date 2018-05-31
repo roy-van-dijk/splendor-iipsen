@@ -1,14 +1,18 @@
 package application.controllers;
 
 import java.rmi.RemoteException;
+import java.util.Optional;
 
 import application.StageManager;
 import application.domain.Card;
 import application.domain.CardRowImpl;
 import application.domain.Game;
 import application.domain.Turn;
+import application.util.ConfirmDialog;
 import application.views.PopUpWindowView;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
 
 /**
@@ -53,8 +57,17 @@ public class GameControllerImpl implements GameController {
 	}
 	@Override
 	public void leaveGame() {
-		StageManager.getInstance().showMainMenu();
-		new PopUpWindowView("Het spel is beëindigd door een van de spelers.", "Het spel is gestopt");
+		ConfirmDialog dialog = new ConfirmDialog(AlertType.CONFIRMATION);
+		dialog.setTitle("Confirmation Dialog");
+		dialog.setHeaderText("You are leaving the game");
+		dialog.setContentText("Are you ok with this?");
+		
+		Optional<ButtonType> results = dialog.showAndWait();
+		if (results.get() == ButtonType.OK){
+			StageManager.getInstance().showMainMenu();
+			new PopUpWindowView("Het spel is beëindigd door een van de spelers.", "Het spel is gestopt");
+		}
+		
 	}
 	@Override
 	public void resetTurn() {
