@@ -2,6 +2,10 @@ package application.util;
 
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.DialogPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.stage.Modality;
 import javafx.stage.StageStyle;
 
 /**
@@ -21,11 +25,14 @@ public class AlertDialog extends javafx.scene.control.Alert {
 	}
 	
 	private void stylizeAlert() {
-		this.initStyle(StageStyle.UNDECORATED);
+		this.initStyle(StageStyle.TRANSPARENT);
 		this.setHeaderText(null);
 		
 		DialogPane dialogPane = this.getDialogPane();
-		dialogPane.getStylesheets().add(getClass().getResource("../application.css").toExternalForm());
+		
+		dialogPane.getScene().getStylesheets().add(getClass().getResource("../application.css").toExternalForm());
+		dialogPane.getScene().setFill(null);
 		dialogPane.getStyleClass().add("alert-dialog");
+		
 	}
 }
