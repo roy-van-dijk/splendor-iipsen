@@ -41,7 +41,7 @@ public class GameControllerImpl implements GameController {
 		//TODO: subtract tokens from player.
 		//game.getPlayers().get(game.getCurrentPlayerIdx()).getReservedCards().add(game.getTurn().getReservedCard());
 		//TODO: check for nobles
-		game.getTurn().emptyhand();
+		game.getTurn().emptyHand();
 		//TODO: Save Game
 		//TODO: Check win condition
 		//TODO: Determine next player

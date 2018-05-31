@@ -50,7 +50,7 @@ public class Turn {
 		return tokenList;
 	}
 	
-	public void emptyhand() {
+	public void emptyHand() {
 		nobles.clear();
 		tokenList.getAll().clear();
 		reservedCard = null;

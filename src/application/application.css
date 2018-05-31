@@ -154,13 +154,20 @@
 	-fx-background-color: white;
 	-fx-padding: 7px 12px;
 	-fx-font-size: 25px;
-	-fx-background-radius: 15px;
+	-fx-background-radius: 10px;
 	-fx-font-weight: bold;
 }
 
 .lobby-grid .label.active {
 	-fx-background-color: #fff584;
+	-fx-text-fill: black;
+	-fx-background-size: 25px;
+	-fx-background-repeat: no-repeat;
+	-fx-background-position: 97% center;
 }
+
+.lobby-grid .label.checked 	 { -fx-background-image: url("../../resources/misc/checked.png"); }
+.lobby-grid .label.unchecked { -fx-background-image: url("../../resources/misc/unchecked.png"); }
 
 .join-panel .join-text {
 	-fx-font-size: 45px;
