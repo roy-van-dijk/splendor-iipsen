@@ -127,7 +127,7 @@ public class GameView implements UIComponent  {
 	
 	private Pane buildPlayingField() throws RemoteException
 	{
-		Pane playingField = new PlayingFieldPanel(game.getPlayingField(), gameController).asPane();
+		Pane playingField = new PlayingFieldView(game.getPlayingField(), gameController).asPane();
 		return playingField;
 	}
 	
@@ -189,7 +189,7 @@ public class GameView implements UIComponent  {
 		{
 			if(player.equals(players.get(0))) continue; // For now we'll assume that the first player in the list is 'our' player
 			
-			Pane opponentView = new OpponentPanel(player).asPane();
+			Pane opponentView = new OpponentView(player).asPane();
 			opponentsRows.getChildren().add(opponentView);
 		}
 		

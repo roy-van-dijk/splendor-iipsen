@@ -21,18 +21,18 @@ import javafx.stage.Stage;
  * @author Alexander
  *
  */
-public class PopupView {
+public class PopUpWindowView {
 
-	BorderPane pane;
+	private BorderPane pane;
 	/**
 	 * Initialize a Popup screen and shows it on the screen
 	 * @param paragraphText
 	 * @param title
 	 */
-	public PopupView(String paragraphText, String title) {
+	public PopUpWindowView(String paragraphText, String title) {
 		System.out.println("Showing PopupView");
 		
-		pane  = new BorderPane();
+		pane = new BorderPane();
 		Scene scene = new Scene(pane, 550, 550);
 		Stage stage = new Stage();
 		VBox hbox = new VBox();

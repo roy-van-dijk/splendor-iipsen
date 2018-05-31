@@ -6,8 +6,8 @@ import java.util.Map;
 
 import application.domain.Card;
 import application.domain.Gem;
-import application.util.Util;
 import javafx.geometry.HPos;
+import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -15,15 +15,10 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 /**
@@ -71,16 +66,17 @@ public class FrontCardView extends CardView {
 	private BorderPane addCardInformation() throws RemoteException
 	{
 		BorderPane borderPane = new BorderPane();
+		borderPane.setPadding(new Insets(7, 0, 15, 0));
 		
 		BorderPane prestigeAndBonus = new BorderPane();
 		prestigeAndBonus.getStyleClass().add("cards-prestige-bonus");
 		
 		int prestigeValue = card.getPrestigeValue();
 
-		Label prestigeLabel = new Label(String.valueOf(prestigeValue));
+		Label prestigeLabel = new Label(prestigeValue == 0 ? "" : String.valueOf(prestigeValue));
 		prestigeLabel.setAlignment(Pos.CENTER);
-		prestigeLabel.setFont(Font.font("Arial", FontWeight.EXTRA_BOLD, 26));
-		
+		prestigeLabel.setFont(Font.font("Arial", FontWeight.EXTRA_BOLD, 35));
+			
 		Gem bonusGem = card.getBonusGem();
 		String gemPath = String.format("file:resources/gems/%s.png", bonusGem.toString().toLowerCase());
 		ImageView bonusImage = new ImageView(new Image(gemPath));

@@ -9,7 +9,7 @@ import application.domain.Game;
 import application.domain.GameImpl;
 import application.services.CardsReader;
 import application.views.GameView;
-import application.views.Manual;
+import application.views.ManualWindowView;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -31,7 +31,7 @@ public class Main extends Application {
 		try {
 			primaryStage.addEventHandler(KeyEvent.ANY, e -> {
 		          if(e.getCode() == KeyCode.F1) {
-		        	  new Manual();
+		        	  new ManualWindowView();
 		          }
 		        });
 			StageManager.getInstance().showMainMenu(primaryStage);
