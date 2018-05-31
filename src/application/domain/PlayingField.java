@@ -9,4 +9,8 @@ public interface PlayingField {
 	public List<Noble> getNobles();
 	
 	public LinkedHashMap<Gem, Integer> getTokenGemCount();
+	
+	public void addToken(Token token);
+	
+	public void removeToken(Token token);
 }

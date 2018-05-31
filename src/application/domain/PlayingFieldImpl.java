@@ -114,4 +114,14 @@ public class PlayingFieldImpl implements PlayingField {
 		return tokenList.getTokenGemCount();
 	}
 
+	public void addToken(Token token) {
+		tokenList.add(token);
+		
+	}
+
+	public void removeToken(Token token) {
+		tokenList.remove(token);
+		
+	}
+
 }

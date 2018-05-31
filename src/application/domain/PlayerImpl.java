@@ -38,8 +38,7 @@ public class PlayerImpl implements Player, Serializable {
 	@Override
 	public void reserveCardFromField(CardRowImpl cardRowImpl, Card card) {
 
-		if(this.getReservedCards().size() < 3) // Business rule: max 3 reserved cards
-		{
+		if(this.getReservedCards().size() < 3) { // Business rule: max 3 reserved cards
 			cardRowImpl.removeCard(card);
 			this.addReservedCard(card);
 			
@@ -59,8 +58,7 @@ public class PlayerImpl implements Player, Serializable {
 		return reservedCards;
 	}
 	
-	public void addReservedCard(Card card)
-	{
+	public void addReservedCard(Card card) {
 		reservedCards.add(card);
 	}
 	
@@ -72,17 +70,22 @@ public class PlayerImpl implements Player, Serializable {
 		return ownedNobles;
 	}
 
-	public TokenList getTokenList()
-	{
+	public TokenList getTokenList() {
 		return tokenList;
 	}
 	
-	public int getPrestige()
-	{
+	public void addToken(Token token) {
+		tokenList.add(token);
+	}
+	
+	public void removeToken(Token token) {
+		tokenList.remove(token);
+	}
+	
+	public int getPrestige() {
 		int prestige = 0;
 		
-		for(Card ownedCard : ownedCards)
-		{
+		for(Card ownedCard : ownedCards) {
 			try {
 				prestige += ownedCard.getPrestigeValue();
 			} catch (RemoteException e) {
@@ -91,8 +94,7 @@ public class PlayerImpl implements Player, Serializable {
 			}
 		}
 		
-		for(Noble ownedNoble : ownedNobles)
-		{
+		for(Noble ownedNoble : ownedNobles) {
 			try {
 				prestige += ownedNoble.getPrestigeValue();
 			} catch (RemoteException e) {

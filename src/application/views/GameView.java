@@ -7,11 +7,14 @@ import java.util.List;
 
 import application.StageManager;
 import application.controllers.GameController;
+import application.controllers.ReturnTokenController;
+import application.controllers.ReturnTokenControllerImpl;
 import application.domain.CardLevel;
 import application.domain.ColorBlindModes;
 import application.domain.Game;
 import application.domain.Player;
 import application.domain.PlayerImpl;
+import application.domain.ReturnTokens;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -27,8 +30,8 @@ import javafx.scene.layout.VBox;
  */
 public class GameView implements UIComponent  {
 	
-	public final static int cardSizeX = 130, cardSizeY = 180; 
-	public final static int tokenSizeRadius = 45;
+	public final static int cardSizeX = 30, cardSizeY = 80; 
+	public final static int tokenSizeRadius = 15;
 	
 	public final static int opponentsSpacing = 20;
 	
@@ -154,6 +157,18 @@ public class GameView implements UIComponent  {
 				//);
 		btnPurchaseCard = new Button("Purchase Card");
 		btnPurchaseCard.getStyleClass().add("move-button");
+		btnPurchaseCard.setOnAction(e -> {
+			// POC -> probably belongs in EndTurnController when that's done.
+			
+			try {
+				ReturnTokens model = new ReturnTokens(game.getPlayingField(), game.getCurrentPlayer());
+				ReturnTokenController controller = new ReturnTokenControllerImpl(model);
+				ReturnTokensView view = new ReturnTokensView(model, controller);
+			} catch (RemoteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		});
 		btnTakeTwoTokens = new Button("Take Two Tokens");
 		btnTakeTwoTokens.getStyleClass().add("move-button");
 		btnTakeThreeTokens = new Button("Take Three Tokens");

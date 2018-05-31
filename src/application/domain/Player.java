@@ -24,6 +24,12 @@ public interface Player extends Remote {
 
 	public TokenList getTokenList();
 	
+	public void addToken(Token token);
+	
+	public void removeToken(Token token);
+	
 	public int getPrestige();
+	
+	
 
 }
