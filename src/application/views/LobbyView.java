@@ -9,7 +9,7 @@ import java.util.List;
 
 import application.StageManager;
 import application.controllers.LobbyController;
-import application.controllers.MenuController;
+import application.controllers.MainMenuController;
 import application.domain.Lobby;
 import application.domain.LobbyObserver;
 import application.domain.Player;
@@ -163,7 +163,6 @@ public class LobbyView extends UnicastRemoteObject implements UIComponent, Lobby
 		lblLobbyIP.prefWidthProperty().bind(gpane.widthProperty());
 			
 		btnReady = new Button("Ready");		
-		
 		btnReady.setOnAction(e -> StageManager.getInstance().showGameScreen());
 		
 		gpane.getStyleClass().add("lobby-grid");
@@ -177,8 +176,6 @@ public class LobbyView extends UnicastRemoteObject implements UIComponent, Lobby
 
 		gpane.add(btnReady, 1, 6);
 		
-		
-//		btnReady.setOnAction(e -> menuController.joinLobby() );
 	     
 		hbox.setAlignment(Pos.CENTER_LEFT); 
 		hbox.setSpacing(10);

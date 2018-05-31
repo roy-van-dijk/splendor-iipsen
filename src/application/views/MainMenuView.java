@@ -1,27 +1,34 @@
 package application.views;
 
+import java.rmi.ConnectException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 
 import application.StageManager;
 import application.controllers.GameController;
-import application.controllers.MenuController;
+import application.controllers.MainMenuController;
 import application.domain.Game;
 import application.domain.PlayerImpl;
+import application.util.AlertDialog;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Popup;
+import javafx.stage.PopupWindow;
 import javafx.stage.Stage;
 
 public class MainMenuView implements UIComponent  {
 	
 //	private Home home;
-	private MenuController menuController;
+	private MainMenuController menuController;
 	
 	private BorderPane root;
 	
@@ -33,33 +40,13 @@ public class MainMenuView implements UIComponent  {
 	
 	private TextField nickname;
 	private TextField hostIp;
-	
-	// POC var - see opt 2. @ this.modelChanged() 
-	//private List<UIComponent> comps = new ArrayList<>();
 
-	public MainMenuView(MenuController menuController) {
-//		this.home = home;
+	public MainMenuView(MainMenuController menuController) {
 		this.menuController = menuController;
-		
-		// home.addObserver(this); // Causes modelChanged() to be called upon initialization, before the scene is even added to the primaryStage.
-		
-		this.buildMainPanel();
+
+		this.buildMainMenuScreen();
 	}
-	
-	// POC
-	public void modelChanged()
-	{
-		/*
-		 * Big question of what to do here.
-		 * 1. We can either re-build the ENTIRE UI (easiest, but very inefficient) -> means calling this.buildUI() and switching scene's root node
-		 * 2. [No] Or we can update either the ENTIRE UI (harder, but more efficient) -> means looping through all childviews and triggering modelChanged [THIS IS NOT EASILY POSSIBLE]  
-		 * 3. Or we should do neither and instead have ALL "subdomain" objects implement the observer pattern and have them ONLY notify THEIR listeners. (shitload of classes, but most efficient)
-		 */
-		System.out.println("Updating home view");
-		this.buildMainPanel(); // Rebuild entire UI for now
-		StageManager.getInstance().switchScene(root);
-	}
-	
+
 	private HBox buildManualButton() 
 	{
 		HBox manualContainer = new HBox();
@@ -74,7 +61,7 @@ public class MainMenuView implements UIComponent  {
 		return manualContainer;
 	}
 	
-	private BorderPane buildJoinPanel()
+	private BorderPane buildJoinLobbyScreen()
 	{
 		root = new BorderPane();
 		manualButton = buildManualButton();
@@ -100,16 +87,18 @@ public class MainMenuView implements UIComponent  {
 		
 		join.setOnAction(e -> {
 			try {
-				StageManager.getInstance().showLobbyScreen(hostIp.getText(), nickname.getText());
+				menuController.joinLobby(hostIp.getText(), nickname.getText());
+			} catch (ConnectException e1) {
+				new AlertDialog(AlertType.ERROR, "Could not connect to the server. Server may be offline.").show();
 			} catch (RemoteException e1) {
-				// TODO Auto-generated catch block
+				new AlertDialog(AlertType.ERROR, "Something went wrong while connecting to the server.").show();
 				e1.printStackTrace();
 			} catch (NotBoundException e1) {
-				// TODO Auto-generated catch block
+				new AlertDialog(AlertType.ERROR, "The server is not configured properly.").show();
 				e1.printStackTrace();
 			}
 		});
-		back.setOnAction(e -> StageManager.getInstance().switchScene(buildMainPanel()));
+		back.setOnAction(e -> StageManager.getInstance().switchScene(buildMainMenuScreen()));
 		
 		panel.setAlignment(Pos.CENTER_LEFT); 
 		panel.setSpacing(10);
@@ -125,7 +114,7 @@ public class MainMenuView implements UIComponent  {
 		return root;
 	}
 	
-	private BorderPane buildMainPanel()
+	private BorderPane buildMainMenuScreen()
 	{
 		root = new BorderPane();
 		manualButton = buildManualButton();
@@ -145,9 +134,9 @@ public class MainMenuView implements UIComponent  {
 		btnPreviousGame.getStyleClass().add("home-button");
 		btnNewGame.getStyleClass().add("home-button");
 		
-		btnJoinLobby.setOnAction(e -> StageManager.getInstance().switchScene(buildJoinPanel()));
-		btnPreviousGame.setOnAction(e -> StageManager.getInstance().switchScene(buildHostPreviousGamePanel()));
-		btnNewGame.setOnAction(e -> StageManager.getInstance().switchScene(buildHostNewGamePanel()));
+		btnJoinLobby.setOnAction(e -> StageManager.getInstance().switchScene(buildJoinLobbyScreen()));
+		btnPreviousGame.setOnAction(e -> StageManager.getInstance().switchScene(buildHostPreviousGameScreen()));
+		btnNewGame.setOnAction(e -> StageManager.getInstance().switchScene(buildHostNewGameScreen()));
 		
 		panel.setAlignment(Pos.CENTER_LEFT); 
 		panel.setSpacing(10);
@@ -164,7 +153,7 @@ public class MainMenuView implements UIComponent  {
 	}	
 	
 
-	private BorderPane buildHostNewGamePanel()
+	private BorderPane buildHostNewGameScreen()
 	{
 		root = new BorderPane();
 		manualButton = buildManualButton();
@@ -185,13 +174,13 @@ public class MainMenuView implements UIComponent  {
 		
 		join.setOnAction(e -> {
 			try {
-				StageManager.getInstance().hostNewGameLobby(nickname.getText());
+					menuController.hostNewGame(nickname.getText());
 			} catch (RemoteException e1) {
-				// TODO Auto-generated catch block
+				new AlertDialog(AlertType.ERROR, "Could not start a new server.").show();
 				e1.printStackTrace();
 			}
 		});
-		back.setOnAction(e -> StageManager.getInstance().switchScene(buildMainPanel()));
+		back.setOnAction(e -> StageManager.getInstance().switchScene(buildMainMenuScreen()));
 		
 		panel.setAlignment(Pos.CENTER_LEFT); 
 		panel.setSpacing(10);
@@ -209,7 +198,7 @@ public class MainMenuView implements UIComponent  {
 
 
 
-	private BorderPane buildHostPreviousGamePanel()
+	private BorderPane buildHostPreviousGameScreen()
 	{
 		root = new BorderPane();
 		manualButton = buildManualButton();
@@ -230,13 +219,13 @@ public class MainMenuView implements UIComponent  {
 		
 		join.setOnAction(e -> {
 			try {
-				StageManager.getInstance().hostPreviousGameLobby(nickname.getText());
+				menuController.hostPreviousGame(nickname.getText());
 			} catch (RemoteException e1) {
-				// TODO Auto-generated catch block
+				new AlertDialog(AlertType.ERROR, "Could not start a new server.").show();
 				e1.printStackTrace();
 			}
 		});
-		back.setOnAction(e -> StageManager.getInstance().switchScene(buildMainPanel()));
+		back.setOnAction(e -> StageManager.getInstance().switchScene(buildMainMenuScreen()));
 		
 		panel.setAlignment(Pos.CENTER_LEFT); 
 		panel.setSpacing(10);
