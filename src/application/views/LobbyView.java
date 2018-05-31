@@ -9,7 +9,7 @@ import java.util.List;
 
 import application.StageManager;
 import application.controllers.LobbyController;
-import application.controllers.MenuController;
+import application.controllers.MainMenuController;
 import application.domain.Lobby;
 import application.domain.LobbyObserver;
 import application.domain.Player;
@@ -34,10 +34,7 @@ import javafx.scene.text.Text;
  *
  */
 public class LobbyView extends UnicastRemoteObject implements UIComponent, LobbyObserver  {
-	
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 	
 	private LobbyController lobbyController;
@@ -50,11 +47,15 @@ public class LobbyView extends UnicastRemoteObject implements UIComponent, Lobby
 	private HBox hbox;
 	private HBox manualButton;
 	
+	private Button btnBack;
 	private Button btnReady;
 	
 	private Label lblUnassPlayers;
 	private Label lblAssPlayers;
 	private Label lblLobbyIP;
+	
+	private final static int gridChildWidth = 250;
+	private final static int gridGap = 5;
 	
 
 	public LobbyView(Lobby lobby, LobbyController lobbyController) throws RemoteException {
@@ -86,8 +87,7 @@ public class LobbyView extends UnicastRemoteObject implements UIComponent, Lobby
 
 	}
 		  
-	private void updateUI(Lobby lobby) throws RemoteException
-	{
+	private void updateUI(Lobby lobby) throws RemoteException {
 		int maxPlayers = lobby.getMaxPlayers();
 		String hostIP = lobby.getHostIP();
 		
@@ -99,13 +99,15 @@ public class LobbyView extends UnicastRemoteObject implements UIComponent, Lobby
 		for(int i = 0; i < maxPlayers; i++) 
 		{
 			String displayName = "Empty slot...";
+			Label label = new Label();
 			
 			if(i < unassignedPlayers.size()) 
 			{
 				displayName = unassignedPlayers.get(i).getName();
+				label.getStyleClass().add("active");
 			}
-			Label label = new Label(displayName);
-			label.setPrefWidth(lblUnassPlayers.getWidth());
+			label.setText(displayName);
+			label.setPrefWidth(gridChildWidth);
 			gpane.add(label, 0, i + 2);
 		}
 		
@@ -113,12 +115,17 @@ public class LobbyView extends UnicastRemoteObject implements UIComponent, Lobby
 		for(int i = 0; i < maxPlayers; i++) 
 		{
 			String displayName = String.format("Player %d - empty", i);
+			Label label = new Label();
 			
 			if(i < assignedPlayers.size()) 
 			{
 				displayName = assignedPlayers.get(i).getName();
+				label.getStyleClass().add("active");
+				label.getStyleClass().add("unchecked");
+				//label.getStyleClass().add("checked");
 			}
-			Label label = new Label(displayName);
+			label.setText(displayName);
+			label.setPrefWidth(gridChildWidth);
 			gpane.add(label, 1, i + 2);
 		}
 	}
@@ -136,8 +143,7 @@ public class LobbyView extends UnicastRemoteObject implements UIComponent, Lobby
 		root.setPadding(new Insets(0));
 	}
 	
-	private HBox buildManualButton() 
-	{
+	private HBox buildManualButton() {
 		HBox manualContainer = new HBox();
 		Button manualButton = new Button("?");
 		
@@ -150,44 +156,46 @@ public class LobbyView extends UnicastRemoteObject implements UIComponent, Lobby
 		return manualContainer;
 	}
 	
-	private Pane buildPane()
-	{
+	private Pane buildPane() {
 		hbox = new HBox();
 		gpane = new GridPane();
 		
-		lblUnassPlayers = new Label("Unassigned Players");
-		lblAssPlayers 	= new Label("Assigned Players");
-		
 		lblLobbyIP = new Label();
 		lblLobbyIP.setAlignment(Pos.CENTER);
-		lblLobbyIP.prefWidthProperty().bind(gpane.widthProperty());
-			
-		btnReady = new Button("Ready");		
+		lblLobbyIP.setPrefWidth(gridChildWidth * 2 + gridGap);
+		lblLobbyIP.getStyleClass().add("active");
 		
-		btnReady.setOnAction(e -> StageManager.getInstance().showGameScreen());
+		lblUnassPlayers = new Label("Unassigned Players");
+		lblUnassPlayers.getStyleClass().add("active");
+		lblUnassPlayers.setPrefWidth(gridChildWidth);
+		
+		lblAssPlayers = new Label("Assigned Players");
+		lblAssPlayers.getStyleClass().add("active");
+		lblAssPlayers.setPrefWidth(gridChildWidth);
+		
+		btnBack = new Button("Back");
+		btnBack.setPrefWidth(gridChildWidth);
+		btnBack.setOnAction(e -> StageManager.getInstance().showMainMenu()); // TODO: replace with call to LobbyController leaveLobby()
+		
+		btnReady = new Button("Ready");
+		btnReady.setPrefWidth(gridChildWidth);
+		btnReady.setOnAction(e -> StageManager.getInstance().showGameScreen()); // TODO: replace with call to LobbyController ready()
 		
 		gpane.getStyleClass().add("lobby-grid");
-		gpane.setVgap(5); 
-		gpane.setHgap(5);
+		gpane.setVgap(gridGap); 
+		gpane.setHgap(gridGap);
 		
 		gpane.add(lblLobbyIP, 0, 0, 2, 1);
-		
 		gpane.add(lblUnassPlayers, 0, 1);
 		gpane.add(lblAssPlayers, 1, 1);
-
 		gpane.add(btnReady, 1, 6);
+		gpane.add(btnBack, 0, 6);
 		
-		
-//		btnReady.setOnAction(e -> menuController.joinLobby() );
-	     
-		hbox.setAlignment(Pos.CENTER_LEFT); 
-		hbox.setSpacing(10);
+		hbox.setAlignment(Pos.CENTER_LEFT);
 		hbox.setTranslateX(-250);
 		hbox.setTranslateY(400);
 		hbox.getChildren().add(gpane);
-		
-		
-		
+				
 		return hbox;
 	}
 

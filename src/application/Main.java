@@ -8,11 +8,13 @@ import application.controllers.GameControllerImpl;
 import application.domain.Game;
 import application.domain.GameImpl;
 import application.services.CardsReader;
+import application.util.ConfirmDialog;
 import application.views.GameView;
 import application.views.ManualWindowView;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -35,7 +37,7 @@ public class Main extends Application {
 		          }
 		        });
 			StageManager.getInstance().startSplendor(primaryStage);
-//			StageManager.getInstance().showGameScreen();
+			StageManager.getInstance().showGameScreen();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

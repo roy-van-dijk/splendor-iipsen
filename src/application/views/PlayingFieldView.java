@@ -11,10 +11,12 @@ import application.domain.Game;
 import application.domain.Gem;
 import application.domain.Noble;
 import application.domain.PlayingField;
+import application.util.ConfirmDialog;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
@@ -138,11 +140,10 @@ public class PlayingFieldView implements UIComponent {
 		Button exit = new Button("X");
 
 		VBox vbox = new VBox();
+        exit.getStyleClass().addAll("button", "manual-button");	
 		vbox.getChildren().add(exit);
 		
-		exit.setOnAction(e -> {
-			
-			System.out.println("exit the game");
+		exit.setOnAction(e -> {	
 			gameController.leaveGame();
 		});
 		return vbox;

@@ -1,13 +1,18 @@
 package application.controllers;
 
 import java.rmi.RemoteException;
+import java.util.Optional;
 
 import application.StageManager;
 import application.domain.Card;
 import application.domain.CardRowImpl;
 import application.domain.Game;
+import application.domain.Turn;
+import application.util.ConfirmDialog;
 import application.views.PopUpWindowView;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
 
 /**
@@ -16,6 +21,8 @@ import javafx.stage.Stage;
  */
 public class GameControllerImpl implements GameController {
 	private Game game;
+	
+	private Turn turn;
 
 	public GameControllerImpl(Game game) {
 		this.game = game;
@@ -41,16 +48,49 @@ public class GameControllerImpl implements GameController {
 		//TODO: subtract tokens from player.
 		//game.getPlayers().get(game.getCurrentPlayerIdx()).getReservedCards().add(game.getTurn().getReservedCard());
 		//TODO: check for nobles
-		game.getTurn().emptyhand();
+		game.getTurn().emptyHand();
 		//TODO: Save Game
 		//TODO: Check win condition
 		//TODO: Determine next player
 		
 		game.nextTurn();
 	}
+	@Override
 	public void leaveGame() {
-		StageManager.getInstance().showMainMenu();
-		PopUpWindowView exitgame = new PopUpWindowView("Het spel is beëindigd door een van de spelers.", "Het spel is gestopt");
+		ConfirmDialog dialog = new ConfirmDialog(AlertType.CONFIRMATION);
+		dialog.setTitle("Confirmation Dialog");
+		dialog.setHeaderText("You are leaving the game");
+		dialog.setContentText("Are you ok with this?");
+		
+		Optional<ButtonType> results = dialog.showAndWait();
+		if (results.get() == ButtonType.OK){
+			StageManager.getInstance().showMainMenu();
+			new PopUpWindowView("Het spel is beëindigd door een van de spelers.", "Het spel is gestopt");
+		}
+		
+	}
+	@Override
+	public void resetTurn() {
+		game.getTurn().emptyHand();
+		
+	}
+
+	@Override
+	public void purchaseCard() {
+		//game.getCurrentPlayer().purchaseCard();
+		
+	}
+
+	@Override
+	public void takeTwoTokens() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void takeThreeTokens() {
+		// TODO Auto-generated method stub
+		
 	}
 
 	

@@ -17,4 +17,13 @@ public interface GameController
 	
 	public void leaveGame();
 	
+	public void resetTurn();
+	
+	public void purchaseCard();
+	
+	public void takeTwoTokens();
+	
+	public void  takeThreeTokens();
+	
+	
 }

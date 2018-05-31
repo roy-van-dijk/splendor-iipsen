@@ -106,4 +106,10 @@ public class PlayerImpl implements Player, Serializable {
 		return prestige;
 	}
 
+	@Override
+	public void purchaseCard(Card card) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
