@@ -192,7 +192,12 @@
 .alert-dialog .button {
 	-fx-font-size: 30px;
 }
-
+.selectable {
+	-fx-effect: dropshadow(GAUSSIAN, yellow, 30, 0.4, 0, 0); 
+}
+.selected {
+	-fx-effect: dropshadow(GAUSSIAN, blue, 30, 0.4, 0, 0);
+}
 .popup-view {
 	-fx-background-image: url("../../resources/misc/splendor.jpg");
 	-fx-background-size: cover;
