@@ -3,9 +3,7 @@ package application.views;
 import java.rmi.RemoteException;
 import java.util.LinkedHashMap;
 import java.util.Map;
-
 import application.controllers.ReturnTokenController;
-import application.controllers.ReturnTokenControllerImpl;
 import application.domain.Game;
 import application.domain.Gem;
 import application.domain.Player;
@@ -106,14 +104,16 @@ public class ReturnTokensView {
 		LinkedHashMap<Gem, Integer> gemsCount = returnTokens.getTokenListNew().getTokenGemCount();
 		
 		//Create a vbox for every gem with curent amount of player.
-		for(Map.Entry<Gem, Integer> entry : gemsCount.entrySet()) {	
+		for(Map.Entry<Gem, Integer> entry : gemsCount.entrySet()) 
+		{	
 			VBox gemBox = createTokenGemCountBox(entry.getKey(), entry.getValue(), GameView.tokenSizeRadius);
 			gemCounterDisplay.getChildren().add(gemBox);	
 		}
 	}
 
 	// the display of a gem type and amount of tokens of that type owned, with buttons to remove and add. 
-	private VBox createTokenGemCountBox(Gem gemType, int count, int tokenSizeRadius) {
+	private VBox createTokenGemCountBox(Gem gemType, int count, int tokenSizeRadius) 
+	{
 		
 		//buttons to edit amount of coins and confirmation of the turn.
 		//TODO add Button action events.
@@ -123,19 +123,25 @@ public class ReturnTokensView {
 		TokenView tokenView = new TokenView(gemType, tokenSizeRadius);
         Label tokenCountLabel = new Label(String.valueOf(count));
         
-		minusTokenButton.setOnAction(e -> {
-			try {
+		minusTokenButton.setOnAction(e -> 
+		{
+			try 
+			{
 				returnTokenController.minusToken(gemType);
-			} catch (RemoteException e1) {
+			} catch (RemoteException e1) 
+			{
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 		});
 		
-		plusTokenButton.setOnAction(e -> {
-			try {
+		plusTokenButton.setOnAction(e -> 
+		{
+			try 
+			{
 				returnTokenController.plusToken(gemType);
-			} catch (RemoteException e1) {
+			} catch (RemoteException e1) 
+			{
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
