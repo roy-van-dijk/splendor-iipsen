@@ -4,11 +4,14 @@ import java.rmi.RemoteException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import application.controllers.ReturnTokenController;
+import application.controllers.ReturnTokenControllerImpl;
 import application.domain.Game;
 import application.domain.Gem;
 import application.domain.Player;
 import application.domain.PlayingField;
 import application.domain.PlayingFieldImpl;
+import application.domain.ReturnTokens;
 import application.domain.TokenList;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -19,6 +22,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 /**
  * 
  * @author Tom
@@ -27,71 +31,85 @@ import javafx.stage.Stage;
 public class ReturnTokensView {
 	
 	private BorderPane pane;
-	private Player player;
-	private PlayingField playingField;
+	
+	private Stage stage;
+	private HBox gemCounterDisplay;
+	private Button confirmButton;
+	
+	private ReturnTokenController returnTokenController;
 
-	public ReturnTokensView(Game game) throws RemoteException {
+	public ReturnTokensView(ReturnTokens returnTokens, ReturnTokenController returnTokenController) throws RemoteException {
+		this.returnTokenController = returnTokenController;
+		this.pane = new BorderPane();
+		
+
+		Label labelText = new Label("You have more than 10 tokens. Please discard tokens until you have 10.");			
+		labelText.setAlignment(Pos.CENTER);
+		labelText.setFont(Font.font(26.0));
+
+		gemCounterDisplay = new HBox(); //big hbox placed in the middle of the pane with in it up to 6 for the gems of the player.
+		gemCounterDisplay.setAlignment(Pos.CENTER);
+		
+		
+		confirmButton = new Button("Confirm");
+		confirmButton.setOnAction(e -> { 
+			try {
+				returnTokenController.confirmButton();
+			} catch (RemoteException e1) {
+				e1.printStackTrace();
+			} 
+			stage.close(); 
+		});
+		
+		HBox confirmBox = new HBox(confirmButton);
+		confirmBox.setAlignment(Pos.CENTER);
+		
+		
+		pane.setTop(labelText);
+		pane.setCenter(gemCounterDisplay);
+		pane.setBottom(confirmBox);
+
+		pane.setPrefHeight(300);
+		pane.setPrefWidth(400);
+				
+		
+		Scene scene = new Scene(pane, 900, 350);
+		scene.getStylesheets().add(getClass().getResource("../application.css").toExternalForm());
+		
+		stage = new Stage();
+		stage.setScene(scene);
+		stage.setTitle("Return tokens");
+		stage.initStyle(StageStyle.UNDECORATED);
+		stage.setResizable(false);
+		stage.show();
+
+		returnTokens.registrate(this);
+	}
 	
-	pane  = new BorderPane();
-	player = game.getCurrentPlayer();
-	playingField = game.getPlayingField();
-	
-	Scene scene = new Scene(pane, 900, 350);
-	Stage stage = new Stage();
-	
-	Label labelText = new Label("You hvae more than 10 tokens. Please discard tokens until you have 10.");	
-	HBox returnTokenDiscription = new HBox(labelText);
-	
-	HBox gemcounterDisplay = buildGemcounterDisplay();
-	HBox confirmBox = new HBox();
-	
-	Button confirmButton = new Button("Confirm");
-	
-	scene.getStylesheets().add(getClass().getResource("../application.css").toExternalForm());
-	
-	pane.setTop(returnTokenDiscription);
-	returnTokenDiscription.setAlignment(Pos.CENTER);
-	labelText.setFont(Font.font(26.0));
-	
-	pane.setBottom(confirmBox);
-	confirmBox.getChildren().add(confirmButton);
-	confirmBox.setAlignment(Pos.CENTER);
-	
-	pane.setCenter(gemcounterDisplay);
-	gemcounterDisplay.setAlignment(Pos.CENTER);
-	
-	pane.setPrefHeight(300);
-	pane.setPrefWidth(400);
-			
-	stage.setScene(scene);
-	stage.setTitle("Return tokens");
-	stage.setResizable(false);
-	stage.show();
-	
-	
+	public void modelChanged(ReturnTokens returnTokens)
+	{
+		this.updateTokenGemCounts(returnTokens);
+		this.updateConfirmButton(returnTokens);
 	}
 
-	//big hbox placed in the middle of the pane with in it up to 6 for the gems of the player.
-	private HBox buildGemcounterDisplay() throws RemoteException {
-		HBox gemcounterDisplay = new HBox();
-		gemcounterDisplay.setAlignment(Pos.CENTER);
-		//setVgrow may be needed, test without first.
-		//VBox.setVgrow(gemcounterDisplay, Priority.ALWAYS);
+
+	private void updateConfirmButton(ReturnTokens returnTokens)
+	{ 
+		confirmButton.setDisable(!returnTokens.isAllowConfirm());
+	}
+	
+	private void updateTokenGemCounts(ReturnTokens returnTokens)
+	{
+		gemCounterDisplay.getChildren().clear();
+
 		
-		// NULL POINTER EXCEPTION!!!! /// get the player tokens.
-		//TokenList gemsCountList = player.getTokenList();
-		//LinkedHashMap<Gem, Integer> gemsCount = gemsCountList.getTokenGemCount();
-		
-		//TODO switch out gemcount below with commented lines above. gems of playingField uses for testing.
-		//System.out.println("hiergaathetmis");
-		LinkedHashMap<Gem, Integer> gemsCount = playingField.getTokenGemCount();
+		LinkedHashMap<Gem, Integer> gemsCount = returnTokens.getTokenListNew().getTokenGemCount();
 		
 		//Create a vbox for every gem with curent amount of player.
 		for(Map.Entry<Gem, Integer> entry : gemsCount.entrySet()) {	
 			VBox gemBox = createTokenGemCountBox(entry.getKey(), entry.getValue(), GameView.tokenSizeRadius);
-			gemcounterDisplay.getChildren().add(gemBox);	
+			gemCounterDisplay.getChildren().add(gemBox);	
 		}
-		return gemcounterDisplay;
 	}
 
 	// the display of a gem type and amount of tokens of that type owned, with buttons to remove and add. 
@@ -99,18 +117,37 @@ public class ReturnTokensView {
 		
 		//buttons to edit amount of coins and confirmation of the turn.
 		//TODO add Button action events.
-		Button removeTokenButton = new Button("-");
-		Button returnTokenButton = new Button("+");
-		
+		Button minusTokenButton = new Button("-");
+		Button plusTokenButton = new Button("+");
+				
 		TokenView tokenView = new TokenView(gemType, tokenSizeRadius);
         Label tokenCountLabel = new Label(String.valueOf(count));
+        
+		minusTokenButton.setOnAction(e -> {
+			try {
+				returnTokenController.minusToken(gemType);
+			} catch (RemoteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		});
+		
+		plusTokenButton.setOnAction(e -> {
+			try {
+				returnTokenController.plusToken(gemType);
+			} catch (RemoteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		});
         
         tokenCountLabel.getStyleClass().add("token-count");	
         tokenCountLabel.setFont(Font.font(tokenSizeRadius * 2));
         
-		VBox tokenColum = new VBox(tokenView.asPane(),returnTokenButton, tokenCountLabel, removeTokenButton);
-        tokenColum.setAlignment(Pos.CENTER);
+		VBox tokenColumn = new VBox(tokenView.asPane(),plusTokenButton, tokenCountLabel, minusTokenButton);
+        tokenColumn.setAlignment(Pos.CENTER);
         
-		return tokenColum;
+		return tokenColumn;
 	}
+	
 }

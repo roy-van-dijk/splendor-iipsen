@@ -24,9 +24,12 @@ public interface Player extends Remote {
 	public List<Card> getOwnedCards() throws RemoteException;
 	public List<Noble> getOwnedNobles() throws RemoteException;
 
+
 	public TokenList getTokenList() throws RemoteException;
 	
+
 	public int getPrestige() throws RemoteException;
 	
 	public void addObserver(PlayerObserver o) throws RemoteException;
+
 }

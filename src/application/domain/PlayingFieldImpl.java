@@ -190,4 +190,14 @@ public class PlayingFieldImpl extends UnicastRemoteObject implements PlayingFiel
 		this.notifyObservers();
 	}
 
+	public void addToken(Token token) {
+		tokenList.add(token);
+		
+	}
+
+	public void removeToken(Token token) {
+		tokenList.remove(token);
+		
+	}
+
 }

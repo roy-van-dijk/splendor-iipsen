@@ -16,18 +16,15 @@ public class TokenList implements Serializable {
 		this.tokens = new ArrayList<Token>();
 	}
 
-	public void add(Token token)
-	{
+	public void add(Token token) {
 		tokens.add(token);
 	}
 	
-	public void remove(Token token)
-	{
+	public void remove(Token token) {
 		tokens.remove(token);
 	}
 	
-	public List<Token> getAll()
-	{
+	public List<Token> getAll() {
 		return tokens;
 	}
 	
@@ -35,8 +32,7 @@ public class TokenList implements Serializable {
 	 * TODO: Consider making this part of a view rather than an a model
 	 * @return a Map containing gems and their amount of occurrences in this TokenList
 	 */
-	public LinkedHashMap<Gem, Integer> getTokenGemCount()
-	{
+	public LinkedHashMap<Gem, Integer> getTokenGemCount() {
 		LinkedHashMap<Gem, Integer> gemsCount = new LinkedHashMap<Gem, Integer>();
 		
 		// Initialize map

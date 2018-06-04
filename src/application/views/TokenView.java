@@ -53,9 +53,11 @@ public class TokenView implements UIComponent, ColorChangeable {
 		//Image image = ImageResources.getImage(imagePath);
         ImagePattern imagePattern = new ImagePattern(image);
         circle.setFill(imagePattern);
-        
+       
 		root = new StackPane(circle);
-	}
+
+		root.getStyleClass().add("selectable");
+	}	
 	
 	/**
 	 *  This function is used to get the suffix of the image filename for a Token. This always equals the name of the token's gemType.  

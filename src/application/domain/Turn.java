@@ -48,12 +48,15 @@ public class Turn implements Serializable {
 	public TokenList getTokenList() {
 		return tokenList;
 	}
-	
+	/**
+	 * Clear the hand of the current player
+	 */
 	public void emptyHand() {
 		nobles.clear();
 		tokenList.getAll().clear();
 		reservedCard = null;
 		boughtCard = null;
+		System.out.printf("%s has emptied his hand \n", player.getName());
 	}
 
 	public MoveType getMoveType() {

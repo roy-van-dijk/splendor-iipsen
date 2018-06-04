@@ -42,6 +42,7 @@ public class PlayerImpl extends UnicastRemoteObject implements Player, Serializa
 
 	public void reserveCardFromField(CardRow cardRow, Card card) throws RemoteException {
 
+
 		if(this.getReservedCards().size() < 3) // Business rule: max 3 reserved cards
 		{
 			cardRow.removeCard(card);
@@ -62,8 +63,7 @@ public class PlayerImpl extends UnicastRemoteObject implements Player, Serializa
 		return reservedCards;
 	}
 	
-	public void addReservedCard(Card card)
-	{
+	public void addReservedCard(Card card) {
 		reservedCards.add(card);
 	}
 	
@@ -75,11 +75,11 @@ public class PlayerImpl extends UnicastRemoteObject implements Player, Serializa
 		return ownedNobles;
 	}
 
-	public TokenList getTokenList()
-	{
+	public TokenList getTokenList() {
 		return tokenList;
 	}
 	
+
 	public int getPrestige() throws RemoteException
 	{
 		int prestige = 0;
@@ -96,7 +96,15 @@ public class PlayerImpl extends UnicastRemoteObject implements Player, Serializa
 		
 		return prestige;
 	}
-
+	
+	public void addToken(Token token) {
+		tokenList.add(token);
+	}
+	
+	public void removeToken(Token token) {
+		tokenList.remove(token);
+	}
+	
 	private void notifyObservers() throws RemoteException
 	{
 		for(PlayerObserver o : observers)
@@ -109,5 +117,4 @@ public class PlayerImpl extends UnicastRemoteObject implements Player, Serializa
 		observers.add(o);
 		this.notifyObservers();
 	}
-
 }

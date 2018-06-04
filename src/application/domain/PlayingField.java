@@ -21,4 +21,5 @@ public interface PlayingField extends Remote {
 	public void addObserver(PlayingFieldObserver observer) throws RemoteException;
 	
 	//public void setTokensSelectable(MoveType moveType) throws RemoteException;
+
 }

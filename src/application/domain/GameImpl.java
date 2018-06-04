@@ -63,7 +63,15 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 	{
 		try {
 			this.players.add(new PlayerImpl("Bob"));
-			this.players.add(new PlayerImpl("Michael"));
+			
+			PlayerImpl player = new PlayerImpl("Michael");
+			for(int i = 0; i < 13; i++)
+			{
+				Gem[] allGems = Gem.values();
+				int randomIdx = (int) (Math.random() * allGems.length);
+				player.addToken(new TokenImpl(allGems[randomIdx]));
+			}
+			this.players.add(player);
 			this.players.add(new PlayerImpl("Peter"));
 			this.players.add(new PlayerImpl("Martin"));
 		} catch (RemoteException e) {
