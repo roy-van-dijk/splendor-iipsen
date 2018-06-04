@@ -4,8 +4,9 @@ import java.rmi.RemoteException;
 
 import application.controllers.GameController;
 import application.domain.Card;
+import application.domain.CardRow;
 import application.domain.CardRowImpl;
-import application.domain.GenericObserver;
+import application.domain.CardRowObserver;
 import javafx.geometry.Pos;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -16,20 +17,24 @@ import javafx.scene.layout.Pane;
  * @author Sanchez
  *
  */
-public class CardRowView implements UIComponent, GenericObserver<CardRowImpl> {
+public class CardRowView implements UIComponent, CardRowObserver {
 
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private Pane root;
 	private GridPane grid;
 	
 	private GameController gameController;
 	
-	public CardRowView(CardRowImpl cardRowImpl, GameController gameController) {
+	public CardRowView(CardRow cardRow, GameController gameController) {
 
-		this.buildUI(cardRowImpl);
+		this.buildUI(cardRow);
 		
 		try {
-			cardRowImpl.addObserver(this);
+			cardRow.addObserver(this);
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -38,10 +43,20 @@ public class CardRowView implements UIComponent, GenericObserver<CardRowImpl> {
 	
 	
 	@Override
-	public void modelChanged(CardRowImpl cardRowImpl) 
+	public void modelChanged(CardRow cardRow) throws RemoteException 
 	{
+		grid.getChildren().clear();
+		
+		// TODO: separate functions
+		
+		// Create the deck view (Looks like the back side of a card)
+		CardDeckView cardDeckView = new CardDeckView(cardRow.getCardDeck(), GameView.cardSizeX, GameView.cardSizeY);
+		
+		// // Add the deck to the grid, make deck view first in row
+		grid.add(cardDeckView.asPane(), 0, 0);
+		
 		// Fetch the cards
-		Card[] cardSlots = cardRowImpl.getCardSlots();
+		Card[] cardSlots = cardRow.getCardSlots();
 		
 		// Render each card if it exists
         for(int idx = 0; idx < cardSlots.length; idx++)
@@ -51,7 +66,14 @@ public class CardRowView implements UIComponent, GenericObserver<CardRowImpl> {
         	
         	// Create card view
         	FrontCardView cardView = new FrontCardView(card, GameView.cardSizeX, GameView.cardSizeY);
-        	//cardView.asPane().setOnMouseClicked(e -> { gameController. });
+        	cardView.asPane().setOnMouseClicked(e -> { 
+        		try {
+        			gameController.onFieldCardClicked(card);
+        		} catch (RemoteException e1) {
+        			// TODO Auto-generated catch block
+        			e1.printStackTrace();
+        		} 
+        	});
         	
         	// Display cards by index
         	grid.add(cardView.asPane(), idx + 1, 0);
@@ -60,18 +82,11 @@ public class CardRowView implements UIComponent, GenericObserver<CardRowImpl> {
 	}
 
 	
-	private void buildUI(CardRowImpl cardRowImpl)
+	private void buildUI(CardRow cardRow)
 	{
 		grid = new GridPane();
 		grid.setAlignment(Pos.CENTER);
 		grid.setHgap(PlayingFieldView.CARDSPACING);
-		
-		// Create the deck view (Looks like the back side of a card)
-		CardDeckView cardDeckView = new CardDeckView(cardRowImpl.getCardDeck(), GameView.cardSizeX, GameView.cardSizeY);
-		
-		// // Add the deck to the grid, make deck view first in row
-		grid.add(cardDeckView.asPane(), 0, 0);
-		
 
         root = grid;
 	}

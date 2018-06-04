@@ -6,6 +6,7 @@ import java.util.Stack;
 
 /**
  * So far a Deck seems to just wrap around a List. Seems almost useless.
+ * TODO: consider splitting Deck into CardDeck and NobleDeck for separate observers.
  * 
  * @author Sanchez
  */
@@ -16,6 +17,4 @@ public interface Deck<T> extends Remote
 	public T pull() throws RemoteException;
 	public T top() throws RemoteException;
 	public Stack<T> getAll() throws RemoteException;
-	
-	public void addObserver(T observer) throws RemoteException;
 }

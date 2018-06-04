@@ -1,5 +1,6 @@
 package application.domain;
 
+import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.Map;
 /**
@@ -7,7 +8,7 @@ import java.util.Map;
  * @author Sanchez
  *
  */
-public class NobleImpl implements Noble {
+public class NobleImpl implements Noble, Serializable {
 	private int prestigeValue;
 	private String illustration; 
 	private Map<Gem, Integer> requirements;

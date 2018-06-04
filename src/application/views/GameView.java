@@ -140,7 +140,7 @@ public class GameView implements UIComponent  {
 		
 		// Make separate button class
 		btnReserveCard = new Button("Reserve Card");
-		btnReserveCard.getStyleClass().addAll("button", "move-button");
+		btnReserveCard.getStyleClass().add("move-button");
 		btnReserveCard.setOnAction(e -> {
 			try {
 				gameController.reserveCard();

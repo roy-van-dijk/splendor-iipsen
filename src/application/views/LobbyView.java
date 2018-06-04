@@ -13,6 +13,7 @@ import application.controllers.MainMenuController;
 import application.domain.Lobby;
 import application.domain.LobbyObserver;
 import application.domain.Player;
+import application.domain.PlayerSlot;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -96,6 +97,7 @@ public class LobbyView extends UnicastRemoteObject implements UIComponent, Lobby
 		// TODO: update ready status of each player;
 		
 		List<Player> unassignedPlayers = lobby.getUnassignedPlayers();
+		
 		for(int i = 0; i < maxPlayers; i++) 
 		{
 			String displayName = "Empty slot...";
@@ -104,6 +106,7 @@ public class LobbyView extends UnicastRemoteObject implements UIComponent, Lobby
 			if(i < unassignedPlayers.size()) 
 			{
 				displayName = unassignedPlayers.get(i).getName();
+				System.out.println(unassignedPlayers.get(i));
 				label.getStyleClass().add("active");
 			}
 			label.setText(displayName);
@@ -111,15 +114,15 @@ public class LobbyView extends UnicastRemoteObject implements UIComponent, Lobby
 			gpane.add(label, 0, i + 2);
 		}
 		
-		List<Player> assignedPlayers = lobby.getAssignedPlayers();
+		List<PlayerSlot> assignedPlayerSlots = new ArrayList<PlayerSlot>(lobby.getAssignedPlayers().values());
 		for(int i = 0; i < maxPlayers; i++) 
 		{
 			String displayName = String.format("Player %d - empty", i);
 			Label label = new Label();
 			
-			if(i < assignedPlayers.size()) 
+			if(i < assignedPlayerSlots.size()) 
 			{
-				displayName = assignedPlayers.get(i).getName();
+				displayName = assignedPlayerSlots.get(i).getPlayer().getName();
 				label.getStyleClass().add("active");
 				label.getStyleClass().add("unchecked");
 				//label.getStyleClass().add("checked");
@@ -179,7 +182,14 @@ public class LobbyView extends UnicastRemoteObject implements UIComponent, Lobby
 		
 		btnReady = new Button("Ready");
 		btnReady.setPrefWidth(gridChildWidth);
-		btnReady.setOnAction(e -> StageManager.getInstance().showGameScreen()); // TODO: replace with call to LobbyController ready()
+		btnReady.setOnAction(e -> {
+			try {
+				StageManager.getInstance().showGameScreen();
+			} catch (RemoteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}); // TODO: replace with call to LobbyController ready()
 		
 		gpane.getStyleClass().add("lobby-grid");
 		gpane.setVgap(gridGap); 

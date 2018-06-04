@@ -1,9 +1,9 @@
 package application;
 
+import java.rmi.RemoteException;
+
 import application.controllers.GameController;
-import application.controllers.GameControllerImpl;
 import application.controllers.MainMenuController;
-import application.controllers.MainMenuControllerImpl;
 import application.domain.Game;
 import application.domain.GameImpl;
 import application.views.GameView;
@@ -27,7 +27,7 @@ public class StageManager {
 	private StageManager() {
 	}
 
-	public synchronized static StageManager getInstance() {
+	public static StageManager getInstance() {
 		if (instance == null)
 			instance = new StageManager();
 
@@ -38,11 +38,11 @@ public class StageManager {
 		primaryStage.getScene().setRoot(rootNode);
 	}
 
-	public void showGameScreen()
+	public void showGameScreen() throws RemoteException
 	{
-		Game game = new GameImpl(null);
+		Game game = new GameImpl(4);
 
-		GameController gameController = new GameControllerImpl(game);
+		GameController gameController = new GameController(game);
 		GameView gameView = new GameView(game, gameController);
 
 		this.switchScene(gameView.asPane());
@@ -72,7 +72,7 @@ public class StageManager {
 	 * Start the MainMenu
 	 */
 	public void showMainMenu() {
-		MainMenuController menuController = new MainMenuControllerImpl();
+		MainMenuController menuController = new MainMenuController();
 		MainMenuView homeView = new MainMenuView(menuController);
 		
 		switchScene(homeView.asPane());

@@ -11,6 +11,8 @@ import application.domain.Card;
 import application.domain.ColorBlindModes;
 import application.domain.Gem;
 import application.domain.Player;
+import application.domain.PlayerObserver;
+import application.domain.TokenList;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
@@ -34,7 +36,7 @@ import javafx.scene.text.FontWeight;
  * @author Sanchez
  *
  */
-public class PlayerView implements UIComponent {
+public class PlayerView implements UIComponent, PlayerObserver {
 
 	// Radio button toggle group
 	final private ToggleGroup group = new ToggleGroup();
@@ -42,7 +44,6 @@ public class PlayerView implements UIComponent {
 	private GameController gamecontroller;
 	
 	private Pane root;
-	private Player player;
 	
 	private Label lblDiamondBonus;
 	private Label lblSapphireBonus;
@@ -50,10 +51,21 @@ public class PlayerView implements UIComponent {
 	private Label lblRubyBonus;
 	private Label lblOnyxBonus;
 	
+	private GridPane tokensGrid;
+	
+	private Label lblPrestigeValue;
+	
 	public PlayerView(Player player) {
-		this.player = player;
+		//player.addObserver(this);
 		
 		this.buildUI();
+		
+		try {
+			player.addObserver(this);
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	private void buildUI()
@@ -63,13 +75,17 @@ public class PlayerView implements UIComponent {
 		root.getStyleClass().add("player");
 		
 		// Player prestige
-		Label prestigeLabel = new Label(String.valueOf(player.getPrestige()));
-		prestigeLabel.setAlignment(Pos.CENTER);
-		prestigeLabel.setFont(Font.font("Arial", FontWeight.EXTRA_BOLD, 50));
-		prestigeLabel.getStyleClass().add("prestige");
-		StackPane prestige = new StackPane(prestigeLabel);
+		lblPrestigeValue = new Label();
+		lblPrestigeValue.setAlignment(Pos.CENTER);
+		lblPrestigeValue.setFont(Font.font("Arial", FontWeight.EXTRA_BOLD, 50));
+		lblPrestigeValue.getStyleClass().add("prestige");
+		StackPane panePrestige = new StackPane(lblPrestigeValue);
 		
-		GridPane playerTokens = buildTokensDisplay();
+		
+		tokensGrid = new GridPane();
+		tokensGrid.setVgap(2);
+		tokensGrid.setHgap(15);
+		
 		
 		Separator sep = new Separator();
 		sep.setOrientation(Orientation.VERTICAL);
@@ -84,7 +100,14 @@ public class PlayerView implements UIComponent {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		root.getChildren().addAll(prestige, sep, playerTokens, accessibility);
+		root.getChildren().addAll(panePrestige, sep, tokensGrid, accessibility);
+	}
+	
+	public void modelChanged(Player player) throws RemoteException
+	{
+		lblPrestigeValue.setText(String.valueOf(player.getPrestige()));
+		
+		this.updatePlayerTokens(player.getTokenList());
 	}
 	
 	private VBox buildAccessibilityMenu() 
@@ -164,14 +187,11 @@ public class PlayerView implements UIComponent {
 		return ownedCardsDisplay;
 	}
 	
-
-	private GridPane buildTokensDisplay()
+	private void updatePlayerTokens(TokenList playerTokens) throws RemoteException
 	{
-		GridPane tokensGrid = new GridPane();
-		tokensGrid.setVgap(2);
-		tokensGrid.setHgap(15);
+		tokensGrid.getChildren().clear();
 		
-		LinkedHashMap<Gem, Integer> gemsCount = player.getTokenList().getTokenGemCount();
+		LinkedHashMap<Gem, Integer> gemsCount = playerTokens.getTokenGemCount();
 		
 		int col = 0, row = 0;	
 		for(Map.Entry<Gem, Integer> entry : gemsCount.entrySet())
@@ -181,9 +201,8 @@ public class PlayerView implements UIComponent {
 			col++;
 			row++;
 		}
-		
-		return tokensGrid;
 	}
+	
 	
 	private HBox createTokenGemCountDisplay(Gem gemType, int count, int radius)
 	{

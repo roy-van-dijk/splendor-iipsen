@@ -1,16 +1,20 @@
 package application.views;
 
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import application.controllers.GameController;
+import application.domain.CardRow;
 import application.domain.CardRowImpl;
 import application.domain.Game;
 import application.domain.Gem;
+import application.domain.MoveType;
 import application.domain.Noble;
 import application.domain.PlayingField;
+import application.domain.PlayingFieldObserver;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -26,7 +30,7 @@ import javafx.scene.text.FontWeight;
  * @author Sanchez
  *
  */
-public class PlayingFieldView implements UIComponent {
+public class PlayingFieldView implements UIComponent, PlayingFieldObserver {
 
 	public final static int CARDSPACING = 15, 
 							TOKENSPACING = 10,
@@ -34,11 +38,17 @@ public class PlayingFieldView implements UIComponent {
 							TOKENSCARDSPADDING = 20,
 							FIELDPADDING = 0;
 	
-	private PlayingField playingField;
 	private HBox root;
+	
+	private VBox cardsAndNoblesPane;
+	private HBox noblesPane;
+	private VBox tokensPane;
+	
+	private VBox exitGamePane;
 	
 	private List<CardRowView> cardRowViews;
 	private List<NobleView> nobleViews;
+	private List<TokenView> tokenViews;
 	
 	private GameController gameController;
 	/**
@@ -47,24 +57,40 @@ public class PlayingFieldView implements UIComponent {
 	 * @param GameController gameController
 	 */
 	public PlayingFieldView(PlayingField playingField, GameController gameController) {
-		this.playingField = playingField;
 		this.gameController = gameController;
 		
 		this.cardRowViews = new ArrayList<>();
 		this.nobleViews = new ArrayList<>();
+		this.tokenViews = new ArrayList<>();
 		this.buildUI();
+		
+		try {
+			playingField.addObserver(this);
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void modelChanged(PlayingField playingField) throws RemoteException
+	{
+		this.updateCardRows(playingField.getCardRows());
+		this.updateFieldTokens(playingField.getTokenGemCount());
+		this.updateNobles(playingField.getNobles());
 	}
 	
 	private void buildUI()
 	{
-		VBox cardsAndNobles = buildCardsAndNoblesDisplay(); 
-		VBox tokens = buildTokensDisplay();
-		VBox exitgame =  buildExitGameDisplay();
+		cardsAndNoblesPane = buildCardsAndNoblesDisplay(); 
+		exitGamePane = buildExitGameDisplay();
+
+		tokensPane = new VBox(TOKENSPACING);
+		tokensPane.setAlignment(Pos.CENTER);
+		HBox.setHgrow(tokensPane, Priority.ALWAYS);
 		
-		
-		this.root = new HBox(TOKENSCARDSPADDING, cardsAndNobles, tokens, exitgame);
-		this.root.setAlignment(Pos.CENTER);
-		this.root.setPadding(new Insets(FIELDPADDING));
+		root = new HBox(TOKENSCARDSPADDING, cardsAndNoblesPane, tokensPane, exitGamePane);
+		root.setAlignment(Pos.CENTER);
+		root.setPadding(new Insets(FIELDPADDING));
 	}
 	
 	private VBox buildCardsAndNoblesDisplay()
@@ -73,55 +99,64 @@ public class PlayingFieldView implements UIComponent {
 		HBox.setHgrow(cardsAndNobles, Priority.ALWAYS);
 		cardsAndNobles.setAlignment(Pos.CENTER);
 		
-		HBox nobles = this.createNobles();
-		cardsAndNobles.getChildren().add(nobles);
-		
-		for(CardRowImpl cardRowImpl : playingField.getCardRows())
-		{
-			CardRowView cardRowView = new CardRowView(cardRowImpl, gameController);
-			cardRowViews.add(cardRowView);
-			cardsAndNobles.getChildren().add(cardRowView.asPane());
-		}
+		noblesPane = new HBox(CARDSPACING);
+		noblesPane.setAlignment(Pos.CENTER);
+		cardsAndNobles.getChildren().add(noblesPane);
 		
 		return cardsAndNobles;
 	}
 	
-	private HBox createNobles()
+	private void updateCardRows(List<CardRow> cardRows)
 	{
-		HBox nobles = new HBox(CARDSPACING);
-		nobles.setAlignment(Pos.CENTER);
-		
-		for(Noble noble : playingField.getNobles())
+		for(CardRow cardRow : cardRows)
+		{
+			CardRowView cardRowView = new CardRowView(cardRow, gameController);
+			cardRowViews.add(cardRowView);
+			cardsAndNoblesPane.getChildren().add(cardRowView.asPane());
+		}
+	}
+	
+	private void updateNobles(List<Noble> nobles)
+	{
+		for(Noble noble : nobles)
 		{
 			NobleView nobleView = new NobleView(noble, GameView.cardSizeX, GameView.cardSizeY / 1.5);
 			nobleViews.add(nobleView);
-			nobles.getChildren().add(nobleView.asPane());
+			noblesPane.getChildren().add(nobleView.asPane());
 		}
-		return nobles;
 	}
 	
-	private VBox buildTokensDisplay()
-	{
-		VBox tokens = new VBox(TOKENSPACING);
-		tokens.setAlignment(Pos.CENTER);
-		HBox.setHgrow(tokens, Priority.ALWAYS);
-		
-		LinkedHashMap<Gem, Integer> gemsCount = playingField.getTokenGemCount();
-		
+	private void updateFieldTokens(Map<Gem, Integer> gemsCount)
+	{	
 		for(Map.Entry<Gem, Integer> entry : gemsCount.entrySet())
 		{	
 			HBox tokenGemCountDisplay = createTokenGemCountDisplay(entry.getKey(), entry.getValue(), GameView.tokenSizeRadius);
-			tokens.getChildren().add(tokenGemCountDisplay);	
+			if(entry.getValue() >= 4) tokenGemCountDisplay.getStyleClass().add("selected");
+			tokensPane.getChildren().add(tokenGemCountDisplay);	
 		}
-		
-		return tokens;
 	}
-	
-	
 	
 	private HBox createTokenGemCountDisplay(Gem gemType, int count, int radius)
 	{
 		TokenView tokenView = new TokenView(gemType, radius);
+		
+		tokenView.asPane().setOnMouseClicked(e -> { 
+			try {
+				gameController.onFieldTokenClicked(gemType);
+			} catch (RemoteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} 
+		});
+		
+		// TODO: find a way to incorporate this into modelChanged();
+		/*if(playingField.getSelectableTokens().contains(gemType)) {
+			tokenView.asPane().getStyleClass().add("selectable");
+		}
+		if(playingField.getTurn().getTokenList().getAll().contains(gemType))
+		{
+			tokenView.asPane().getStyleClass().add("selected");
+		}*/
 		
         Label tokenCountLabel = new Label(String.valueOf(count));
         tokenCountLabel.getStyleClass().add("token-count");	

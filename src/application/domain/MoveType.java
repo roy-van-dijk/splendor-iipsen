@@ -1,0 +1,9 @@
+package application.domain;
+
+public enum MoveType {
+	TAKE_TWO_TOKENS,
+	TAKE_THREE_TOKENS,
+	RESERVE_CARD,
+	PURCHASE_RESERVED_CARD,
+	PURCHASE_FIELD_CARD;
+}

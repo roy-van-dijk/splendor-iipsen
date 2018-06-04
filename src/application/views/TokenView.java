@@ -57,15 +57,6 @@ public class TokenView implements UIComponent, ColorChangeable {
 		root = new StackPane(circle);
 	}
 	
-	public void switchAccessibiliyModes(ColorBlindModes mode) {
-		double hueOffset = this.gemType.hueOffset(this.gemType, mode);
-		
-		
-	    
-	    
-	}
-	
-	
 	/**
 	 *  This function is used to get the suffix of the image filename for a Token. This always equals the name of the token's gemType.  
 	 *  For example, If a token's gemType is Gem.DIAMOND, this function returns "diamond".

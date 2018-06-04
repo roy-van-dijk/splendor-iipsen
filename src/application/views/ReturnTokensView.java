@@ -72,7 +72,7 @@ public class ReturnTokensView {
 	}
 
 	//big hbox placed in the middle of the pane with in it up to 6 for the gems of the player.
-	private HBox buildGemcounterDisplay() {
+	private HBox buildGemcounterDisplay() throws RemoteException {
 		HBox gemcounterDisplay = new HBox();
 		gemcounterDisplay.setAlignment(Pos.CENTER);
 		//setVgrow may be needed, test without first.

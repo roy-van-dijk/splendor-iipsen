@@ -1,10 +1,13 @@
 package application.domain;
+
+import java.io.Serializable;
+
 /**
  * 
  * @author Sanchez
  *
  */
-public class TokenImpl implements Token {
+public class TokenImpl implements Token, Serializable {
 	private Gem gemType;
 
 	public Gem getGemType() {

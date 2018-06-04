@@ -1,13 +1,20 @@
 package application.domain;
 
+import java.io.Serializable;
 import java.util.Map;
 
 /**
  * @author Sanchez
  *
  */
-public class CardImpl implements Card {
+public class CardImpl implements Card, Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2889130830902711273L;
+	
+	
 	private boolean reservedFromDeck = false;
 	private CardLevel level;
 	private int prestigeValue;

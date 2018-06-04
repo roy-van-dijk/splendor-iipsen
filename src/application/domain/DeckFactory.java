@@ -11,12 +11,20 @@ import application.services.NoblesReader;
  *
  */
 public class DeckFactory {
-	private CardsReader cardsReader;
-	private NoblesReader noblesReader;
+	private static CardsReader cardsReader;
+	private static NoblesReader noblesReader;
 	// TODO: add NoblesReader
+	
+	private static DeckFactory deckFactory; 
+	
+	public static DeckFactory getInstance()
+	{
+		if(deckFactory == null)
+			return new DeckFactory();
+		return deckFactory;
+	}
 
-	public DeckFactory() {
-		
+	private DeckFactory() {
 		try {
 			cardsReader = new CardsReader();
 			noblesReader = new NoblesReader();

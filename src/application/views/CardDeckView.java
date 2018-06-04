@@ -51,11 +51,11 @@ public class CardDeckView extends CardView {
 	protected String getImagePath()
 	{
 		String path = "";
-		try {
-			path = String.format("file:resources/cards/%s/%s.png", deck.top().getLevel().name().toLowerCase(), deck.top().getLevel().name().toLowerCase());
-		} catch (RemoteException e) {
-			e.printStackTrace();
-		}
+		//try {
+			path = String.format("file:resources/cards/%s/%s.png", deck.getLevel().name().toLowerCase(), deck.getLevel().name().toLowerCase());
+		//} catch (RemoteException e) {
+		//	e.printStackTrace();
+		//}
 		
 		return path;
 	}

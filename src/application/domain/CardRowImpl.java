@@ -1,5 +1,6 @@
 package application.domain;
 
+import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.EmptyStackException;
@@ -13,23 +14,34 @@ import application.views.CardRowView;
  * This class acts like how you would expect CardDeck to act. This class makes sense as a View but it makes less sense as a model.
  * TODO: Consider pros/cons of merging it with CardDeck
  */
-public class CardRowImpl {
+public class CardRowImpl implements Serializable, CardRow {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7939191665883088567L;
+
 	private static final int MAX_OPEN_CARDS = 4;
 	
 	private CardDeck cardDeckImpl;
-	private Card[] cardSlots;
-	private ArrayList<GenericObserver<CardRowImpl>> observers = new ArrayList<GenericObserver<CardRowImpl>>();
+	private CardImpl[] cardSlots;
+	private ArrayList<CardRowObserver> observers;
 	
 	
 	public CardRowImpl(CardDeck cardDeckImpl) {
 		this.cardDeckImpl = cardDeckImpl;
-		this.cardSlots = new Card[MAX_OPEN_CARDS];
+		this.cardSlots = new CardImpl[MAX_OPEN_CARDS];
+		this.observers = new ArrayList<>();
 		
-		fillCardSlots();
+		try {
+			fillCardSlots();
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
-	public void removeCard(Card card)
+	public void removeCard(Card card) throws RemoteException
 	{
 		for(int i = 0; i < cardSlots.length; i++)
 		{
@@ -39,19 +51,11 @@ public class CardRowImpl {
 				fillCardSlots();
 			}
 		}
-		//notifyObservers();
+		this.notifyObservers();
 	}
 	
-	/*
-	private void notifyObservers() {
-		for(Observer o : observers)
-		{
-			o.modelChanged(this);
-		}
-
-	}*/
 	
-	private void fillCardSlots()
+	private void fillCardSlots() throws RemoteException
 	{
 		for(int pos = 0; pos < cardSlots.length; pos++)
 		{
@@ -59,7 +63,7 @@ public class CardRowImpl {
 			if(cardSlots[pos] == null)
 			{
 				try {
-					Card cardFromDeck = cardDeckImpl.pull();
+					CardImpl cardFromDeck = (CardImpl) cardDeckImpl.pull();
 					cardSlots[pos] = cardFromDeck;
 				} 
 				catch (EmptyStackException e)
@@ -68,6 +72,7 @@ public class CardRowImpl {
 				}
 			}
 		}
+		this.notifyObservers();
 	}
 
 	public CardDeck getCardDeck() {
@@ -81,19 +86,15 @@ public class CardRowImpl {
 		return cardSlots;
 	}
 	
-	public void notifyObservers() throws RemoteException {
-		for (GenericObserver<CardRowImpl> co : observers) {
+	private void notifyObservers() throws RemoteException {
+		for (CardRowObserver co : observers) {
 			co.modelChanged(this);
 		}
 	}
 
-	public void addObserver(GenericObserver<CardRowImpl> observer) throws RemoteException {
+	public void addObserver(CardRowObserver observer) throws RemoteException {
 		observers.add(observer);
-		try {
-			notifyObservers();
-		} catch (RemoteException e) {
-			e.printStackTrace();
-		}
+		this.notifyObservers();
 	}
 
 }

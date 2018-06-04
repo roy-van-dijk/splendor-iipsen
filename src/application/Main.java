@@ -4,7 +4,6 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 import application.controllers.GameController;
-import application.controllers.GameControllerImpl;
 import application.domain.Game;
 import application.domain.GameImpl;
 import application.services.CardsReader;

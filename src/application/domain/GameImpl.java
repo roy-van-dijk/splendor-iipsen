@@ -1,6 +1,8 @@
 package application.domain;
 
+import java.io.Serializable;
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,16 +10,24 @@ import java.util.List;
  * @author Sanchez
  *
  */
-public class GameImpl implements Game {
+public class GameImpl extends UnicastRemoteObject implements Game, Serializable {
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2852281344739846301L;
+	
+	public GameState gameState;
 	
 	private int currentPlayerIdx;
 	private int roundNr;
 	
 	private List<Player> players;
+	//private Map<Integer, Player> players;
 	
-	private PlayingField playingField;
+	private PlayingFieldImpl playingField;
 	
-	private Turn turn;
+	private int maxPlayers;
 	
 	/*
 	 * The Game object knows how many players there are
@@ -25,22 +35,24 @@ public class GameImpl implements Game {
 	 * This information is then passed onto the playingField, which generates those tokens and nobles.
 	 */
 
-	public GameImpl(List<Player> players) {
-		this.players = new ArrayList<Player>(); // TODO: replace with: this.players = players;
+	public GameImpl(int maxPlayers) throws RemoteException {
+		this.maxPlayers = maxPlayers;
 		
-		Test_Create4Players();
+		
 		
 		this.roundNr = 0;
 		this.currentPlayerIdx = 1; // TODO: First opponent starts first for now (1 because 0 = Player in SP)
 		
-
-		this.playingField = new PlayingFieldImpl(this.players.size());
-
-		this.turn = new Turn(getPlayers().get(currentPlayerIdx));
+		this.players = new ArrayList<Player>(); // TODO: replace with: this.players = players;
+		
+		Test_Create4Players();
+		
+		this.playingField = new PlayingFieldImpl(this.maxPlayers);
 	}
 	
 	public void nextTurn()
 	{
+		System.out.println("NEXT TURN!!!");
 		currentPlayerIdx++;
 		if(currentPlayerIdx >= players.size())
 			currentPlayerIdx = 0;
@@ -49,10 +61,15 @@ public class GameImpl implements Game {
 
 	private void Test_Create4Players()
 	{
-		this.players.add(new PlayerImpl("Bob"));
-		this.players.add(new PlayerImpl("Michael"));
-		this.players.add(new PlayerImpl("Peter"));
-		this.players.add(new PlayerImpl("Martin"));
+		try {
+			this.players.add(new PlayerImpl("Bob"));
+			this.players.add(new PlayerImpl("Michael"));
+			this.players.add(new PlayerImpl("Peter"));
+			this.players.add(new PlayerImpl("Martin"));
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public int getCurrentPlayerIdx() {
@@ -66,6 +83,10 @@ public class GameImpl implements Game {
 	public List<Player> getPlayers() {
 		return players;
 	}
+	
+	public void setPlayers(List<Player> players) {
+		this.players = players;
+	}
 
 	public PlayingField getPlayingField() {
 		return playingField;
@@ -75,9 +96,13 @@ public class GameImpl implements Game {
 	public Player getCurrentPlayer() {
 		return players.get(currentPlayerIdx);
 	}
-	
-	public Turn getTurn() {
-		return this.turn;
+
+	public int getMaxPlayers() {
+		return maxPlayers;
 	}
-	
+
+	public GameState getGameState() {
+		return gameState;
+	}
+
 }

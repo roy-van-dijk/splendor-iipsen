@@ -1,29 +1,28 @@
 package application.domain;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
+import javafx.scene.Node;
 /**
  * 
  * @author Kees
  *
  */
-public class Turn {
+public class Turn implements Serializable {
 	
-	private Player player;
+	
 	private List<Noble> nobles;
 	private Card boughtCard;
 	private Card reservedCard;
 	private TokenList tokenList;
 	
-	public Turn(Player player) {
+	private MoveType moveType;
+	
+	public Turn() {
 		this.nobles = new ArrayList<>();
 		this.tokenList = new TokenList();
-		
-		this.player = player;
-	}
-	
-	public Player getPlayer() {
-		return this.player;
 	}
 	
 	public void selectNoble(Noble noble) {
@@ -55,6 +54,14 @@ public class Turn {
 		tokenList.getAll().clear();
 		reservedCard = null;
 		boughtCard = null;
+	}
+
+	public MoveType getMoveType() {
+		return moveType;
+	}
+
+	public void setMoveType(MoveType moveType) {
+		this.moveType = moveType;
 	}
 	
 }

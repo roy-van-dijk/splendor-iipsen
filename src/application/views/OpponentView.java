@@ -1,13 +1,17 @@
 package application.views;
 
+import java.rmi.RemoteException;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import application.domain.Card;
 import application.domain.Gem;
 import application.domain.Player;
 import application.domain.PlayerImpl;
+import application.domain.PlayerObserver;
 import application.domain.Token;
+import application.domain.TokenList;
 import application.util.Util;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -24,44 +28,75 @@ import javafx.scene.text.FontWeight;
  * @author Sanchez
  *
  */
-public class OpponentView implements UIComponent {
+public class OpponentView implements UIComponent, PlayerObserver {
 	
-	private Player opponent;
+	
 	private Pane root;
-
+	
+	private HBox reservedCardsFrame;
+	private HBox tokensFrame;
+	
+	private Label lblOpponentName;
+	private Label lblOpponentPrestige;
+	
 	public OpponentView(Player opponent) {
-		this.opponent = opponent;
-		
 		this.buildUI();
+		
+		try {
+			opponent.addObserver(this);
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	private void buildUI()
 	{
 		HBox topFrame = buildOpponentHeaderDisplay();
-		HBox tokensFrame = buildOpponentTokensDisplay();
-		HBox reservedCardsFrame = buildOpponentReservedCardsDisplay();
+		
+		reservedCardsFrame = new HBox();
+		reservedCardsFrame.setAlignment(Pos.CENTER);
+		
+		tokensFrame = new HBox();
+		tokensFrame.setAlignment(Pos.CENTER);
 		
 		root = new VBox(topFrame, tokensFrame, reservedCardsFrame);
 		root.getStyleClass().add("opponent");
 	}
 	
-	private HBox buildOpponentReservedCardsDisplay()
+	public void modelChanged(Player opponent) throws RemoteException
 	{
-		HBox reservedCardsFrame = new HBox();
-		reservedCardsFrame.setAlignment(Pos.CENTER);
+		lblOpponentName.setText(opponent.getName());
+		lblOpponentPrestige.setText(String.valueOf(opponent.getPrestige()));
 		
-		for(Card reservedCard : opponent.getReservedCards())
+		this.updateOpponentTokens(opponent.getTokenList());
+		this.updateOpponentsReservedCards(opponent.getReservedCards());
+	}
+	
+	private void updateOpponentsReservedCards(List<Card> opponentReservedCards)
+	{
+		reservedCardsFrame.getChildren().clear();
+		for(Card reservedCard : opponentReservedCards)
 		{
-            StackPane container = new StackPane();
-            container.setAlignment(Pos.CENTER);
-            HBox.setHgrow(container, Priority.ALWAYS);
+            FrontCardView card = new FrontCardView(reservedCard, GameView.cardSizeX , GameView.cardSizeY);
+            
+            //StackPane paneCard = new StackPane(card.asPane());
+            //paneCard.setAlignment(Pos.CENTER);
+            //HBox.setHgrow(paneCard, Priority.ALWAYS);
 
-            FrontCardView card = new FrontCardView(reservedCard, GameView.cardSizeX / 1.8, GameView.cardSizeY / 1.8);
-            container.getChildren().add(card.asPane());
-
-            reservedCardsFrame.getChildren().add(container);
+            reservedCardsFrame.getChildren().add(card.asPane());
 		}
-        return reservedCardsFrame;
+	}
+	private void updateOpponentTokens(TokenList opponentTokens)
+	{
+		tokensFrame.getChildren().clear();
+		LinkedHashMap<Gem, Integer> gemsCount = opponentTokens.getTokenGemCount();
+		
+		for(Map.Entry<Gem, Integer> entry : gemsCount.entrySet())
+		{	
+			VBox tokenGemCountDisplay = createTokenGemCountDisplay(entry.getKey(), entry.getValue(), GameView.tokenSizeRadius);
+			tokensFrame.getChildren().add(tokenGemCountDisplay);	
+		}
 	}
 	
 	private HBox buildOpponentHeaderDisplay()
@@ -71,35 +106,20 @@ public class OpponentView implements UIComponent {
 		
 		topFrame.setAlignment(Pos.CENTER);
 		
-		Label opponentNameLabel = new Label(opponent.getName());
-		opponentNameLabel.setAlignment(Pos.CENTER_LEFT);
-		opponentNameLabel.getStyleClass().add("opponent-name");	
+		lblOpponentName = new Label();
+		lblOpponentName.setAlignment(Pos.CENTER_LEFT);
+		lblOpponentName.getStyleClass().add("opponent-name");	
 		
 		Pane spacer = new Pane();
 		HBox.setHgrow(spacer, Priority.ALWAYS);    // Give prestige points any extra space
 		
-		Label opponentPrestigePoints = new Label(String.valueOf(opponent.getPrestige()));
-		opponentPrestigePoints.setAlignment(Pos.CENTER_RIGHT);
-		opponentPrestigePoints.getStyleClass().add("prestige");
+		lblOpponentPrestige = new Label();
+		lblOpponentPrestige.setAlignment(Pos.CENTER_RIGHT);
+		lblOpponentPrestige.getStyleClass().add("prestige");
 		
-		topFrame.getChildren().addAll(opponentNameLabel, spacer, opponentPrestigePoints);
+		topFrame.getChildren().addAll(lblOpponentName, spacer, lblOpponentPrestige);
 		
 		return topFrame;
-	}
-	
-	private HBox buildOpponentTokensDisplay()
-	{
-		HBox tokensFrame = new HBox();
-		tokensFrame.setAlignment(Pos.CENTER);
-		
-		LinkedHashMap<Gem, Integer> gemsCount = opponent.getTokenList().getTokenGemCount();
-		
-		for(Map.Entry<Gem, Integer> entry : gemsCount.entrySet())
-		{	
-			VBox tokenGemCountDisplay = createTokenGemCountDisplay(entry.getKey(), entry.getValue(), GameView.tokenSizeRadius);
-			tokensFrame.getChildren().add(tokenGemCountDisplay);	
-		}
-		return tokensFrame;
 	}
 	
 	private VBox createTokenGemCountDisplay(Gem gemType, int count, int radius)

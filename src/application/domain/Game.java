@@ -11,7 +11,7 @@ import java.rmi.RemoteException;
  */
 public interface Game extends Remote {
 
-	public void nextTurn();
+	public void nextTurn() throws RemoteException;
 	
 	public int getCurrentPlayerIdx() throws RemoteException;
 	
@@ -24,8 +24,5 @@ public interface Game extends Remote {
 
 	public List<Player> getPlayers() throws RemoteException;
 
-
 	public PlayingField getPlayingField() throws RemoteException;
-
-	public Turn getTurn();
 }
