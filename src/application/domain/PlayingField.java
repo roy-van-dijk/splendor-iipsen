@@ -6,6 +6,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 public interface PlayingField extends Remote {
+	
 	public List<CardRow> getCardRows() throws RemoteException;
 	
 	public List<Noble> getNobles() throws RemoteException;
@@ -19,6 +20,8 @@ public interface PlayingField extends Remote {
 	public void addTwoTokensToTemp(Gem gemType) throws RemoteException;
 	
 	public void addObserver(PlayingFieldObserver observer) throws RemoteException;
+
+	public void addToken(Token token);
 	
 	//public void setTokensSelectable(MoveType moveType) throws RemoteException;
 
