@@ -11,10 +11,19 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
+/**
+ * Shows a new manual window.
+ * @author Roy
+ *
+ */
 public class ManualWindowView {
 		
-	BorderPane pane;
+	private BorderPane pane;
 	
+	/**
+	 * Shows a new window that contains the manual.
+	 * 
+	 */
 	public ManualWindowView() {
 		System.out.println("Showing manual");
 		
@@ -47,7 +56,11 @@ public class ManualWindowView {
 		stage.show();
 	}
 	
-	public void switchPage () {
+	/**
+	 * Switches to the next page of the manual.
+	 * 
+	 */
+	public void switchPage() {
 		System.out.println("Switching manual pages");
 		
 		String page = pane.getStyleClass().get(1);
