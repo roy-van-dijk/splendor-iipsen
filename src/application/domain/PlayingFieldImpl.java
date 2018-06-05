@@ -189,10 +189,14 @@ public class PlayingFieldImpl extends UnicastRemoteObject implements PlayingFiel
 		this.observers.add(observer);
 		this.notifyObservers();
 	}
-
-	public void addToken(Token token) {
-		tokenList.add(token);
-		
+	
+	public void addTokens(List<Token> tokens) throws RemoteException
+	{
+		for(Token token : tokens)
+		{
+			tokenList.add(token);
+		}
+		this.notifyObservers();
 	}
 
 	public void removeToken(Token token) {

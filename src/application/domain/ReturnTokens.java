@@ -24,7 +24,7 @@ public class ReturnTokens {
 		
 		this.allowConfirm = false;
 		try {
-			this.tokenListNew = player.getTokenList();
+			this.tokenListNew = new TokenList(player.getTokens());
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -84,11 +84,7 @@ public class ReturnTokens {
 	{
 		if(allowConfirm)
 		{
-			for(Token token : removedTokens)
-			{
-				player.removeToken(token); // TODO: only problem: updates UI 3x quickly
-				playingField.addToken(token);
-			}
+			player.returnTokensToField(removedTokens, playingField);
 		}
 	}
 

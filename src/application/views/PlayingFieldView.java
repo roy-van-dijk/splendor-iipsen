@@ -40,9 +40,12 @@ public class PlayingFieldView implements UIComponent, PlayingFieldObserver {
 							TOKENSCARDSPADDING = 20,
 							FIELDPADDING = 0;
 	
+	private final static double NOBLES_HEIGHT_FACTOR = 0.67;
+	
 	private HBox root;
 	
-	private VBox cardsAndNoblesPane;
+	private VBox rowsPane;
+	private VBox cardsPane;
 	private HBox noblesPane;
 	private VBox tokensPane;
 	
@@ -57,8 +60,9 @@ public class PlayingFieldView implements UIComponent, PlayingFieldObserver {
 	 * 
 	 * @param PlayingField playingField
 	 * @param GameController gameController
+	 * @throws RemoteException 
 	 */
-	public PlayingFieldView(PlayingField playingField, GameController gameController) {
+	public PlayingFieldView(PlayingField playingField, GameController gameController) throws RemoteException {
 		this.gameController = gameController;
 		
 		this.cardRowViews = new ArrayList<>();
@@ -66,12 +70,7 @@ public class PlayingFieldView implements UIComponent, PlayingFieldObserver {
 		this.tokenViews = new ArrayList<>();
 		this.buildUI();
 		
-		try {
-			playingField.addObserver(this);
-		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		playingField.addObserver(this);
 	}
 	
 	public void modelChanged(PlayingField playingField) throws RemoteException
@@ -83,46 +82,51 @@ public class PlayingFieldView implements UIComponent, PlayingFieldObserver {
 	
 	private void buildUI()
 	{
-		cardsAndNoblesPane = buildCardsAndNoblesDisplay(); 
+		rowsPane = buildCardsAndNoblesDisplay(); 
 		exitGamePane = buildExitGameDisplay();
 
 		tokensPane = new VBox(TOKENSPACING);
 		tokensPane.setAlignment(Pos.CENTER);
 		HBox.setHgrow(tokensPane, Priority.ALWAYS);
 		
-		root = new HBox(TOKENSCARDSPADDING, cardsAndNoblesPane, tokensPane, exitGamePane);
+		root = new HBox(TOKENSCARDSPADDING, rowsPane, tokensPane, exitGamePane);
 		root.setAlignment(Pos.CENTER);
 		root.setPadding(new Insets(FIELDPADDING));
 	}
 	
 	private VBox buildCardsAndNoblesDisplay()
 	{
-		VBox cardsAndNobles = new VBox(CARDSPACING);
-		HBox.setHgrow(cardsAndNobles, Priority.ALWAYS);
-		cardsAndNobles.setAlignment(Pos.CENTER);
-		
 		noblesPane = new HBox(CARDSPACING);
 		noblesPane.setAlignment(Pos.CENTER);
-		cardsAndNobles.getChildren().add(noblesPane);
 		
-		return cardsAndNobles;
+		cardsPane = new VBox(CARDSPACING);
+		cardsPane.setAlignment(Pos.CENTER);
+		
+		VBox rowsPane = new VBox(CARDSPACING, noblesPane, cardsPane);
+		rowsPane.setAlignment(Pos.CENTER);
+		HBox.setHgrow(rowsPane, Priority.ALWAYS);
+		return rowsPane;
 	}
 	
 	private void updateCardRows(List<CardRow> cardRows)
 	{
+		cardsPane.getChildren().clear();
+		
 		for(CardRow cardRow : cardRows)
 		{
 			CardRowView cardRowView = new CardRowView(cardRow, gameController);
 			cardRowViews.add(cardRowView);
-			cardsAndNoblesPane.getChildren().add(cardRowView.asPane());
+			cardsPane.getChildren().add(cardRowView.asPane());
 		}
 	}
 	
 	private void updateNobles(List<Noble> nobles)
 	{
+		noblesPane.getChildren().clear();
+		
 		for(Noble noble : nobles)
 		{
-			NobleView nobleView = new NobleView(noble, GameView.cardSizeX, GameView.cardSizeY / 1.5);
+			NobleView nobleView = new NobleView(noble, GameView.cardSizeX, GameView.cardSizeY * NOBLES_HEIGHT_FACTOR);
 			nobleViews.add(nobleView);
 			noblesPane.getChildren().add(nobleView.asPane());
 		}
@@ -130,6 +134,8 @@ public class PlayingFieldView implements UIComponent, PlayingFieldObserver {
 	
 	private void updateFieldTokens(Map<Gem, Integer> gemsCount)
 	{	
+		tokensPane.getChildren().clear();
+		
 		for(Map.Entry<Gem, Integer> entry : gemsCount.entrySet())
 		{	
 			HBox tokenGemCountDisplay = createTokenGemCountDisplay(entry.getKey(), entry.getValue(), GameView.tokenSizeRadius);

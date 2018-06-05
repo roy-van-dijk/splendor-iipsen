@@ -55,20 +55,14 @@ public class PlayerView implements UIComponent, PlayerObserver {
 	
 	private Label lblPrestigeValue;
 	
-	public PlayerView(Player player) {
-		//player.addObserver(this);
+	public PlayerView(Player player) throws RemoteException {		
 		
 		this.buildUI();
 		
-		try {
-			player.addObserver(this);
-		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		player.addObserver(this);
 	}
 	
-	private void buildUI()
+	private void buildUI() throws RemoteException
 	{
 		root = new HBox(25);
 		root.setPadding(new Insets(15, 0, 15, 25));
@@ -94,12 +88,8 @@ public class PlayerView implements UIComponent, PlayerObserver {
 		
 		VBox accessibility = buildAccessibilityMenu();
 		
-		try {
-			HBox test = buildOwnedCardsDisplay();
-		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		HBox test = buildOwnedCardsDisplay();
+		
 		root.getChildren().addAll(panePrestige, sep, tokensGrid, accessibility);
 	}
 	
@@ -107,7 +97,7 @@ public class PlayerView implements UIComponent, PlayerObserver {
 	{
 		lblPrestigeValue.setText(String.valueOf(player.getPrestige()));
 		
-		this.updatePlayerTokens(player.getTokenList());
+		this.updatePlayerTokens(player.getTokensGemCount());
 	}
 	
 	private VBox buildAccessibilityMenu() 
@@ -164,7 +154,7 @@ public class PlayerView implements UIComponent, PlayerObserver {
 		return accessibility;
 	}
 	
-	private HBox buildOwnedCardsDisplay() throws RemoteException {
+	private HBox buildOwnedCardsDisplay() {
 		HBox ownedCardsDisplay = new HBox();
 		
 // TODO
@@ -187,11 +177,9 @@ public class PlayerView implements UIComponent, PlayerObserver {
 		return ownedCardsDisplay;
 	}
 	
-	private void updatePlayerTokens(TokenList playerTokens) throws RemoteException
+	private void updatePlayerTokens(Map<Gem, Integer> gemsCount) throws RemoteException
 	{
 		tokensGrid.getChildren().clear();
-		
-		LinkedHashMap<Gem, Integer> gemsCount = playerTokens.getTokenGemCount();
 		
 		int col = 0, row = 0;	
 		for(Map.Entry<Gem, Integer> entry : gemsCount.entrySet())

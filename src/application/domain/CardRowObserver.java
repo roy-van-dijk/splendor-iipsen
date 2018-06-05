@@ -1,6 +1,6 @@
 package application.domain;
 
-import java.io.Serializable;
+
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 

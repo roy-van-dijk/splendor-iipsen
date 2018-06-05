@@ -5,6 +5,7 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 /**
  * 
  * @author Sanchez
@@ -43,18 +44,42 @@ public class PlayerImpl extends UnicastRemoteObject implements Player, Serializa
 
 	public void reserveCardFromField(CardRow cardRow, Card card) throws RemoteException 
 	{
-
-
+		// TODO (low priority): Make reservedTokens class that incorporates this business rule
 		if(this.getReservedCards().size() < 3) // Business rule: max 3 reserved cards
 		{
 			cardRow.removeCard(card);
-			this.addReservedCard(card);
+			reservedCards.add(card);
 			
 			System.out.printf("%s has taken the card: %s", this.getName() ,card.toString());
 			this.notifyObservers();
 		}
 	}
 	
+
+	
+	public void purchaseCardFromField(CardRow cardRow, Card card) throws RemoteException
+	{
+		if(this.canAffordCard(card.getCosts()))
+		{
+			cardRow.removeCard(card);
+			ownedCards.add(card);
+			
+			System.out.printf("%s has taken the card: %s", this.getName() ,card.toString());
+			this.notifyObservers();
+		}
+	}
+	
+	private boolean canAffordCard(Map<Gem, Integer> costs)
+	{
+		Map<Gem, Integer> gemsCount = tokenList.getTokenGemCount();
+		
+		for(Map.Entry<Gem, Integer> cost : costs.entrySet())
+		{
+			if(!gemsCount.containsKey(cost.getKey())) return false; // Player does not even have the right tokens.
+			if(gemsCount.get(cost.getKey()) < cost.getValue()) return false; // Insufficient funds
+		}
+		return true;
+	}
 	
 	public String getName() 
 	{
@@ -66,12 +91,6 @@ public class PlayerImpl extends UnicastRemoteObject implements Player, Serializa
 	{
 		return reservedCards;
 	}
-	
-	public void addReservedCard(Card card) 
-	{
-		reservedCards.add(card);
-	}
-	
 	public List<Card> getOwnedCards() 
 	{
 		return ownedCards;
@@ -81,12 +100,14 @@ public class PlayerImpl extends UnicastRemoteObject implements Player, Serializa
 	{
 		return ownedNobles;
 	}
-
-	public TokenList getTokenList() 
-	{
-		return tokenList;
-	}
 	
+	public List<Token> getTokens() throws RemoteException {
+		return tokenList.getAll();
+	}
+
+	public Map<Gem, Integer> getTokensGemCount() throws RemoteException {
+		return tokenList.getTokenGemCount();
+	}
 
 	public int getPrestige() throws RemoteException
 	{
@@ -105,14 +126,14 @@ public class PlayerImpl extends UnicastRemoteObject implements Player, Serializa
 		return prestige;
 	}
 	
-	public void addToken(Token token) 
+	public void returnTokensToField(List<Token> tokens, PlayingField field) throws RemoteException
 	{
-		tokenList.add(token);
-	}
-	
-	public void removeToken(Token token) 
-	{
-		tokenList.remove(token);
+		for(Token token : tokens)
+		{
+			tokenList.remove(token);
+		}
+		field.addTokens(tokens);
+		this.notifyObservers();
 	}
 	
 	private void notifyObservers() throws RemoteException
@@ -128,4 +149,12 @@ public class PlayerImpl extends UnicastRemoteObject implements Player, Serializa
 		observers.add(o);
 		this.notifyObservers();
 	}
+
+
+	@Override
+	public void debugAddToken(Token token) throws RemoteException {
+		this.tokenList.add(token);
+	}
+
+
 }
