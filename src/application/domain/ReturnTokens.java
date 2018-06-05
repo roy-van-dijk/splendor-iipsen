@@ -42,8 +42,10 @@ public class ReturnTokens {
 		return null;
 	}
 
-	public void removeToken(Gem gemType) {
-		if(tokenListNew.getAll().size() > 10 && tokenListNew.getTokenGemCount().get(gemType) > 0) {
+	public void removeToken(Gem gemType) 
+	{
+		if(tokenListNew.getAll().size() > 10 && tokenListNew.getTokenGemCount().get(gemType) > 0) 
+		{
 			Token token = this.getTokenFromGemType(tokenListNew.getAll(), gemType);
 			tokenListNew.remove(token);
 			removedTokens.add(token);
@@ -51,22 +53,26 @@ public class ReturnTokens {
 		validateNewTokens();
 	}
 
-	public void addToken(Gem gemType)  {
+	public void addToken(Gem gemType)  
+	{
 		Token token = this.getTokenFromGemType(removedTokens, gemType);
-		if(token != null) {
+		if(token != null) 
+		{
 			tokenListNew.add(token);
 			removedTokens.remove(token);
 		}
 		validateNewTokens();
 	}
 	
-	public void notifyView() {
+	public void notifyView() 
+	{
 		view.modelChanged(this);
 	}
 	
 	public void validateNewTokens()
 	{
-		if(tokenListNew.getAll().size() == 10) {
+		if(tokenListNew.getAll().size() == 10) 
+		{
 			this.allowConfirm = true;
 		} else {
 			this.allowConfirm = false;
@@ -74,7 +80,8 @@ public class ReturnTokens {
 		notifyView();
 	}
 
-	public void confirmButton() throws RemoteException {
+	public void confirmButton() throws RemoteException 
+	{
 		if(allowConfirm)
 		{
 			for(Token token : removedTokens)
@@ -85,18 +92,21 @@ public class ReturnTokens {
 		}
 	}
 
-	public TokenList getTokenListNew() {
+	public TokenList getTokenListNew() 
+	{
 		return tokenListNew;
 	}
 
 
-	public void registrate(ReturnTokensView view) {
+	public void registrate(ReturnTokensView view) 
+	{
 		this.view = view;
 		this.view.modelChanged(this);
 	}
 
 
-	public boolean isAllowConfirm() {
+	public boolean isAllowConfirm() 
+	{
 		return allowConfirm;
 	}
 	

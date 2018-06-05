@@ -22,6 +22,7 @@ public interface Player extends Remote {
 	public void addReservedCard(Card card) throws RemoteException;
 	
 	public List<Card> getOwnedCards() throws RemoteException;
+	
 	public List<Noble> getOwnedNobles() throws RemoteException;
 
 
@@ -32,6 +33,8 @@ public interface Player extends Remote {
 	
 	public void addObserver(PlayerObserver o) throws RemoteException;
 
+
 	public void removeToken(Token token) throws RemoteException;
+
 
 }
