@@ -19,7 +19,7 @@ import application.util.Util;
  * @author Sanchez
  *
  */
-public class LobbyImpl extends UnicastRemoteObject implements Lobby, Serializable {
+public class LobbyImpl extends UnicastRemoteObject implements Lobby {
 
 	private static final long serialVersionUID = 1L;
 	public enum LobbyStates { WAITING, STARTED_GAME };

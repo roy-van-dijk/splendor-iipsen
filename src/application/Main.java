@@ -1,12 +1,16 @@
 package application;
 	
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.nio.file.FileSystems;
 
 import application.controllers.GameController;
 import application.domain.Game;
 import application.domain.GameImpl;
 import application.services.CardsReader;
+import application.services.SaveGameDAO;
 import application.util.ConfirmDialog;
 import application.views.GameView;
 import application.views.ManualWindowView;
@@ -43,7 +47,19 @@ public class Main extends Application {
 	}
 	
 	public static void main(String[] args) {
-		
+		try {
+			GameImpl game = SaveGameDAO.getInstance().loadSaveGame(FileSystems.getDefault().getPath("saves").toAbsolutePath().toString() + "/Bob.splendor");
+			System.out.println(game);
+		} catch (FileNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (ClassNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		try {
 			System.setProperty("java.rmi.server.hostname", InetAddress.getLocalHost().getHostAddress());
 		} catch (UnknownHostException e) {

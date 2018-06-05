@@ -35,7 +35,7 @@ public class PlayingFieldImpl extends UnicastRemoteObject implements PlayingFiel
 	private TokenList tokenList;
 	private Turn turn;
 	
-	private List<PlayingFieldObserver> observers;
+	private transient List<PlayingFieldObserver> observers;
 	
 
 	public PlayingFieldImpl(int playerCount) throws RemoteException {

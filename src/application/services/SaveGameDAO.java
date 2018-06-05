@@ -18,6 +18,7 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 
 import application.domain.Game;
+import application.domain.GameImpl;
 
 /**
  * @author Alexander
@@ -27,15 +28,12 @@ import application.domain.Game;
 public class SaveGameDAO {
 
 	private static SaveGameDAO instance;
-	private static ArrayList<Game> saveGames = new ArrayList<Game>();
-	private Game game;
-
+	
+	private GameImpl game;
+	
 	private static String path = "saves";
 	private static String basePath;
 
-	private static String extension = ".splendor";
-
-	private String name;
 
 	private SaveGameDAO() {
 	}
@@ -47,31 +45,21 @@ public class SaveGameDAO {
 		return instance;
 	}
 
-	private void setFileName(Game game) throws RemoteException{
-		name = game.getPlayers().get(0).getName() + extension;
-		System.out.println(name);
-	}
-
 	/**
 	 * 
 	 * @param game
 	 *            Saves the game to an file void
+	 * @throws IOException 
+	 * @throws FileNotFoundException 
 	 * @throws RemoteException
 	 */
-	public void saveGameToFile(Game game) throws RemoteException {
-		this.setFileName(game);
-		this.setSavePath(name);
-		try {
+	public void saveGameToFile(GameImpl game) throws FileNotFoundException, IOException {
+		this.setSavePath("Bob.splendor");
+		
 			ObjectOutputStream output = new ObjectOutputStream(new FileOutputStream(basePath));
 			output.writeObject(game);
 			output.close();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+			System.out.println("Game saved to "+  this.basePath);
 	}
 
 	/**
@@ -83,42 +71,19 @@ public class SaveGameDAO {
 	 * @throws ClassNotFoundException
 	 *             Game
 	 */
-	public Game loadSaveGame(String filename) throws FileNotFoundException, IOException, ClassNotFoundException {
+	public GameImpl loadSaveGame(String filename) throws FileNotFoundException, IOException, ClassNotFoundException {
 
 		ObjectInputStream read = new ObjectInputStream(new FileInputStream(filename));
-		game = (Game) read.readObject();
+		game = (GameImpl) read.readObject();
+		
 		read.close();
+		
 		return game;
 	}
-
 	
-	private static Path getSavePath() {
-		
-		return  FileSystems.getDefault().getPath(path).toAbsolutePath();
-	}
 	private void setSavePath(String save) {
 		
 		basePath = FileSystems.getDefault().getPath(path).toAbsolutePath().toString() + "/" +  save;
-		System.out.println(basePath);
 	}
-	/**
-	 * 
-	 * @return Arraylist of gamesaves ArrayList
-	 */
-	public static ArrayList<File> listSaveGame() {
-		ArrayList<File> list = new ArrayList<File>();
-
-		Path path = getSavePath();
-		File folder = new File(path.toString());
-		File[] listOfFiles = folder.listFiles();
-		for (File file : listOfFiles) {
-			if (file.isFile()) {
-				list.add(file);
-				System.out.println(file);
-
-			}
-		}
-		return list;
-	}
-
+	
 }

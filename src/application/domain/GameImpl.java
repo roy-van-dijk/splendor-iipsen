@@ -1,10 +1,14 @@
 package application.domain;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.List;
+
+import application.services.SaveGameDAO;
 
 /**
  * @author Sanchez
@@ -25,11 +29,11 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 	private List<Player> players;
 	//private Map<Integer, Player> players;
 	
-	private PlayingFieldImpl playingField;
+	private transient PlayingFieldImpl playingField;
 	
 	private int maxPlayers;
 
-	private List<GameObserver> observers;
+	private transient List<GameObserver> observers;
 	
 	/*
 	 * The Game object knows how many players there are
@@ -59,6 +63,20 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 			currentPlayerIdx = 0;
 	}
 
+	
+	public void saveGame() throws RemoteException
+	{
+		try {
+			SaveGameDAO.getInstance().saveGameToFile(this);
+			
+		} catch (FileNotFoundException e) {
+			
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 	private void Test_Create4Players()
 	{

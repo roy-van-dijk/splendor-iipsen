@@ -16,6 +16,8 @@ public interface Game extends Remote {
 	public void addObserver(GameObserver o) throws RemoteException;
 	public void removeObserver(GameObserver o) throws RemoteException;
 	
+	public void saveGame() throws RemoteException;
+	
 	public int getCurrentPlayerIdx() throws RemoteException;
 	
 	/**

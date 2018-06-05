@@ -10,6 +10,7 @@ import application.domain.CardRowImpl;
 import application.domain.Game;
 import application.domain.Gem;
 import application.domain.MoveType;
+import application.services.SaveGameDAO;
 import application.util.ConfirmDialog;
 import application.views.PopUpWindowView;
 import javafx.scene.Scene;
@@ -68,10 +69,15 @@ public class GameController {
 		
 		Optional<ButtonType> results = dialog.showAndWait();
 		if (results.get() == ButtonType.OK){
+			try {
+				game.saveGame();
+			} catch (RemoteException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			StageManager.getInstance().showMainMenu();		
 			new PopUpWindowView("Het spel is beëindigd door een van de spelers.", "Het spel is gestopt");
 		}
-		
 	}
 
 	
