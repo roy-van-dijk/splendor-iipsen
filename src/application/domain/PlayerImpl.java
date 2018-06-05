@@ -28,7 +28,8 @@ public class PlayerImpl extends UnicastRemoteObject implements Player, Serializa
 	private TokenList tokenList;
 	
 	
-	public PlayerImpl(String name) throws RemoteException {
+	public PlayerImpl(String name) throws RemoteException 
+	{
 		this.name = name;
 		
 		this.reservedCards = new ArrayList<>();
@@ -40,7 +41,8 @@ public class PlayerImpl extends UnicastRemoteObject implements Player, Serializa
 	}
 	
 
-	public void reserveCardFromField(CardRow cardRow, Card card) throws RemoteException {
+	public void reserveCardFromField(CardRow cardRow, Card card) throws RemoteException 
+	{
 
 
 		if(this.getReservedCards().size() < 3) // Business rule: max 3 reserved cards
@@ -54,28 +56,34 @@ public class PlayerImpl extends UnicastRemoteObject implements Player, Serializa
 	}
 	
 	
-	public String getName() {
+	public String getName() 
+	{
 		System.out.printf("Getting name of: %s\n", name);
 		return name;
 	}
 	
-	public List<Card> getReservedCards() {
+	public List<Card> getReservedCards() 
+	{
 		return reservedCards;
 	}
 	
-	public void addReservedCard(Card card) {
+	public void addReservedCard(Card card) 
+	{
 		reservedCards.add(card);
 	}
 	
-	public List<Card> getOwnedCards() {
+	public List<Card> getOwnedCards() 
+	{
 		return ownedCards;
 	}
 	
-	public List<Noble> getOwnedNobles() {
+	public List<Noble> getOwnedNobles() 
+	{
 		return ownedNobles;
 	}
 
-	public TokenList getTokenList() {
+	public TokenList getTokenList() 
+	{
 		return tokenList;
 	}
 	
@@ -97,11 +105,13 @@ public class PlayerImpl extends UnicastRemoteObject implements Player, Serializa
 		return prestige;
 	}
 	
-	public void addToken(Token token) {
+	public void addToken(Token token) 
+	{
 		tokenList.add(token);
 	}
 	
-	public void removeToken(Token token) {
+	public void removeToken(Token token) 
+	{
 		tokenList.remove(token);
 	}
 	
@@ -113,7 +123,8 @@ public class PlayerImpl extends UnicastRemoteObject implements Player, Serializa
 		}
 	}
 	
-	public void addObserver(PlayerObserver o) throws RemoteException {
+	public void addObserver(PlayerObserver o) throws RemoteException 
+	{
 		observers.add(o);
 		this.notifyObservers();
 	}

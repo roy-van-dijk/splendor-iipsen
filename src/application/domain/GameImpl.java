@@ -38,8 +38,6 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 	public GameImpl(int maxPlayers) throws RemoteException {
 		this.maxPlayers = maxPlayers;
 		
-		
-		
 		this.roundNr = 0;
 		this.currentPlayerIdx = 1; // TODO: First opponent starts first for now (1 because 0 = Player in SP)
 		
