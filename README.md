@@ -1,4 +1,4 @@
-# IIPSEn
+# IIPSEN
 
 De laatste jaren worden er steeds meer verschillende soorten bordspellen uitgebracht. Er zijn steeds
 meer mensen die een spel ontwerpen en deze kunnen uitgeven, waardoor er nu veel meer spellen op de
