@@ -30,6 +30,8 @@ import javafx.scene.text.FontWeight;
  */
 public class OpponentView implements UIComponent, PlayerObserver {
 	
+	private final static double CARDS_RESIZE_FACTOR = 0.55;
+	private final static double TOKENS_RESIZE_FACTOR = 0.55;
 	
 	private Pane root;
 	
@@ -56,6 +58,7 @@ public class OpponentView implements UIComponent, PlayerObserver {
 		
 		reservedCardsFrame = new HBox();
 		reservedCardsFrame.setAlignment(Pos.CENTER);
+		reservedCardsFrame.setPadding(new Insets(10));
 		
 		tokensFrame = new HBox();
 		tokensFrame.setAlignment(Pos.CENTER);
@@ -78,13 +81,14 @@ public class OpponentView implements UIComponent, PlayerObserver {
 		reservedCardsFrame.getChildren().clear();
 		for(Card reservedCard : opponentReservedCards)
 		{
-            FrontCardView card = new FrontCardView(reservedCard, GameView.cardSizeX , GameView.cardSizeY);
+            FrontCardView card = new FrontCardView(reservedCard, GameView.cardSizeX * CARDS_RESIZE_FACTOR, GameView.cardSizeY * CARDS_RESIZE_FACTOR);
+            card.asPane().getStyleClass().addAll("opponent");
             
-            //StackPane paneCard = new StackPane(card.asPane());
-            //paneCard.setAlignment(Pos.CENTER);
-            //HBox.setHgrow(paneCard, Priority.ALWAYS);
+            StackPane paneCard = new StackPane(card.asPane());
+            paneCard.setAlignment(Pos.CENTER);
+            HBox.setHgrow(paneCard, Priority.ALWAYS);
 
-            reservedCardsFrame.getChildren().add(card.asPane());
+            reservedCardsFrame.getChildren().add(paneCard);
 		}
 	}
 	private void updateOpponentTokens(TokenList opponentTokens)
@@ -124,7 +128,7 @@ public class OpponentView implements UIComponent, PlayerObserver {
 	
 	private VBox createTokenGemCountDisplay(Gem gemType, int count, int radius)
 	{
-		TokenView tokenView = new TokenView(gemType, radius / 1.8);
+		TokenView tokenView = new TokenView(gemType, radius * TOKENS_RESIZE_FACTOR);
         
         Label tokenCountLabel = new Label(String.valueOf(count));
         tokenCountLabel.setAlignment(Pos.CENTER);
