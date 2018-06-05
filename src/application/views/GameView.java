@@ -185,10 +185,15 @@ public class GameView implements UIComponent  {
 			}
 		});
 		
-		/*btnResetTurn.setOnAction(e ->{
-			gameController.resetTurn();
+		btnResetTurn.setOnAction(e ->{
+			try {
+				gameController.debugNextTurn();
+			} catch (RemoteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		});
-		
+		/*
 		btnPurchaseCard.setOnAction(e -> {
 			gameController.purchaseCard();
 		});

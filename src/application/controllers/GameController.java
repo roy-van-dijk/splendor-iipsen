@@ -35,6 +35,10 @@ public class GameController {
 		//game.nextTurn();
 	}
 	
+	public void debugNextTurn() throws RemoteException {
+		game.nextTurn();
+	}
+	
 	public void endTurn() throws RemoteException {
 		/*if (game.getCurrentPlayer().getTokenList().getAll().size() + game.getTurn().getTokenList().getAll().size() > 10) {
 			//TODO: ReturnTokens
