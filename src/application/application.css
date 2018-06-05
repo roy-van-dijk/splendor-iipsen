@@ -1,5 +1,4 @@
 .root{
-
     -fx-font-family: "Times New Roman";
     -fx-text-fill: lightgrey;
     -fx-base: rgb(10, 10, 10);
@@ -205,5 +204,9 @@
 
 .ReturnTokensView .button {
 	-fx-font-size: 4px;
-
+}
+.modal {
+	-fx-effect: dropshadow(three-pass-box, black, 100, 0.4, 0, 0); 
+	-fx-background-insets: 75;
+	-fx-background-radius: 25px;
 }
