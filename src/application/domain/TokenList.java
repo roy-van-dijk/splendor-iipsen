@@ -15,6 +15,11 @@ public class TokenList implements Serializable {
 	public TokenList() {
 		this.tokens = new ArrayList<Token>();
 	}
+	
+	public TokenList(List<Token> tokens)
+	{
+		this.tokens = tokens;
+	}
 
 	public void add(Token token) {
 		tokens.add(token);

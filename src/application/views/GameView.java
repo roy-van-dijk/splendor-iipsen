@@ -11,11 +11,14 @@ import application.controllers.ReturnTokenController;
 import application.domain.CardLevel;
 import application.domain.ColorBlindModes;
 import application.domain.Game;
+import application.domain.GameObserver;
 import application.domain.Player;
 import application.domain.PlayerImpl;
 import application.domain.ReturnTokens;
+import application.util.AlertDialog;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -27,12 +30,12 @@ import javafx.scene.layout.VBox;
  * @author Sanchez
  *
  */
-public class GameView implements UIComponent  {
+public class GameView implements UIComponent, GameObserver  {
 	
 	public final static int cardSizeX = 130, cardSizeY = 180; 
 	public final static int tokenSizeRadius = 45;
 	
-	public final static int opponentsSpacing = 20;
+	public final static int opponentsSpacing = 0;
 	
 	public static List<ColorChangeable> colorBlindViews;
 	
@@ -53,9 +56,6 @@ public class GameView implements UIComponent  {
 	private Pane opponents;
 	private Pane player;
 	
-	// POC var - see opt 2. @ this.modelChanged() 
-	//private List<UIComponent> comps = new ArrayList<>();
-
 	public GameView(Game game, GameController gameController) {
 		this.game = game;
 		this.gameController = gameController;
@@ -63,6 +63,18 @@ public class GameView implements UIComponent  {
 		colorBlindViews = new ArrayList<>();
 		
 		this.buildUI();
+		
+		try {
+			game.addObserver(this);
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void modelChanged(Game game)
+	{
+		
 	}
 	
 	public static void changeColorBlindMode(ColorBlindModes mode) {
@@ -76,26 +88,7 @@ public class GameView implements UIComponent  {
 				view.updateView(mode);
 			}
 		}
-	
-//		for(ColorChangeable colorBlindView : colorBlindViews) {
-//			colorBlindView.updateView(mode);
-//		}
 	}
-	
-	// POC
-	public void modelChanged(Game game)
-	{
-		/*
-		 * Big question of what to do here.
-		 * 1. We can either re-build the ENTIRE UI (easiest, but very inefficient) -> means calling this.buildUI() and switching scene's root node
-		 * 2. [No] Or we can update either the ENTIRE UI (harder, but more efficient) -> means looping through all childviews and triggering modelChanged [THIS IS NOT EASILY POSSIBLE]  
-		 * 3. Or we should do neither and instead have ALL "subdomain" objects implement the observer pattern and have them ONLY notify THEIR listeners. (shitload of classes, but most efficient)
-		 */
-		System.out.println("Updating game view");
-		this.buildUI(); // Rebuild entire UI for now
-		StageManager.getInstance().switchScene(root);
-	}
-	
 	
 	private void buildUI()
 	{
@@ -108,21 +101,18 @@ public class GameView implements UIComponent  {
 			buttons = buildButtons();
 			opponents = buildOpponents();
 			player = buildPlayer();
-
 		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
+			new AlertDialog(AlertType.ERROR, "A network error has occured while setting up one of the views.").show();
 			e.printStackTrace();
 		}
 		
 		VBox center = new VBox(playingField, buttons);
 		VBox.setVgrow(playingField, Priority.ALWAYS);
 		
-		//gameLayout.setTop(topLayout);
+		//root.setTop(topLayout);
 		root.setCenter(center);
 		root.setLeft(opponents);
 		root.setBottom(player);
-
-		//root.setPadding(new Insets(0));
 	}
 	
 	
@@ -158,8 +148,8 @@ public class GameView implements UIComponent  {
 		btnPurchaseCard.getStyleClass().add("move-button");
 		btnPurchaseCard.setOnAction(e -> {
 			// POC -> probably belongs in EndTurnController when that's done.
-			
 			try {
+				// Debug code below
 				ReturnTokens model = new ReturnTokens(game.getPlayingField(), game.getCurrentPlayer());
 				ReturnTokenController controller = new ReturnTokenController(model);
 				ReturnTokensView view = new ReturnTokensView(model, controller);
@@ -168,12 +158,16 @@ public class GameView implements UIComponent  {
 				e1.printStackTrace();
 			}
 		});
+		
 		btnTakeTwoTokens = new Button("Take Two Tokens");
 		btnTakeTwoTokens.getStyleClass().add("move-button");
+		
 		btnTakeThreeTokens = new Button("Take Three Tokens");
 		btnTakeThreeTokens.getStyleClass().add("move-button");
+		
 		btnResetTurn = new Button("Reset Turn");
 		btnResetTurn.getStyleClass().add("move-button");
+		
 		btnEndTurn = new Button("End Turn");
 		btnEndTurn.getStyleClass().add("move-button");
 		btnEndTurn.setOnAction(e -> {

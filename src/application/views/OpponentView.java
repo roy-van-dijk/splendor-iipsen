@@ -41,15 +41,11 @@ public class OpponentView implements UIComponent, PlayerObserver {
 	private Label lblOpponentName;
 	private Label lblOpponentPrestige;
 	
-	public OpponentView(Player opponent) {
+	public OpponentView(Player opponent) throws RemoteException {
 		this.buildUI();
 		
-		try {
-			opponent.addObserver(this);
-		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
+		opponent.addObserver(this);
 	}
 	
 	private void buildUI()
@@ -72,7 +68,7 @@ public class OpponentView implements UIComponent, PlayerObserver {
 		lblOpponentName.setText(opponent.getName());
 		lblOpponentPrestige.setText(String.valueOf(opponent.getPrestige()));
 		
-		this.updateOpponentTokens(opponent.getTokenList());
+		this.updateOpponentTokens(opponent.getTokensGemCount());
 		this.updateOpponentsReservedCards(opponent.getReservedCards());
 	}
 	
@@ -91,10 +87,9 @@ public class OpponentView implements UIComponent, PlayerObserver {
             reservedCardsFrame.getChildren().add(paneCard);
 		}
 	}
-	private void updateOpponentTokens(TokenList opponentTokens)
+	private void updateOpponentTokens(Map<Gem, Integer> gemsCount)
 	{
 		tokensFrame.getChildren().clear();
-		LinkedHashMap<Gem, Integer> gemsCount = opponentTokens.getTokenGemCount();
 		
 		for(Map.Entry<Gem, Integer> entry : gemsCount.entrySet())
 		{	

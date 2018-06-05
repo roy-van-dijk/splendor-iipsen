@@ -28,6 +28,8 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 	private PlayingFieldImpl playingField;
 	
 	private int maxPlayers;
+
+	private List<GameObserver> observers;
 	
 	/*
 	 * The Game object knows how many players there are
@@ -42,6 +44,7 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 		this.currentPlayerIdx = 1; // TODO: First opponent starts first for now (1 because 0 = Player in SP)
 		
 		this.players = new ArrayList<Player>(); // TODO: replace with: this.players = players;
+		this.observers = new ArrayList<GameObserver>();
 		
 		Test_Create4Players();
 		
@@ -67,7 +70,7 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 			{
 				Gem[] allGems = Gem.values();
 				int randomIdx = (int) (Math.random() * allGems.length);
-				player.addToken(new TokenImpl(allGems[randomIdx]));
+				player.debugAddToken(new TokenImpl(allGems[randomIdx]));
 			}
 			this.players.add(player);
 			this.players.add(new PlayerImpl("Peter"));
@@ -109,6 +112,26 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 
 	public GameState getGameState() {
 		return gameState;
+	}
+	
+	private void notifyObservers()
+	{
+		for(GameObserver o : observers)
+		{
+			o.modelChanged(this);
+		}
+	}
+
+	@Override
+	public void addObserver(GameObserver o) throws RemoteException {
+		this.observers.add(o);
+		this.notifyObservers();
+	}
+
+	@Override
+	public void removeObserver(GameObserver o) throws RemoteException {
+		this.observers.remove(o);
+		this.notifyObservers();
 	}
 
 }
