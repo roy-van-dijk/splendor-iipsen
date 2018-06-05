@@ -11,10 +11,13 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -39,7 +42,7 @@ public class ReturnTokensView {
 		this.pane = new BorderPane();
 
 		Label labelText = new Label("You have more than 10 tokens. Please discard tokens until you have 10.");
-		labelText.setFont(Font.font(26.0));
+		labelText.setFont(Font.font(23.0));
 
 		gemCounterDisplay = new HBox(); // big hbox placed in the middle of the
 										// pane with in it up to 6 for the gems
@@ -58,23 +61,30 @@ public class ReturnTokensView {
 
 		HBox confirmBox = new HBox(confirmButton);
 		confirmBox.setAlignment(Pos.CENTER);
-		
+
 		BorderPane.setAlignment(labelText, Pos.CENTER);
 
 		pane.setTop(labelText);
 		pane.setCenter(gemCounterDisplay);
 		pane.setBottom(confirmBox);
+		pane.setPadding(new Insets(100));
+		pane.setMaxWidth(900);
+		pane.setMaxHeight(550);
+		
+		BorderPane bpane = new BorderPane();
+		bpane.setCenter(pane);
+		bpane.getStyleClass().add("modal");
 
-		pane.setPadding(new Insets(10));
-
-		Scene scene = new Scene(pane, 900, 550);
+		Scene scene = new Scene(bpane, 1000, 700);
 		scene.getStylesheets().add(getClass().getResource("../application.css").toExternalForm());
+		scene.setFill(Color.TRANSPARENT);
 
 		stage = new Stage();
 		stage.setScene(scene);
 		stage.setTitle("Return tokens");
-		stage.initStyle(StageStyle.UNDECORATED);
+		stage.initStyle(StageStyle.TRANSPARENT);
 		stage.setResizable(false);
+		stage.initModality(Modality.APPLICATION_MODAL);
 		stage.show();
 
 		returnTokens.registrate(this);
