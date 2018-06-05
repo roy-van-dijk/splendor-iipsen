@@ -8,7 +8,6 @@ import java.util.List;
 import application.StageManager;
 import application.controllers.GameController;
 import application.controllers.ReturnTokenController;
-import application.controllers.ReturnTokenControllerImpl;
 import application.domain.CardLevel;
 import application.domain.ColorBlindModes;
 import application.domain.Game;
@@ -162,7 +161,7 @@ public class GameView implements UIComponent  {
 			
 			try {
 				ReturnTokens model = new ReturnTokens(game.getPlayingField(), game.getCurrentPlayer());
-				ReturnTokenController controller = new ReturnTokenControllerImpl(model);
+				ReturnTokenController controller = new ReturnTokenController(model);
 				ReturnTokensView view = new ReturnTokensView(model, controller);
 			} catch (RemoteException e1) {
 				// TODO Auto-generated catch block

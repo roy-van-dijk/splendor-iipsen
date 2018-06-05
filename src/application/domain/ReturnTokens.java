@@ -23,7 +23,12 @@ public class ReturnTokens {
 		this.playingField = playingField;
 		
 		this.allowConfirm = false;
-		this.tokenListNew = player.getTokenList();
+		try {
+			this.tokenListNew = player.getTokenList();
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		this.removedTokens = new ArrayList<>();
 	}

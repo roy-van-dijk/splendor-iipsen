@@ -19,6 +19,8 @@ public interface PlayingField extends Remote {
 	public void addTwoTokensToTemp(Gem gemType) throws RemoteException;
 	
 	public void addObserver(PlayingFieldObserver observer) throws RemoteException;
+
+	public void addToken(Token token) throws RemoteException;
 	
 	//public void setTokensSelectable(MoveType moveType) throws RemoteException;
 

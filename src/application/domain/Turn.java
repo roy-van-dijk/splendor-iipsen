@@ -56,7 +56,7 @@ public class Turn implements Serializable {
 		tokenList.getAll().clear();
 		reservedCard = null;
 		boughtCard = null;
-		System.out.printf("%s has emptied his hand \n", player.getName());
+		//System.out.printf("%s has emptied his hand \n", player.getName());
 	}
 
 	public MoveType getMoveType() {

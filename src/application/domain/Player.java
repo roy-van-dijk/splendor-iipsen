@@ -32,4 +32,6 @@ public interface Player extends Remote {
 	
 	public void addObserver(PlayerObserver o) throws RemoteException;
 
+	public void removeToken(Token token) throws RemoteException;
+
 }
