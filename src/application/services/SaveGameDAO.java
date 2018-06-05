@@ -26,26 +26,43 @@ import application.domain.Game;
  */
 public class SaveGameDAO {
 
-	static ArrayList<Game> saveGames = new ArrayList<Game>();
+	private static SaveGameDAO instance;
+	private static ArrayList<Game> saveGames = new ArrayList<Game>();
 	private Game game;
 
-	private static String basePath = "saves";
+	private static String path = "saves";
+	private static String basePath;
 
 	private static String extension = ".splendor";
 
-	private File name;
+	private String name;
 
-	public SaveGameDAO(){
-
+	private SaveGameDAO() {
 	}
-/**
- * 
- * @param game Saves the game to an file
- * void
- */
-	public void saveAnGame(Game game) {
+
+	public static SaveGameDAO getInstance() {
+		if (instance == null)
+			instance = new SaveGameDAO();
+
+		return instance;
+	}
+
+	private void setFileName(Game game) throws RemoteException{
+		name = game.getPlayers().get(0).getName() + extension;
+		System.out.println(name);
+	}
+
+	/**
+	 * 
+	 * @param game
+	 *            Saves the game to an file void
+	 * @throws RemoteException
+	 */
+	public void saveGameToFile(Game game) throws RemoteException {
+		this.setFileName(game);
+		this.setSavePath(name);
 		try {
-			ObjectOutputStream output = new ObjectOutputStream(new FileOutputStream(name));
+			ObjectOutputStream output = new ObjectOutputStream(new FileOutputStream(basePath));
 			output.writeObject(game);
 			output.close();
 		} catch (FileNotFoundException e) {
@@ -56,38 +73,49 @@ public class SaveGameDAO {
 			e.printStackTrace();
 		}
 	}
-/**
- * 
- * @param filename
- * @return Game
- * @throws FileNotFoundException
- * @throws IOException
- * @throws ClassNotFoundException
- * Game
- */
+
+	/**
+	 * 
+	 * @param filename
+	 * @return Game
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 * @throws ClassNotFoundException
+	 *             Game
+	 */
 	public Game loadSaveGame(String filename) throws FileNotFoundException, IOException, ClassNotFoundException {
-	
+
 		ObjectInputStream read = new ObjectInputStream(new FileInputStream(filename));
 		game = (Game) read.readObject();
 		read.close();
 		return game;
 	}
 
+	
+	private static Path getSavePath() {
+		
+		return  FileSystems.getDefault().getPath(path).toAbsolutePath();
+	}
+	private void setSavePath(String save) {
+		
+		basePath = FileSystems.getDefault().getPath(path).toAbsolutePath().toString() + "/" +  save;
+		System.out.println(basePath);
+	}
 	/**
 	 * 
-	 * @return
-	 * ArrayList
+	 * @return Arraylist of gamesaves ArrayList
 	 */
-	public ArrayList listSaveGame() {
-		ArrayList list = new ArrayList(); ;
-		Path path = FileSystems.getDefault().getPath(basePath).toAbsolutePath();
+	public static ArrayList<File> listSaveGame() {
+		ArrayList<File> list = new ArrayList<File>();
+
+		Path path = getSavePath();
 		File folder = new File(path.toString());
 		File[] listOfFiles = folder.listFiles();
 		for (File file : listOfFiles) {
-			if (file.isFile() ) {
+			if (file.isFile()) {
 				list.add(file);
 				System.out.println(file);
-				
+
 			}
 		}
 		return list;
