@@ -33,7 +33,7 @@ public class PlayingFieldImpl extends UnicastRemoteObject implements PlayingFiel
 	private List<Gem> selectableTokens;
 
 	private TokenList tokenList;
-	private Turn turn;
+	private TempHand turn;
 	
 	private transient List<PlayingFieldObserver> observers;
 	
@@ -50,7 +50,7 @@ public class PlayingFieldImpl extends UnicastRemoteObject implements PlayingFiel
 		this.createNobles(noblesAmount(playerCount));
 		this.createCardRows();
 		
-		this.turn = new Turn();
+		this.turn = new TempHand();
 	}
 
 	private void createTokens(int baseAmount)
@@ -170,7 +170,7 @@ public class PlayingFieldImpl extends UnicastRemoteObject implements PlayingFiel
 		return selectableTokens;
 	}
 
-	public Turn getTurn() {
+	public TempHand getTempHand() {
 		return turn;
 	}
 

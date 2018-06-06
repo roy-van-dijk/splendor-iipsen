@@ -54,11 +54,11 @@ public class GameController {
 		 */
 		//TODO: check for nobles
 		game.cleanUpTurn();
-		//TODO: Save Game
+		game.saveGame();
 		//TODO: Check win condition 
 		//TODO: Determine next player
 		
-		game.saveGame();
+		
 		game.nextTurn();
 	}
 	

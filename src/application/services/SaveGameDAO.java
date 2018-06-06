@@ -54,7 +54,7 @@ public class SaveGameDAO {
 	 * @throws RemoteException
 	 */
 	public void saveGameToFile(GameImpl game) throws FileNotFoundException, IOException {
-		this.setSavePath("Bob.splendor");
+		basePath = this.createSavePath("Bob.splendor");
 		
 			ObjectOutputStream output = new ObjectOutputStream(new FileOutputStream(basePath));
 			output.writeObject(game);
@@ -72,7 +72,7 @@ public class SaveGameDAO {
 	 *             Game
 	 */
 	public GameImpl loadSaveGame(String filename) throws FileNotFoundException, IOException, ClassNotFoundException {
-		this.setSavePath("Bob.splendor");
+		this.createSavePath("Bob.splendor");
 		ObjectInputStream read = new ObjectInputStream(new FileInputStream(basePath));
 		game = (GameImpl) read.readObject();
 		
@@ -81,9 +81,9 @@ public class SaveGameDAO {
 		return game;
 	}
 	
-	private void setSavePath(String save) {
+	public String createSavePath(String save) {
 		
-		basePath = FileSystems.getDefault().getPath(path).toAbsolutePath().toString() + "/" +  save;
+		return FileSystems.getDefault().getPath(path).toAbsolutePath().toString() + "/" +  save;
 	}
 	
 }

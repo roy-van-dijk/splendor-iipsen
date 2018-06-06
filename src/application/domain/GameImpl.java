@@ -160,7 +160,7 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 
 	@Override
 	public void cleanUpTurn() throws RemoteException {
-		playingField.getTurn().emptyHand();
+		playingField.getTempHand().emptyHand();
 		
 	}
 

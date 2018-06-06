@@ -15,7 +15,7 @@ import application.domain.MoveType;
 import application.domain.Noble;
 import application.domain.PlayingField;
 import application.domain.PlayingFieldObserver;
-import application.domain.Turn;
+import application.domain.TempHand;
 import application.util.ConfirmDialog;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -80,7 +80,7 @@ public class PlayingFieldView implements UIComponent, PlayingFieldObserver {
 		{
 			this.initializeCardRows(playingField.getCardRows());
 		}
-		this.updateFieldTokens(playingField.getTokenGemCount(), playingField.getSelectableTokens(), playingField.getTurn());
+		this.updateFieldTokens(playingField.getTokenGemCount(), playingField.getSelectableTokens(), playingField.getTempHand());
 		this.updateNobles(playingField.getNobles());
 	}
 	
@@ -136,7 +136,7 @@ public class PlayingFieldView implements UIComponent, PlayingFieldObserver {
 		}
 	}
 	
-	private void updateFieldTokens(Map<Gem, Integer> gemsCount, List<Gem> selectableTokens, Turn turn)
+	private void updateFieldTokens(Map<Gem, Integer> gemsCount, List<Gem> selectableTokens, TempHand turn)
 	{	
 		tokensPane.getChildren().clear();
 		
@@ -147,7 +147,7 @@ public class PlayingFieldView implements UIComponent, PlayingFieldObserver {
 		}
 	}
 	
-	private HBox createTokenGemCountDisplay(Gem gemType, int count, int radius, List<Gem> selectableTokens, Turn turn)
+	private HBox createTokenGemCountDisplay(Gem gemType, int count, int radius, List<Gem> selectableTokens, TempHand turn)
 	{
 		TokenView tokenView = new TokenView(gemType, radius);
 		
