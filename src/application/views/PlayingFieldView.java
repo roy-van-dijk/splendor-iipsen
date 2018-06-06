@@ -15,6 +15,7 @@ import application.domain.MoveType;
 import application.domain.Noble;
 import application.domain.PlayingField;
 import application.domain.PlayingFieldObserver;
+import application.domain.Turn;
 import application.util.ConfirmDialog;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -75,8 +76,11 @@ public class PlayingFieldView implements UIComponent, PlayingFieldObserver {
 	
 	public void modelChanged(PlayingField playingField) throws RemoteException
 	{
-		this.updateCardRows(playingField.getCardRows());
-		this.updateFieldTokens(playingField.getTokenGemCount());
+		if(cardsPane.getChildren().isEmpty())
+		{
+			this.initializeCardRows(playingField.getCardRows());
+		}
+		this.updateFieldTokens(playingField.getTokenGemCount(), playingField.getSelectableTokens(), playingField.getTurn());
 		this.updateNobles(playingField.getNobles());
 	}
 	
@@ -108,9 +112,9 @@ public class PlayingFieldView implements UIComponent, PlayingFieldObserver {
 		return rowsPane;
 	}
 	
-	private void updateCardRows(List<CardRow> cardRows)
+	private void initializeCardRows(List<CardRow> cardRows)
 	{
-		cardsPane.getChildren().clear();
+		System.out.println("Initializing cardrows");
 		
 		for(CardRow cardRow : cardRows)
 		{
@@ -132,39 +136,43 @@ public class PlayingFieldView implements UIComponent, PlayingFieldObserver {
 		}
 	}
 	
-	private void updateFieldTokens(Map<Gem, Integer> gemsCount)
+	private void updateFieldTokens(Map<Gem, Integer> gemsCount, List<Gem> selectableTokens, Turn turn)
 	{	
 		tokensPane.getChildren().clear();
 		
 		for(Map.Entry<Gem, Integer> entry : gemsCount.entrySet())
 		{	
-			HBox tokenGemCountDisplay = createTokenGemCountDisplay(entry.getKey(), entry.getValue(), GameView.tokenSizeRadius);
-			if(entry.getValue() >= 4) tokenGemCountDisplay.getStyleClass().add("selected");
+			HBox tokenGemCountDisplay = createTokenGemCountDisplay(entry.getKey(), entry.getValue(), GameView.tokenSizeRadius, selectableTokens, turn);
 			tokensPane.getChildren().add(tokenGemCountDisplay);	
 		}
 	}
 	
-	private HBox createTokenGemCountDisplay(Gem gemType, int count, int radius)
+	private HBox createTokenGemCountDisplay(Gem gemType, int count, int radius, List<Gem> selectableTokens, Turn turn)
 	{
 		TokenView tokenView = new TokenView(gemType, radius);
 		
-		tokenView.asPane().setOnMouseClicked(e -> { 
-			try {
-				gameController.onFieldTokenClicked(gemType);
-			} catch (RemoteException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} 
-		});
-		
-		// TODO: find a way to incorporate this into modelChanged();
-		/*if(playingField.getSelectableTokens().contains(gemType)) {
+		if(
+				(turn.getMoveType() == MoveType.TAKE_TWO_TOKENS && turn.getSelectedTokensCount() < 1) ||
+				(turn.getMoveType() == MoveType.TAKE_THREE_TOKENS && turn.getSelectedTokensCount() < 3 && !turn.getSelectedGemTypes().contains(gemType))
+		) {
+			tokenView.asPane().setOnMouseClicked(e -> { 
+				try {
+					gameController.onFieldTokenClicked(gemType);
+				} catch (RemoteException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} 
+			});
+
+		}
+		if(selectableTokens.contains(gemType)) {
 			tokenView.asPane().getStyleClass().add("selectable");
 		}
-		if(playingField.getTurn().getTokenList().getAll().contains(gemType))
+		if(turn.getTokenList().getTokenGemCount().get(gemType) > 0)
 		{
+			tokenView.asPane().getStyleClass().remove("selectable");
 			tokenView.asPane().getStyleClass().add("selected");
-		}*/
+		}
 		
         Label tokenCountLabel = new Label(String.valueOf(count));
         tokenCountLabel.getStyleClass().add("token-count");	

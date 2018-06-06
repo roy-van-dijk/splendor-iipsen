@@ -30,5 +30,7 @@ public interface Game extends Remote {
 	public List<Player> getPlayers() throws RemoteException;
 
 	public PlayingField getPlayingField() throws RemoteException;
-	
+
+	public void cleanUpTurn() throws RemoteException;
+
 }
