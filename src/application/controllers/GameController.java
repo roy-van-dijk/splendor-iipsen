@@ -74,7 +74,7 @@ public class GameController {
 		//		game.getPlayingField().removeNoble(noble);
 		//	}
 		//	break;
-		}
+		//}
 		
 		//game.getPlayers().get(game.getCurrentPlayerIdx()).getOwnedCards().add(game.getTurn().getBoughtCard());
 		//TODO: subtract tokens from player.
