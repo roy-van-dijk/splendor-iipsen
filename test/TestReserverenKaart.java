@@ -6,7 +6,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class TestTurn {
+class TestReserverenKaart {
 
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
@@ -18,7 +18,6 @@ class TestTurn {
 
 	@BeforeEach
 	void setUp() throws Exception {
-		
 	}
 
 	@AfterEach
