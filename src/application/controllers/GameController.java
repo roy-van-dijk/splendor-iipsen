@@ -63,17 +63,17 @@ public class GameController {
 		
 		
 		//begin voor toevoegen nobles
-		List<Noble> allNobles= game.getPlayingField().getNobles();
-		Map<Gem, Integer> totalBonusGems = game.getCurrentPlayer().getDiscount();
+		//List<Noble> allNobles= game.getPlayingField().getNobles();
+		//Map<Gem, Integer> totalBonusGems = game.getCurrentPlayer().getDiscount();
 		
-		for(Noble noble : allNobles) {
-			Map<Gem, Integer> nobleCost = noble.getRequirements();
-			if(totalBonusGems.containsKey(nobleCost) == true) 
-			{
-				game.getCurrentPlayer().addNoble(noble);
-				game.getPlayingField().removeNoble(noble);
-			}
-			break;
+		//for(Noble noble : allNobles) {
+		//	Map<Gem, Integer> nobleCost = noble.getRequirements();
+		//	if(totalBonusGems.containsKey(nobleCost) == true) 
+		//	{
+		//		game.getCurrentPlayer().addNoble(noble);
+		//		game.getPlayingField().removeNoble(noble);
+		//	}
+		//	break;
 		}
 		
 		//game.getPlayers().get(game.getCurrentPlayerIdx()).getOwnedCards().add(game.getTurn().getBoughtCard());
