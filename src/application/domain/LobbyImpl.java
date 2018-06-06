@@ -41,7 +41,7 @@ public class LobbyImpl extends UnicastRemoteObject implements Lobby {
 		this.lobbyState = LobbyStates.WAITING;
 		
 		try {
-			this.hostIP  = InetAddress.getLocalHost().getHostAddress();
+			this.hostIP = InetAddress.getLocalHost().getHostAddress();
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}

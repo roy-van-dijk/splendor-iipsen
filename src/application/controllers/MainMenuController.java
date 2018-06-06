@@ -28,7 +28,14 @@ import javafx.stage.Stage;
  */
 public class MainMenuController {
 	
-
+	/**
+	 * 
+	 * @param hostIP
+	 * @param playerName
+	 * @throws RemoteException
+	 * @throws NotBoundException
+	 * void
+	 */
 	public void joinLobby(String hostIP, String playerName) throws RemoteException, NotBoundException {
 		Lobby lobby = connectToLobby(hostIP);
 		
@@ -44,7 +51,12 @@ public class MainMenuController {
 		StageManager.getInstance().switchScene(lobbyView.asPane());
 	}
 
-
+	/**
+	 * 
+	 * @param playerName
+	 * @throws RemoteException
+	 * void
+	 */
 	public void hostPreviousGame(String playerName) throws RemoteException {
 		GameImpl game = new GameImpl(3); // TODO: load from binary savefile
 		LobbyImpl lobby = createLobby(game);
@@ -56,7 +68,12 @@ public class MainMenuController {
 
 		StageManager.getInstance().switchScene(lobbyView.asPane());
 	}
-
+	/**
+	 * 
+	 * @param playerName
+	 * @throws RemoteException
+	 * void
+	 */
 	public void hostNewGame(String playerName) throws RemoteException {
 		GameImpl game = new GameImpl(4);
 /*		try {
@@ -74,7 +91,13 @@ public class MainMenuController {
 
 		StageManager.getInstance().switchScene(lobbyView.asPane());
 	}
-	
+	/**
+	 * 
+	 * @param game
+	 * @return
+	 * @throws RemoteException
+	 * LobbyImpl
+	 */
 	private LobbyImpl createLobby(GameImpl game) throws RemoteException
 	{
 		LobbyImpl lobby = new LobbyImpl(game);
@@ -88,7 +111,14 @@ public class MainMenuController {
         
         return lobby;
 	}
-
+	/**
+	 * 
+	 * @param hostIP
+	 * @return
+	 * @throws RemoteException
+	 * @throws NotBoundException
+	 * Lobby
+	 */
 	public Lobby connectToLobby(String hostIP) throws RemoteException, NotBoundException
 	{
 		System.out.println("Getting access to RMI registry");

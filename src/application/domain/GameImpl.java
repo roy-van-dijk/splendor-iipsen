@@ -31,7 +31,7 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 	private List<Player> players;
 	//private Map<Integer, Player> players;
 	
-	private transient PlayingFieldImpl playingField;
+	private PlayingFieldImpl playingField;
 	
 	private int maxPlayers;
 

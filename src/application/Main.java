@@ -47,6 +47,8 @@ public class Main extends Application {
 	}
 	
 	public static void main(String[] args) {
+		// Debug loading-game code below
+		/*
 		try {
 			GameImpl game = SaveGameDAO.getInstance().loadSaveGame(FileSystems.getDefault().getPath("saves").toAbsolutePath().toString() + "/Bob.splendor");
 			System.out.println(game);
@@ -60,6 +62,8 @@ public class Main extends Application {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
+		*/
+		
 		try {
 			System.setProperty("java.rmi.server.hostname", InetAddress.getLocalHost().getHostAddress());
 		} catch (UnknownHostException e) {

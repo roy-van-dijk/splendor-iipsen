@@ -13,25 +13,47 @@ import application.domain.Token;
 import application.domain.TokenList;
 import application.views.ReturnTokensView;
 
-
-
-public class ReturnTokenController {	
+/**
+ * @author Tom
+ *
+ */
+public class ReturnTokenController {
 	private ReturnTokens returnTokens;
 
+	/**
+	 * 
+	 * @param returnTokens
+	 */
 	public ReturnTokenController(ReturnTokens returnTokens) {
 		this.returnTokens = returnTokens;
 	}
-	
+
+	/**
+	 * 
+	 * @param gemType
+	 * @throws RemoteException
+	 * void
+	 */
 	public void minusToken(Gem gemType) throws RemoteException {
 		returnTokens.removeToken(gemType);
 	}
-
+/**
+ * 
+ * @param gemType
+ * @throws RemoteException
+ * void
+ */
 	public void plusToken(Gem gemType) throws RemoteException {
 		returnTokens.addToken(gemType);
 	}
 
+	/**
+	 * 
+	 * @throws RemoteException
+	 *             void
+	 */
 	public void confirmButton() throws RemoteException {
 		returnTokens.confirmButton();
 	}
-	
+
 }
