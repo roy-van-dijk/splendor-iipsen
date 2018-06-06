@@ -12,6 +12,7 @@ import application.domain.CardLevel;
 import application.domain.ColorBlindModes;
 import application.domain.Game;
 import application.domain.GameObserver;
+import application.domain.MoveType;
 import application.domain.Player;
 import application.domain.PlayerImpl;
 import application.domain.ReturnTokens;
@@ -190,15 +191,27 @@ public class GameView implements UIComponent, GameObserver  {
 		/*
 		btnPurchaseCard.setOnAction(e -> {
 			gameController.purchaseCard();
-		});
+		});*/
 		
 		btnTakeTwoTokens.setOnAction(e ->{
-			gameController.takeTwoTokens();
+			try {
+				game.getPlayingField().getTurn().setMoveType(MoveType.TAKE_TWO_TOKENS);
+				gameController.findSelectableTokens();
+			} catch (RemoteException e1) {
+				e1.printStackTrace();
+				new AlertDialog(AlertType.ERROR, "Dit hoor je niet te zien").show();
+			}
 		});
 		
 		btnTakeThreeTokens.setOnAction(e ->{
-			gameController.takeThreeTokens();
-		});*/
+			try {
+				game.getPlayingField().getTurn().setMoveType(MoveType.TAKE_THREE_TOKENS);
+				gameController.findSelectableTokens();
+			} catch (RemoteException e1) {
+				e1.printStackTrace();
+				new AlertDialog(AlertType.ERROR, "Dit hoor je niet te zien").show();
+			}
+		});
 		
 		btnEndTurn.getStyleClass().add("disabled");
 
@@ -212,7 +225,7 @@ public class GameView implements UIComponent, GameObserver  {
 
 		opponentsRows.setAlignment(Pos.CENTER_LEFT);
 		opponentsRows.getStyleClass().add("opponents");
-		opponentsRows.setPrefWidth(600);
+		opponentsRows.setPrefWidth(400);
 		
 		List<Player> players = game.getPlayers();
 		for(Player player : players)

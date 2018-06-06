@@ -5,7 +5,6 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.EmptyStackException;
 
-import application.views.CardRowView;
 
 
 
@@ -25,7 +24,7 @@ public class CardRowImpl implements Serializable, CardRow {
 	
 	private CardDeck cardDeckImpl;
 	private CardImpl[] cardSlots;
-	private ArrayList<CardRowObserver> observers;
+	private transient ArrayList<CardRowObserver> observers;
 	
 	
 	public CardRowImpl(CardDeck cardDeckImpl) {

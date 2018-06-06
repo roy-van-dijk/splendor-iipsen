@@ -24,7 +24,7 @@ public class PlayerImpl extends UnicastRemoteObject implements Player, Serializa
 	private List<Card> ownedCards;
 	private List<Noble> ownedNobles;
 
-	private List<PlayerObserver> observers;
+	private transient List<PlayerObserver> observers;
 	
 	private TokenList tokenList;
 	

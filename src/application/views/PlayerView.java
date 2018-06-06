@@ -45,13 +45,8 @@ public class PlayerView implements UIComponent, PlayerObserver {
 	
 	private Pane root;
 	
-	private Label lblDiamondBonus;
-	private Label lblSapphireBonus;
-	private Label lblEmeraldBonus;
-	private Label lblRubyBonus;
-	private Label lblOnyxBonus;
-	
 	private GridPane tokensGrid;
+	private HBox ownedCards;
 	
 	private Label lblPrestigeValue;
 	
@@ -73,24 +68,18 @@ public class PlayerView implements UIComponent, PlayerObserver {
 		lblPrestigeValue.setAlignment(Pos.CENTER);
 		lblPrestigeValue.setFont(Font.font("Arial", FontWeight.EXTRA_BOLD, 50));
 		lblPrestigeValue.getStyleClass().add("prestige");
-		StackPane panePrestige = new StackPane(lblPrestigeValue);
 		
+		StackPane panePrestige = new StackPane(lblPrestigeValue);
 		
 		tokensGrid = new GridPane();
 		tokensGrid.setVgap(2);
 		tokensGrid.setHgap(15);
 		
-		
-		Separator sep = new Separator();
-		sep.setOrientation(Orientation.VERTICAL);
-		sep.setValignment(VPos.CENTER);
-		//sep.setPrefHeight(80);
+		ownedCards = new HBox(10);
 		
 		VBox accessibility = buildAccessibilityMenu();
 		
-		HBox test = buildOwnedCardsDisplay();
-		
-		root.getChildren().addAll(panePrestige, sep, tokensGrid, accessibility);
+		root.getChildren().addAll(panePrestige, sep(), tokensGrid, sep(), ownedCards, accessibility);
 	}
 	
 	public void modelChanged(Player player) throws RemoteException
@@ -113,6 +102,7 @@ public class PlayerView implements UIComponent, PlayerObserver {
 		RadioButton rbAccTritanopia 	= new RadioButton();
 		
 		btnManual.setPadding(new Insets(0, -8, 0, 0));
+		
 		rbAccNormal.setOnAction(e -> {
 			System.out.println("Switching to normal accessiblity mode");
 			GameView.changeColorBlindMode(ColorBlindModes.NORMAL);
@@ -133,19 +123,12 @@ public class PlayerView implements UIComponent, PlayerObserver {
 			GameView.changeColorBlindMode(ColorBlindModes.TRITANOPIA);
 		});
 		
-		ArrayList<RadioButton> radios = new ArrayList<RadioButton>();
-		
-		radios.add(rbAccNormal);
-		radios.add(rbAccDeuteranopia);
-		radios.add(rbAccProtanopia);
-		radios.add(rbAccTritanopia);
+		rbAccNormal.setToggleGroup(group);
+		rbAccDeuteranopia.setToggleGroup(group);
+		rbAccProtanopia.setToggleGroup(group);
+		rbAccTritanopia.setToggleGroup(group);
 		
 		rbAccNormal.setSelected(true);
-		
-		for(RadioButton radio : radios) {
-			radio.setToggleGroup(group);
-//			radio.setAlignment(Pos.BASELINE_CENTER);
-		}
 		
 		accessibility.getChildren().addAll(rbAccNormal, rbAccDeuteranopia, rbAccProtanopia, rbAccTritanopia, btnManual);
 		
@@ -154,27 +137,66 @@ public class PlayerView implements UIComponent, PlayerObserver {
 		return accessibility;
 	}
 	
-	private HBox buildOwnedCardsDisplay() {
-		HBox ownedCardsDisplay = new HBox();
+	private VBox createCardDisplay(ArrayList<Card> cards, int count, int sizeX, int sizeY) {
+		int offset = 0;
 		
-// TODO
-//		List<Card> cardsCount = player.getOwnedCards();
-//		
-//		for(Card c : cardsCount) {
-//			VBox v = new VBox();
-//			Label l = new Label();
-//			
-//			FrontCardView cv = new FrontCardView(c, 200, 200);
-//			l.setText(c.getBonusGem().toString());
-//			
-//			v.getChildren().addAll(l, cv.asPane());
-//			
-//
-//			
-//			ownedCardsDisplay.getChildren().add(v);
-//		}
+		StackPane cardStack = new StackPane();
 		
-		return ownedCardsDisplay;
+		for(Card card : cards) {
+			CardView cardView = new FrontCardView(card, sizeX, sizeY);
+			cardView.asPane().setTranslateY(offset);
+			offset = offset + 20;
+			cardStack.getChildren().add(cardView.asPane());
+		}
+		
+		Label cardCountLabel = new Label(String.valueOf(count));
+		cardCountLabel.setAlignment(Pos.CENTER);
+		cardCountLabel.getStyleClass().add("card-count");
+		cardCountLabel.setFont(Font.font(25));
+		
+		VBox ownedCardDisplay = new VBox(10, cardCountLabel, cardStack);
+		
+		return ownedCardDisplay;
+	}
+	
+	private void updatePlayerCards(ArrayList<Card> cards) throws RemoteException {
+		ownedCards.getChildren().clear();
+		
+		ArrayList<Card> diamondCards = new ArrayList<Card>();
+		ArrayList<Card> sapphireCards = new ArrayList<Card>();
+		ArrayList<Card> emeraldCards = new ArrayList<Card>();
+		ArrayList<Card> rubyCards = new ArrayList<Card>();
+		ArrayList<Card> onyxCards = new ArrayList<Card>();
+		
+		for(Card c : cards) {
+			switch(c.getBonusGem()) {
+				case DIAMOND:
+					diamondCards.add(c);
+					break;
+				case SAPPHIRE:
+					sapphireCards.add(c);
+					break;
+				case EMERALD:
+					emeraldCards.add(c);
+					break;
+				case RUBY:
+					rubyCards.add(c);
+					break;
+				case ONYX:
+					onyxCards.add(c);
+					break;
+				default:
+					break;
+			}
+		}
+		
+		VBox d = createCardDisplay(diamondCards, diamondCards.size(), 100, 80);
+		VBox s = createCardDisplay(sapphireCards, sapphireCards.size(), 100, 80);
+		VBox e = createCardDisplay(emeraldCards, emeraldCards.size(), 100, 80);
+		VBox r = createCardDisplay(rubyCards, rubyCards.size(), 100, 80);
+		VBox o = createCardDisplay(onyxCards, onyxCards.size(), 100, 80);
+		
+		ownedCards.getChildren().addAll(d, s, e, r, o);
 	}
 	
 	private void updatePlayerTokens(Map<Gem, Integer> gemsCount) throws RemoteException
@@ -219,6 +241,15 @@ public class PlayerView implements UIComponent, PlayerObserver {
 		manualContainer.setAlignment(Pos.TOP_RIGHT);
 		
 		return manualContainer;
+	}
+	
+	private Separator sep() {
+		Separator sep = new Separator();
+		sep.setOrientation(Orientation.VERTICAL);
+		sep.setValignment(VPos.CENTER);
+		//sep.setPrefHeight(80);
+		
+		return sep;
 	}
 
 	public Pane asPane() {

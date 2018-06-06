@@ -1,10 +1,14 @@
 package application.domain;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.List;
+
+import application.services.SaveGameDAO;
 
 /**
  * @author Sanchez
@@ -29,7 +33,7 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 	
 	private int maxPlayers;
 
-	private List<GameObserver> observers;
+	private transient List<GameObserver> observers;
 	
 	/*
 	 * The Game object knows how many players there are
@@ -57,8 +61,28 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 		currentPlayerIdx++;
 		if(currentPlayerIdx >= players.size())
 			currentPlayerIdx = 0;
+		try {
+			playingField.newTurn();
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
+	
+	public void saveGame() throws RemoteException
+	{
+		try {
+			SaveGameDAO.getInstance().saveGameToFile(this);
+			
+		} catch (FileNotFoundException e) {
+			
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 	private void Test_Create4Players()
 	{
@@ -132,6 +156,12 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 	public void removeObserver(GameObserver o) throws RemoteException {
 		this.observers.remove(o);
 		this.notifyObservers();
+	}
+
+	@Override
+	public void cleanUpTurn() throws RemoteException {
+		playingField.getTurn().emptyHand();
+		
 	}
 
 }
