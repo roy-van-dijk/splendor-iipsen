@@ -106,3 +106,4 @@ hs_err_pid*
 
 # Splendor savegames
 *.splendor
+saves/Bob.splendor

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import application.controllers.GameController;
+import application.domain.Card;
 import application.domain.CardRow;
 import application.domain.CardRowImpl;
 import application.domain.Game;
@@ -33,7 +34,7 @@ import javafx.scene.text.FontWeight;
  * @author Sanchez
  *
  */
-public class PlayingFieldView implements UIComponent, PlayingFieldObserver {
+public class PlayingFieldView implements UIComponent, Disableable, PlayingFieldObserver {
 
 	public final static int CARDSPACING = 15, 
 							TOKENSPACING = 10,
@@ -94,6 +95,7 @@ public class PlayingFieldView implements UIComponent, PlayingFieldObserver {
 		HBox.setHgrow(tokensPane, Priority.ALWAYS);
 		
 		root = new HBox(TOKENSCARDSPADDING, rowsPane, tokensPane, exitGamePane);
+		root.getStyleClass().add("playing-field");
 		root.setAlignment(Pos.CENTER);
 		root.setPadding(new Insets(FIELDPADDING));
 	}
@@ -150,28 +152,31 @@ public class PlayingFieldView implements UIComponent, PlayingFieldObserver {
 	private HBox createTokenGemCountDisplay(Gem gemType, int count, int radius, List<Gem> selectableTokens, TempHand turn)
 	{
 		TokenView tokenView = new TokenView(gemType, radius);
-		
-		if(
-				(turn.getMoveType() == MoveType.TAKE_TWO_TOKENS && turn.getSelectedTokensCount() < 1) ||
-				(turn.getMoveType() == MoveType.TAKE_THREE_TOKENS && turn.getSelectedTokensCount() < 3 && !turn.getSelectedGemTypes().contains(gemType))
-		) {
-			tokenView.asPane().setOnMouseClicked(e -> { 
-				try {
-					gameController.onFieldTokenClicked(gemType);
-				} catch (RemoteException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} 
-			});
 
-		}
-		if(selectableTokens.contains(gemType)) {
-			tokenView.asPane().getStyleClass().add("selectable");
-		}
-		if(turn.getTokenList().getTokenGemCount().get(gemType) > 0)
-		{
-			tokenView.asPane().getStyleClass().remove("selectable");
-			tokenView.asPane().getStyleClass().add("selected");
+		if(gemType != Gem.JOKER) {
+			if(
+					(turn.getMoveType() == MoveType.TAKE_TWO_TOKENS && turn.getSelectedTokensCount() < 1) ||
+					(turn.getMoveType() == MoveType.TAKE_THREE_TOKENS && turn.getSelectedTokensCount() < 3 && !turn.getSelectedGemTypes().contains(gemType))
+			) {
+				tokenView.asPane().setOnMouseClicked(e -> { 
+					try {
+						gameController.onFieldTokenClicked(gemType);
+					} catch (RemoteException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} 
+				});
+	
+			}
+		
+			if(selectableTokens.contains(gemType)) {
+				tokenView.asPane().getStyleClass().add("selectable");
+			}
+			if(turn.getTokenList().getTokenGemCount().get(gemType) > 0)
+			{
+				tokenView.asPane().getStyleClass().remove("selectable");
+				tokenView.asPane().getStyleClass().add("selected");
+			}
 		}
 		
         Label tokenCountLabel = new Label(String.valueOf(count));
@@ -200,5 +205,11 @@ public class PlayingFieldView implements UIComponent, PlayingFieldObserver {
 
 	public Pane asPane() {
 		return root;
+	}
+
+	@Override
+	public void setDisabled(boolean disabled) throws RemoteException {
+		this.rowsPane.setDisable(disabled);
+		this.tokensPane.setDisable(disabled);
 	}
 }

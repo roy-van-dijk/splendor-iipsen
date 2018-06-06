@@ -10,9 +10,11 @@ import application.domain.CardRowImpl;
 import application.domain.Game;
 import application.domain.Gem;
 import application.domain.MoveType;
+import application.domain.ReturnTokens;
 import application.services.SaveGameDAO;
 import application.util.ConfirmDialog;
 import application.views.PopUpWindowView;
+import application.views.ReturnTokensView;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
@@ -40,18 +42,25 @@ public class GameController {
 		//game.nextTurn();
 	}
 	
+	public void purchaseCard() throws RemoteException {
+		game.findSelectableCards();
+	}
+	
 	public void debugNextTurn() throws RemoteException {
 		game.nextTurn();
 	}
 	
 	public void endTurn() throws RemoteException {
-		/*if (game.getCurrentPlayer().getTokenList().getAll().size() + game.getTurn().getTokenList().getAll().size() > 10) {
-			//TODO: ReturnTokens
-		}
+		
+		//return Tokens
+		ReturnTokens model = new ReturnTokens(game.getPlayingField(), game.getCurrentPlayer());
+		ReturnTokenController controller = new ReturnTokenController(model);
+		model.moreThanTenTokens(model, controller);
+		
 		//game.getPlayers().get(game.getCurrentPlayerIdx()).getOwnedCards().add(game.getTurn().getBoughtCard());
 		//TODO: subtract tokens from player.
 		//game.getPlayers().get(game.getCurrentPlayerIdx()).getReservedCards().add(game.getTurn().getReservedCard());
-		 */
+		 
 		//TODO: check for nobles
 		game.cleanUpTurn();
 		game.saveGame();
@@ -87,8 +96,7 @@ public class GameController {
 
 	
 	public void onFieldCardClicked(Card card) throws RemoteException {
-		// TODO Auto-generated method stub
-		
+		System.out.println("I am going to do something");
 	}
 
 	public void onFieldTokenClicked(Gem gemType) throws RemoteException {

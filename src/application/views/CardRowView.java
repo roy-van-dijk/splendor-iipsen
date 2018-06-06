@@ -1,12 +1,14 @@
 package application.views;
 
 import java.rmi.RemoteException;
+import java.util.List;
 
 import application.controllers.GameController;
 import application.domain.Card;
 import application.domain.CardRow;
 import application.domain.CardRowImpl;
 import application.domain.CardRowObserver;
+import application.domain.Gem;
 import javafx.geometry.Pos;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -29,6 +31,7 @@ public class CardRowView implements UIComponent, CardRowObserver {
 	
 	private GameController gameController;
 	
+
 	public CardRowView(CardRow cardRow, GameController gameController) {
 		this.gameController = gameController;
 		this.buildUI(cardRow);

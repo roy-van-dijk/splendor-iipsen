@@ -105,4 +105,8 @@ public class TempHand implements Serializable {
 		this.moveType = moveType;
 	}
 	
+	public Player getPlayer() {
+		return player;
+	}
+	
 }
