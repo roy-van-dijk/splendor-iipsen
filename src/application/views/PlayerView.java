@@ -140,7 +140,7 @@ public class PlayerView implements UIComponent, Disableable, PlayerObserver {
 
 	private void updatePlayerReservedCards(List<Card> cards) {
 		reservedCards.getChildren().clear();
-		HBox reservedCardsDisplay = createReservedCardDisplay(cards, 100, 125);
+		HBox reservedCardsDisplay = createReservedCardDisplay(cards, 110, 160);
 		reservedCardsDisplay.setPrefWidth(350);
 		reservedCards.getChildren().add(reservedCardsDisplay);
 	}
@@ -159,7 +159,7 @@ public class PlayerView implements UIComponent, Disableable, PlayerObserver {
 	private void updatePlayerNobles(List<Noble> nobles) {
 		ownedNobles.getChildren().clear();
 
-		VBox nobleDisplay = createNobleDisplay(nobles, 100, 100);
+		VBox nobleDisplay = createNobleDisplay(nobles, 110, 110);
 		nobleDisplay.setPrefWidth(175);
 		ownedNobles.getChildren().add(nobleDisplay);
 	}
@@ -214,11 +214,11 @@ public class PlayerView implements UIComponent, Disableable, PlayerObserver {
 			}
 		}
 
-		VBox d = createCardDisplay(diamondCards, diamondCards.size(), 100, 125);
-		VBox s = createCardDisplay(sapphireCards, sapphireCards.size(), 100, 125);
-		VBox e = createCardDisplay(emeraldCards, emeraldCards.size(), 100, 125);
-		VBox r = createCardDisplay(rubyCards, rubyCards.size(), 100, 125);
-		VBox o = createCardDisplay(onyxCards, onyxCards.size(), 100, 125);
+		VBox d = createCardDisplay(diamondCards, diamondCards.size(), 110, 160);
+		VBox s = createCardDisplay(sapphireCards, sapphireCards.size(), 110, 160);
+		VBox e = createCardDisplay(emeraldCards, emeraldCards.size(), 110, 160);
+		VBox r = createCardDisplay(rubyCards, rubyCards.size(), 110, 160);
+		VBox o = createCardDisplay(onyxCards, onyxCards.size(), 110, 160);
 
 		ownedCards.getChildren().addAll(d, s, e, r, o);
 	}
