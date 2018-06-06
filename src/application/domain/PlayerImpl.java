@@ -192,5 +192,4 @@ public class PlayerImpl extends UnicastRemoteObject implements Player, Serializa
 		this.tokenList.add(token);
 	}
 
-
 }

@@ -17,7 +17,7 @@ class TestInstellenToegankelijkheid {
 	private GameController gameController;	
 	private ColorBlindModes mode;
 	GameView view = new GameView(game, gameController);
-	TokenView token = TokkenView();
+	//TokenView token = new TokenView(Gem, double);
 	
 
 	@BeforeAll
@@ -30,10 +30,7 @@ class TestInstellenToegankelijkheid {
 
 	@BeforeEach
 	void setUp() throws Exception {
-		
-		
-		
-		
+
 	}
 
 	@AfterEach
@@ -43,7 +40,6 @@ class TestInstellenToegankelijkheid {
 	@Test
 	void test() {
 		view.changeColorBlindMode(mode.DEUTERANOPIA);
-		view.
 		
 		
 		}
