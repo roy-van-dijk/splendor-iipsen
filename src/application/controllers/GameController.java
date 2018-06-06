@@ -47,6 +47,8 @@ public class GameController {
 	}
 	
 	public void endTurn() throws RemoteException {
+		
+		//return Tokens
 		ReturnTokens model = new ReturnTokens(game.getPlayingField(), game.getCurrentPlayer());
 		ReturnTokenController controller = new ReturnTokenController(model);
 		model.moreThanTenTokens(model, controller);
