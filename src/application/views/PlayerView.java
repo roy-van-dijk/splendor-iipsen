@@ -35,7 +35,7 @@ import javafx.scene.text.FontWeight;
  * @author Sanchez
  *
  */
-public class PlayerView implements UIComponent, PlayerObserver {
+public class PlayerView implements UIComponent, Disableable, PlayerObserver {
 
 	// Radio button toggle group
 	final private ToggleGroup group = new ToggleGroup();
@@ -300,6 +300,11 @@ public class PlayerView implements UIComponent, PlayerObserver {
 
 	public Pane asPane() {
 		return root;
+	}
+
+	@Override
+	public void setDisabled(boolean disabled) {
+		// TODO: Disable reserved cards.
 	}
 
 }

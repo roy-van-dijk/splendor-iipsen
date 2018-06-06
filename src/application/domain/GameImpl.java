@@ -6,7 +6,9 @@ import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import application.services.SaveGameDAO;
 
@@ -55,18 +57,33 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 		this.playingField = new PlayingFieldImpl(this.maxPlayers);
 	}
 	
-	public void nextTurn()
+	public void nextTurn() throws RemoteException
 	{
-		System.out.println("NEXT TURN!!!");
+		System.out.println("Next turn started");
 		currentPlayerIdx++;
-		if(currentPlayerIdx >= players.size())
+		if(currentPlayerIdx >= players.size()) {
 			currentPlayerIdx = 0;
+		}
+		
 		try {
 			playingField.newTurn();
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		System.out.println(currentPlayerIdx);
+		
+		// TODO: remove once lobby done
+		for(GameObserver o : observers)
+		{
+			o.setDisabled(true);
+		}
+		if(currentPlayerIdx < observers.size())
+		{
+			observers.get(currentPlayerIdx).setDisabled(false);
+		}
+		this.notifyObservers();
 	}
 
 	
@@ -104,6 +121,11 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 			e.printStackTrace();
 		}
 	}
+	
+	public void findSelectableCards() throws RemoteException {
+		this.getCurrentPlayer().findSelectableCardsFromReserve();
+		playingField.findSelectableCardsFromField();
+	}
 
 	public int getCurrentPlayerIdx() {
 		return currentPlayerIdx;
@@ -138,7 +160,7 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 		return gameState;
 	}
 	
-	private void notifyObservers()
+	private void notifyObservers() throws RemoteException
 	{
 		for(GameObserver o : observers)
 		{

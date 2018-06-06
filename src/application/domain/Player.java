@@ -22,6 +22,14 @@ public interface Player extends Remote {
 	
 	//public void removeObserver(PlayerObserver o) throws RemoteException;
 
+	public void addSelectableCardFromReserve(Card card) throws RemoteException;
+	
+	public List<Card> getSelectableCardsFromReserve() throws RemoteException;
+	
+	public void findSelectableCardsFromReserve() throws RemoteException;
+	
+	public boolean canAffordCard(Map<Gem, Integer> costs) throws RemoteException;
+	
 	public String getName() throws RemoteException;
 	
 	public List<Card> getReservedCards() throws RemoteException;
@@ -38,5 +46,5 @@ public interface Player extends Remote {
 	
 	public void debugAddToken(Token token) throws RemoteException;
 	
-	
+	public Map<Gem, Integer> getDiscount() throws RemoteException;
 }

@@ -42,6 +42,10 @@ public class GameController {
 		//game.nextTurn();
 	}
 	
+	public void purchaseCard() throws RemoteException {
+		game.findSelectableCards();
+	}
+	
 	public void debugNextTurn() throws RemoteException {
 		game.nextTurn();
 	}
@@ -92,8 +96,7 @@ public class GameController {
 
 	
 	public void onFieldCardClicked(Card card) throws RemoteException {
-		// TODO Auto-generated method stub
-		
+		System.out.println("I am going to do something");
 	}
 
 	public void onFieldTokenClicked(Gem gemType) throws RemoteException {

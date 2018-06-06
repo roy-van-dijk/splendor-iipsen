@@ -36,6 +36,9 @@ public class PlayingFieldImpl extends UnicastRemoteObject implements PlayingFiel
 	private Turn turn;
 	
 	private transient List<PlayingFieldObserver> observers;
+
+
+	private List<Card> selectableCardsFromField;
 	
 
 	public PlayingFieldImpl(int playerCount) throws RemoteException {
@@ -133,10 +136,22 @@ public class PlayingFieldImpl extends UnicastRemoteObject implements PlayingFiel
 		return tokenList.getTokenGemCount();
 	}
 	
-	public void setCardsSelectable(MoveType moveType) {
-		// TODO: Sets cards as selectable. Consider adding to Player
+	public void findSelectableCardsFromField() throws RemoteException {
 		selectableCards.clear();
-		//this.notifyObservers();
+		for(CardRow cardRow : cardRows) {
+			for(Card card : cardRow.getCardSlots()) {
+				if(turn.getPlayer().canAffordCard(card.getCosts())) {
+					this.addSelectableCards(card);
+				}
+			}
+		}
+		this.notifyObservers();
+	}
+	
+	
+	
+	public List<Card> getSelectableCardsFromField() throws RemoteException {
+		return selectableCardsFromField;
 	}
 	
 	public void setTokensSelectable() throws RemoteException
@@ -164,6 +179,10 @@ public class PlayingFieldImpl extends UnicastRemoteObject implements PlayingFiel
 	
 	public List<Card> getSelectableCards() {
 		return selectableCards;
+	}
+	
+	public void addSelectableCards(Card card) {
+		selectableCardsFromField.add(card);
 	}
 
 	public List<Gem> getSelectableTokens() {

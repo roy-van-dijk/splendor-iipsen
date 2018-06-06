@@ -19,6 +19,8 @@ public interface Game extends Remote {
 	
 	public void saveGame() throws RemoteException;
 	
+	public void findSelectableCards() throws RemoteException;
+	
 	public int getCurrentPlayerIdx() throws RemoteException;
 	
 	/**

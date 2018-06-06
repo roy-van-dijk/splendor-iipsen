@@ -15,6 +15,10 @@ public interface PlayingField extends Remote {
 	
 	public List<Gem> getSelectableTokens() throws RemoteException;
 	
+	public void findSelectableCardsFromField() throws RemoteException;
+	
+	public List<Card> getSelectableCardsFromField() throws RemoteException; 
+	
 	public Turn getTurn() throws RemoteException;
 
 	public void addTokenToTemp(Gem gemType) throws RemoteException;
