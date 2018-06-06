@@ -169,7 +169,7 @@ public class GameView implements UIComponent, Disableable, GameObserver  {
 		btnTakeTwoTokens.getStyleClass().add("move-button");
 		btnTakeTwoTokens.setOnAction(e ->{
 			try {
-				game.getPlayingField().getTurn().setMoveType(MoveType.TAKE_TWO_TOKENS);
+				game.getPlayingField().getTempHand().setMoveType(MoveType.TAKE_TWO_TOKENS);
 				gameController.findSelectableTokens();
 			} catch (RemoteException e1) {
 				e1.printStackTrace();
@@ -181,7 +181,7 @@ public class GameView implements UIComponent, Disableable, GameObserver  {
 		btnTakeThreeTokens.getStyleClass().add("move-button");		
 		btnTakeThreeTokens.setOnAction(e ->{
 			try {
-				game.getPlayingField().getTurn().setMoveType(MoveType.TAKE_THREE_TOKENS);
+				game.getPlayingField().getTempHand().setMoveType(MoveType.TAKE_THREE_TOKENS);
 				gameController.findSelectableTokens();
 			} catch (RemoteException e1) {
 				e1.printStackTrace();
@@ -193,6 +193,10 @@ public class GameView implements UIComponent, Disableable, GameObserver  {
 		btnResetTurn.getStyleClass().add("move-button");
 		btnResetTurn.setOnAction(e ->{
 			try {
+
+				game.getPlayingField().getTempHand().setMoveType(MoveType.TAKE_TWO_TOKENS);
+				gameController.findSelectableTokens();
+
 				gameController.debugNextTurn();
 			} catch (RemoteException e1) {
 				// TODO Auto-generated catch block
@@ -205,7 +209,9 @@ public class GameView implements UIComponent, Disableable, GameObserver  {
 		btnEndTurn.setDisable(true);
 		btnEndTurn.setOnAction(e -> {
 			try {
+
 				gameController.endTurn();
+
 			} catch (RemoteException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();

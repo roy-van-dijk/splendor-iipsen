@@ -7,12 +7,12 @@ import java.util.List;
 
 import javafx.scene.Node;
 /**
- * 
+ * Turn is tijdelijk hand 
  * @author Kees
  *
  */
 // TODO: give Turn a remote interface.
-public class Turn implements Serializable {
+public class TempHand implements Serializable {
 	
 	
 	private List<Noble> nobles;
@@ -26,7 +26,7 @@ public class Turn implements Serializable {
 	private int selectedTokensCount;
 	private List<Gem> selectedGemTypes;
 	
-	public Turn() 
+	public TempHand() 
 	{
 		this.nobles = new ArrayList<>();
 		this.selectedGemTypes = new ArrayList<>();

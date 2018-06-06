@@ -6,7 +6,19 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import application.controllers.GameController;
+import application.domain.ColorBlindModes;
+import application.domain.Game;
+import application.views.GameView;
+import application.views.TokenView;
+
 class TestInstellenToegankelijkheid {
+	private Game game;
+	private GameController gameController;	
+	private ColorBlindModes mode;
+	GameView view = new GameView(game, gameController);
+	TokenView token = TokkenView();
+	
 
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
@@ -18,6 +30,10 @@ class TestInstellenToegankelijkheid {
 
 	@BeforeEach
 	void setUp() throws Exception {
+		
+		
+		
+		
 	}
 
 	@AfterEach
@@ -26,7 +42,10 @@ class TestInstellenToegankelijkheid {
 
 	@Test
 	void test() {
-		fail("Not yet implemented");
-	}
+		view.changeColorBlindMode(mode.DEUTERANOPIA);
+		view.
+		
+		
+		}
 
 }
