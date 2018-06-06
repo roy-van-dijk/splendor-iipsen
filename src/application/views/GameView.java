@@ -11,11 +11,14 @@ import application.controllers.ReturnTokenController;
 import application.domain.CardLevel;
 import application.domain.ColorBlindModes;
 import application.domain.Game;
+import application.domain.MoveType;
 import application.domain.Player;
 import application.domain.PlayerImpl;
 import application.domain.ReturnTokens;
+import application.util.AlertDialog;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -191,15 +194,27 @@ public class GameView implements UIComponent  {
 		
 		btnPurchaseCard.setOnAction(e -> {
 			gameController.purchaseCard();
-		});
+		});*/
 		
 		btnTakeTwoTokens.setOnAction(e ->{
-			gameController.takeTwoTokens();
+			try {
+				game.getPlayingField().getTurn().setMoveType(MoveType.TAKE_TWO_TOKENS);
+				gameController.findSelectableTokens();
+			} catch (RemoteException e1) {
+				e1.printStackTrace();
+				new AlertDialog(AlertType.ERROR, "Dit hoor je niet te zien").show();
+			}
 		});
 		
 		btnTakeThreeTokens.setOnAction(e ->{
-			gameController.takeThreeTokens();
-		});*/
+			try {
+				game.getPlayingField().getTurn().setMoveType(MoveType.TAKE_THREE_TOKENS);
+				gameController.findSelectableTokens();
+			} catch (RemoteException e1) {
+				e1.printStackTrace();
+				new AlertDialog(AlertType.ERROR, "Dit hoor je niet te zien").show();
+			}
+		});
 		
 		btnEndTurn.getStyleClass().add("disabled");
 

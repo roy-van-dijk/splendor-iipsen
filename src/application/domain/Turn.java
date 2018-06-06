@@ -21,10 +21,14 @@ public class Turn implements Serializable {
 	private Player player;
 	
 	private MoveType moveType;
+
+	private int selectedTokensCount;
+	private List<Gem> selectedGemTypes;
 	
 	public Turn() 
 	{
 		this.nobles = new ArrayList<>();
+		this.selectedGemTypes = new ArrayList<>();
 		this.tokenList = new TokenList();
 	}
 	
@@ -53,9 +57,27 @@ public class Turn implements Serializable {
 		return reservedCard;
 	}
 	
+	public void setTokenList(TokenList tokenList) {
+		this.tokenList = tokenList;
+	}
+	
 	public TokenList getTokenList() 
 	{
 		return tokenList;
+	}
+	
+	public void addToken(Token token) {
+		selectedTokensCount++;
+		tokenList.add(token);
+		selectedGemTypes.add(token.getGemType());
+	}
+	
+	public int getSelectedTokensCount() {
+		return selectedTokensCount;
+	}
+	
+	public List<Gem> getSelectedGemTypes() {
+		return selectedGemTypes;
 	}
 	/**
 	 * Clear the hand of the current player
@@ -64,9 +86,11 @@ public class Turn implements Serializable {
 	public void emptyHand() throws RemoteException 
 	{
 		nobles.clear();
+		selectedGemTypes.clear();
 		tokenList.getAll().clear();
 		reservedCard = null;
 		boughtCard = null;
+		selectedTokensCount = 0;
 		//System.out.printf("%s has emptied his hand \n", player.getName());
 	}
 

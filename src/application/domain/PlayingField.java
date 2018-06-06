@@ -17,12 +17,14 @@ public interface PlayingField extends Remote {
 	
 	public Turn getTurn() throws RemoteException;
 
-	public void addTwoTokensToTemp(Gem gemType) throws RemoteException;
+	public void addTokenToTemp(Gem gemType) throws RemoteException;
 	
 	public void addObserver(PlayingFieldObserver observer) throws RemoteException;
 
 	public void addToken(Token token) throws RemoteException;
 
-	//public void setTokensSelectable(MoveType moveType) throws RemoteException;
+	public void setTokensSelectable() throws RemoteException;
+	
+	public void newTurn() throws RemoteException;
 
 }
