@@ -6,7 +6,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class TestGameImpl {
+class TestKopenKaart {
 
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {

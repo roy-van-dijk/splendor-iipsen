@@ -6,7 +6,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class TestNobleImpl {
+class TestJoinLobby {
 
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {

@@ -6,9 +6,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import application.domain.CardImpl;
-
-class TestCardImpl {
+class TestSpelenBeurt {
 
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
@@ -20,7 +18,6 @@ class TestCardImpl {
 
 	@BeforeEach
 	void setUp() throws Exception {
-		CardImpl card = new CardImpl(null, 0, null, null, null);
 	}
 
 	@AfterEach
