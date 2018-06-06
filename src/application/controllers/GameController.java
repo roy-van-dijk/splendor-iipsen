@@ -1,6 +1,8 @@
 package application.controllers;
 
 import java.rmi.RemoteException;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import application.StageManager;
@@ -10,6 +12,8 @@ import application.domain.CardRowImpl;
 import application.domain.Game;
 import application.domain.Gem;
 import application.domain.MoveType;
+import application.domain.Noble;
+import application.domain.PlayingField;
 import application.domain.ReturnTokens;
 import application.services.SaveGameDAO;
 import application.util.ConfirmDialog;
@@ -39,7 +43,7 @@ public class GameController {
 		//if(!card.equals(card2wantdezeisspeciaal)) return;
 		
 		game.getCurrentPlayer().reserveCardFromField(row, card);
-		//game.nextTurn();
+		
 	}
 	
 	public void purchaseCard() throws RemoteException {
@@ -56,6 +60,21 @@ public class GameController {
 		ReturnTokens model = new ReturnTokens(game.getPlayingField(), game.getCurrentPlayer());
 		ReturnTokenController controller = new ReturnTokenController(model);
 		model.moreThanTenTokens(model, controller);
+		
+		
+		//begin voor toevoegen nobles
+		List<Noble> allNobles= game.getPlayingField().getNobles();
+		Map<Gem, Integer> totalBonusGems = game.getCurrentPlayer().getDiscount();
+		
+		for(Noble noble : allNobles) {
+			Map<Gem, Integer> nobleCost = noble.getRequirements();
+			if(totalBonusGems.containsKey(nobleCost) == true) 
+			{
+				game.getCurrentPlayer().addNoble(noble);
+				game.getPlayingField().removeNoble(noble);
+			}
+			break;
+		}
 		
 		//game.getPlayers().get(game.getCurrentPlayerIdx()).getOwnedCards().add(game.getTurn().getBoughtCard());
 		//TODO: subtract tokens from player.
