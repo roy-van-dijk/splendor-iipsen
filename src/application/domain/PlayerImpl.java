@@ -50,7 +50,7 @@ public class PlayerImpl extends UnicastRemoteObject implements Player, Serializa
 			cardRow.removeCard(card);
 			reservedCards.add(card);
 			
-			System.out.printf("%s has taken the card: %s", this.getName() ,card.toString());
+			System.out.printf("%s has taken the card with costs: %s\n", this.getName() ,card.getCosts());
 			this.notifyObservers();
 		}
 	}
@@ -64,7 +64,7 @@ public class PlayerImpl extends UnicastRemoteObject implements Player, Serializa
 			cardRow.removeCard(card);
 			ownedCards.add(card);
 			
-			System.out.printf("%s has taken the card: %s", this.getName() ,card.toString());
+			System.out.printf("%s has bought the card with costs: %s\\n", this.getName(), card.getCosts());
 			this.notifyObservers();
 		}
 	}

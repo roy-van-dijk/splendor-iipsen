@@ -103,3 +103,6 @@ hs_err_pid*
 # Visio autosave temporary files
 *.~vsd*
 # End of https://www.gitignore.io/api/java,eclipse
+
+# Splendor savegames
+*.splendor
