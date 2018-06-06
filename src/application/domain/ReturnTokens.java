@@ -4,6 +4,7 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 
+import application.controllers.ReturnTokenController;
 import application.views.ReturnTokensView;
 
 public class ReturnTokens {
@@ -67,6 +68,14 @@ public class ReturnTokens {
 	public void notifyView() 
 	{
 		view.modelChanged(this);
+	}
+	
+	public void moreThanTenTokens(ReturnTokens model, ReturnTokenController controller) throws RemoteException
+	{
+		if(tokenListNew.getAll().size() > 10)
+		{
+			ReturnTokensView view = new ReturnTokensView(model, controller);
+		}
 	}
 	
 	public void validateNewTokens()

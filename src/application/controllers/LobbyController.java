@@ -18,7 +18,11 @@ public class LobbyController {
 	public LobbyController(Lobby lobby) {
 		this.lobby = lobby;
 	}
-
+	/**
+	 * Shows the GameScreen
+	 * @throws RemoteException
+	 * void
+	 */
 	public void showGameScreen() throws RemoteException
 	{
 		Game game = lobby.getGame();
@@ -28,7 +32,12 @@ public class LobbyController {
 		StageManager.getInstance().switchScene(gameView.asPane());
 	}
 
-
+	/**
+	 * 
+	 * @param playerName
+	 * @throws RemoteException
+	 * void
+	 */
 	public void connectPlayer(String playerName) throws RemoteException {
 		lobby.createPlayer(playerName);
 	}

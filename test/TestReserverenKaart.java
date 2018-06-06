@@ -1,22 +1,12 @@
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.ArrayList;
-
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import application.domain.Player;
-import application.domain.PlayingField;
-
-class testReturnTokens {
-	PlayingField playingField;
-	Player player;
-	allowConfirm = false;
-	tokenListNew = player.getTokenList();
-	removedTokens = new ArrayList<>();
+class TestReserverenKaart {
 
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
@@ -36,7 +26,7 @@ class testReturnTokens {
 
 	@Test
 	void test() {
-	
+		fail("Not yet implemented");
 	}
 
 }
