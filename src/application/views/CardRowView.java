@@ -30,7 +30,7 @@ public class CardRowView implements UIComponent, CardRowObserver {
 	private GameController gameController;
 	
 	public CardRowView(CardRow cardRow, GameController gameController) {
-
+		this.gameController = gameController;
 		this.buildUI(cardRow);
 		
 		try {

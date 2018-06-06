@@ -58,6 +58,7 @@ public class GameController {
 		//TODO: Check win condition 
 		//TODO: Determine next player
 		
+		game.saveGame();
 		game.nextTurn();
 	}
 	

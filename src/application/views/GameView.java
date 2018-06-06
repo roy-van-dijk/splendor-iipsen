@@ -225,7 +225,7 @@ public class GameView implements UIComponent, GameObserver  {
 
 		opponentsRows.setAlignment(Pos.CENTER_LEFT);
 		opponentsRows.getStyleClass().add("opponents");
-		opponentsRows.setPrefWidth(600);
+		opponentsRows.setPrefWidth(400);
 		
 		List<Player> players = game.getPlayers();
 		for(Player player : players)

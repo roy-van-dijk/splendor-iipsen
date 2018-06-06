@@ -76,7 +76,10 @@ public class PlayingFieldView implements UIComponent, PlayingFieldObserver {
 	
 	public void modelChanged(PlayingField playingField) throws RemoteException
 	{
-		this.updateCardRows(playingField.getCardRows());
+		if(cardsPane.getChildren().isEmpty())
+		{
+			this.initializeCardRows(playingField.getCardRows());
+		}
 		this.updateFieldTokens(playingField.getTokenGemCount(), playingField.getSelectableTokens(), playingField.getTurn());
 		this.updateNobles(playingField.getNobles());
 	}
@@ -109,9 +112,9 @@ public class PlayingFieldView implements UIComponent, PlayingFieldObserver {
 		return rowsPane;
 	}
 	
-	private void updateCardRows(List<CardRow> cardRows)
+	private void initializeCardRows(List<CardRow> cardRows)
 	{
-		cardsPane.getChildren().clear();
+		System.out.println("Initializing cardrows");
 		
 		for(CardRow cardRow : cardRows)
 		{

@@ -176,11 +176,9 @@ public class PlayingFieldImpl extends UnicastRemoteObject implements PlayingFiel
 
 	@Override
 	public void addTokenToTemp(Gem gemType) throws RemoteException {
-		Token token = new TokenImpl(gemType);
-		turn.addToken(token);
+		turn.addToken(new TokenImpl(gemType));
 		if(turn.getMoveType() == MoveType.TAKE_TWO_TOKENS) {
-			Token token2 = new TokenImpl(gemType);
-			turn.addToken(token2);		
+			turn.addToken(new TokenImpl(gemType));		
 		}
 		this.notifyObservers();
 	}
