@@ -10,9 +10,11 @@ import application.domain.CardRowImpl;
 import application.domain.Game;
 import application.domain.Gem;
 import application.domain.MoveType;
+import application.domain.ReturnTokens;
 import application.services.SaveGameDAO;
 import application.util.ConfirmDialog;
 import application.views.PopUpWindowView;
+import application.views.ReturnTokensView;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
@@ -45,13 +47,14 @@ public class GameController {
 	}
 	
 	public void endTurn() throws RemoteException {
-		/*if (game.getCurrentPlayer().getTokenList().getAll().size() + game.getTurn().getTokenList().getAll().size() > 10) {
-			//TODO: ReturnTokens
-		}
+		ReturnTokens model = new ReturnTokens(game.getPlayingField(), game.getCurrentPlayer());
+		ReturnTokenController controller = new ReturnTokenController(model);
+		model.moreThanTenTokens(model, controller);
+		
 		//game.getPlayers().get(game.getCurrentPlayerIdx()).getOwnedCards().add(game.getTurn().getBoughtCard());
 		//TODO: subtract tokens from player.
 		//game.getPlayers().get(game.getCurrentPlayerIdx()).getReservedCards().add(game.getTurn().getReservedCard());
-		 */
+		 
 		//TODO: check for nobles
 		game.cleanUpTurn();
 		//TODO: Save Game

@@ -6,10 +6,13 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import application.views.ManualWindowView;
+
 class TestTerugleggenTokens {
 
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
+		
 	}
 
 	@AfterAll
@@ -26,6 +29,7 @@ class TestTerugleggenTokens {
 
 	@Test
 	void test() {
+		
 		fail("Not yet implemented");
 	}
 

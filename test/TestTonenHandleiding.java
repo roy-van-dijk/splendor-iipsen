@@ -6,6 +6,8 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import application.views.ManualWindowView;
+
 class TestTonenHandleiding {
 
 	@BeforeAll
@@ -26,6 +28,11 @@ class TestTonenHandleiding {
 
 	@Test
 	void test() {
+		
+		ManualWindowView  manual = new ManualWindowView();
+		
+		
+		
 		fail("Not yet implemented");
 	}
 
