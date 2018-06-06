@@ -2,6 +2,7 @@ package application.views;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -31,7 +32,7 @@ import javafx.scene.layout.VBox;
  * @author Sanchez
  *
  */
-public class GameView implements UIComponent, GameObserver  {
+public class GameView implements UIComponent, Disableable, GameObserver  {
 	
 	public final static int cardSizeX = 130, cardSizeY = 180; 
 	public final static int tokenSizeRadius = 45;
@@ -52,10 +53,15 @@ public class GameView implements UIComponent, GameObserver  {
 	private Button btnResetTurn;
 	private Button btnEndTurn;
 	
-	private Pane playingField;
+	private List<Button> moveButtons;
+	
+
 	private Pane buttons;
 	private Pane opponents;
-	private Pane player;
+	
+	private PlayingFieldView playingField;
+	private PlayerView player;
+	
 	
 	public GameView(Game game, GameController gameController) {
 		this.game = game;
@@ -107,21 +113,20 @@ public class GameView implements UIComponent, GameObserver  {
 			e.printStackTrace();
 		}
 		
-		VBox center = new VBox(playingField, buttons);
-		VBox.setVgrow(playingField, Priority.ALWAYS);
+		VBox center = new VBox(playingField.asPane(), buttons);
+		VBox.setVgrow(playingField.asPane(), Priority.ALWAYS);
 		
 		//root.setTop(topLayout);
 		root.setCenter(center);
 		root.setLeft(opponents);
-		root.setBottom(player);
+		root.setBottom(player.asPane());
 	}
 	
 	
 	
-	private Pane buildPlayingField() throws RemoteException
+	private PlayingFieldView buildPlayingField() throws RemoteException
 	{
-		Pane playingField = new PlayingFieldView(game.getPlayingField(), gameController).asPane();
-		return playingField;
+		return new PlayingFieldView(game.getPlayingField(), gameController);
 	}
 	
 	private HBox buildButtons()
@@ -130,6 +135,7 @@ public class GameView implements UIComponent, GameObserver  {
 		buttons.getStyleClass().add("buttons-view");
 		buttons.setAlignment(Pos.CENTER);
 		
+		this.moveButtons = new ArrayList<>();
 		
 		// Make separate button class
 		btnReserveCard = new Button("Reserve Card");
@@ -142,18 +148,14 @@ public class GameView implements UIComponent, GameObserver  {
 				e1.printStackTrace();
 			}
 		});
-		//btnReserveCard.setOnAction(
-				
-				//);
+		
 		btnPurchaseCard = new Button("Purchase Card");
 		btnPurchaseCard.getStyleClass().add("move-button");
 		btnPurchaseCard.setOnAction(e -> {
-			// POC -> probably belongs in EndTurnController when that's done.
+			// POC -> belongs in GameController
 			try {
-				
 				gameController.purchaseCard();
-				
-				// Debug code below
+				// TODO Debug code below
 				ReturnTokens model = new ReturnTokens(game.getPlayingField(), game.getCurrentPlayer());
 				ReturnTokenController controller = new ReturnTokenController(model);
 				ReturnTokensView view = new ReturnTokensView(model, controller);
@@ -165,37 +167,6 @@ public class GameView implements UIComponent, GameObserver  {
 		
 		btnTakeTwoTokens = new Button("Take Two Tokens");
 		btnTakeTwoTokens.getStyleClass().add("move-button");
-		
-		btnTakeThreeTokens = new Button("Take Three Tokens");
-		btnTakeThreeTokens.getStyleClass().add("move-button");
-		
-		btnResetTurn = new Button("Reset Turn");
-		btnResetTurn.getStyleClass().add("move-button");
-		
-		btnEndTurn = new Button("End Turn");
-		btnEndTurn.getStyleClass().add("move-button");
-		btnEndTurn.setOnAction(e -> {
-			try {
-				gameController.endTurn();
-			} catch (RemoteException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-		});
-		
-		btnResetTurn.setOnAction(e ->{
-			try {
-				gameController.debugNextTurn();
-			} catch (RemoteException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-		});
-		/*
-		btnPurchaseCard.setOnAction(e -> {
-			gameController.purchaseCard();
-		});*/
-		
 		btnTakeTwoTokens.setOnAction(e ->{
 			try {
 				game.getPlayingField().getTurn().setMoveType(MoveType.TAKE_TWO_TOKENS);
@@ -206,6 +177,8 @@ public class GameView implements UIComponent, GameObserver  {
 			}
 		});
 		
+		btnTakeThreeTokens = new Button("Take Three Tokens");
+		btnTakeThreeTokens.getStyleClass().add("move-button");		
 		btnTakeThreeTokens.setOnAction(e ->{
 			try {
 				game.getPlayingField().getTurn().setMoveType(MoveType.TAKE_THREE_TOKENS);
@@ -216,9 +189,32 @@ public class GameView implements UIComponent, GameObserver  {
 			}
 		});
 		
-		btnEndTurn.getStyleClass().add("disabled");
+		btnResetTurn = new Button("Reset Turn");
+		btnResetTurn.getStyleClass().add("move-button");
+		btnResetTurn.setOnAction(e ->{
+			try {
+				gameController.debugNextTurn();
+			} catch (RemoteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		});
+		
+		btnEndTurn = new Button("End Turn");
+		btnEndTurn.getStyleClass().add("move-button");
+		btnEndTurn.setDisable(true);
+		btnEndTurn.setOnAction(e -> {
+			try {
+				gameController.endTurn();
+			} catch (RemoteException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		});
 
-		buttons.getChildren().addAll(btnReserveCard, btnPurchaseCard, btnTakeTwoTokens, btnTakeThreeTokens, btnResetTurn, btnEndTurn);
+		this.moveButtons.addAll(Arrays.asList(btnReserveCard, btnPurchaseCard, btnTakeTwoTokens, btnTakeThreeTokens, btnResetTurn, btnEndTurn));
+		buttons.getChildren().addAll(this.moveButtons);
+		
 		return buttons;
 	}
 	
@@ -242,15 +238,26 @@ public class GameView implements UIComponent, GameObserver  {
 		return opponentsRows;
 	}
 	
-	private Pane buildPlayer() throws RemoteException
+	private PlayerView buildPlayer() throws RemoteException
 	{
-		Pane player = new PlayerView(game.getPlayers().get(0)).asPane();
-		return player;
+		return new PlayerView(game.getPlayers().get(0));
 	}
 	
 
 	public Pane asPane() {
 		return root;
+	}
+
+	public void setDisabled(boolean disabled) throws RemoteException {
+
+		for(Button btn : this.moveButtons)
+		{
+			btn.setDisable(disabled);
+		}
+		this.btnResetTurn.setDisable(false);
+		
+		this.playingField.setDisabled(disabled);
+		this.player.setDisabled(disabled);
 	}
 	
 }
