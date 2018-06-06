@@ -61,6 +61,12 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 		currentPlayerIdx++;
 		if(currentPlayerIdx >= players.size())
 			currentPlayerIdx = 0;
+		try {
+			playingField.newTurn();
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	
@@ -150,6 +156,12 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 	public void removeObserver(GameObserver o) throws RemoteException {
 		this.observers.remove(o);
 		this.notifyObservers();
+	}
+
+	@Override
+	public void cleanUpTurn() throws RemoteException {
+		playingField.getTurn().emptyHand();
+		
 	}
 
 }

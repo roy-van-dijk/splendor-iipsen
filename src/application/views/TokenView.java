@@ -56,7 +56,7 @@ public class TokenView implements UIComponent, ColorChangeable {
        
 		root = new StackPane(circle);
 
-		root.getStyleClass().add("selectable");
+		//root.getStyleClass().add("selectable");
 	}	
 	
 	/**

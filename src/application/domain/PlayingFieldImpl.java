@@ -139,22 +139,26 @@ public class PlayingFieldImpl extends UnicastRemoteObject implements PlayingFiel
 		//this.notifyObservers();
 	}
 	
-	public void setTokensSelectable(MoveType moveType)
+	public void setTokensSelectable() throws RemoteException
 	{
 		selectableTokens.clear();
+		
+		MoveType moveType = turn.getMoveType();
 		
 		LinkedHashMap<Gem, Integer> gemsCount = tokenList.getTokenGemCount();
 		for(Map.Entry<Gem, Integer> gemCount : gemsCount.entrySet())
 		{
-			if(moveType == MoveType.TAKE_TWO_TOKENS && gemCount.getValue() >= 4) {
-				selectableTokens.add(gemCount.getKey());
-			} 
-			else if(moveType == MoveType.TAKE_THREE_TOKENS && gemCount.getValue() > 0) 
-			{
-				selectableTokens.add(gemCount.getKey());
+			if(gemCount.getKey() != Gem.JOKER) {
+				if(moveType == MoveType.TAKE_TWO_TOKENS && gemCount.getValue() >= 4) {
+					selectableTokens.add(gemCount.getKey());
+				} 
+				else if(moveType == MoveType.TAKE_THREE_TOKENS && gemCount.getValue() > 0) 
+				{
+					selectableTokens.add(gemCount.getKey());
+				}
 			}
 		}
-		//this.notifyObservers();
+		this.notifyObservers();
 	}
 	
 	
@@ -171,9 +175,14 @@ public class PlayingFieldImpl extends UnicastRemoteObject implements PlayingFiel
 	}
 
 	@Override
-	public void addTwoTokensToTemp(Gem gemType) {
-		// TODO Auto-generated method stub
-		
+	public void addTokenToTemp(Gem gemType) throws RemoteException {
+		Token token = new TokenImpl(gemType);
+		turn.addToken(token);
+		if(turn.getMoveType() == MoveType.TAKE_TWO_TOKENS) {
+			Token token2 = new TokenImpl(gemType);
+			turn.addToken(token2);		
+		}
+		this.notifyObservers();
 	}
 	
 	private void notifyObservers() throws RemoteException
@@ -202,6 +211,10 @@ public class PlayingFieldImpl extends UnicastRemoteObject implements PlayingFiel
 	public void removeToken(Token token) {
 		tokenList.remove(token);
 		
+	}
+
+	public void newTurn() throws RemoteException {
+		this.notifyObservers();	
 	}
 
 }
