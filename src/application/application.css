@@ -119,10 +119,14 @@
 .move-button {
 	-fx-font-size: 20px;
 }
-.move-button.disabled {
+.move-button:disabled {
 	-fx-background-color: gray;
 	-fx-text-fill:rgb(192,192,192);
 	-fx-cursor: default;
+}
+
+*:disabled {
+	-fx-opacity: 1;
 }
 
 .home-button {
