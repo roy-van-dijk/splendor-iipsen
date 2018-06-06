@@ -31,4 +31,6 @@ public interface PlayingField extends Remote {
 	
 	public void newTurn() throws RemoteException;
 
+	public void removeNoble(Noble noble);
+
 }
