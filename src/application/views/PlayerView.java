@@ -47,6 +47,7 @@ public class PlayerView implements UIComponent, PlayerObserver {
 	private GridPane tokensGrid;
 	private HBox ownedCards;
 	private HBox ownedNobles;
+	private HBox reservedCards;
 
 	private Label lblPrestigeValue;
 
@@ -65,7 +66,7 @@ public class PlayerView implements UIComponent, PlayerObserver {
 		// Player prestige
 		lblPrestigeValue = new Label();
 		lblPrestigeValue.setAlignment(Pos.CENTER);
-		lblPrestigeValue.setFont(Font.font("Arial", FontWeight.EXTRA_BOLD, 50));
+		lblPrestigeValue.setFont(Font.font("Times new Roman", FontWeight.EXTRA_BOLD, 50));
 		lblPrestigeValue.getStyleClass().add("prestige");
 
 		StackPane panePrestige = new StackPane(lblPrestigeValue);
@@ -76,11 +77,11 @@ public class PlayerView implements UIComponent, PlayerObserver {
 
 		ownedCards = new HBox(10);
 		ownedNobles = new HBox(10);
+		reservedCards = new HBox(10);
 
 		VBox accessibility = buildAccessibilityMenu();
 
-		root.getChildren().addAll(panePrestige, sep(), tokensGrid, sep(), ownedCards, sep(), ownedNobles, sep(),
-				accessibility);
+		root.getChildren().addAll(panePrestige, sep(), tokensGrid, sep(), ownedCards, sep(), ownedNobles, sep(), reservedCards, sep(), accessibility);
 	}
 
 	public void modelChanged(Player player) throws RemoteException {
@@ -88,7 +89,8 @@ public class PlayerView implements UIComponent, PlayerObserver {
 
 		this.updatePlayerTokens(player.getTokensGemCount());
 		this.updatePlayerCards(player.getOwnedCards());
-		this.updatesNobles(player.getOwnedNobles());
+		this.updatePlayerNobles(player.getOwnedNobles());
+		this.updatePlayerReservedCards(player.getReservedCards());
 	}
 
 	private VBox buildAccessibilityMenu() {
@@ -103,6 +105,11 @@ public class PlayerView implements UIComponent, PlayerObserver {
 		RadioButton rbAccTritanopia = new RadioButton();
 
 		btnManual.setPadding(new Insets(0, -8, 0, 0));
+		rbAccNormal.setSelected(true);
+		rbAccNormal.setToggleGroup(group);
+		rbAccDeuteranopia.setToggleGroup(group);
+		rbAccProtanopia.setToggleGroup(group);
+		rbAccTritanopia.setToggleGroup(group);
 
 		rbAccNormal.setOnAction(e -> {
 			System.out.println("Switching to normal accessiblity mode");
@@ -124,13 +131,6 @@ public class PlayerView implements UIComponent, PlayerObserver {
 			GameView.changeColorBlindMode(ColorBlindModes.TRITANOPIA);
 		});
 
-		rbAccNormal.setToggleGroup(group);
-		rbAccDeuteranopia.setToggleGroup(group);
-		rbAccProtanopia.setToggleGroup(group);
-		rbAccTritanopia.setToggleGroup(group);
-
-		rbAccNormal.setSelected(true);
-
 		accessibility.getChildren().addAll(rbAccNormal, rbAccDeuteranopia, rbAccProtanopia, rbAccTritanopia, btnManual);
 
 		HBox.setHgrow(accessibility, Priority.ALWAYS);
@@ -138,9 +138,29 @@ public class PlayerView implements UIComponent, PlayerObserver {
 		return accessibility;
 	}
 
-	private void updatesNobles(List<Noble> nobles) {
-		VBox nobleDisplay = createNobleDisplay(nobles, 75, 75);
-		nobleDisplay.setPrefWidth(100);
+	private void updatePlayerReservedCards(List<Card> cards) {
+		reservedCards.getChildren().clear();
+		HBox reservedCardsDisplay = createReservedCardDisplay(cards, 100, 125);
+		reservedCardsDisplay.setPrefWidth(350);
+		reservedCards.getChildren().add(reservedCardsDisplay);
+	}
+
+	private HBox createReservedCardDisplay(List<Card> cards, int sizeX, int sizeY) {
+		HBox reservedCards = new HBox(10);
+
+		for (Card card : cards) {
+			CardView cardView = new FrontCardView(card, sizeX, sizeY);
+			reservedCards.getChildren().add(cardView.asPane());
+		}
+
+		return reservedCards;
+	}
+
+	private void updatePlayerNobles(List<Noble> nobles) {
+		ownedNobles.getChildren().clear();
+
+		VBox nobleDisplay = createNobleDisplay(nobles, 100, 100);
+		nobleDisplay.setPrefWidth(175);
 		ownedNobles.getChildren().add(nobleDisplay);
 	}
 
@@ -194,11 +214,11 @@ public class PlayerView implements UIComponent, PlayerObserver {
 			}
 		}
 
-		VBox d = createCardDisplay(diamondCards, diamondCards.size(), 100, 80);
-		VBox s = createCardDisplay(sapphireCards, sapphireCards.size(), 100, 80);
-		VBox e = createCardDisplay(emeraldCards, emeraldCards.size(), 100, 80);
-		VBox r = createCardDisplay(rubyCards, rubyCards.size(), 100, 80);
-		VBox o = createCardDisplay(onyxCards, onyxCards.size(), 100, 80);
+		VBox d = createCardDisplay(diamondCards, diamondCards.size(), 100, 125);
+		VBox s = createCardDisplay(sapphireCards, sapphireCards.size(), 100, 125);
+		VBox e = createCardDisplay(emeraldCards, emeraldCards.size(), 100, 125);
+		VBox r = createCardDisplay(rubyCards, rubyCards.size(), 100, 125);
+		VBox o = createCardDisplay(onyxCards, onyxCards.size(), 100, 125);
 
 		ownedCards.getChildren().addAll(d, s, e, r, o);
 	}
@@ -220,11 +240,11 @@ public class PlayerView implements UIComponent, PlayerObserver {
 		Label cardCountLabel = new Label(String.valueOf(count));
 		cardCountLabel.setAlignment(Pos.CENTER);
 		cardCountLabel.getStyleClass().add("card-count");
-		cardCountLabel.setFont(Font.font("Arial", FontWeight.BOLD, 40));
+		cardCountLabel.setFont(Font.font("Times New Roman", FontWeight.BOLD, 40));
 		cardCountLabel.setPrefWidth(125);
 		cardCountLabel.setTextFill(Color.WHITE);
 
-		VBox ownedCardDisplay = new VBox(10, cardCountLabel, cardStack);
+		VBox ownedCardDisplay = new VBox(25, cardCountLabel, cardStack);
 
 		return ownedCardDisplay;
 	}
