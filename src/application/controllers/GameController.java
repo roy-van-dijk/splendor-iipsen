@@ -40,6 +40,10 @@ public class GameController {
 		//game.nextTurn();
 	}
 	
+	public void purchaseCard() throws RemoteException {
+		game.findSelectableCards();
+	}
+	
 	public void debugNextTurn() throws RemoteException {
 		game.nextTurn();
 	}

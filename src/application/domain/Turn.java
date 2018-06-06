@@ -104,4 +104,8 @@ public class Turn implements Serializable {
 		this.moveType = moveType;
 	}
 	
+	public Player getPlayer() {
+		return player;
+	}
+	
 }

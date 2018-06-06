@@ -150,6 +150,9 @@ public class GameView implements UIComponent, GameObserver  {
 		btnPurchaseCard.setOnAction(e -> {
 			// POC -> probably belongs in EndTurnController when that's done.
 			try {
+				
+				gameController.purchaseCard();
+				
 				// Debug code below
 				ReturnTokens model = new ReturnTokens(game.getPlayingField(), game.getCurrentPlayer());
 				ReturnTokenController controller = new ReturnTokenController(model);

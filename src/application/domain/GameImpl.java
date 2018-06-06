@@ -6,7 +6,9 @@ import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import application.services.SaveGameDAO;
 
@@ -103,6 +105,11 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	public void findSelectableCards() throws RemoteException {
+		this.getCurrentPlayer().findSelectableCardsFromReserve();
+		playingField.findSelectableCardsFromField();
 	}
 
 	public int getCurrentPlayerIdx() {

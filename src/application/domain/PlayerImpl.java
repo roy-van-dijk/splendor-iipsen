@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 /**
@@ -24,15 +25,25 @@ public class PlayerImpl extends UnicastRemoteObject implements Player, Serializa
 	private List<Card> ownedCards;
 	private List<Noble> ownedNobles;
 
+	private List<Card> selectableCards;
+
 	private transient List<PlayerObserver> observers;
 	
 	private TokenList tokenList;
 	
+	public void addSelectableCardFromReserve(Card card) {
+		selectableCards.add(card);
+	}
+	
+	public List<Card> getSelectableCardsFromReserve() {
+		return selectableCards;
+	}
 	
 	public PlayerImpl(String name) throws RemoteException 
 	{
 		this.name = name;
 		
+		this.selectableCards = new ArrayList<>();
 		this.reservedCards = new ArrayList<>();
 		this.ownedCards = new ArrayList<>();
 		this.ownedNobles = new ArrayList<>();
@@ -69,16 +80,41 @@ public class PlayerImpl extends UnicastRemoteObject implements Player, Serializa
 		}
 	}
 	
-	private boolean canAffordCard(Map<Gem, Integer> costs)
+	public void findSelectableCardsFromReserve() throws RemoteException {
+		selectableCards.clear();
+		for(Card card : this.getReservedCards()) {
+			if(this.canAffordCard(card.getCosts())) {
+				this.addSelectableCardFromReserve(card);
+			}
+		}
+		
+		this.notifyObservers();
+	}
+	
+	public boolean canAffordCard(Map<Gem, Integer> costs) throws RemoteException
 	{
 		Map<Gem, Integer> gemsCount = tokenList.getTokenGemCount();
 		
 		for(Map.Entry<Gem, Integer> cost : costs.entrySet())
 		{
-			if(!gemsCount.containsKey(cost.getKey())) return false; // Player does not even have the right tokens.
-			if(gemsCount.get(cost.getKey()) < cost.getValue()) return false; // Insufficient funds
+			//if(!gemsCount.containsKey(cost.getKey())) return false; // Player does not even have the right tokens.
+			if((gemsCount.get(cost.getKey()) + gemsCount.get(Gem.JOKER)) < (cost.getValue() - this.getDiscount().get(cost.getKey()))) return false; // Insufficient funds
 		}
 		return true;
+	}
+	
+	public Map<Gem, Integer> getDiscount() throws RemoteException {
+		LinkedHashMap<Gem, Integer> discount = new LinkedHashMap<Gem, Integer>();
+		
+		for(Gem gemType : Gem.values()) {
+			discount.put(gemType, 0);
+		}
+		
+		for(Card card : this.getOwnedCards()) {
+			discount.put(card.getBonusGem(), discount.get(card.getBonusGem()) + 1);
+		}
+		
+		return discount;
 	}
 	
 	public String getName() 
