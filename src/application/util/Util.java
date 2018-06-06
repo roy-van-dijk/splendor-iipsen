@@ -18,6 +18,13 @@ public final class Util {
 		// Prevents instantiation
 	}
 	
+	/**
+	 * 
+	 * @param str
+	 * @param defaultValue
+	 * @return
+	 * int
+	 */
 	public static int StringToInt(String str, int defaultValue)
 	{
 		if(str.isEmpty()) return defaultValue;
@@ -25,6 +32,13 @@ public final class Util {
 		return Integer.parseInt(str);
 	}
 
+	/**
+	 * 
+	 * @param map
+	 * @param value
+	 * @return
+	 * T
+	 */
 	public static <T, E> T getKeyByValue(Map<T, E> map, E value) {
 	    for (Entry<T, E> entry : map.entrySet()) {
 	        if (Objects.equals(value, entry.getValue())) {

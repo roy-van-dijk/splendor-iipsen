@@ -58,6 +58,7 @@ public class GameController {
 		//TODO: Determine next player
 		
 		game.nextTurn();*/
+		game.saveGame();
 	}
 
 
