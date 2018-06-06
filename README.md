@@ -1,5 +1,9 @@
 # IIPSEN
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/roy-van-dijk/IIPSEN/master/resources/misc/splendor-icon.png?token=AVKglyRlvcHnZUpsfHAlmiah13-c5sxDks5bINUjwA%3D%3D" width="350"/>
+</p>
+
 De laatste jaren worden er steeds meer verschillende soorten bordspellen uitgebracht. Er zijn steeds
 meer mensen die een spel ontwerpen en deze kunnen uitgeven, waardoor er nu veel meer spellen op de
 markt zijn waarvan er veel niet erg bekend zijn. Deze spellen zouden digitaal gemaakt en aangeboden
