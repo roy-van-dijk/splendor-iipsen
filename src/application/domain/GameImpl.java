@@ -47,7 +47,7 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 		this.maxPlayers = maxPlayers;
 		
 		this.roundNr = 0;
-		this.currentPlayerIdx = 1; // TODO: First opponent starts first for now (1 because 0 = Player in SP)
+		this.currentPlayerIdx = 0; // TODO: First opponent starts first for now (1 because 0 = Player in SP)
 		
 		this.players = new ArrayList<Player>(); // TODO: replace with: this.players = players;
 		this.observers = new ArrayList<GameObserver>();
@@ -106,7 +106,6 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 	private void Test_Create4Players()
 	{
 		try {
-			this.players.add(new PlayerImpl("Bob"));
 			
 			PlayerImpl player = new PlayerImpl("Michael");
 			for(int i = 0; i < 13; i++)
@@ -116,6 +115,7 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 				player.debugAddToken(new TokenImpl(allGems[randomIdx]));
 			}
 			this.players.add(player);
+			this.players.add(new PlayerImpl("Bob"));
 			this.players.add(new PlayerImpl("Peter"));
 			this.players.add(new PlayerImpl("Martin"));
 		} catch (RemoteException e) {
@@ -186,6 +186,12 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 	public void cleanUpTurn() throws RemoteException {
 		playingField.getTempHand().emptyHand();
 		
+	}
+	
+	public void cardSelected() throws RemoteException {
+		for(CardRow cardRow : playingField.getCardRows()) {
+			cardRow.updateView();
+		}
 	}
 
 }

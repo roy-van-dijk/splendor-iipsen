@@ -86,7 +86,7 @@ public class CardRowImpl implements Serializable, CardRow {
 		} else if(moveType == MoveType.RESERVE_CARD) {
 			tempHand.selectCardToReserve(card);
 		}
-		this.notifyObservers();
+		//this.notifyObservers();
 	}
 	
 
@@ -131,6 +131,12 @@ public class CardRowImpl implements Serializable, CardRow {
 	
 	public List<Card> getSelectableCards() {
 		return selectableCards;
+	}
+
+	@Override
+	public void updateView() throws RemoteException {
+		this.notifyObservers();
+		
 	}
 	
 }

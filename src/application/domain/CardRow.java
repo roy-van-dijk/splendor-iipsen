@@ -39,4 +39,6 @@ public interface CardRow extends Remote {
 	public List<Card> getSelectableCards();
 
 	public void addCardToTemp(CardRow cardRow, Card card, TempHand tempHand) throws RemoteException;
+
+	public void updateView() throws RemoteException;
 }

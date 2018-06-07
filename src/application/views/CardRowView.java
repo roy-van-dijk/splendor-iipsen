@@ -66,12 +66,15 @@ public class CardRowView implements UIComponent, CardRowObserver {
 		// Render each card if it exists
         for(int idx = 0; idx < cardSlots.length; idx++)
         {
+
         	Card card = cardSlots[idx];
         	if(card == null) continue; // Do not display anything for an empty slot.
         	
         	// Create card view
         	FrontCardView cardView = new FrontCardView(card, GameView.cardSizeX, GameView.cardSizeY);
 			
+        	
+        	
         	if(tempHand.getBoughtCard() == card) {
         		cardView.asPane().getStyleClass().remove("selectable");
         		cardView.asPane().getStyleClass().add("selected");
@@ -86,6 +89,7 @@ public class CardRowView implements UIComponent, CardRowObserver {
 	        		} 
 	        	});
 			}
+        	
         	// Display cards by index
         	grid.add(cardView.asPane(), idx + 1, 0);
         }
