@@ -35,7 +35,12 @@ public class ReturnTokensView {
 	private Button confirmButton;
 
 	private ReturnTokenController returnTokenController;
-
+/**
+ * 
+ * @param returnTokens
+ * @param returnTokenController
+ * @throws RemoteException
+ */
 	public ReturnTokensView(ReturnTokens returnTokens, ReturnTokenController returnTokenController)
 			throws RemoteException {
 		this.returnTokenController = returnTokenController;

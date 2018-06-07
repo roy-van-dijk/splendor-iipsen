@@ -17,7 +17,7 @@ class TestInstellenToegankelijkheid {
 	private GameController gameController;	
 	private ColorBlindModes mode;
 	GameView view = new GameView(game, gameController);
-	TokenView token = TokkenView();
+	TokenView token = new TokkenView();
 	
 
 	@BeforeAll

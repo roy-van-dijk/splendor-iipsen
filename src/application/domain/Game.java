@@ -24,14 +24,28 @@ public interface Game extends Remote {
 	public int getCurrentPlayerIdx() throws RemoteException;
 	
 	/**
-	 * Convenience function
+	 * 
+	 * @return
+	 * @throws RemoteException
+	 * Player
 	 */
 	public Player getCurrentPlayer() throws RemoteException;
 
 	public int getRoundNr() throws RemoteException;
 
+	/**
+	 * 
+	 * @return
+	 * @throws RemoteException
+	 * List<Player>
+	 */
 	public List<Player> getPlayers() throws RemoteException;
-
+	/**
+	 * 
+	 * @return
+	 * @throws RemoteException
+	 * PlayingField
+	 */
 	public PlayingField getPlayingField() throws RemoteException;
 
 	public void cleanUpTurn() throws RemoteException;
