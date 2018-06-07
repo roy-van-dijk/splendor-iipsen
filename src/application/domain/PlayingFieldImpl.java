@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Stack;
 
 /**
  * 
@@ -208,6 +209,11 @@ public class PlayingFieldImpl extends UnicastRemoteObject implements PlayingFiel
 
 	public void newTurn() throws RemoteException {
 		this.notifyObservers();	
+	}
+
+	public void removeNoble(Noble noble) throws RemoteException {
+		nobles.remove(noble);
+		
 	}
 
 }

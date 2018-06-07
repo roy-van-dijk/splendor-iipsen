@@ -68,8 +68,8 @@
 
 .cards-prestige-bonus
 {
-	 -fx-background-color: rgba(200, 200, 200, 0.5);
-	 -fx-padding: 0 5px;
+	-fx-background-color: rgba(200, 200, 200, 0.5);
+	-fx-padding: 0 5px;
 }
 
 .opponents

@@ -3,6 +3,7 @@ package application.domain;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -47,4 +48,6 @@ public interface Player extends Remote {
 	public void debugAddToken(Token token) throws RemoteException;
 	
 	public Map<Gem, Integer> getDiscount() throws RemoteException;
+	
+	public void addNoble(Noble noble) throws RemoteException;
 }
