@@ -17,9 +17,9 @@ class TestInstellenToegankelijkheid {
 	private GameController gameController;	
 	private ColorBlindModes mode;
 	GameView view = new GameView(game, gameController);
-	//TokenView token = TokkenView();
-	
 
+	//TokenView token = new TokenView(Gem, double);
+	
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
 	}
@@ -30,10 +30,6 @@ class TestInstellenToegankelijkheid {
 
 	@BeforeEach
 	void setUp() throws Exception {
-		
-		
-		
-		
 	}
 
 	@AfterEach

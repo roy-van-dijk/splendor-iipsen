@@ -98,29 +98,29 @@ public class PlayerImpl extends UnicastRemoteObject implements Player, Serializa
 		for(Map.Entry<Gem, Integer> cost : costs.entrySet())
 		{
 			//if(!gemsCount.containsKey(cost.getKey())) return false; // Player does not even have the right tokens.
-			if(gemsCount.get(cost.getKey()) < (cost.getValue() - this.getDiscount().get(cost.getKey()))) {
-				if((gemsCount.get(cost.getKey()) + jokersLeft) < (cost.getValue() - this.getDiscount().get(cost.getKey()))) {
+			if(gemsCount.get(cost.getKey()) < (cost.getValue() - this.getBonus().get(cost.getKey()))) {
+				if((gemsCount.get(cost.getKey()) + jokersLeft) < (cost.getValue() - this.getBonus().get(cost.getKey()))) {
 					return false; // Insufficient funds
 				} else {
-					jokersLeft += gemsCount.get(cost.getKey()) - (cost.getValue() - this.getDiscount().get(cost.getKey()));
+					jokersLeft += gemsCount.get(cost.getKey()) - (cost.getValue() - this.getBonus().get(cost.getKey()));
 				}
-			} 
+			}
 		}
 		return true;
 	}
 	
-	public Map<Gem, Integer> getDiscount() throws RemoteException {
-		LinkedHashMap<Gem, Integer> discount = new LinkedHashMap<Gem, Integer>();
+	public Map<Gem, Integer> getBonus() throws RemoteException {
+		LinkedHashMap<Gem, Integer> bonus = new LinkedHashMap<Gem, Integer>();
 		
 		for(Gem gemType : Gem.values()) {
-			discount.put(gemType, 0);
+			bonus.put(gemType, 0);
 		}
 		
 		for(Card card : this.getOwnedCards()) {
-			discount.put(card.getBonusGem(), discount.get(card.getBonusGem()) + 1);
+			bonus.put(card.getBonusGem(), bonus.get(card.getBonusGem()) + 1);
 		}
 		
-		return discount;
+		return bonus;
 	}
 	
 	public String getName() 

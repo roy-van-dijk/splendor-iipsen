@@ -66,7 +66,7 @@ public class GameController {
 		TempHand temphand = game.getPlayingField().getTempHand();
 		Player player = game.getCurrentPlayer();
 		List<Noble> allNobles= game.getPlayingField().getNobles();
-		Map<Gem, Integer> totalBonusGems = game.getCurrentPlayer().getDiscount();
+		Map<Gem, Integer> totalBonusGems = game.getCurrentPlayer().getBonus();
 		/**
 		 * Create the returntokens if the an player has moren then 10 tokens
 		 */
