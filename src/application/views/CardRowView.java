@@ -50,7 +50,6 @@ public class CardRowView implements UIComponent, CardRowObserver {
 	@Override
 	public void modelChanged(CardRow cardRow) throws RemoteException 
 	{
-		System.out.println("CardRowModelChnged");
 		grid.getChildren().clear();
 		
 		// TODO: separate functions
