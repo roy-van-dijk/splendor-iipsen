@@ -141,6 +141,7 @@ public class GameController {
 
 	public void cardClicked(CardRow cardRow, Card card) throws RemoteException {
 		cardRow.addCardToTemp(cardRow, card, game.getPlayingField().getTempHand());
+		game.cardSelected();
 	}
 
 	public void onFieldTokenClicked(Gem gemType) throws RemoteException {	
