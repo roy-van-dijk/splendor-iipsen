@@ -66,7 +66,7 @@ public class PlayerView implements UIComponent, Disableable, PlayerObserver {
 		// Player prestige
 		lblPrestigeValue = new Label();
 		lblPrestigeValue.setAlignment(Pos.CENTER);
-		lblPrestigeValue.setFont(Font.font("Times new Roman", FontWeight.EXTRA_BOLD, 50));
+		lblPrestigeValue.setFont(Font.font("Times New Roman", FontWeight.EXTRA_BOLD, 50));
 		lblPrestigeValue.getStyleClass().add("prestige");
 
 		StackPane panePrestige = new StackPane(lblPrestigeValue);
@@ -304,7 +304,7 @@ public class PlayerView implements UIComponent, Disableable, PlayerObserver {
 
 	@Override
 	public void setDisabled(boolean disabled) {
-		// TODO: Disable reserved cards.
+		reservedCards.setDisable(disabled);
 	}
 
 }

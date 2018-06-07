@@ -65,7 +65,6 @@ public class PlayerImpl extends UnicastRemoteObject implements Player, Serializa
 			this.notifyObservers();
 		}
 	}
-	
 
 	
 	public void purchaseCardFromField(CardRow cardRow, Card card) throws RemoteException
@@ -136,6 +135,10 @@ public class PlayerImpl extends UnicastRemoteObject implements Player, Serializa
 	{
 		return ownedNobles;
 	}
+	public void addNoble(Noble noble)
+	{
+		ownedNobles.add(noble);
+	}
 	
 	public List<Token> getTokens() throws RemoteException {
 		return tokenList.getAll();
@@ -191,6 +194,5 @@ public class PlayerImpl extends UnicastRemoteObject implements Player, Serializa
 	public void debugAddToken(Token token) throws RemoteException {
 		this.tokenList.add(token);
 	}
-
 
 }
