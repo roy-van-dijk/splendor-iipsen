@@ -49,5 +49,7 @@ public interface Game extends Remote {
 	public PlayingField getPlayingField() throws RemoteException;
 
 	public void cleanUpTurn() throws RemoteException;
+	
+	public void cardSelected() throws RemoteException;
 
 }

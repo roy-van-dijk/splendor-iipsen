@@ -2,7 +2,11 @@ package application.controllers;
 
 import java.rmi.RemoteException;
 import java.util.List;
+
+
 import java.util.Map;
+
+
 import java.util.Optional;
 
 import application.StageManager;
@@ -12,9 +16,18 @@ import application.domain.CardRowImpl;
 import application.domain.Game;
 import application.domain.Gem;
 import application.domain.MoveType;
+
 import application.domain.Noble;
 import application.domain.PlayingField;
+
+
+import application.domain.Player;
+import application.domain.PlayingField;
+import application.domain.Noble;
+
+
 import application.domain.ReturnTokens;
+import application.domain.TempHand;
 import application.services.SaveGameDAO;
 import application.util.ConfirmDialog;
 import application.views.PopUpWindowView;
@@ -55,8 +68,16 @@ public class GameController {
 	}
 	
 	public void endTurn() throws RemoteException {
-		
-		//return Tokens
+
+		PlayingField playingfield = game.getPlayingField();
+		TempHand temphand = game.getPlayingField().getTempHand();
+		Player player = game.getCurrentPlayer();
+		List<Noble> allNobles= game.getPlayingField().getNobles();
+		Map<Gem, Integer> totalBonusGems = game.getCurrentPlayer().getBonus();
+		/**
+		 * Create the returntokens if the an player has moren then 10 tokens
+		 */
+
 		ReturnTokens model = new ReturnTokens(game.getPlayingField(), game.getCurrentPlayer());
 		ReturnTokenController controller = new ReturnTokenController(model);
 		model.moreThanTenTokens(model, controller);
@@ -102,13 +123,12 @@ public class GameController {
 		}
 	}
 
-	
-	public void onFieldCardClicked(Card card) throws RemoteException {
-		System.out.println("I am going to do something");
+	public void cardClicked(CardRow cardRow, Card card) throws RemoteException {
+		cardRow.addCardToTemp(cardRow, card, game.getPlayingField().getTempHand());
+		game.cardSelected();
 	}
 
-	public void onFieldTokenClicked(Gem gemType) throws RemoteException {
-		
+	public void onFieldTokenClicked(Gem gemType) throws RemoteException {	
 		game.getPlayingField().addTokenToTemp(gemType);
 		
 	}

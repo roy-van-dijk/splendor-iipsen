@@ -9,6 +9,7 @@ import application.domain.CardRow;
 import application.domain.CardRowImpl;
 import application.domain.CardRowObserver;
 import application.domain.Gem;
+import application.domain.TempHand;
 import javafx.geometry.Pos;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -30,9 +31,10 @@ public class CardRowView implements UIComponent, CardRowObserver {
 	private GridPane grid;
 	
 	private GameController gameController;
-	
+	private TempHand tempHand;
 
-	public CardRowView(CardRow cardRow, GameController gameController) {
+	public CardRowView(CardRow cardRow, GameController gameController, TempHand tempHand) {
+		this.tempHand = tempHand;
 		this.gameController = gameController;
 		this.buildUI(cardRow);
 		
@@ -48,6 +50,7 @@ public class CardRowView implements UIComponent, CardRowObserver {
 	@Override
 	public void modelChanged(CardRow cardRow) throws RemoteException 
 	{
+		System.out.println("CardRowModelChnged");
 		grid.getChildren().clear();
 		
 		// TODO: separate functions
@@ -64,19 +67,29 @@ public class CardRowView implements UIComponent, CardRowObserver {
 		// Render each card if it exists
         for(int idx = 0; idx < cardSlots.length; idx++)
         {
+
         	Card card = cardSlots[idx];
         	if(card == null) continue; // Do not display anything for an empty slot.
         	
         	// Create card view
         	FrontCardView cardView = new FrontCardView(card, GameView.cardSizeX, GameView.cardSizeY);
-        	cardView.asPane().setOnMouseClicked(e -> { 
-        		try {
-        			gameController.onFieldCardClicked(card);
-        		} catch (RemoteException e1) {
-        			// TODO Auto-generated catch block
-        			e1.printStackTrace();
-        		} 
-        	});
+			
+        	
+        	
+        	if(tempHand.getBoughtCard() == card) {
+        		cardView.asPane().getStyleClass().remove("selectable");
+        		cardView.asPane().getStyleClass().add("selected");
+        	} else if(cardRow.getSelectableCards().contains(card)) {
+				cardView.asPane().getStyleClass().add("selectable");
+	        	cardView.asPane().setOnMouseClicked(e -> { 
+	        		try {
+	        			gameController.cardClicked(cardRow, card);
+	        		} catch (RemoteException e1) {
+	        			// TODO Auto-generated catch block
+	        			e1.printStackTrace();
+	        		} 
+	        	});
+			}
         	
         	// Display cards by index
         	grid.add(cardView.asPane(), idx + 1, 0);

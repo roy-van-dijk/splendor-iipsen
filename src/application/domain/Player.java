@@ -47,7 +47,7 @@ public interface Player extends Remote {
 	
 	public void debugAddToken(Token token) throws RemoteException;
 	
-	public Map<Gem, Integer> getDiscount() throws RemoteException;
+	public Map<Gem, Integer> getBonus() throws RemoteException;
 	
 	public void addNoble(Noble noble) throws RemoteException;
 }

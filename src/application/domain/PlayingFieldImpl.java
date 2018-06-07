@@ -30,23 +30,20 @@ public class PlayingFieldImpl extends UnicastRemoteObject implements PlayingFiel
 	private List<CardRow> cardRows;
 	private List<Noble> nobles;
 	
-	private List<Card> selectableCards;
 	private List<Gem> selectableTokens;
 
 	private TokenList tokenList;
-	private TempHand turn;
+	private TempHand tempHand;
 	
 	private transient List<PlayingFieldObserver> observers;
 
 
-	private List<Card> selectableCardsFromField;
 	
 
 	public PlayingFieldImpl(int playerCount) throws RemoteException {
 		this.nobles = new ArrayList<>();
 		this.cardRows = new ArrayList<>();
 		this.tokenList = new TokenList();
-		this.selectableCards = new ArrayList<>();
 		this.selectableTokens = new ArrayList<>();
 		this.observers = new ArrayList<>();
 		
@@ -54,7 +51,7 @@ public class PlayingFieldImpl extends UnicastRemoteObject implements PlayingFiel
 		this.createNobles(noblesAmount(playerCount));
 		this.createCardRows();
 		
-		this.turn = new TempHand();
+		this.tempHand = new TempHand();
 	}
 
 	private void createTokens(int baseAmount)
@@ -138,28 +135,16 @@ public class PlayingFieldImpl extends UnicastRemoteObject implements PlayingFiel
 	}
 	
 	public void findSelectableCardsFromField() throws RemoteException {
-		selectableCards.clear();
 		for(CardRow cardRow : cardRows) {
-			for(Card card : cardRow.getCardSlots()) {
-				if(turn.getPlayer().canAffordCard(card.getCosts())) {
-					this.addSelectableCards(card);
-				}
-			}
+			cardRow.findSelectableCards(tempHand.getPlayer());
 		}
-		this.notifyObservers();
-	}
-	
-	
-	
-	public List<Card> getSelectableCardsFromField() throws RemoteException {
-		return selectableCardsFromField;
 	}
 	
 	public void setTokensSelectable() throws RemoteException
 	{
 		selectableTokens.clear();
 		
-		MoveType moveType = turn.getMoveType();
+		MoveType moveType = tempHand.getMoveType();
 		
 		LinkedHashMap<Gem, Integer> gemsCount = tokenList.getTokenGemCount();
 		for(Map.Entry<Gem, Integer> gemCount : gemsCount.entrySet())
@@ -176,29 +161,20 @@ public class PlayingFieldImpl extends UnicastRemoteObject implements PlayingFiel
 		}
 		this.notifyObservers();
 	}
-	
-	
-	public List<Card> getSelectableCards() {
-		return selectableCards;
-	}
-	
-	public void addSelectableCards(Card card) {
-		selectableCardsFromField.add(card);
-	}
 
 	public List<Gem> getSelectableTokens() {
 		return selectableTokens;
 	}
 
 	public TempHand getTempHand() {
-		return turn;
+		return tempHand;
 	}
 
 	@Override
 	public void addTokenToTemp(Gem gemType) throws RemoteException {
-		turn.addToken(new TokenImpl(gemType));
-		if(turn.getMoveType() == MoveType.TAKE_TWO_TOKENS) {
-			turn.addToken(new TokenImpl(gemType));		
+		tempHand.addToken(new TokenImpl(gemType));
+		if(tempHand.getMoveType() == MoveType.TAKE_TWO_TOKENS) {
+			tempHand.addToken(new TokenImpl(gemType));		
 		}
 		this.notifyObservers();
 	}
