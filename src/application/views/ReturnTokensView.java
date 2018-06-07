@@ -94,16 +94,28 @@ public class ReturnTokensView {
 
 		returnTokens.registrate(this);
 	}
-
+	/**
+	 * 
+	 * @param returnTokens
+	 * void
+	 */
 	public void modelChanged(ReturnTokens returnTokens) {
 		this.updateTokenGemCounts(returnTokens);
 		this.updateConfirmButton(returnTokens);
 	}
-
+	/**
+	 * 
+	 * @param returnTokens
+	 * void
+	 */
 	private void updateConfirmButton(ReturnTokens returnTokens) {
 		confirmButton.setDisable(!returnTokens.isAllowConfirm());
 	}
-
+	/**
+	 * 
+	 * @param returnTokens
+	 * void
+	 */
 	private void updateTokenGemCounts(ReturnTokens returnTokens) {
 		gemCounterDisplay.getChildren().clear();
 

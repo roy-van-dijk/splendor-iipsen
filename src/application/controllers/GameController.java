@@ -2,10 +2,9 @@ package application.controllers;
 
 import java.rmi.RemoteException;
 import java.util.List;
-<<<<<<< HEAD
-=======
+
 import java.util.Map;
->>>>>>> 463575088ad39257a3ca98ef47aec290571f9f83
+
 import java.util.Optional;
 
 import application.StageManager;
@@ -15,12 +14,11 @@ import application.domain.CardRowImpl;
 import application.domain.Game;
 import application.domain.Gem;
 import application.domain.MoveType;
-<<<<<<< HEAD
+
 import application.domain.Player;
-=======
-import application.domain.Noble;
 import application.domain.PlayingField;
->>>>>>> 463575088ad39257a3ca98ef47aec290571f9f83
+import application.domain.Noble;
+
 import application.domain.ReturnTokens;
 import application.domain.TempHand;
 import application.domain.Token;
