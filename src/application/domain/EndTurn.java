@@ -11,7 +11,7 @@ public class EndTurn {
 	public void checkNobleVisits() throws RemoteException{
 		
 		List<Noble> allNobles= game.getPlayingField().getNobles();
-		Map<Gem, Integer> totalBonusGems = game.getCurrentPlayer().getDiscount();
+		Map<Gem, Integer> totalBonusGems = game.getCurrentPlayer().getBonus();
 
 		List<Noble> visitingNobles = checkPlayingFieldNobles(allNobles, totalBonusGems);
 		
