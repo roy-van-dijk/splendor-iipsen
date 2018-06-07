@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.EmptyStackException;
+import java.util.List;
 
 
 
@@ -25,12 +26,15 @@ public class CardRowImpl implements Serializable, CardRow {
 	private CardDeck cardDeckImpl;
 	private CardImpl[] cardSlots;
 	private transient ArrayList<CardRowObserver> observers;
+
+	private List<Card> selectableCards;
 	
 	
 	public CardRowImpl(CardDeck cardDeckImpl) {
 		this.cardDeckImpl = cardDeckImpl;
 		this.cardSlots = new CardImpl[MAX_OPEN_CARDS];
 		this.observers = new ArrayList<>();
+		this.selectableCards = new ArrayList<>();
 		
 		try {
 			fillCardSlots();
@@ -73,6 +77,18 @@ public class CardRowImpl implements Serializable, CardRow {
 		}
 		this.notifyObservers();
 	}
+	
+	@Override
+	public void addCardToTemp(CardRow cardRow, Card card, TempHand tempHand) throws RemoteException {	
+		MoveType moveType = tempHand.getMoveType();
+		if(moveType == MoveType.PURCHASE_FIELD_CARD || moveType == MoveType.PURCHASE_RESERVED_CARD) {
+			tempHand.selectCardToBuy(card);
+		} else if(moveType == MoveType.RESERVE_CARD) {
+			tempHand.selectCardToReserve(card);
+		}
+		this.notifyObservers();
+	}
+	
 
 	public CardDeck getCardDeck() {
 		return cardDeckImpl;
@@ -95,5 +111,26 @@ public class CardRowImpl implements Serializable, CardRow {
 		observers.add(observer);
 		this.notifyObservers();
 	}
+	
+	public void findSelectableCards(Player player) throws RemoteException {
+		selectableCards.clear();
+		for(Card card : cardSlots) {
+			if(player.canAffordCard(card.getCosts())) {
+				this.addSelectableCards(card);
+			}
+		}
+		this.notifyObservers();
+	}
+	
+	
 
+	private void addSelectableCards(Card card) {
+		selectableCards.add(card);
+		
+	}
+	
+	public List<Card> getSelectableCards() {
+		return selectableCards;
+	}
+	
 }

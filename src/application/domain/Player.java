@@ -131,19 +131,15 @@ public interface Player extends Remote {
 	 * void
 	 */
 	public void debugAddToken(Token token) throws RemoteException;
+
 	/**
 	 * 
 	 * @return
 	 * @throws RemoteException
 	 * Map<Gem,Integer>
 	 */
-	public Map<Gem, Integer> getDiscount() throws RemoteException;
-	/**
-	 * 
-	 * @param noble
-	 * @throws RemoteException
-	 * void
-	 */
+	public Map<Gem, Integer> getBonus() throws RemoteException;
+	
 	public void addNoble(Noble noble) throws RemoteException;
 	/**
 	 * 

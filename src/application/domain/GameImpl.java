@@ -55,6 +55,8 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 		Test_Create4Players();
 		
 		this.playingField = new PlayingFieldImpl(this.maxPlayers);
+		
+		playingField.getTempHand().updatePlayer(this.getCurrentPlayer());
 	}
 	
 	public void nextTurn() throws RemoteException

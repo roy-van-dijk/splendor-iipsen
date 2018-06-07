@@ -20,6 +20,7 @@ import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.stage.Window;
 
 /**
  * 
@@ -58,7 +59,11 @@ public class ReturnTokensView {
 		confirmButton.setOnAction(e -> {
 			try {
 				returnTokenController.confirmButton();
+				stage.close();
+				stage.hide();//TODO moet weg
 			} catch (RemoteException e1) {
+				
+				stage.hide();//TODO moet weg
 				e1.printStackTrace();
 			}
 			stage.close();
@@ -172,6 +177,10 @@ public class ReturnTokensView {
 		tokenColumn.setAlignment(Pos.CENTER);
 
 		return tokenColumn;
+	}
+	public void closeWindow() {
+		stage.hide();
+		stage.close();
 	}
 
 }

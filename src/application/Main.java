@@ -40,7 +40,7 @@ public class Main extends Application {
 		          }
 		        });
 			StageManager.getInstance().startSplendor(primaryStage);
-			//StageManager.getInstance().showGameScreen();
+			StageManager.getInstance().showGameScreen();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

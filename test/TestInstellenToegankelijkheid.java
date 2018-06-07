@@ -20,7 +20,6 @@ class TestInstellenToegankelijkheid {
 
 	//TokenView token = new TokenView(Gem, double);
 	
-
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
 	}

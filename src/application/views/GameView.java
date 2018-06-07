@@ -154,11 +154,8 @@ public class GameView implements UIComponent, Disableable, GameObserver  {
 		btnPurchaseCard.setOnAction(e -> {
 			// POC -> belongs in GameController
 			try {
+				game.getPlayingField().getTempHand().setMoveType(MoveType.PURCHASE_FIELD_CARD);
 				gameController.purchaseCard();
-				// TODO Debug code below
-				ReturnTokens model = new ReturnTokens(game.getPlayingField(), game.getCurrentPlayer());
-				ReturnTokenController controller = new ReturnTokenController(model);
-				ReturnTokensView view = new ReturnTokensView(model, controller);
 			} catch (RemoteException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -193,10 +190,6 @@ public class GameView implements UIComponent, Disableable, GameObserver  {
 		btnResetTurn.getStyleClass().add("move-button");
 		btnResetTurn.setOnAction(e ->{
 			try {
-
-				game.getPlayingField().getTempHand().setMoveType(MoveType.TAKE_TWO_TOKENS);
-				gameController.findSelectableTokens();
-
 				gameController.debugNextTurn();
 			} catch (RemoteException e1) {
 				// TODO Auto-generated catch block
@@ -206,7 +199,7 @@ public class GameView implements UIComponent, Disableable, GameObserver  {
 		
 		btnEndTurn = new Button("End Turn");
 		btnEndTurn.getStyleClass().add("move-button");
-		btnEndTurn.setDisable(true);
+		//btnEndTurn.setDisable(true);
 		btnEndTurn.setOnAction(e -> {
 			try {
 

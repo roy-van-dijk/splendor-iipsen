@@ -66,13 +66,12 @@ public class GameController {
 		TempHand temphand = game.getPlayingField().getTempHand();
 		Player player = game.getCurrentPlayer();
 		List<Noble> allNobles= game.getPlayingField().getNobles();
-		Map<Gem, Integer> totalBonusGems = game.getCurrentPlayer().getDiscount();
+		Map<Gem, Integer> totalBonusGems = game.getCurrentPlayer().getBonus();
 		/**
 		 * Create the returntokens if the an player has moren then 10 tokens
 		 */
 		ReturnTokens model = new ReturnTokens(game.getPlayingField(), game.getCurrentPlayer());
 		ReturnTokenController controller = new ReturnTokenController(model);
-		model.moreThanTenTokens(model, controller);
 		List<Token> tokens = game.getCurrentPlayer().getTokens();
 		
 		
@@ -98,7 +97,7 @@ public class GameController {
 		 */
 		if(temphand.getBoughtCard() != null) {
 			
-				//player.canAffordCard(temphand.getBoughtCard().);
+			//player.returnTokensToField(removedTokens, playingfield);
 			
 			player.addCard(temphand.getBoughtCard());
 		}
@@ -155,13 +154,11 @@ public class GameController {
 		}
 	}
 
-	
-	public void onFieldCardClicked(Card card) throws RemoteException {
-		System.out.println("I am going to do something");
+	public void cardClicked(CardRow cardRow, Card card) throws RemoteException {
+		cardRow.addCardToTemp(cardRow, card, game.getPlayingField().getTempHand());
 	}
 
-	public void onFieldTokenClicked(Gem gemType) throws RemoteException {
-		
+	public void onFieldTokenClicked(Gem gemType) throws RemoteException {	
 		game.getPlayingField().addTokenToTemp(gemType);
 		
 	}
