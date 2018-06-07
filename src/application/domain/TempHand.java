@@ -33,6 +33,10 @@ public class TempHand implements Serializable {
 		this.tokenList = new TokenList();
 	}
 	
+	public void updatePlayer(Player player) {
+		this.player = player;
+	}
+	
 	public void selectNoble(Noble noble) 
 	{
 		nobles.add(noble);

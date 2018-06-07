@@ -79,7 +79,7 @@ public class PlayingFieldView implements UIComponent, Disableable, PlayingFieldO
 	{
 		if(cardsPane.getChildren().isEmpty())
 		{
-			this.initializeCardRows(playingField.getCardRows());
+			this.initializeCardRows(playingField.getCardRows(), playingField.getTempHand());
 		}
 		this.updateFieldTokens(playingField.getTokenGemCount(), playingField.getSelectableTokens(), playingField.getTempHand());
 		this.updateNobles(playingField.getNobles());
@@ -114,13 +114,13 @@ public class PlayingFieldView implements UIComponent, Disableable, PlayingFieldO
 		return rowsPane;
 	}
 	
-	private void initializeCardRows(List<CardRow> cardRows)
+	private void initializeCardRows(List<CardRow> cardRows, TempHand tempHand)
 	{
 		System.out.println("Initializing cardrows");
 		
 		for(CardRow cardRow : cardRows)
 		{
-			CardRowView cardRowView = new CardRowView(cardRow, gameController);
+			CardRowView cardRowView = new CardRowView(cardRow, gameController, tempHand);
 			cardRowViews.add(cardRowView);
 			cardsPane.getChildren().add(cardRowView.asPane());
 		}
@@ -138,25 +138,25 @@ public class PlayingFieldView implements UIComponent, Disableable, PlayingFieldO
 		}
 	}
 	
-	private void updateFieldTokens(Map<Gem, Integer> gemsCount, List<Gem> selectableTokens, TempHand turn)
+	private void updateFieldTokens(Map<Gem, Integer> gemsCount, List<Gem> selectableTokens, TempHand tempHand)
 	{	
 		tokensPane.getChildren().clear();
 		
 		for(Map.Entry<Gem, Integer> entry : gemsCount.entrySet())
 		{	
-			HBox tokenGemCountDisplay = createTokenGemCountDisplay(entry.getKey(), entry.getValue(), GameView.tokenSizeRadius, selectableTokens, turn);
+			HBox tokenGemCountDisplay = createTokenGemCountDisplay(entry.getKey(), entry.getValue(), GameView.tokenSizeRadius, selectableTokens, tempHand);
 			tokensPane.getChildren().add(tokenGemCountDisplay);	
 		}
 	}
 	
-	private HBox createTokenGemCountDisplay(Gem gemType, int count, int radius, List<Gem> selectableTokens, TempHand turn)
+	private HBox createTokenGemCountDisplay(Gem gemType, int count, int radius, List<Gem> selectableTokens, TempHand tempHand)
 	{
 		TokenView tokenView = new TokenView(gemType, radius);
 
 		if(gemType != Gem.JOKER) {
 			if(
-					(turn.getMoveType() == MoveType.TAKE_TWO_TOKENS && turn.getSelectedTokensCount() < 1) ||
-					(turn.getMoveType() == MoveType.TAKE_THREE_TOKENS && turn.getSelectedTokensCount() < 3 && !turn.getSelectedGemTypes().contains(gemType))
+					(tempHand.getMoveType() == MoveType.TAKE_TWO_TOKENS && tempHand.getSelectedTokensCount() < 1) ||
+					(tempHand.getMoveType() == MoveType.TAKE_THREE_TOKENS && tempHand.getSelectedTokensCount() < 3 && !tempHand.getSelectedGemTypes().contains(gemType))
 			) {
 				tokenView.asPane().setOnMouseClicked(e -> { 
 					try {
@@ -172,7 +172,7 @@ public class PlayingFieldView implements UIComponent, Disableable, PlayingFieldO
 			if(selectableTokens.contains(gemType)) {
 				tokenView.asPane().getStyleClass().add("selectable");
 			}
-			if(turn.getTokenList().getTokenGemCount().get(gemType) > 0)
+			if(tempHand.getTokenList().getTokenGemCount().get(gemType) > 0)
 			{
 				tokenView.asPane().getStyleClass().remove("selectable");
 				tokenView.asPane().getStyleClass().add("selected");

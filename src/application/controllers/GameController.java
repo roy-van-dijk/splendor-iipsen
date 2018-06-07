@@ -94,13 +94,11 @@ public class GameController {
 		}
 	}
 
-	
-	public void onFieldCardClicked(Card card) throws RemoteException {
-		System.out.println("I am going to do something");
+	public void cardClicked(CardRow cardRow, Card card) throws RemoteException {
+		cardRow.addCardToTemp(cardRow, card, game.getPlayingField().getTempHand());
 	}
 
-	public void onFieldTokenClicked(Gem gemType) throws RemoteException {
-		
+	public void onFieldTokenClicked(Gem gemType) throws RemoteException {	
 		game.getPlayingField().addTokenToTemp(gemType);
 		
 	}

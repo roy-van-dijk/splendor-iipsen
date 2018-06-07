@@ -94,11 +94,18 @@ public class PlayerImpl extends UnicastRemoteObject implements Player, Serializa
 	public boolean canAffordCard(Map<Gem, Integer> costs) throws RemoteException
 	{
 		Map<Gem, Integer> gemsCount = tokenList.getTokenGemCount();
+		int jokersLeft = gemsCount.get(Gem.JOKER);
 		
 		for(Map.Entry<Gem, Integer> cost : costs.entrySet())
 		{
 			//if(!gemsCount.containsKey(cost.getKey())) return false; // Player does not even have the right tokens.
-			if((gemsCount.get(cost.getKey()) + gemsCount.get(Gem.JOKER)) < (cost.getValue() - this.getDiscount().get(cost.getKey()))) return false; // Insufficient funds
+			if(gemsCount.get(cost.getKey()) < (cost.getValue() - this.getDiscount().get(cost.getKey()))) {
+				if((gemsCount.get(cost.getKey()) + jokersLeft) < (cost.getValue() - this.getDiscount().get(cost.getKey()))) {
+					return false; // Insufficient funds
+				} else {
+					jokersLeft += gemsCount.get(cost.getKey()) - (cost.getValue() - this.getDiscount().get(cost.getKey()));
+				}
+			} 
 		}
 		return true;
 	}
