@@ -2,7 +2,9 @@ package application.controllers;
 
 import java.rmi.RemoteException;
 import java.util.List;
+
 import java.util.Map;
+
 import java.util.Optional;
 
 import application.StageManager;
@@ -12,9 +14,14 @@ import application.domain.CardRowImpl;
 import application.domain.Game;
 import application.domain.Gem;
 import application.domain.MoveType;
-import application.domain.Noble;
+
+import application.domain.Player;
 import application.domain.PlayingField;
+import application.domain.Noble;
+
 import application.domain.ReturnTokens;
+import application.domain.TempHand;
+import application.domain.Token;
 import application.services.SaveGameDAO;
 import application.util.ConfirmDialog;
 import application.views.PopUpWindowView;
@@ -34,7 +41,7 @@ public class GameController {
 	public GameController(Game game) {
 		this.game = game;
 	}
-
+	
 	public void reserveCard() throws RemoteException {
 		// Creating POC variables - basically specifying: Hey controller, I clicked on this >predefined< card
 		CardRow row = game.getPlayingField().getCardRows().get(1); // Second row
@@ -55,27 +62,46 @@ public class GameController {
 	}
 	
 	public void endTurn() throws RemoteException {
-		
-		//return Tokens
+		PlayingField playingfield = game.getPlayingField();
+		TempHand temphand = game.getPlayingField().getTempHand();
+		Player player = game.getCurrentPlayer();
+		List<Noble> allNobles= game.getPlayingField().getNobles();
+		Map<Gem, Integer> totalBonusGems = game.getCurrentPlayer().getDiscount();
+		/**
+		 * Create the returntokens if the an player has moren then 10 tokens
+		 */
 		ReturnTokens model = new ReturnTokens(game.getPlayingField(), game.getCurrentPlayer());
 		ReturnTokenController controller = new ReturnTokenController(model);
 		model.moreThanTenTokens(model, controller);
+		List<Token> tokens = game.getCurrentPlayer().getTokens();
+		System.out.println("I'v got " + tokens.size() + " Tokens");
 		
 		
+		if(tokens.size() > 10) {
+			model.moreThanTenTokens(model, controller);
+
+		}
+		
+		if(temphand.getReservedCard() != null) {
+			
+			
+		}
+
 		//begin voor toevoegen nobles
-		//List<Noble> allNobles= game.getPlayingField().getNobles();
-		//Map<Gem, Integer> totalBonusGems = game.getCurrentPlayer().getDiscount();
 		
-		//for(Noble noble : allNobles) {
-		//	Map<Gem, Integer> nobleCost = noble.getRequirements();
-		//	if(totalBonusGems.containsKey(nobleCost) == true) 
-		//	{
-		//		game.getCurrentPlayer().addNoble(noble);
-		//		game.getPlayingField().removeNoble(noble);
-		//	}
-		//	break;
-		//}
 		
+		
+		for(Noble noble : allNobles) {
+			Map<Gem, Integer> nobleCost = noble.getRequirements();
+			if(totalBonusGems.containsKey(nobleCost) == true) 
+			{
+				player.addNoble(noble);
+				playingfield.removeNoble(noble);
+			}
+			break;
+		}
+		
+
 		//game.getPlayers().get(game.getCurrentPlayerIdx()).getOwnedCards().add(game.getTurn().getBoughtCard());
 		//TODO: subtract tokens from player.
 		//game.getPlayers().get(game.getCurrentPlayerIdx()).getReservedCards().add(game.getTurn().getReservedCard());

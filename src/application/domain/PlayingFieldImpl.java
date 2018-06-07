@@ -235,4 +235,9 @@ public class PlayingFieldImpl extends UnicastRemoteObject implements PlayingFiel
 		this.notifyObservers();	
 	}
 
+	public void removeNoble(Noble noble) throws RemoteException {
+		nobles.remove(noble);
+		
+	}
+
 }
