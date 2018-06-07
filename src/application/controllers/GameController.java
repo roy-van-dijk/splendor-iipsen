@@ -74,17 +74,33 @@ public class GameController {
 		ReturnTokenController controller = new ReturnTokenController(model);
 		model.moreThanTenTokens(model, controller);
 		List<Token> tokens = game.getCurrentPlayer().getTokens();
-		System.out.println("I'v got " + tokens.size() + " Tokens");
+		
 		
 		
 		if(tokens.size() > 10) {
+			System.out.println("I'v got " + tokens.size() + " Tokens");
 			model.moreThanTenTokens(model, controller);
 
 		}
-		
+		/**
+		 * Adds the reservecard to the player
+		 */
 		if(temphand.getReservedCard() != null) {
+			CardRow row = game.getPlayingField().getCardRows().get(1); // Second row
+			Card card = row.getCardSlots()[1];
+			playingfield.removeCard(temphand.getReservedCard());
+			player.addReserverveCard(temphand.getReservedCard());
+			game.getCurrentPlayer().reserveCardFromField(row, card);
 			
+		}
+		/**
+		 * Add temphand cards to the player
+		 */
+		if(temphand.getBoughtCard() != null) {
 			
+				//player.canAffordCard(temphand.getBoughtCard().);
+			
+			player.addCard(temphand.getBoughtCard());
 		}
 
 		//begin voor toevoegen nobles

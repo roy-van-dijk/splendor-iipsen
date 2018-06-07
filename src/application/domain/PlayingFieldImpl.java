@@ -230,6 +230,11 @@ public class PlayingFieldImpl extends UnicastRemoteObject implements PlayingFiel
 		tokenList.remove(token);
 		
 	}
+	
+	public void removeCard(Card card) throws RemoteException{
+		cardRows.remove(card);
+		//TODO Remove card from CardRow
+	}
 
 	public void newTurn() throws RemoteException {
 		this.notifyObservers();	

@@ -53,7 +53,7 @@ public class PlayerImpl extends UnicastRemoteObject implements Player, Serializa
 	}
 	
 
-	public void reserveCardFromField(CardRow cardRow, Card card) throws RemoteException 
+	public void addreserveCardFromField(CardRow cardRow, Card card) throws RemoteException 
 	{
 		// TODO (low priority): Make reservedTokens class that incorporates this business rule
 		if(this.getReservedCards().size() < 3) // Business rule: max 3 reserved cards
@@ -89,7 +89,6 @@ public class PlayerImpl extends UnicastRemoteObject implements Player, Serializa
 		
 		this.notifyObservers();
 	}
-	
 	public boolean canAffordCard(Map<Gem, Integer> costs) throws RemoteException
 	{
 		Map<Gem, Integer> gemsCount = tokenList.getTokenGemCount();
@@ -193,6 +192,35 @@ public class PlayerImpl extends UnicastRemoteObject implements Player, Serializa
 	@Override
 	public void debugAddToken(Token token) throws RemoteException {
 		this.tokenList.add(token);
+		this.notifyObservers();
+	}
+
+	/**
+	 * 
+	 */
+	@Override
+	public void addCard(Card card) throws RemoteException {
+		this.ownedCards.add(card);
+		
+	}
+
+
+	/* (non-Javadoc)
+	 * @see application.domain.Player#reserveCardFromField(application.domain.CardRow, application.domain.Card)
+	 */
+	@Override
+	public void reserveCardFromField(CardRow cardRow, Card card) throws RemoteException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/* (non-Javadoc)
+	 * @see application.domain.Player#addReserverveCard(application.domain.Card)
+	 */
+	@Override
+	public void addReserverveCard(Card card) throws RemoteException {
+		this.reservedCards.add(card);
+		
 	}
 
 }
