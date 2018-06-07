@@ -217,7 +217,15 @@ public class PlayerImpl extends UnicastRemoteObject implements Player, Serializa
 	 */
 	@Override
 	public void reserveCardFromField(CardRow cardRow, Card card) throws RemoteException {
-		// TODO Auto-generated method stub
+		// TODO (low priority): Make reservedTokens class that incorporates this business rule
+				if(this.getReservedCards().size() < 3) // Business rule: max 3 reserved cards
+				{
+					cardRow.removeCard(card);
+					reservedCards.add(card);
+					
+					System.out.printf("%s has taken the card with costs: %s\n", this.getName() ,card.getCosts());
+					this.notifyObservers();
+				}
 		
 	}
 
