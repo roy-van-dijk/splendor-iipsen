@@ -20,7 +20,12 @@ import javafx.scene.shape.StrokeType;
 public class CardDeckView extends CardView {
 	
 	private CardDeck deck;
-	
+	/**
+	 * 
+	 * @param deck CardDeck of cards of 1 kind like lvl 1 playingfield cards
+	 * @param sizeX size horizontal
+	 * @param sizeY size vertical 
+	 */
 	public CardDeckView(CardDeck deck, int sizeX, int sizeY) {
 		super(sizeX, sizeY);
 		this.deck = deck;
@@ -28,6 +33,9 @@ public class CardDeckView extends CardView {
 		this.buildUI();
 	}
 	
+	/**
+	 * build the view
+	 */
 	private void buildUI()
 	{
     	rect = new Rectangle(sizeX, sizeY);
@@ -47,16 +55,14 @@ public class CardDeckView extends CardView {
         root = new StackPane(rect);
 	}
 	
+	/**
+	 * get the img of the card.
+	 */
 	@Override
 	protected String getImagePath()
 	{
 		String path = "";
-		//try {
-			path = String.format("file:resources/cards/%s/%s.png", deck.getLevel().name().toLowerCase(), deck.getLevel().name().toLowerCase());
-		//} catch (RemoteException e) {
-		//	e.printStackTrace();
-		//}
-		
+		path = String.format("file:resources/cards/%s/%s.png", deck.getLevel().name().toLowerCase(), deck.getLevel().name().toLowerCase());	
 		return path;
 	}
 }

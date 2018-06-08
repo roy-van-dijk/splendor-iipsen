@@ -34,7 +34,12 @@ public class NobleView implements UIComponent {
 	private Pane root;
 
 	private double sizeX, sizeY;
-
+	/**
+	 * create view of noble with size x and y
+	 * @param noble
+	 * @param sizeX
+	 * @param sizeY
+	 */
 	public NobleView(Noble noble, double sizeX, double sizeY) {
 		this.noble = noble;
 		this.sizeX = sizeX;
@@ -43,12 +48,11 @@ public class NobleView implements UIComponent {
 		try {
 			this.buildUI();
 		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
-	// TODO: See comment @ Noble.illustrationID
+	//image path to get the image.
 	public String getNobleImagePath() throws RemoteException {
 		String illustration = String.valueOf(noble.getIllustration());
 		return String.format("file:resources/nobles/%s.png", illustration);

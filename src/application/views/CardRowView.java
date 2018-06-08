@@ -22,10 +22,6 @@ import javafx.scene.layout.Pane;
  */
 public class CardRowView implements UIComponent, CardRowObserver {
 
-	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private Pane root;
 	private GridPane grid;
@@ -33,6 +29,12 @@ public class CardRowView implements UIComponent, CardRowObserver {
 	private GameController gameController;
 	private TempHand tempHand;
 
+	/**
+	 * 
+	 * @param cardRow a row of cards on the playingfield
+	 * @param gameController
+	 * @param tempHand used to determine if a card is selected or not
+	 */
 	public CardRowView(CardRow cardRow, GameController gameController, TempHand tempHand) {
 		this.tempHand = tempHand;
 		this.gameController = gameController;
@@ -46,7 +48,9 @@ public class CardRowView implements UIComponent, CardRowObserver {
 		}
 	}
 	
-	
+	/**
+	 * update the cardrow view, like when a card is bought, reserved or selected.
+	 */
 	@Override
 	public void modelChanged(CardRow cardRow) throws RemoteException 
 	{
@@ -96,7 +100,10 @@ public class CardRowView implements UIComponent, CardRowObserver {
         
 	}
 
-	
+	/**
+	 * 
+	 * @param cardRow
+	 */
 	private void buildUI(CardRow cardRow)
 	{
 		grid = new GridPane();

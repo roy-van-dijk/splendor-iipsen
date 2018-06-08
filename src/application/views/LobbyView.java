@@ -58,7 +58,12 @@ public class LobbyView extends UnicastRemoteObject implements UIComponent, Lobby
 	private final static int gridChildWidth = 250;
 	private final static int gridGap = 5;
 	
-
+	/**
+	 * 
+	 * @param lobby
+	 * @param lobbyController
+	 * @throws RemoteException
+	 */
 	public LobbyView(Lobby lobby, LobbyController lobbyController) throws RemoteException {
 		this.lobbyController = lobbyController;
 		
@@ -67,11 +72,13 @@ public class LobbyView extends UnicastRemoteObject implements UIComponent, Lobby
 		try {
 			lobby.addObserver(this);
 		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
+	/**
+	 * update the lobby view
+	 */
 	public void modelChanged(Lobby lobby) throws RemoteException {
 		// Avoid throwing IllegalStateException by running from a non-JavaFX thread.
 		
@@ -80,7 +87,6 @@ public class LobbyView extends UnicastRemoteObject implements UIComponent, Lobby
 			  try {
 				  updateUI(lobby);
 			} catch (RemoteException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		  });
@@ -88,6 +94,11 @@ public class LobbyView extends UnicastRemoteObject implements UIComponent, Lobby
 
 	}
 		  
+	/**
+	 * update the UI of the lobby.
+	 * @param lobby
+	 * @throws RemoteException
+	 */
 	private void updateUI(Lobby lobby) throws RemoteException {
 		int maxPlayers = lobby.getMaxPlayers();
 		String hostIP = lobby.getHostIP();
@@ -132,7 +143,9 @@ public class LobbyView extends UnicastRemoteObject implements UIComponent, Lobby
 			gpane.add(label, 1, i + 2);
 		}
 	}
-	
+	/**
+	 * build up the UI on creating the lobby
+	 */
 	private void buildUI()
 	{	
 		root = new BorderPane();
@@ -146,6 +159,10 @@ public class LobbyView extends UnicastRemoteObject implements UIComponent, Lobby
 		root.setPadding(new Insets(0));
 	}
 	
+	/**
+	 * button to open manual
+	 * @return
+	 */
 	private HBox buildManualButton() {
 		HBox manualContainer = new HBox();
 		Button manualButton = new Button("?");

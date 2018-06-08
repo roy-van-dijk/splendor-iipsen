@@ -23,8 +23,8 @@ public class RearCardView extends CardView {
 	/**
 	 * 
 	 * @param Card card 
-	 * @param double sizeX
-	 * @param double sizeY
+	 * @param double sizeX horizontal
+	 * @param double sizeY vertical
 	 */
 	public RearCardView(Card card, double sizeX, double sizeY) {
 		super(sizeX, sizeY);
@@ -49,6 +49,9 @@ public class RearCardView extends CardView {
         root = new StackPane(rect);
 	}
 
+	/**
+	 * get the img of the card.
+	 */
 	@Override
 	protected String getImagePath()
 	{

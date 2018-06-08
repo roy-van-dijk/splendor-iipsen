@@ -56,7 +56,11 @@ public class GameView implements UIComponent, Disableable, GameObserver  {
 	private PlayingFieldView playingField;
 	private PlayerView player;
 	
-	
+	/**
+	 * 
+	 * @param game
+	 * @param gameController
+	 */
 	public GameView(Game game, GameController gameController) {
 		this.game = game;
 		this.gameController = gameController;
@@ -72,12 +76,15 @@ public class GameView implements UIComponent, Disableable, GameObserver  {
 			e.printStackTrace();
 		}
 	}
-	
+	//TODO	MAKE THIs??
 	public void modelChanged(Game game)
 	{
 		
 	}
-	
+	/**
+	 * 
+	 * @param mode, change the colour pallet based on the type of colourblindness
+	 */
 	public static void changeColorBlindMode(ColorBlindModes mode) {
 		Iterator<ColorChangeable> i = colorBlindViews.iterator();
 		while (i.hasNext()) {
@@ -91,6 +98,9 @@ public class GameView implements UIComponent, Disableable, GameObserver  {
 		}
 	}
 	
+	/**
+	 * build the actual game view
+	 */
 	private void buildUI()
 	{
 		root = new BorderPane();
@@ -122,7 +132,10 @@ public class GameView implements UIComponent, Disableable, GameObserver  {
 	{
 		return new PlayingFieldView(game.getPlayingField(), gameController);
 	}
-	
+	/**
+	 * build the buttons the players use to sellect their action for a turn.
+	 * @return buttons
+	 */
 	private HBox buildButtons()
 	{
 		HBox buttons = new HBox(20);
@@ -210,6 +223,11 @@ public class GameView implements UIComponent, Disableable, GameObserver  {
 		return buttons;
 	}
 	
+	/**
+	 * build the box with the player information of the opponants.
+	 * @return opponentsRow
+	 * @throws RemoteException
+	 */
 	private Pane buildOpponents() throws RemoteException
 	{
 		VBox opponentsRows = new VBox(opponentsSpacing);

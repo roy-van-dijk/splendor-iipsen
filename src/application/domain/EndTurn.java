@@ -4,6 +4,7 @@ import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Map;
 
+
 public interface EndTurn {
 
 	void checkNobleVisits() throws RemoteException;
