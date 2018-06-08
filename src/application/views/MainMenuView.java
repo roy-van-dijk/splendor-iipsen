@@ -24,7 +24,11 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Popup;
 import javafx.stage.PopupWindow;
 import javafx.stage.Stage;
-
+/**
+ * main menu views and the buttons they have
+ * @author Tom de Jong labtop
+ *
+ */
 public class MainMenuView implements UIComponent  {
 	
 //	private Home home;
@@ -47,6 +51,10 @@ public class MainMenuView implements UIComponent  {
 		this.buildMainMenuScreen();
 	}
 
+	/**
+	 * button to open manual
+	 * @return
+	 */
 	private HBox buildManualButton() 
 	{
 		HBox manualContainer = new HBox();
@@ -195,8 +203,6 @@ public class MainMenuView implements UIComponent  {
 		
 		return root;
 	}
-
-
 
 	private BorderPane buildHostPreviousGameScreen()
 	{

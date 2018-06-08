@@ -67,7 +67,9 @@ public class PlayingFieldView implements UIComponent, Disableable, PlayingFieldO
 
 		playingField.addObserver(this);
 	}
-
+	/**
+	 * update the playingFieldView
+	 */
 	public void modelChanged(PlayingField playingField) throws RemoteException {
 		if (cardsPane.getChildren().isEmpty()) {
 			this.initializeCardRows(playingField.getCardRows(), playingField.getTempHand());

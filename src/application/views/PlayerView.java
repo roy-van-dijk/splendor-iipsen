@@ -55,6 +55,12 @@ public class PlayerView implements UIComponent, Disableable, PlayerObserver {
 
 	private Label lblPrestigeValue;
 
+	/**
+	 * 
+	 * @param player this player.
+	 * @param gameController
+	 * @throws RemoteException
+	 */
 	public PlayerView(Player player, GameController gameController) throws RemoteException {
 
 		this.buildUI();

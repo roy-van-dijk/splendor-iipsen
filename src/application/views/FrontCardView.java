@@ -126,6 +126,9 @@ public class FrontCardView extends CardView {
 		return borderPane;
 	}
 	
+	/**
+	 * to get the image.
+	 */
 	@Override
 	protected String getImagePath()
 	{

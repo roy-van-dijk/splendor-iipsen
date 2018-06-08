@@ -15,6 +15,10 @@ public abstract class CardView implements UIComponent {
 	
 	protected double sizeX, sizeY;
 
+	/**
+	 * @param sizeX card size horizontal
+	 * @param sizeY card size vertical
+	 */
 	public CardView(double sizeX, double sizeY) {
 		this.sizeX = sizeX;
 		this.sizeY = sizeY;

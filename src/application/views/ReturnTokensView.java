@@ -38,7 +38,7 @@ public class ReturnTokensView {
 	private ReturnTokenController returnTokenController;
 /**
  * 
- * @param returnTokens
+ * @param returnTokens refers to model return tokens
  * @param returnTokenController
  * @throws RemoteException
  */
@@ -135,12 +135,11 @@ public class ReturnTokensView {
 		}
 	}
 
-	// the display of a gem type and amount of tokens of that type owned, with
-	// buttons to remove and add.
+	// the display of a gem type and amount of tokens of that type owned
+	// with buttons to edit the tokens you want to return
 	private VBox createTokenGemCountBox(Gem gemType, int count, int tokenSizeRadius) {
 
 		// buttons to edit amount of coins and confirmation of the turn.
-		// TODO add Button action events.
 		Button minusTokenButton = new Button("-");
 		Button plusTokenButton = new Button("+");
 
@@ -156,7 +155,6 @@ public class ReturnTokensView {
 			try {
 				returnTokenController.minusToken(gemType);
 			} catch (RemoteException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 		});
@@ -165,7 +163,6 @@ public class ReturnTokensView {
 			try {
 				returnTokenController.plusToken(gemType);
 			} catch (RemoteException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 		});
