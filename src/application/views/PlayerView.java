@@ -20,10 +20,12 @@ import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Separator;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -68,6 +70,7 @@ public class PlayerView implements UIComponent, Disableable, PlayerObserver {
 		lblPrestigeValue.setAlignment(Pos.CENTER);
 		lblPrestigeValue.setFont(Font.font("Times New Roman", FontWeight.EXTRA_BOLD, 50));
 		lblPrestigeValue.getStyleClass().add("prestige");
+		lblPrestigeValue.setMinWidth(135.0);
 
 		StackPane panePrestige = new StackPane(lblPrestigeValue);
 
@@ -91,7 +94,7 @@ public class PlayerView implements UIComponent, Disableable, PlayerObserver {
 		this.updatePlayerCards(player.getOwnedCards());
 		this.updatePlayerNobles(player.getOwnedNobles());
 		this.updatePlayerReservedCards(player.getReservedCards());
-	}
+	} 
 
 	private VBox buildAccessibilityMenu() {
 		VBox accessibility = new VBox(10);
@@ -150,6 +153,7 @@ public class PlayerView implements UIComponent, Disableable, PlayerObserver {
 
 		for (Card card : cards) {
 			CardView cardView = new FrontCardView(card, sizeX, sizeY);
+			cardView.asPane().getStyleClass().add("dropshadow");
 			reservedCards.getChildren().add(cardView.asPane());
 		}
 
@@ -172,13 +176,14 @@ public class PlayerView implements UIComponent, Disableable, PlayerObserver {
 		for (Noble noble : nobles) {
 			NobleView nobleView = new NobleView(noble, sizeX, sizeY);
 			nobleView.asPane().setTranslateY(offset);
-			offset = offset + 20;
+			nobleView.asPane().getStyleClass().add("dropshadow");
+			offset = offset + 50;
 			nobleStack.getChildren().add(nobleView.asPane());
 		}
 
 		nobleStack.setAlignment(Pos.CENTER);
 
-		VBox nobleDisplay = new VBox(10, nobleStack);
+		VBox nobleDisplay = new VBox(nobleStack);
 
 		return nobleDisplay;
 	}
@@ -214,37 +219,40 @@ public class PlayerView implements UIComponent, Disableable, PlayerObserver {
 			}
 		}
 
-		VBox d = createCardDisplay(diamondCards, diamondCards.size(), 110, 160);
-		VBox s = createCardDisplay(sapphireCards, sapphireCards.size(), 110, 160);
-		VBox e = createCardDisplay(emeraldCards, emeraldCards.size(), 110, 160);
-		VBox r = createCardDisplay(rubyCards, rubyCards.size(), 110, 160);
-		VBox o = createCardDisplay(onyxCards, onyxCards.size(), 110, 160);
+		VBox diamondDisplay = createCardDisplay(diamondCards, diamondCards.size(), 110, 160);
+		VBox sapphireDisplay = createCardDisplay(sapphireCards, sapphireCards.size(), 110, 160);
+		VBox emeraldDisplay = createCardDisplay(emeraldCards, emeraldCards.size(), 110, 160);
+		VBox rubyDisplay = createCardDisplay(rubyCards, rubyCards.size(), 110, 160);
+		VBox onyxDisplay = createCardDisplay(onyxCards, onyxCards.size(), 110, 160);
 
-		ownedCards.getChildren().addAll(d, s, e, r, o);
+		ownedCards.getChildren().addAll(diamondDisplay, sapphireDisplay, emeraldDisplay, rubyDisplay, onyxDisplay);
 	}
 
 	private VBox createCardDisplay(ArrayList<Card> cards, int count, int sizeX, int sizeY) {
-		int offset = 0;
+		int offset = 60;
 
 		StackPane cardStack = new StackPane();
-
-		for (Card card : cards) {
-			CardView cardView = new FrontCardView(card, sizeX, sizeY);
-			cardView.asPane().setTranslateY(offset);
-			offset = offset + 20;
-			cardStack.getChildren().add(cardView.asPane());
-		}
-
-		cardStack.setAlignment(Pos.CENTER);
-
+		
 		Label cardCountLabel = new Label(String.valueOf(count));
-		cardCountLabel.setAlignment(Pos.CENTER);
+		cardCountLabel.setAlignment(Pos.TOP_CENTER);
 		cardCountLabel.getStyleClass().add("card-count");
 		cardCountLabel.setFont(Font.font("Times New Roman", FontWeight.BOLD, 40));
 		cardCountLabel.setPrefWidth(125);
 		cardCountLabel.setTextFill(Color.WHITE);
+		
+		cardStack.getChildren().add(cardCountLabel);
 
-		VBox ownedCardDisplay = new VBox(25, cardCountLabel, cardStack);
+		for (Card card : cards) {
+			CardView cardView = new FrontCardView(card, sizeX, sizeY);
+			cardView.asPane().setTranslateY(offset);
+			cardView.asPane().getStyleClass().add("dropshadow");
+			offset = offset + 25;
+			cardStack.getChildren().add(cardView.asPane());
+		}
+
+		cardStack.setAlignment(Pos.TOP_CENTER);		
+
+		VBox ownedCardDisplay = new VBox(10, cardStack);
 
 		return ownedCardDisplay;
 	}
@@ -254,8 +262,7 @@ public class PlayerView implements UIComponent, Disableable, PlayerObserver {
 
 		int col = 0, row = 0;
 		for (Map.Entry<Gem, Integer> entry : gemsCount.entrySet()) {
-			HBox tokenGemCountDisplay = createTokenGemCountDisplay(entry.getKey(), entry.getValue(),
-					GameView.tokenSizeRadius / 2);
+			HBox tokenGemCountDisplay = createTokenGemCountDisplay(entry.getKey(), entry.getValue(), GameView.tokenSizeRadius / 2);
 			tokensGrid.add(tokenGemCountDisplay, col % 2, row % 3);
 			col++;
 			row++;
@@ -264,6 +271,7 @@ public class PlayerView implements UIComponent, Disableable, PlayerObserver {
 
 	private HBox createTokenGemCountDisplay(Gem gemType, int count, int radius) {
 		TokenView tokenView = new TokenView(gemType, radius);
+		tokenView.asPane().getStyleClass().add("dropshadow");
 
 		Label tokenCountLabel = new Label(String.valueOf(count));
 		tokenCountLabel.setAlignment(Pos.CENTER);
