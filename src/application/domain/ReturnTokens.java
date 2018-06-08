@@ -94,10 +94,7 @@ public class ReturnTokens {
 		if(allowConfirm)
 		{
 			player.returnTokensToField(removedTokens, playingField);
-			
-			
-			
-			
+
 		}
 	}
 
