@@ -1,24 +1,10 @@
 package application;
 	
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.nio.file.FileSystems;
 
-import application.controllers.GameController;
-import application.domain.Game;
-import application.domain.GameImpl;
-import application.services.CardsReader;
-import application.services.SaveGameDAO;
-import application.util.ConfirmDialog;
-import application.views.GameView;
 import application.views.ManualWindowView;
 import javafx.application.Application;
-import javafx.event.EventHandler;
-import javafx.scene.Scene;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;

@@ -1,48 +1,20 @@
 package application.controllers;
 
 import java.rmi.RemoteException;
-import java.util.LinkedHashMap;
-import java.util.List;
-
-
-import java.util.Map;
-
-
 import java.util.Optional;
-
-
 
 import application.StageManager;
 import application.domain.Card;
 import application.domain.CardRow;
-import application.domain.CardRowImpl;
-import application.domain.EndTurnImpl;
 import application.domain.Game;
 import application.domain.Gem;
-import application.domain.MoveType;
-
-import application.domain.Noble;
-import application.domain.PlayingField;
-
-
-import application.domain.Player;
-import application.domain.PlayingField;
-import application.domain.Noble;
-
-
-import application.domain.ReturnTokens;
 import application.domain.TempHand;
 import application.domain.Token;
-import application.domain.TokenImpl;
 import application.domain.TokenList;
-import application.services.SaveGameDAO;
 import application.util.ConfirmDialog;
 import application.views.PopUpWindowView;
-import application.views.ReturnTokensView;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
-import javafx.stage.Stage;
 
 /**
  * @author Sanchez
