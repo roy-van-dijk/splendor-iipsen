@@ -26,7 +26,12 @@ public class TokenList implements Serializable {
 	}
 	
 	public void remove(Token token) {
-		tokens.remove(token);
+		for(Token t : tokens) {
+			if(t.getGemType() == token.getGemType()) {
+			tokens.remove(t); return;
+		}
+		}
+		//tokens.remove(token);
 	}
 	
 	public List<Token> getAll() {

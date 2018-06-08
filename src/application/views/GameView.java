@@ -166,6 +166,7 @@ public class GameView implements UIComponent, Disableable, GameObserver  {
 		btnTakeTwoTokens.getStyleClass().add("move-button");
 		btnTakeTwoTokens.setOnAction(e ->{
 			try {
+				
 				game.getPlayingField().getTempHand().setMoveType(MoveType.TAKE_TWO_TOKENS);
 				gameController.findSelectableTokens();
 			} catch (RemoteException e1) {

@@ -105,10 +105,17 @@ public interface PlayingField extends Remote {
 	 * void
 	 */
 	public void removeCard(Card card) throws RemoteException;
-	
+	/**
+	 * 
+	 * @param tokens
+	 * @throws RemoteException
+	 * void
+	 */
 	public void removeTokens(List<Token> tokens) throws RemoteException;
 	
 	public TokenList getTokenList() throws RemoteException;
+	
+	public void removeToken(Token token) throws RemoteException;
 
 
 }

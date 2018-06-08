@@ -60,6 +60,7 @@ public class GameController {
 		Card card = row.getCardSlots()[1]; // Second card
 		
 		//if(!card.equals(card2wantdezeisspeciaal)) return;
+
 		//if(game.getPlayingField().getTokenGemCount().containsKey(Gem.JOKER))
 		if(game.getPlayingField().getTokenGemCount().containsKey(Gem.JOKER))
 		{
@@ -69,6 +70,7 @@ public class GameController {
 
 				game.getCurrentPlayer().debugAddToken(token);
 			}
+
 		game.getCurrentPlayer().reserveCardFromField(row, card);
 		}
 
@@ -82,7 +84,27 @@ public class GameController {
 	public void debugNextTurn() throws RemoteException {
 		game.nextTurn();
 	}
-	
+	public void getTokens() throws RemoteException {
+		List<Token> tokenlist = game.getPlayingField().getTokenList().getAll();
+		PlayingField playingfield = game.getPlayingField();
+		//TokenList newtokenlist =  game.getPlayingField().getTokenList();
+		TempHand temphand = game.getPlayingField().getTempHand();
+		Player player = game.getCurrentPlayer();
+		TokenList newtokenlist1 = new TokenList();
+			for(Gem gem: temphand.getSelectedGemTypes()) {
+				
+				Token token = new TokenImpl(gem);
+
+				newtokenlist1.add(token);
+				System.out.println();
+				player.addToken(token);
+				playingfield.removeToken(token);
+			}
+			//List<Token> listToken = newtokenlist.getAll();
+			//	playingfield.removeTokens(newtokenlist1.getAll());
+			//player.addTokens(newtokenlist);
+		
+	}
 	public void endTurn() throws RemoteException {
 
 		PlayingField playingfield = game.getPlayingField();
@@ -104,6 +126,10 @@ public class GameController {
 			System.out.println("I'v got " + tokens.size() + " Tokens");
 			model.moreThanTenTokens(model, controller);
 
+		}
+		
+		if(temphand.getSelectedTokensCount() != 0) {
+			this.getTokens();
 		}
 		/**
 		 * Adds the reservecard to the player
@@ -127,6 +153,15 @@ public class GameController {
 		}
 
 
+		
+		
+		//TODO take three token
+		/*
+		if (temphand.getPlayer().getTokens() != null) {
+			for(Token token : temphand.getPlayer().getTokens()) {
+				player.addToken(token);
+			}
+		}*/
 		//begin voor toevoegen nobles
 
 		
