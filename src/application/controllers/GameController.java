@@ -87,12 +87,12 @@ public class GameController {
 
 	public void cardClickedFromField(CardRow cardRow, Card card) throws RemoteException {
 		cardRow.addCardToTemp(cardRow, card, game.getPlayingField().getTempHand());
-		game.updatePlayingFieldCardsAndPlayerView();
+		game.updatePlayingFieldAndPlayerView();
 	}
 	
 	public void cardClickedFromReserve(Card card) throws RemoteException {
 		game.addCardToTempFromReserve(card);
-		game.updatePlayingFieldCardsAndPlayerView();
+		game.updatePlayingFieldAndPlayerView();
 	}
 
 	public void onFieldTokenClicked(Gem gemType) throws RemoteException {	

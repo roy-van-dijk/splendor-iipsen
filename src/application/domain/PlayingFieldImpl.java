@@ -218,6 +218,7 @@ public class PlayingFieldImpl extends UnicastRemoteObject implements PlayingFiel
 	}
 
 	public void newTurn() throws RemoteException {
+		selectableTokens.clear();
 		this.notifyObservers();	
 	}
 

@@ -187,10 +187,11 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 	}
 	
 	@Override
-	public void updatePlayingFieldCardsAndPlayerView() throws RemoteException {
+	public void updatePlayingFieldAndPlayerView() throws RemoteException {
 		for(CardRow cardRow : playingField.getCardRows()) {
 			cardRow.updateView();
 		}
+		playingField.newTurn();
 		this.getCurrentPlayer().updatePlayerView();
 	}
 	
@@ -205,7 +206,7 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 	@Override
 	public void addCardToTempFromReserve(Card card) throws RemoteException {	
 		MoveType moveType = this.getPlayingField().getTempHand().getMoveType();
-		if(moveType == MoveType.PURCHASE_FIELD_CARD || moveType == MoveType.PURCHASE_RESERVED_CARD) {
+		if(moveType == MoveType.PURCHASE_CARD) {
 			this.getPlayingField().getTempHand().selectCardToBuy(card);
 		} else if(moveType == MoveType.RESERVE_CARD) {
 			this.getPlayingField().getTempHand().selectCardToReserve(card);

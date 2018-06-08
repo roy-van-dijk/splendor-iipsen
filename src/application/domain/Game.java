@@ -47,13 +47,13 @@ public interface Game extends Remote {
 	 * PlayingField
 	 */
 	public PlayingField getPlayingField() throws RemoteException;
-	
-	public void updatePlayingFieldCardsAndPlayerView() throws RemoteException;
 
 	public void addCardToTempFromReserve(Card card) throws RemoteException;
 
 	public EndTurn getEndTurn() throws RemoteException;
 
 	public void cleanUpSelections() throws RemoteException;
+
+	public void updatePlayingFieldAndPlayerView() throws RemoteException;
 
 }

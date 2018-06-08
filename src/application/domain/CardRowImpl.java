@@ -81,7 +81,7 @@ public class CardRowImpl implements Serializable, CardRow {
 	@Override
 	public void addCardToTemp(CardRow cardRow, Card card, TempHand tempHand) throws RemoteException {	
 		MoveType moveType = tempHand.getMoveType();
-		if(moveType == MoveType.PURCHASE_FIELD_CARD || moveType == MoveType.PURCHASE_RESERVED_CARD) {
+		if(moveType == MoveType.PURCHASE_CARD) {
 			tempHand.selectCardToBuy(card);
 		} else if(moveType == MoveType.RESERVE_CARD) {
 			tempHand.selectCardToReserve(card);

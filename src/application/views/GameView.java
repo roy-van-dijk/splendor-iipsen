@@ -161,7 +161,7 @@ public class GameView implements UIComponent, Disableable, GameObserver  {
 		btnPurchaseCard.setOnAction(e -> {
 			// POC -> belongs in GameController
 			try {
-				game.getPlayingField().getTempHand().setMoveType(MoveType.PURCHASE_FIELD_CARD);
+				game.getPlayingField().getTempHand().setMoveType(MoveType.PURCHASE_CARD);
 				gameController.purchaseCard();
 			} catch (RemoteException e1) {
 				// TODO Auto-generated catch block
