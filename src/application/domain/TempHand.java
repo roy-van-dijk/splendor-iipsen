@@ -80,7 +80,11 @@ public class TempHand implements Serializable {
 	public int getSelectedTokensCount() {
 		return selectedTokensCount;
 	}
-	
+	/**
+	 * 
+	 * @return
+	 * List<Gem>
+	 */
 	public List<Gem> getSelectedGemTypes() {
 		return selectedGemTypes;
 	}

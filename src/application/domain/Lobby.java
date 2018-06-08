@@ -4,10 +4,13 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Map;
-
 import application.domain.LobbyImpl.LobbyStates;
 
-
+/**
+ * A lobby for players to be able to join
+ * @author Sanchez
+ *
+ */
 public interface Lobby extends Remote {
 	
 	public void addObserver(LobbyObserver o) throws RemoteException;

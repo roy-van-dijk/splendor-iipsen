@@ -1,3 +1,4 @@
+package nl.hsleiden.splendor.test;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.AfterAll;
@@ -6,13 +7,10 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import application.views.ManualWindowView;
-
-class TestTerugleggenTokens {
+class TestStartenSpel {
 
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
-		
 	}
 
 	@AfterAll
@@ -29,7 +27,6 @@ class TestTerugleggenTokens {
 
 	@Test
 	void test() {
-		
 		fail("Not yet implemented");
 	}
 

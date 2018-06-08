@@ -1,3 +1,4 @@
+package nl.hsleiden.splendor.test;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.AfterAll;
@@ -6,7 +7,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class TestVerlatenSpel {
+class TestReserverenKaart {
 
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {

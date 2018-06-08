@@ -6,19 +6,13 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-import application.StageManager;
 import application.controllers.GameController;
-import application.controllers.ReturnTokenController;
-import application.domain.CardLevel;
 import application.domain.ColorBlindModes;
 import application.domain.Game;
 import application.domain.GameObserver;
 import application.domain.MoveType;
 import application.domain.Player;
-import application.domain.PlayerImpl;
-import application.domain.ReturnTokens;
 import application.util.AlertDialog;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -179,6 +173,7 @@ public class GameView implements UIComponent, Disableable, GameObserver  {
 		btnTakeTwoTokens.getStyleClass().add("move-button");
 		btnTakeTwoTokens.setOnAction(e ->{
 			try {
+				
 				game.getPlayingField().getTempHand().setMoveType(MoveType.TAKE_TWO_TOKENS);
 				gameController.findSelectableTokens();
 			} catch (RemoteException e1) {
@@ -214,14 +209,12 @@ public class GameView implements UIComponent, Disableable, GameObserver  {
 		btnEndTurn.getStyleClass().add("move-button");
 		//btnEndTurn.setDisable(true);
 		btnEndTurn.setOnAction(e -> {
-			try {
-
-				gameController.endTurn();
-
-			} catch (RemoteException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+				try {
+					gameController.endTurn();
+				} catch (RemoteException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 		});
 
 		this.moveButtons.addAll(Arrays.asList(btnReserveCard, btnPurchaseCard, btnTakeTwoTokens, btnTakeThreeTokens, btnResetTurn, btnEndTurn));
