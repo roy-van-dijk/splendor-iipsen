@@ -129,7 +129,9 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 	}
 	
 	public void findSelectableCards() throws RemoteException {
-		this.getCurrentPlayer().findSelectableCardsFromReserve();
+		if(playingField.getTempHand().getMoveType() == MoveType.PURCHASE_CARD) {
+			this.getCurrentPlayer().findSelectableCardsFromReserve();
+		}
 		playingField.findSelectableCardsFromField();
 	}
 
@@ -191,7 +193,6 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 		for(CardRow cardRow : playingField.getCardRows()) {
 			cardRow.updateView();
 		}
-		playingField.newTurn();
 		this.getCurrentPlayer().updatePlayerView();
 	}
 	
@@ -200,6 +201,7 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 		for(CardRow cardRow : playingField.getCardRows()) {
 			cardRow.clearSelectableCards();
 		}
+		playingField.newTurn();
 		this.getCurrentPlayer().clearSelectableCards();
 	}
 	

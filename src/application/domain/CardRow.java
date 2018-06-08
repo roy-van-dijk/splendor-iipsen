@@ -34,8 +34,6 @@ public interface CardRow extends Remote {
 	 */
 	public CardDeck getCardDeck() throws RemoteException;
 	
-	public void findSelectableCards(Player player) throws RemoteException;
-	
 	public List<Card> getSelectableCards();
 
 	public void addCardToTemp(CardRow cardRow, Card card, TempHand tempHand) throws RemoteException;
@@ -43,4 +41,8 @@ public interface CardRow extends Remote {
 	public void updateView() throws RemoteException;
 	
 	public void clearSelectableCards() throws RemoteException;
+	
+	public void findSelectableCards(MoveType moveType, Player player) throws RemoteException;
+	
+	boolean isCardDeckSelectable();
 }

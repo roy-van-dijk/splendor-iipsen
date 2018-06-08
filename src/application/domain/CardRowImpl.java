@@ -29,6 +29,8 @@ public class CardRowImpl implements Serializable, CardRow {
 
 	private List<Card> selectableCards;
 	
+	private boolean cardDeckSelectable;
+	
 	
 	public CardRowImpl(CardDeck cardDeckImpl) {
 		this.cardDeckImpl = cardDeckImpl;
@@ -111,24 +113,39 @@ public class CardRowImpl implements Serializable, CardRow {
 		this.notifyObservers();
 	}
 	
-	public void findSelectableCards(Player player) throws RemoteException {
+	@Override
+	public void findSelectableCards(MoveType moveType, Player player) throws RemoteException {
 		this.clearSelectableCards();
-		for(Card card : cardSlots) {
-			if(player.canAffordCard(card.getCosts())) {
+		if(moveType == MoveType.PURCHASE_CARD) {
+			for(Card card : cardSlots) {
+				if(player.canAffordCard(card.getCosts())) {
+					selectableCards.add(card);
+				}
+			}
+		} else if(moveType == MoveType.RESERVE_CARD){
+			for(Card card : cardSlots) {
 				selectableCards.add(card);
 			}
+			cardDeckSelectable = true;
 		}
 		this.notifyObservers();
 	}
 	
 	@Override
 	public void clearSelectableCards() throws RemoteException {
+		cardDeckSelectable = false;
 		selectableCards.clear();
 		this.notifyObservers();
 	}
 	
+	@Override
 	public List<Card> getSelectableCards() {
 		return selectableCards;
+	}
+	
+	@Override
+	public boolean isCardDeckSelectable() {
+		return cardDeckSelectable;
 	}
 
 	@Override

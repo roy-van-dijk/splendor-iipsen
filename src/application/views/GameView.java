@@ -149,6 +149,7 @@ public class GameView implements UIComponent, Disableable, GameObserver  {
 		btnReserveCard.getStyleClass().add("move-button");
 		btnReserveCard.setOnAction(e -> {
 			try {
+				game.getPlayingField().getTempHand().setMoveType(MoveType.RESERVE_CARD);
 				gameController.reserveCard();
 			} catch (RemoteException e1) {
 				// TODO Auto-generated catch block

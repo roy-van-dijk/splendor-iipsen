@@ -112,16 +112,11 @@ public class EndTurnImpl implements EndTurn, Serializable {
 			player.addCard(boughtCard);
 			this.removeTokenCost();	
 		} else if(moveType == MoveType.RESERVE_CARD) {
-			// TODO: Dit werkt echt nog voor geen meter
-			
 			/**
 			 * Adds the reservecard to the player
 			 */
-			CardRow row = game.getPlayingField().getCardRows().get(1); // Second row
-			Card card = row.getCardSlots()[1];
 			playingField.removeCard(tempHand.getReservedCard());
 			player.addReserverveCard(tempHand.getReservedCard());
-			player.reserveCardFromField(row, card);
 		} else if(moveType == MoveType.TAKE_THREE_TOKENS || moveType == MoveType.TAKE_TWO_TOKENS) {
 			this.getTokens();
 		}
@@ -197,7 +192,7 @@ public class EndTurnImpl implements EndTurn, Serializable {
 	
 	private void cleanUpTurn() throws RemoteException {
 		tempHand.emptyHand();
-		game.updatePlayingFieldAndPlayerView();
+		game.cleanUpSelections();
 		
 	}
 }

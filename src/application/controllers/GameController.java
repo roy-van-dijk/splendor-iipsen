@@ -28,19 +28,7 @@ public class GameController {
 	}
 
 	public void reserveCard() throws RemoteException {
-		// Creating POC variables - basically specifying: Hey controller, I clicked on this >predefined< card
-		CardRow row = game.getPlayingField().getCardRows().get(2); // Second row
-		Card card = row.getCardSlots()[1]; // Second card
-		
-		if(game.getPlayingField().getTokenGemCount().containsKey(Gem.JOKER)) {
-			TokenList tokenList = game.getPlayingField().getTokenList();
-			for(Token token : tokenList.getAll()){
-				game.getCurrentPlayer().debugAddToken(token);
-			}
-			game.getCurrentPlayer().reserveCardFromField(row, card);
-		}
-
-		
+		game.findSelectableCards();
 	}
 	
 	public void purchaseCard() throws RemoteException {

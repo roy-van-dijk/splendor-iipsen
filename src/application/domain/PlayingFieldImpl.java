@@ -135,7 +135,7 @@ public class PlayingFieldImpl extends UnicastRemoteObject implements PlayingFiel
 	
 	public void findSelectableCardsFromField() throws RemoteException {
 		for(CardRow cardRow : cardRows) {
-			cardRow.findSelectableCards(tempHand.getPlayer());
+			cardRow.findSelectableCards(tempHand.getMoveType(), tempHand.getPlayer());
 		}
 	}
 	

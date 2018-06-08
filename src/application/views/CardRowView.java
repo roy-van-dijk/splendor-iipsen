@@ -61,6 +61,15 @@ public class CardRowView implements UIComponent, CardRowObserver {
 		// Create the deck view (Looks like the back side of a card)
 		CardDeckView cardDeckView = new CardDeckView(cardRow.getCardDeck(), GameView.cardSizeX, GameView.cardSizeY);
 		
+		if(cardRow.isCardDeckSelectable()) {
+			cardDeckView.asPane().getStyleClass().add("selectable");
+			cardDeckView.asPane().setOnMouseClicked(e -> {
+				// TODO: Reserve card from deck
+			});
+		} else {
+			cardDeckView.asPane().getStyleClass().remove("selectable");
+		}
+		
 		// // Add the deck to the grid, make deck view first in row
 		grid.add(cardDeckView.asPane(), 0, 0);
 		
@@ -77,9 +86,7 @@ public class CardRowView implements UIComponent, CardRowObserver {
         	// Create card view
         	FrontCardView cardView = new FrontCardView(card, GameView.cardSizeX, GameView.cardSizeY);
 			
-        	
-        	
-        	if(tempHand.getBoughtCard() == card) {
+        	if(tempHand.getBoughtCard() == card || tempHand.getReservedCard() == card) {
         		cardView.asPane().getStyleClass().remove("selectable");
         		cardView.asPane().getStyleClass().add("selected");
         	} else if(cardRow.getSelectableCards().contains(card)) {
