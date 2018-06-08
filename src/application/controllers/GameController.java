@@ -60,7 +60,15 @@ public class GameController {
 		Card card = row.getCardSlots()[1]; // Second card
 		
 		//if(!card.equals(card2wantdezeisspeciaal)) return;
-		
+		if(game.getPlayingField().getTokenGemCount().containsKey(Gem.JOKER))
+		{
+			TokenList tokenList = game.getPlayingField().getTokenList();
+			for(Token token : tokenList)
+			{
+				
+			}
+			game.getCurrentPlayer().debugAddToken(token);
+			tempHand.
 		game.getCurrentPlayer().reserveCardFromField(row, card);
 		
 	}
