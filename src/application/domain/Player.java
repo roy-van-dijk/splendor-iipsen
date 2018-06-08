@@ -155,7 +155,7 @@ public interface Player extends Remote {
 	 * @throws RemoteException
 	 * void
 	 */
-	public void addToken(Token token,  TokenList tokenlist) throws RemoteException;
+	public void addToken(Token token) throws RemoteException;
 	
 
 }

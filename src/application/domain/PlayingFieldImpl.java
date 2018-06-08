@@ -206,10 +206,6 @@ public class PlayingFieldImpl extends UnicastRemoteObject implements PlayingFiel
 		this.notifyObservers();
 	}
 
-	public void removeToken(Token token) {
-		tokenList.remove(token);
-		
-	}
 	
 	public void removeCard(Card card) throws RemoteException{
 		cardRows.remove(card);
@@ -243,5 +239,12 @@ public class PlayingFieldImpl extends UnicastRemoteObject implements PlayingFiel
 		this.notifyObservers();
 		
 	}
-
+	/**
+	 * 
+	 * @param token
+	 * void
+	 */
+	public void removeToken(Token token) throws RemoteException {
+		tokenList.remove(token);
+	}
 }
