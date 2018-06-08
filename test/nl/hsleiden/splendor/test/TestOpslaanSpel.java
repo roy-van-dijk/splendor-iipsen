@@ -1,3 +1,4 @@
+package nl.hsleiden.splendor.test;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;

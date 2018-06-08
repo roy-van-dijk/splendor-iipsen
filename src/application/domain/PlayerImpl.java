@@ -238,4 +238,15 @@ public class PlayerImpl extends UnicastRemoteObject implements Player, Serializa
 		
 	}
 
+	/* (non-Javadoc)
+	 * @see application.domain.Player#addToken(application.domain.Token)
+	 */
+	@Override
+	public void addToken(Token token, TokenList tokenlist) throws RemoteException {
+		this.tokenList.add(token);
+		this.notifyObservers();
+		
+	}
+	
+
 }

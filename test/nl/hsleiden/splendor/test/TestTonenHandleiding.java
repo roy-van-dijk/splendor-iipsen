@@ -1,3 +1,4 @@
+package nl.hsleiden.splendor.test;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.AfterAll;
@@ -6,7 +7,9 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class TestHostLobby {
+import application.views.ManualWindowView;
+
+class TestTonenHandleiding {
 
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
@@ -26,6 +29,11 @@ class TestHostLobby {
 
 	@Test
 	void test() {
+		
+		ManualWindowView  manual = new ManualWindowView();
+		
+		
+		
 		fail("Not yet implemented");
 	}
 

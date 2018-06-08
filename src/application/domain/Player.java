@@ -148,5 +148,14 @@ public interface Player extends Remote {
 	 * @return 
 	 */
 	public void addReserverveCard(Card card) throws RemoteException;
+	
+	/**
+	 * 
+	 * @param token
+	 * @throws RemoteException
+	 * void
+	 */
+	public void addToken(Token token,  TokenList tokenlist) throws RemoteException;
+	
 
 }

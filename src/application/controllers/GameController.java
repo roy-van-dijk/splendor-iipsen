@@ -1,6 +1,7 @@
 package application.controllers;
 
 import java.rmi.RemoteException;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 
@@ -31,6 +32,8 @@ import application.domain.Noble;
 import application.domain.ReturnTokens;
 import application.domain.TempHand;
 import application.domain.Token;
+import application.domain.TokenImpl;
+import application.domain.TokenList;
 import application.services.SaveGameDAO;
 import application.util.ConfirmDialog;
 import application.views.PopUpWindowView;
@@ -69,7 +72,24 @@ public class GameController {
 	public void debugNextTurn() throws RemoteException {
 		game.nextTurn();
 	}
-	
+	public void getTokens() throws RemoteException {
+		TokenList tokenlist = game.getPlayingField().getTokenlist();
+		PlayingField playingfield = game.getPlayingField();
+		
+		TempHand temphand = game.getPlayingField().getTempHand();
+		Player player = game.getCurrentPlayer();
+		
+			for(Gem gem: temphand.getSelectedGemTypes()) {
+				
+				Token token = new TokenImpl(gem);
+				System.out.println();
+				playingfield.removeToken(token);
+				player.addToken(token, tokenlist);
+				
+				
+			}
+		
+	}
 	public void endTurn() throws RemoteException {
 
 		PlayingField playingfield = game.getPlayingField();
@@ -91,6 +111,10 @@ public class GameController {
 			System.out.println("I'v got " + tokens.size() + " Tokens");
 			model.moreThanTenTokens(model, controller);
 
+		}
+		
+		if(temphand.getSelectedTokensCount() != 0) {
+			this.getTokens();
 		}
 		/**
 		 * Adds the reservecard to the player
@@ -114,6 +138,15 @@ public class GameController {
 		}
 
 
+		
+		
+		//TODO take three token
+		/*
+		if (temphand.getPlayer().getTokens() != null) {
+			for(Token token : temphand.getPlayer().getTokens()) {
+				player.addToken(token);
+			}
+		}*/
 		//begin voor toevoegen nobles
 
 		
