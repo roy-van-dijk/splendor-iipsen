@@ -213,4 +213,6 @@ public interface Player extends Remote {
 	 */
 	public void updatePlayerView() throws RemoteException;
 
+	public void clearSelectableCards() throws RemoteException;
+
 }

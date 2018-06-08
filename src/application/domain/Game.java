@@ -54,4 +54,6 @@ public interface Game extends Remote {
 
 	public EndTurn getEndTurn() throws RemoteException;
 
+	public void cleanUpSelections() throws RemoteException;
+
 }

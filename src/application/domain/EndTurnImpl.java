@@ -129,7 +129,7 @@ public class EndTurnImpl implements EndTurn {
 		 * Add temphand cards to the player
 		 */
 		if(temphand.getBoughtCard() != null) {
-			
+			game.cleanUpSelections();
 			//player.returnTokensToField(removedTokens, playingfield);
 			
 			player.addCard(temphand.getBoughtCard());

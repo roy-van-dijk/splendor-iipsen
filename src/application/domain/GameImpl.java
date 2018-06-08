@@ -186,11 +186,20 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 		this.notifyObservers();
 	}
 	
+	@Override
 	public void updatePlayingFieldCardsAndPlayerView() throws RemoteException {
 		for(CardRow cardRow : playingField.getCardRows()) {
 			cardRow.updateView();
 		}
 		this.getCurrentPlayer().updatePlayerView();
+	}
+	
+	@Override
+	public void cleanUpSelections() throws RemoteException {
+		for(CardRow cardRow : playingField.getCardRows()) {
+			cardRow.clearSelectableCards();
+		}
+		this.getCurrentPlayer().clearSelectableCards();
 	}
 	
 	@Override

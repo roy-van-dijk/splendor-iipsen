@@ -29,11 +29,7 @@ public class PlayerImpl extends UnicastRemoteObject implements Player, Serializa
 
 	private transient List<PlayerObserver> observers;
 	
-	private TokenList tokenList;	
-	
-	public void addSelectableCardFromReserve(Card card) {
-		selectableCards.add(card);
-	}
+	private TokenList tokenList;
 	
 	public List<Card> getSelectableCardsFromReserve() {
 		return selectableCards;
@@ -85,13 +81,18 @@ public class PlayerImpl extends UnicastRemoteObject implements Player, Serializa
 	}
 	
 	public void findSelectableCardsFromReserve() throws RemoteException {
-		selectableCards.clear();
+		this.clearSelectableCards();
 		for(Card card : this.getReservedCards()) {
 			if(this.canAffordCard(card.getCosts())) {
-				this.addSelectableCardFromReserve(card);
+				selectableCards.add(card);
 			}
 		}
-		
+		this.notifyObservers();
+	}
+	
+	@Override
+	public void clearSelectableCards() throws RemoteException {
+		selectableCards.clear();
 		this.notifyObservers();
 	}
 	
@@ -252,6 +253,12 @@ public class PlayerImpl extends UnicastRemoteObject implements Player, Serializa
 	public void addToken(Token token) throws RemoteException {
 		this.tokenList.add(token);
 		this.notifyObservers();
+		
+	}
+
+	@Override
+	public void addSelectableCardFromReserve(Card card) throws RemoteException {
+		// TODO Auto-generated method stub
 		
 	}
 	

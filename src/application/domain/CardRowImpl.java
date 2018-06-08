@@ -113,20 +113,19 @@ public class CardRowImpl implements Serializable, CardRow {
 	}
 	
 	public void findSelectableCards(Player player) throws RemoteException {
-		selectableCards.clear();
+		this.clearSelectableCards();
 		for(Card card : cardSlots) {
 			if(player.canAffordCard(card.getCosts())) {
-				this.addSelectableCards(card);
+				selectableCards.add(card);
 			}
 		}
 		this.notifyObservers();
 	}
 	
-	
-
-	private void addSelectableCards(Card card) {
-		selectableCards.add(card);
-		
+	@Override
+	public void clearSelectableCards() throws RemoteException {
+		selectableCards.clear();
+		this.notifyObservers();
 	}
 	
 	public List<Card> getSelectableCards() {
