@@ -116,6 +116,8 @@ public interface PlayingField extends Remote {
 	public TokenList getTokenList() throws RemoteException;
 	
 	public void removeToken(Token token) throws RemoteException;
+	
+	public void setDeckSelected(CardRow cardRow) throws RemoteException;
 
 
 }

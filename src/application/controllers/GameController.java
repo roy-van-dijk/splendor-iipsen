@@ -84,4 +84,10 @@ public class GameController {
 	public TempHand getTempHand() throws RemoteException {
 		return game.getPlayingField().getTempHand();
 	}
+
+	public void reserveCardFromDeck(CardRow cardRow) throws RemoteException {
+		cardRow.addCardToTemp(cardRow, cardRow.getCardDeck().top(), this.getTempHand());
+		game.getPlayingField().setDeckSelected(cardRow);
+		game.updatePlayingFieldAndPlayerView();	
+	}
 }

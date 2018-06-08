@@ -12,6 +12,8 @@ public class CardDeck implements Deck<Card>, Serializable {
 	
 	private Stack<Card> cards;
 	private CardLevel level;
+	private boolean isSelectable;
+	private boolean isSelected;
 	
 	public CardDeck(Stack<Card> cards, CardLevel level)
 	{
@@ -41,5 +43,31 @@ public class CardDeck implements Deck<Card>, Serializable {
 
 	public Stack<Card> getAll() {
 		return cards;
+	}
+	
+	public boolean isSelectable() {
+		return isSelectable;
+	}
+	
+	public void setSelectable() {
+		isSelectable = true;
+		isSelected = false;
+	}
+	
+	public void clearSelectable() {
+		isSelectable = false;
+	}
+	
+	public boolean isSelected() {
+		return isSelected;
+	}
+	
+	public void setSelected() {
+		isSelected = true;
+		isSelectable = false;
+	}
+	
+	public void clearSelection() {
+		isSelected = false;
 	}
 }

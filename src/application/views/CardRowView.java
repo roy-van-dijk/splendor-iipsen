@@ -61,10 +61,19 @@ public class CardRowView implements UIComponent, CardRowObserver {
 		// Create the deck view (Looks like the back side of a card)
 		CardDeckView cardDeckView = new CardDeckView(cardRow.getCardDeck(), GameView.cardSizeX, GameView.cardSizeY);
 		
-		if(cardRow.isCardDeckSelectable()) {
+		if(cardRow.getCardDeck().isSelected()) {
+    		cardDeckView.asPane().getStyleClass().remove("selectable");
+    		cardDeckView.asPane().getStyleClass().add("selected");
+		} else if(cardRow.getCardDeck().isSelectable()) {
+			cardDeckView.asPane().getStyleClass().remove("selected");
 			cardDeckView.asPane().getStyleClass().add("selectable");
 			cardDeckView.asPane().setOnMouseClicked(e -> {
-				// TODO: Reserve card from deck
+				try {
+					gameController.reserveCardFromDeck(cardRow);
+				} catch (RemoteException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			});
 		} else {
 			cardDeckView.asPane().getStyleClass().remove("selectable");
@@ -90,6 +99,7 @@ public class CardRowView implements UIComponent, CardRowObserver {
         		cardView.asPane().getStyleClass().remove("selectable");
         		cardView.asPane().getStyleClass().add("selected");
         	} else if(cardRow.getSelectableCards().contains(card)) {
+    			cardView.asPane().getStyleClass().remove("selected");
 				cardView.asPane().getStyleClass().add("selectable");
 	        	cardView.asPane().setOnMouseClicked(e -> { 
 	        		try {
@@ -99,6 +109,8 @@ public class CardRowView implements UIComponent, CardRowObserver {
 	        			e1.printStackTrace();
 	        		} 
 	        	});
+			} else {
+				cardView.asPane().getStyleClass().remove("selectable");
 			}
         	
         	// Display cards by index

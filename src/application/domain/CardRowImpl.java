@@ -23,17 +23,14 @@ public class CardRowImpl implements Serializable, CardRow {
 
 	private static final int MAX_OPEN_CARDS = 4;
 	
-	private CardDeck cardDeckImpl;
+	private CardDeck cardDeck;
 	private CardImpl[] cardSlots;
 	private transient ArrayList<CardRowObserver> observers;
 
 	private List<Card> selectableCards;
 	
-	private boolean cardDeckSelectable;
-	
-	
 	public CardRowImpl(CardDeck cardDeckImpl) {
-		this.cardDeckImpl = cardDeckImpl;
+		this.cardDeck = cardDeckImpl;
 		this.cardSlots = new CardImpl[MAX_OPEN_CARDS];
 		this.observers = new ArrayList<>();
 		this.selectableCards = new ArrayList<>();
@@ -67,7 +64,7 @@ public class CardRowImpl implements Serializable, CardRow {
 			if(cardSlots[pos] == null)
 			{
 				try {
-					CardImpl cardFromDeck = (CardImpl) cardDeckImpl.pull();
+					CardImpl cardFromDeck = (CardImpl) cardDeck.pull();
 					cardSlots[pos] = cardFromDeck;
 				} 
 				catch (EmptyStackException e)
@@ -87,12 +84,11 @@ public class CardRowImpl implements Serializable, CardRow {
 		} else if(moveType == MoveType.RESERVE_CARD) {
 			tempHand.selectCardToReserve(card);
 		}
-		//this.notifyObservers();
 	}
 	
 
 	public CardDeck getCardDeck() {
-		return cardDeckImpl;
+		return cardDeck;
 	}
 
 	/**
@@ -126,14 +122,15 @@ public class CardRowImpl implements Serializable, CardRow {
 			for(Card card : cardSlots) {
 				selectableCards.add(card);
 			}
-			cardDeckSelectable = true;
+			cardDeck.setSelectable();
 		}
 		this.notifyObservers();
 	}
 	
 	@Override
 	public void clearSelectableCards() throws RemoteException {
-		cardDeckSelectable = false;
+		cardDeck.clearSelectable();
+		cardDeck.clearSelection();
 		selectableCards.clear();
 		this.notifyObservers();
 	}
@@ -142,16 +139,10 @@ public class CardRowImpl implements Serializable, CardRow {
 	public List<Card> getSelectableCards() {
 		return selectableCards;
 	}
-	
-	@Override
-	public boolean isCardDeckSelectable() {
-		return cardDeckSelectable;
-	}
 
 	@Override
 	public void updateView() throws RemoteException {
-		this.notifyObservers();
-		
+		this.notifyObservers();	
 	}
 	
 }

@@ -117,6 +117,7 @@ public class EndTurnImpl implements EndTurn, Serializable {
 			 */
 			playingField.removeCard(tempHand.getReservedCard());
 			player.addReserverveCard(tempHand.getReservedCard());
+			// TODO: Geef speler een joker
 		} else if(moveType == MoveType.TAKE_THREE_TOKENS || moveType == MoveType.TAKE_TWO_TOKENS) {
 			this.getTokens();
 		}

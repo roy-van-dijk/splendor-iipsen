@@ -34,23 +34,19 @@ public class TempHand implements Serializable {
 		this.player = player;
 	}
 	
-	public void selectCardToBuy(Card card) 
-	{
+	public void selectCardToBuy(Card card) {
 		boughtCard = card;
 	}
 	
-	public void selectCardToReserve(Card card) 
-	{
+	public void selectCardToReserve(Card card) {
 		reservedCard = card;
 	}
 	
-	public Card getBoughtCard() 
-	{
+	public Card getBoughtCard() {
 		return boughtCard;
 	}
 	
-	public Card getReservedCard() 
-	{
+	public Card getReservedCard() {
 		return reservedCard;
 	}
 	
@@ -58,8 +54,7 @@ public class TempHand implements Serializable {
 		this.tokenList = tokenList;
 	}
 	
-	public TokenList getTokenList() 
-	{
+	public TokenList getTokenList() {
 		return tokenList;
 	}
 	
