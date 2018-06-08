@@ -61,6 +61,16 @@ public class GameController {
 		
 		//if(!card.equals(card2wantdezeisspeciaal)) return;
 		//if(game.getPlayingField().getTokenGemCount().containsKey(Gem.JOKER))
+		if(game.getPlayingField().getTokenGemCount().containsKey(Gem.JOKER))
+		{
+			TokenList tokenList = game.getPlayingField().getTokenList();
+			for(Token token : tokenList.getAll())
+			{
+
+				game.getCurrentPlayer().debugAddToken(token);
+			}
+		game.getCurrentPlayer().reserveCardFromField(row, card);
+		}
 
 		
 	}
