@@ -93,24 +93,12 @@ public class EndTurnImpl implements EndTurn, Serializable {
 		Player player = game.getCurrentPlayer();
 		List<Noble> allNobles= game.getPlayingField().getNobles();
 		Map<Gem, Integer> totalBonusGems = game.getCurrentPlayer().getBonus();
+		MoveType moveType = tempHand.getMoveType();
 		/**
 		 * Create the returntokens if the an player has moren then 10 tokens
 		 */
 
-		ReturnTokens model = new ReturnTokens(game.getPlayingField(), game.getCurrentPlayer());
-		ReturnTokenController controller = new ReturnTokenController(model);
 		
-		if(tempHand.getSelectedTokensCount() != 0) {
-			this.getTokens();
-		}
-		
-		List<Token> tokens = game.getCurrentPlayer().getTokens();
-		
-		if(tokens.size() > 10) {
-			System.out.println("I'v got " + tokens.size() + " Tokens");
-			model.moreThanTenTokens(model, controller);
-
-		}
 		
 		
 		/**
@@ -138,7 +126,7 @@ public class EndTurnImpl implements EndTurn, Serializable {
 			
 			for(Map.Entry<Gem, Integer> cost : costs.entrySet()) {
 				
-				int[] totalTokensNeeded = this.neededTokens(cost, playerGems, player;
+				int[] totalTokensNeeded = this.neededTokens(cost, playerGems, player);
 				int tokensNeeded = totalTokensNeeded[0];
 				int jokersNeeded =  totalTokensNeeded[1];
 				
@@ -159,6 +147,21 @@ public class EndTurnImpl implements EndTurn, Serializable {
 					}
 				}	
 			}	
+		}
+		
+		ReturnTokens model = new ReturnTokens(game.getPlayingField(), game.getCurrentPlayer());
+		ReturnTokenController controller = new ReturnTokenController(model);
+		
+		if(tempHand.getSelectedTokensCount() != 0) {
+			this.getTokens();
+		}
+		
+		List<Token> tokens = game.getCurrentPlayer().getTokens();
+		
+		if(tokens.size() > 10) {
+			System.out.println("I'v got " + tokens.size() + " Tokens");
+			model.moreThanTenTokens(model, controller);
+
 		}
 		
 		//TODO take three token
