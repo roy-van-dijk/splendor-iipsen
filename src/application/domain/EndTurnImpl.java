@@ -1,11 +1,14 @@
 package application.domain;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import application.controllers.ReturnTokenController;
+import application.services.SaveGameDAO;
 
 public class EndTurnImpl implements EndTurn {
 	
@@ -47,15 +50,15 @@ public class EndTurnImpl implements EndTurn {
 
 	@Override
 	public boolean compareNobleAndBonusGems(Map<Gem, Integer> nobleCost, Map<Gem, Integer> totalBonusGems) {
-		boolean nobleWillVisit = true;
-		for(Gem gemType : Gem.values())
-		{
-			if(nobleCost.get(gemType) > totalBonusGems.get(gemType))
-			{
-				nobleWillVisit = false;
+		System.out.println(nobleCost);
+		System.out.println(totalBonusGems);
+		for(Map.Entry<Gem, Integer> nobleCostEntry : nobleCost.entrySet()) {
+		//for(Gem gemType : Gem.values()) 
+			if(nobleCostEntry.getValue() > totalBonusGems.get(nobleCostEntry.getKey())) {
+				return false;
 			}
 		}
-		return nobleWillVisit;	
+		return true;	
 	}
 
 	@Override
@@ -95,9 +98,12 @@ public class EndTurnImpl implements EndTurn {
 
 		ReturnTokens model = new ReturnTokens(game.getPlayingField(), game.getCurrentPlayer());
 		ReturnTokenController controller = new ReturnTokenController(model);
+		
+		if(temphand.getSelectedTokensCount() != 0) {
+			this.getTokens();
+		}
+		
 		List<Token> tokens = game.getCurrentPlayer().getTokens();
-		
-		
 		
 		if(tokens.size() > 10) {
 			System.out.println("I'v got " + tokens.size() + " Tokens");
@@ -105,9 +111,7 @@ public class EndTurnImpl implements EndTurn {
 
 		}
 		
-		if(temphand.getSelectedTokensCount() != 0) {
-			this.getTokens();
-		}
+		
 		/**
 		 * Adds the reservecard to the player
 		 */
@@ -133,13 +137,6 @@ public class EndTurnImpl implements EndTurn {
 		
 		
 		//TODO take three token
-		/*
-		if (temphand.getPlayer().getTokens() != null) {
-			for(Token token : temphand.getPlayer().getTokens()) {
-				player.addToken(token);
-			}
-		}*/
-		//begin voor toevoegen nobles
 
 		
 		//game.getPlayers().get(game.getCurrentPlayerIdx()).getOwnedCards().add(game.getTurn().getBoughtCard());
@@ -147,12 +144,20 @@ public class EndTurnImpl implements EndTurn {
 		//game.getPlayers().get(game.getCurrentPlayerIdx()).getReservedCards().add(game.getTurn().getReservedCard());
 		 
 		//TODO: check for nobles
-		game.cleanUpTurn();
+		this.checkNobleVisits();
+		
+		this.cleanUpTurn();
 		game.saveGame();
 		//TODO: Check win condition 
 		//TODO: Determine next player
 		
-		
 		game.nextTurn();
+	}
+	
+	@Override
+	public void cleanUpTurn() throws RemoteException {
+		game.getPlayingField().getTempHand().emptyHand();
+		game.updatePlayingFieldCardsAndPlayerView();
+		
 	}
 }

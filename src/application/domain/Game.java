@@ -47,10 +47,8 @@ public interface Game extends Remote {
 	 * PlayingField
 	 */
 	public PlayingField getPlayingField() throws RemoteException;
-
-	public void cleanUpTurn() throws RemoteException;
 	
-	public void cardSelected() throws RemoteException;
+	public void updatePlayingFieldCardsAndPlayerView() throws RemoteException;
 
 	public void addCardToTempFromReserve(Card card) throws RemoteException;
 

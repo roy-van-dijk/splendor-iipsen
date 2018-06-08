@@ -16,4 +16,6 @@ public interface EndTurn {
 
 	void endTurn() throws RemoteException;
 
+	void cleanUpTurn() throws RemoteException;
+
 }

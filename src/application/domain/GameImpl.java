@@ -92,7 +92,7 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 		this.notifyObservers();
 	}
 
-	
+	@Override
 	public void saveGame() throws RemoteException
 	{
 		try {
@@ -185,14 +185,8 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 		this.observers.remove(o);
 		this.notifyObservers();
 	}
-
-	@Override
-	public void cleanUpTurn() throws RemoteException {
-		playingField.getTempHand().emptyHand();
-		
-	}
 	
-	public void cardSelected() throws RemoteException {
+	public void updatePlayingFieldCardsAndPlayerView() throws RemoteException {
 		for(CardRow cardRow : playingField.getCardRows()) {
 			cardRow.updateView();
 		}

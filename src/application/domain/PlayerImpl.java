@@ -115,16 +115,15 @@ public class PlayerImpl extends UnicastRemoteObject implements Player, Serializa
 	}
 	
 	public Map<Gem, Integer> getBonus() throws RemoteException {
-		LinkedHashMap<Gem, Integer> bonus = new LinkedHashMap<Gem, Integer>();
-		
+		LinkedHashMap<Gem, Integer> bonus = new LinkedHashMap<Gem, Integer>();	
 		for(Gem gemType : Gem.values()) {
-			bonus.put(gemType, 0);
+			if(gemType != Gem.JOKER) {
+				bonus.put(gemType, 0);	
+			}
 		}
-		
 		for(Card card : this.getOwnedCards()) {
 			bonus.put(card.getBonusGem(), bonus.get(card.getBonusGem()) + 1);
 		}
-		
 		return bonus;
 	}
 	
@@ -147,9 +146,10 @@ public class PlayerImpl extends UnicastRemoteObject implements Player, Serializa
 	{
 		return ownedNobles;
 	}
-	public void addNoble(Noble noble)
-	{
+	
+	public void addNoble(Noble noble) throws RemoteException {
 		ownedNobles.add(noble);
+		this.notifyObservers();
 	}
 	
 	public List<Token> getTokens() throws RemoteException {

@@ -14,8 +14,6 @@ import javafx.scene.Node;
 // TODO: give Turn a remote interface.
 public class TempHand implements Serializable {
 	
-	
-	private List<Noble> nobles;
 	private Card boughtCard;
 	private Card reservedCard;
 	private TokenList tokenList;
@@ -28,18 +26,12 @@ public class TempHand implements Serializable {
 	
 	public TempHand() 
 	{
-		this.nobles = new ArrayList<>();
 		this.selectedGemTypes = new ArrayList<>();
 		this.tokenList = new TokenList();
 	}
 	
 	public void updatePlayer(Player player) {
 		this.player = player;
-	}
-	
-	public void selectNoble(Noble noble) 
-	{
-		nobles.add(noble);
 	}
 	
 	public void selectCardToBuy(Card card) 
@@ -94,7 +86,6 @@ public class TempHand implements Serializable {
 	 */
 	public void emptyHand() throws RemoteException 
 	{
-		nobles.clear();
 		selectedGemTypes.clear();
 		tokenList.getAll().clear();
 		reservedCard = null;
