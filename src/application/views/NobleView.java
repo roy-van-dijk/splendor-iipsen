@@ -96,14 +96,14 @@ public class NobleView implements UIComponent {
 		requirements.setAlignment(Pos.BOTTOM_CENTER);
 		requirements.setColumnHalignment(HPos.LEFT); // align labels on left
 
-		// Render requirement circles
+		// Render requirement rectangles
 		for (Map.Entry<Gem, Integer> entry : noble.getRequirements().entrySet()) {
 			if (entry.getValue() != 0) {
 				double rectSizeX = (this.sizeX * 1.0) * RECTANGLE_RESIZE_FACTOR;
 				double rectSizeY = (this.sizeY * 1.2) * RECTANGLE_RESIZE_FACTOR;
 				Rectangle requirementRect = new Rectangle(rectSizeX, rectSizeY);
-				String circlePath = String.format("file:resources/requirements/rectangle_%s.png", entry.getKey().toString().toLowerCase());
-				ImagePattern imagePattern = new ImagePattern(new Image(circlePath));
+				String rectanglePath = String.format("file:resources/requirements/rectangle_%s.png", entry.getKey().toString().toLowerCase());
+				ImagePattern imagePattern = new ImagePattern(new Image(rectanglePath));
 				requirementRect.setFill(imagePattern);
 
 				Label requirementLabel = new Label(String.valueOf(entry.getValue()));
