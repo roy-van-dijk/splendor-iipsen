@@ -174,7 +174,7 @@ public class PlayingFieldImpl extends UnicastRemoteObject implements PlayingFiel
 	public void addTokenToTemp(Gem gemType) throws RemoteException {
 		tempHand.addToken(new TokenImpl(gemType));
 		if(tempHand.getMoveType() == MoveType.TAKE_TWO_TOKENS) {
-			tempHand.addToken(new TokenImpl(gemType));		
+			tempHand.addToken(new TokenImpl(gemType));
 		}
 		this.notifyObservers();
 	}
@@ -204,7 +204,6 @@ public class PlayingFieldImpl extends UnicastRemoteObject implements PlayingFiel
 
 	public void removeToken(Token token) {
 		tokenList.remove(token);
-		
 	}
 	
 	public void removeCard(Card card) throws RemoteException{

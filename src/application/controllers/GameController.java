@@ -53,7 +53,7 @@ public class GameController {
 
 	public void reserveCard() throws RemoteException {
 		// Creating POC variables - basically specifying: Hey controller, I clicked on this >predefined< card
-		CardRow row = game.getPlayingField().getCardRows().get(1); // Second row
+		CardRow row = game.getPlayingField().getCardRows().get(2); // Second row
 		Card card = row.getCardSlots()[1]; // Second card
 		
 		//if(!card.equals(card2wantdezeisspeciaal)) return;
@@ -154,13 +154,22 @@ public class GameController {
 		}
 	}
 
-	public void cardClicked(CardRow cardRow, Card card) throws RemoteException {
+	public void cardClickedFromField(CardRow cardRow, Card card) throws RemoteException {
 		cardRow.addCardToTemp(cardRow, card, game.getPlayingField().getTempHand());
+		game.cardSelected();
+	}
+	
+	public void cardClickedFromReserve(Card card) throws RemoteException {
+		game.addCardToTempFromReserve(card);
 		game.cardSelected();
 	}
 
 	public void onFieldTokenClicked(Gem gemType) throws RemoteException {	
 		game.getPlayingField().addTokenToTemp(gemType);
 		
+	}
+	
+	public TempHand getTempHand() throws RemoteException {
+		return game.getPlayingField().getTempHand();
 	}
 }
