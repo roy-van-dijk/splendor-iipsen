@@ -198,7 +198,7 @@ public class PlayerView implements UIComponent, Disableable, PlayerObserver {
 		ownedNobles.getChildren().clear();
 
 		VBox nobleDisplay = createNobleDisplay(nobles, 110, 110);
-		nobleDisplay.setPrefWidth(175);
+		nobleDisplay.setPrefWidth(110);
 		ownedNobles.getChildren().add(nobleDisplay);
 	}
 
@@ -211,7 +211,7 @@ public class PlayerView implements UIComponent, Disableable, PlayerObserver {
 			NobleView nobleView = new NobleView(noble, sizeX, sizeY);
 			nobleView.asPane().setTranslateY(offset);
 			nobleView.asPane().getStyleClass().add("dropshadow");
-			offset = offset + 50;
+			offset = offset + 35;
 			nobleStack.getChildren().add(nobleView.asPane());
 		}
 
