@@ -165,6 +165,10 @@ public class PlayingFieldImpl extends UnicastRemoteObject implements PlayingFiel
 	public List<Gem> getSelectableTokens() {
 		return selectableTokens;
 	}
+	
+	public TokenList getTokenList() {
+		return tokenList;
+	}
 
 	public TempHand getTempHand() {
 		return tempHand;
@@ -227,6 +231,16 @@ public class PlayingFieldImpl extends UnicastRemoteObject implements PlayingFiel
 	public List<Card> getSelectableCardsFromField() throws RemoteException {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void removeTokens(List<Token> tokens) throws RemoteException {
+		for(Token token : tokens)
+		{
+			tokenList.remove(token);
+		}
+		this.notifyObservers();
+		
 	}
 
 }

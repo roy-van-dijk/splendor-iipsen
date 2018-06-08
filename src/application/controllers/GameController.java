@@ -1,6 +1,7 @@
 package application.controllers;
 
 import java.rmi.RemoteException;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 
@@ -31,6 +32,8 @@ import application.domain.Noble;
 import application.domain.ReturnTokens;
 import application.domain.TempHand;
 import application.domain.Token;
+import application.domain.TokenImpl;
+import application.domain.TokenList;
 import application.services.SaveGameDAO;
 import application.util.ConfirmDialog;
 import application.views.PopUpWindowView;
@@ -57,7 +60,15 @@ public class GameController {
 		Card card = row.getCardSlots()[1]; // Second card
 		
 		//if(!card.equals(card2wantdezeisspeciaal)) return;
-		
+		if(game.getPlayingField().getTokenGemCount().containsKey(Gem.JOKER))
+		{
+			TokenList tokenList = game.getPlayingField().getTokenList();
+			for(Token token : tokenList)
+			{
+				
+			}
+			game.getCurrentPlayer().debugAddToken(token);
+			tempHand.
 		game.getCurrentPlayer().reserveCardFromField(row, card);
 		
 	}
