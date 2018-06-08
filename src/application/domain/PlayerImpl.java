@@ -29,7 +29,7 @@ public class PlayerImpl extends UnicastRemoteObject implements Player, Serializa
 
 	private transient List<PlayerObserver> observers;
 	
-	private TokenList tokenList;
+	private TokenList tokenList;	
 	
 	public void addSelectableCardFromReserve(Card card) {
 		selectableCards.add(card);
@@ -79,6 +79,11 @@ public class PlayerImpl extends UnicastRemoteObject implements Player, Serializa
 		}
 	}
 	
+	@Override
+	public void updatePlayerView() throws RemoteException {
+		this.notifyObservers();
+	}
+	
 	public void findSelectableCardsFromReserve() throws RemoteException {
 		selectableCards.clear();
 		for(Card card : this.getReservedCards()) {
@@ -89,6 +94,7 @@ public class PlayerImpl extends UnicastRemoteObject implements Player, Serializa
 		
 		this.notifyObservers();
 	}
+	
 	public boolean canAffordCard(Map<Gem, Integer> costs) throws RemoteException
 	{
 		Map<Gem, Integer> gemsCount = tokenList.getTokenGemCount();
@@ -218,16 +224,17 @@ public class PlayerImpl extends UnicastRemoteObject implements Player, Serializa
 	@Override
 	public void reserveCardFromField(CardRow cardRow, Card card) throws RemoteException {
 		// TODO (low priority): Make reservedTokens class that incorporates this business rule
-				if(this.getReservedCards().size() < 3) // Business rule: max 3 reserved cards
-				{
-					cardRow.removeCard(card);
-					reservedCards.add(card);
-					
-					System.out.printf("%s has taken the card with costs: %s\n", this.getName() ,card.getCosts());
-					this.notifyObservers();
-				}
-		
+		if(this.getReservedCards().size() < 3) // Business rule: max 3 reserved cards
+		{
+			cardRow.removeCard(card);
+			reservedCards.add(card);
+			
+			System.out.printf("%s has taken the card with costs: %s\n", this.getName() ,card.getCosts());
+			this.notifyObservers();
+		}
+
 	}
+		
 
 	/* (non-Javadoc)
 	 * @see application.domain.Player#addReserverveCard(application.domain.Card)

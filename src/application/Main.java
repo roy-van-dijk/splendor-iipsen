@@ -41,6 +41,8 @@ public class Main extends Application {
 		        });
 			StageManager.getInstance().startSplendor(primaryStage);
 			StageManager.getInstance().showGameScreen();
+			
+			primaryStage.setMaximized(true);
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
