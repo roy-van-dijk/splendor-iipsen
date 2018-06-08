@@ -165,6 +165,10 @@ public class PlayingFieldImpl extends UnicastRemoteObject implements PlayingFiel
 	public List<Gem> getSelectableTokens() {
 		return selectableTokens;
 	}
+	
+	public TokenList getTokenList() {
+		return tokenList;
+	}
 
 	public TempHand getTempHand() {
 		return tempHand;
@@ -174,7 +178,7 @@ public class PlayingFieldImpl extends UnicastRemoteObject implements PlayingFiel
 	public void addTokenToTemp(Gem gemType) throws RemoteException {
 		tempHand.addToken(new TokenImpl(gemType));
 		if(tempHand.getMoveType() == MoveType.TAKE_TWO_TOKENS) {
-			tempHand.addToken(new TokenImpl(gemType));		
+			tempHand.addToken(new TokenImpl(gemType));
 		}
 		this.notifyObservers();
 	}
@@ -204,7 +208,6 @@ public class PlayingFieldImpl extends UnicastRemoteObject implements PlayingFiel
 
 	public void removeToken(Token token) {
 		tokenList.remove(token);
-		
 	}
 	
 	public void removeCard(Card card) throws RemoteException{
@@ -228,6 +231,16 @@ public class PlayingFieldImpl extends UnicastRemoteObject implements PlayingFiel
 	public List<Card> getSelectableCardsFromField() throws RemoteException {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void removeTokens(List<Token> tokens) throws RemoteException {
+		for(Token token : tokens)
+		{
+			tokenList.remove(token);
+		}
+		this.notifyObservers();
+		
 	}
 
 }

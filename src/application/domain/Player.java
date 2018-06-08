@@ -148,5 +148,7 @@ public interface Player extends Remote {
 	 * @return 
 	 */
 	public void addReserverveCard(Card card) throws RemoteException;
+	
+	public void updatePlayerView() throws RemoteException;
 
 }

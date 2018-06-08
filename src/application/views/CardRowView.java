@@ -82,7 +82,7 @@ public class CardRowView implements UIComponent, CardRowObserver {
 				cardView.asPane().getStyleClass().add("selectable");
 	        	cardView.asPane().setOnMouseClicked(e -> { 
 	        		try {
-	        			gameController.cardClicked(cardRow, card);
+	        			gameController.cardClickedFromField(cardRow, card);
 	        		} catch (RemoteException e1) {
 	        			// TODO Auto-generated catch block
 	        			e1.printStackTrace();

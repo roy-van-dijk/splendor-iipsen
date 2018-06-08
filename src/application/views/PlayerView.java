@@ -11,6 +11,7 @@ import application.domain.Gem;
 import application.domain.Noble;
 import application.domain.Player;
 import application.domain.PlayerObserver;
+import application.domain.TempHand;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
@@ -42,7 +43,8 @@ public class PlayerView implements UIComponent, Disableable, PlayerObserver {
 	// Radio button toggle group
 	final private ToggleGroup group = new ToggleGroup();
 
-	private GameController gamecontroller;
+	private GameController gameController;
+	private Player player;
 
 	private Pane root;
 
@@ -53,11 +55,12 @@ public class PlayerView implements UIComponent, Disableable, PlayerObserver {
 
 	private Label lblPrestigeValue;
 
-	public PlayerView(Player player) throws RemoteException {
+	public PlayerView(Player player, GameController gameController) throws RemoteException {
 
 		this.buildUI();
-
+		this.player = player;
 		player.addObserver(this);
+		this.gameController = gameController;
 	}
 
 	private void buildUI() throws RemoteException {
@@ -153,7 +156,32 @@ public class PlayerView implements UIComponent, Disableable, PlayerObserver {
 
 		for (Card card : cards) {
 			CardView cardView = new FrontCardView(card, sizeX, sizeY);
+			
 			cardView.asPane().getStyleClass().add("dropshadow");
+
+			try {
+				if(!player.getSelectableCardsFromReserve().isEmpty()) {
+					System.out.println(gameController);
+					System.out.println(card);
+					if(gameController.getTempHand().getBoughtCard() == card) {
+						cardView.asPane().getStyleClass().remove("selectable");
+						cardView.asPane().getStyleClass().add("selected");
+					} else if(player.getSelectableCardsFromReserve().contains(card)) {
+						cardView.asPane().getStyleClass().add("selectable");
+						cardView.asPane().setOnMouseClicked(e -> { 
+							try {
+								gameController.cardClickedFromReserve(card);
+							} catch (RemoteException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+						});
+					}
+				}
+			} catch (RemoteException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			reservedCards.getChildren().add(cardView.asPane());
 		}
 

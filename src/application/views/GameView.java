@@ -239,7 +239,7 @@ public class GameView implements UIComponent, Disableable, GameObserver  {
 	
 	private PlayerView buildPlayer() throws RemoteException
 	{
-		return new PlayerView(game.getPlayers().get(0));
+		return new PlayerView(game.getPlayers().get(0), gameController);
 	}
 	
 
