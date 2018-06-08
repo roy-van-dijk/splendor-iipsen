@@ -32,19 +32,12 @@ public class GameController {
 		CardRow row = game.getPlayingField().getCardRows().get(2); // Second row
 		Card card = row.getCardSlots()[1]; // Second card
 		
-		//if(!card.equals(card2wantdezeisspeciaal)) return;
-
-		//if(game.getPlayingField().getTokenGemCount().containsKey(Gem.JOKER))
-		if(game.getPlayingField().getTokenGemCount().containsKey(Gem.JOKER))
-		{
+		if(game.getPlayingField().getTokenGemCount().containsKey(Gem.JOKER)) {
 			TokenList tokenList = game.getPlayingField().getTokenList();
-			for(Token token : tokenList.getAll())
-			{
-
+			for(Token token : tokenList.getAll()){
 				game.getCurrentPlayer().debugAddToken(token);
 			}
-
-		game.getCurrentPlayer().reserveCardFromField(row, card);
+			game.getCurrentPlayer().reserveCardFromField(row, card);
 		}
 
 		

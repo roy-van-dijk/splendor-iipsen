@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.EmptyStackException;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -255,12 +256,4 @@ public class PlayerImpl extends UnicastRemoteObject implements Player, Serializa
 		this.notifyObservers();
 		
 	}
-
-	@Override
-	public void addSelectableCardFromReserve(Card card) throws RemoteException {
-		// TODO Auto-generated method stub
-		
-	}
-	
-
 }

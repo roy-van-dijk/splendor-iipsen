@@ -8,7 +8,6 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Stack;
 
 /**
  * 
@@ -211,10 +210,10 @@ public class PlayingFieldImpl extends UnicastRemoteObject implements PlayingFiel
 		tokenList.remove(token);
 	}
 
-	
 	public void removeCard(Card card) throws RemoteException{
-		cardRows.remove(card);
-		//TODO Remove card from CardRow
+		for(CardRow cardRow : cardRows) {
+			cardRow.removeCard(card);
+		}
 	}
 
 	public void newTurn() throws RemoteException {

@@ -53,15 +53,6 @@ public interface Player extends Remote {
 	// public void removeObserver(PlayerObserver o) throws RemoteException;
 
 	/**
-	 * Adds a reserved card to the selectableCards list
-	 * 
-	 * @param card
-	 * @throws RemoteException
-	 * @return void
-	 */
-	public void addSelectableCardFromReserve(Card card) throws RemoteException;
-
-	/**
 	 * Adds a card to the player's owned card list
 	 * 
 	 * @param card

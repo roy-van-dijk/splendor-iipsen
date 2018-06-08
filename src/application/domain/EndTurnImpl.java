@@ -102,10 +102,18 @@ public class EndTurnImpl implements EndTurn, Serializable {
 			/**
 			 * Add temphand cards to the player
 			 */
-			game.cleanUpSelections();		
-			player.addCard(tempHand.getBoughtCard());
+			Card boughtCard = tempHand.getBoughtCard();
+			game.cleanUpSelections();
+			if(player.getReservedCards().contains(boughtCard)) {
+				player.getReservedCards().remove(boughtCard);
+			} else {
+				playingField.removeCard(boughtCard);
+			}
+			player.addCard(boughtCard);
 			this.removeTokenCost();	
 		} else if(moveType == MoveType.RESERVE_CARD) {
+			// TODO: Dit werkt echt nog voor geen meter
+			
 			/**
 			 * Adds the reservecard to the player
 			 */

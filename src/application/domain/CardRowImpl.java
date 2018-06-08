@@ -51,10 +51,9 @@ public class CardRowImpl implements Serializable, CardRow {
 			if(cardSlots[i].equals(card))
 			{
 				cardSlots[i] = null;
-				fillCardSlots();
 			}
 		}
-		this.notifyObservers();
+		this.fillCardSlots();
 	}
 	
 	
