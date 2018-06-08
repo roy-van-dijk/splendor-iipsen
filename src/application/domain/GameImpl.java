@@ -37,6 +37,8 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 
 	private transient List<GameObserver> observers;
 	
+	private EndTurnImpl endTurn;
+	
 	/*
 	 * The Game object knows how many players there are
 	 * Therefore the game object determines how many tokens and nobles there need to be created. 
@@ -57,6 +59,8 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 		this.playingField = new PlayingFieldImpl(this.maxPlayers);
 		
 		playingField.getTempHand().updatePlayer(this.getCurrentPlayer());
+		
+		endTurn = new EndTurnImpl(this);
 	}
 	
 	public void nextTurn() throws RemoteException
@@ -204,6 +208,11 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 			this.getPlayingField().getTempHand().selectCardToReserve(card);
 		}
 		this.getCurrentPlayer().updatePlayerView();
+	}
+	
+	@Override
+	public EndTurnImpl getEndTurn() throws RemoteException {
+		return endTurn;
 	}
 
 }

@@ -202,14 +202,12 @@ public class GameView implements UIComponent, Disableable, GameObserver  {
 		btnEndTurn.getStyleClass().add("move-button");
 		//btnEndTurn.setDisable(true);
 		btnEndTurn.setOnAction(e -> {
-			try {
-
-				gameController.endTurn();
-
-			} catch (RemoteException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+				try {
+					gameController.endTurn();
+				} catch (RemoteException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 		});
 
 		this.moveButtons.addAll(Arrays.asList(btnReserveCard, btnPurchaseCard, btnTakeTwoTokens, btnTakeThreeTokens, btnResetTurn, btnEndTurn));
