@@ -211,7 +211,7 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 	}
 	
 	@Override
-	public EndTurnImpl getEndTurn() throws RemoteException {
+	public EndTurn getEndTurn() throws RemoteException {
 		return endTurn;
 	}
 

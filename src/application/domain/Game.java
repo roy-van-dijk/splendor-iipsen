@@ -54,6 +54,6 @@ public interface Game extends Remote {
 
 	public void addCardToTempFromReserve(Card card) throws RemoteException;
 
-	public EndTurnImpl getEndTurn() throws RemoteException;
+	public EndTurn getEndTurn() throws RemoteException;
 
 }
