@@ -26,8 +26,10 @@ public class EndTurnImpl implements EndTurn {
 
 		List<Noble> visitingNobles = checkPlayingFieldNobles(allNobles, totalBonusGems);
 		
-		for(Noble noble : visitingNobles)
-		game.getCurrentPlayer().addNoble(noble);
+		for(Noble noble : visitingNobles) {
+			game.getCurrentPlayer().addNoble(noble);
+			game.getPlayingField().getNobles().remove(noble);
+		}
 		
 	}
 	
