@@ -8,6 +8,7 @@ import application.domain.Card;
 import application.domain.CardRow;
 import application.domain.Game;
 import application.domain.Gem;
+import application.domain.MoveType;
 import application.domain.TempHand;
 import application.domain.Token;
 import application.domain.TokenList;
@@ -68,7 +69,9 @@ public class GameController {
 
 	public void cardClickedFromField(CardRow cardRow, Card card) throws RemoteException {
 		cardRow.addCardToTemp(cardRow, card, game.getPlayingField().getTempHand());
-		game.getPlayingField().setDeckDeselected();
+		if(game.getPlayingField().getTempHand().getMoveType() == MoveType.RESERVE_CARD) {
+			game.getPlayingField().setDeckDeselected();
+		}
 		game.updatePlayingFieldAndPlayerView();
 	}
 	
