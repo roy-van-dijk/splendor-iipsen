@@ -87,13 +87,11 @@ public class EndTurnImpl implements EndTurn, Serializable {
 		this.getCurrentPlayer();
 		MoveType moveType = tempHand.getMoveType();
 		
-		
 		if(moveType == MoveType.PURCHASE_CARD) {
 			/**
 			 * Add temphand cards to the player
 			 */
 			Card boughtCard = tempHand.getBoughtCard();
-			game.cleanUpSelections();
 			if(player.getReservedCards().contains(boughtCard)) {
 				player.getReservedCards().remove(boughtCard);
 			} else {
@@ -106,6 +104,11 @@ public class EndTurnImpl implements EndTurn, Serializable {
 			 * Adds the reservecard to the player
 			 */
 			playingField.removeCard(tempHand.getReservedCard());
+			for(CardRow cardRow : playingField.getCardRows()) {
+				if(cardRow.getCardDeck().isSelected()) {
+					cardRow.getCardDeck().pull();
+				}
+			}
 			player.addReserverveCard(tempHand.getReservedCard());
 			// TODO: Geef speler een joker
 			if(playingField.getTokenGemCount().get(Gem.JOKER) > 0){
