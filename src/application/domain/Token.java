@@ -13,7 +13,7 @@ public interface Token extends Remote {
 	/**
 	 * Gets the gem type this token is associated with
 	 * 
-	 * @return
+	 * @return Gem
 	 */
 	public Gem getGemType();
 
