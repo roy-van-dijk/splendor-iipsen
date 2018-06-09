@@ -255,4 +255,11 @@ public class PlayingFieldImpl extends UnicastRemoteObject implements PlayingFiel
 		selectedCardRow.getCardDeck().setSelected();
 	}
 	
+	@Override
+	public void setDeckDeselected() throws RemoteException {
+		for(CardRow cardRow : cardRows) {
+			cardRow.getCardDeck().setSelectable();;
+		}
+	}
+	
 }

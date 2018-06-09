@@ -56,32 +56,6 @@ public class CardRowView implements UIComponent, CardRowObserver {
 	{
 		grid.getChildren().clear();
 		
-		// TODO: separate functions
-		
-		// Create the deck view (Looks like the back side of a card)
-		CardDeckView cardDeckView = new CardDeckView(cardRow.getCardDeck(), GameView.cardSizeX, GameView.cardSizeY);
-		
-		if(cardRow.getCardDeck().isSelected()) {
-    		cardDeckView.asPane().getStyleClass().remove("selectable");
-    		cardDeckView.asPane().getStyleClass().add("selected");
-		} else if(cardRow.getCardDeck().isSelectable()) {
-			cardDeckView.asPane().getStyleClass().remove("selected");
-			cardDeckView.asPane().getStyleClass().add("selectable");
-			cardDeckView.asPane().setOnMouseClicked(e -> {
-				try {
-					gameController.reserveCardFromDeck(cardRow);
-				} catch (RemoteException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-			});
-		} else {
-			cardDeckView.asPane().getStyleClass().remove("selectable");
-		}
-		
-		// // Add the deck to the grid, make deck view first in row
-		grid.add(cardDeckView.asPane(), 0, 0);
-		
 		// Fetch the cards
 		Card[] cardSlots = cardRow.getCardSlots();
 		
@@ -116,6 +90,34 @@ public class CardRowView implements UIComponent, CardRowObserver {
         	// Display cards by index
         	grid.add(cardView.asPane(), idx + 1, 0);
         }
+		
+		// TODO: separate functions
+		
+		// Create the deck view (Looks like the back side of a card)
+		CardDeckView cardDeckView = new CardDeckView(cardRow.getCardDeck(), GameView.cardSizeX, GameView.cardSizeY);
+		
+		if(cardRow.getCardDeck().isSelected()) {
+    		cardDeckView.asPane().getStyleClass().remove("selectable");
+    		cardDeckView.asPane().getStyleClass().add("selected");
+		} else if(cardRow.getCardDeck().isSelectable()) {
+			cardDeckView.asPane().getStyleClass().remove("selected");
+			cardDeckView.asPane().getStyleClass().add("selectable");
+			cardDeckView.asPane().setOnMouseClicked(e -> {
+				try {
+					gameController.reserveCardFromDeck(cardRow);
+				} catch (RemoteException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			});
+		} else {
+			cardDeckView.asPane().getStyleClass().remove("selectable");
+		}
+		
+		// // Add the deck to the grid, make deck view first in row
+		grid.add(cardDeckView.asPane(), 0, 0);
+		
+		
         
 	}
 
