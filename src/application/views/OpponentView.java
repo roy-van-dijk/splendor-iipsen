@@ -77,14 +77,26 @@ public class OpponentView implements UIComponent, PlayerObserver {
 		reservedCardsFrame.getChildren().clear();
 		for(Card reservedCard : opponentReservedCards)
 		{
-            FrontCardView card = new FrontCardView(reservedCard, GameView.cardSizeX * CARDS_RESIZE_FACTOR, GameView.cardSizeY * CARDS_RESIZE_FACTOR);
-            card.asPane().getStyleClass().addAll("opponent");
-            
-            StackPane paneCard = new StackPane(card.asPane());
-            paneCard.setAlignment(Pos.CENTER);
-            HBox.setHgrow(paneCard, Priority.ALWAYS);
+			CardView card;
+			try {
+				if(reservedCard.isReservedFromDeck()) {
+					card = new RearCardView(reservedCard, GameView.cardSizeX * CARDS_RESIZE_FACTOR, GameView.cardSizeY * CARDS_RESIZE_FACTOR);
+				} else {
+					card = new FrontCardView(reservedCard, GameView.cardSizeX * CARDS_RESIZE_FACTOR, GameView.cardSizeY * CARDS_RESIZE_FACTOR);
+				}
+				card.asPane().getStyleClass().addAll("opponent");
+	            
+	            StackPane paneCard = new StackPane(card.asPane());
+	            paneCard.setAlignment(Pos.CENTER);
+	            HBox.setHgrow(paneCard, Priority.ALWAYS);
 
-            reservedCardsFrame.getChildren().add(paneCard);
+	            reservedCardsFrame.getChildren().add(paneCard);
+			} catch (RemoteException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+           
+            
 		}
 	}
 	private void updateOpponentTokens(Map<Gem, Integer> gemsCount)

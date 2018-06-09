@@ -88,13 +88,13 @@ public class GameController {
 
 	public void reserveCardFromDeck(CardRow cardRow) throws RemoteException {
 		cardRow.addCardToTemp(cardRow, cardRow.getCardDeck().top(), this.getTempHand());
+		cardRow.getCardDeck().top().setReservedFromDeck(true);
 		game.getPlayingField().setDeckSelected(cardRow);
 		game.updatePlayingFieldAndPlayerView();	
 	}
 
 	public void clearDeckSelection() throws RemoteException {
 		game.getPlayingField().setDeckDeselected();
-		game.updatePlayingFieldAndPlayerView();	
-		
+		game.updatePlayingFieldAndPlayerView();			
 	}
 }
