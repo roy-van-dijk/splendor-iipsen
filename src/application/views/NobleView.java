@@ -21,6 +21,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
 /**
+ * Displays nobles
  * 
  * @author Sanchez
  *
@@ -34,8 +35,10 @@ public class NobleView implements UIComponent {
 	private Pane root;
 
 	private double sizeX, sizeY;
+
 	/**
-	 * create view of noble with size x and y
+	 * Create view of a noble with size x and y
+	 * 
 	 * @param noble
 	 * @param sizeX
 	 * @param sizeY
@@ -52,7 +55,12 @@ public class NobleView implements UIComponent {
 		}
 	}
 
-	//image path to get the image.
+	/**
+	 * Returns the path for this noble's illustration
+	 * 
+	 * @throws RemoteException
+	 * @return String
+	 */
 	public String getNobleImagePath() throws RemoteException {
 		String illustration = String.valueOf(noble.getIllustration());
 		return String.format("file:resources/nobles/%s.png", illustration);
@@ -102,7 +110,8 @@ public class NobleView implements UIComponent {
 				double rectSizeX = (this.sizeX * 1.0) * RECTANGLE_RESIZE_FACTOR;
 				double rectSizeY = (this.sizeY * 1.2) * RECTANGLE_RESIZE_FACTOR;
 				Rectangle requirementRect = new Rectangle(rectSizeX, rectSizeY);
-				String rectanglePath = String.format("file:resources/requirements/rectangle_%s.png", entry.getKey().toString().toLowerCase());
+				String rectanglePath = String.format("file:resources/requirements/rectangle_%s.png",
+						entry.getKey().toString().toLowerCase());
 				ImagePattern imagePattern = new ImagePattern(new Image(rectanglePath));
 				requirementRect.setFill(imagePattern);
 

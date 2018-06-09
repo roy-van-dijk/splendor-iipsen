@@ -34,6 +34,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
 /**
+ * This is the view with the player's own information
  * 
  * @author Sanchez
  *
@@ -56,8 +57,10 @@ public class PlayerView implements UIComponent, Disableable, PlayerObserver {
 	private Label lblPrestigeValue;
 
 	/**
+	 * Creates a new player view
 	 * 
-	 * @param player this player.
+	 * @param player
+	 *            this player.
 	 * @param gameController
 	 * @throws RemoteException
 	 */
@@ -93,7 +96,8 @@ public class PlayerView implements UIComponent, Disableable, PlayerObserver {
 
 		VBox accessibility = buildAccessibilityMenu();
 
-		root.getChildren().addAll(panePrestige, sep(), tokensGrid, sep(), ownedCards, sep(), ownedNobles, sep(), reservedCards, sep(), accessibility);
+		root.getChildren().addAll(panePrestige, sep(), tokensGrid, sep(), ownedCards, sep(), ownedNobles, sep(),
+				reservedCards, sep(), accessibility);
 	}
 
 	public void modelChanged(Player player) throws RemoteException {
@@ -103,7 +107,7 @@ public class PlayerView implements UIComponent, Disableable, PlayerObserver {
 		this.updatePlayerCards(player.getOwnedCards());
 		this.updatePlayerNobles(player.getOwnedNobles());
 		this.updatePlayerReservedCards(player.getReservedCards());
-	} 
+	}
 
 	private VBox buildAccessibilityMenu() {
 		VBox accessibility = new VBox(10);
@@ -162,19 +166,19 @@ public class PlayerView implements UIComponent, Disableable, PlayerObserver {
 
 		for (Card card : cards) {
 			CardView cardView = new FrontCardView(card, sizeX, sizeY);
-			
+
 			cardView.asPane().getStyleClass().add("dropshadow");
 
 			try {
-				if(!player.getSelectableCardsFromReserve().isEmpty()) {
+				if (!player.getSelectableCardsFromReserve().isEmpty()) {
 					System.out.println(gameController);
 					System.out.println(card);
-					if(gameController.getTempHand().getBoughtCard() == card) {
+					if (gameController.getTempHand().getBoughtCard() == card) {
 						cardView.asPane().getStyleClass().remove("selectable");
 						cardView.asPane().getStyleClass().add("selected");
-					} else if(player.getSelectableCardsFromReserve().contains(card)) {
+					} else if (player.getSelectableCardsFromReserve().contains(card)) {
 						cardView.asPane().getStyleClass().add("selectable");
-						cardView.asPane().setOnMouseClicked(e -> { 
+						cardView.asPane().setOnMouseClicked(e -> {
 							try {
 								gameController.cardClickedFromReserve(card);
 							} catch (RemoteException e1) {
@@ -266,14 +270,14 @@ public class PlayerView implements UIComponent, Disableable, PlayerObserver {
 		int offset = 60;
 
 		StackPane cardStack = new StackPane();
-		
+
 		Label cardCountLabel = new Label(String.valueOf(count));
 		cardCountLabel.setAlignment(Pos.TOP_CENTER);
 		cardCountLabel.getStyleClass().add("card-count");
 		cardCountLabel.setFont(Font.font("Times New Roman", FontWeight.BOLD, 40));
 		cardCountLabel.setPrefWidth(125);
 		cardCountLabel.setTextFill(Color.WHITE);
-		
+
 		cardStack.getChildren().add(cardCountLabel);
 
 		for (Card card : cards) {
@@ -284,7 +288,7 @@ public class PlayerView implements UIComponent, Disableable, PlayerObserver {
 			cardStack.getChildren().add(cardView.asPane());
 		}
 
-		cardStack.setAlignment(Pos.TOP_CENTER);		
+		cardStack.setAlignment(Pos.TOP_CENTER);
 
 		VBox ownedCardDisplay = new VBox(10, cardStack);
 
@@ -296,7 +300,8 @@ public class PlayerView implements UIComponent, Disableable, PlayerObserver {
 
 		int col = 0, row = 0;
 		for (Map.Entry<Gem, Integer> entry : gemsCount.entrySet()) {
-			HBox tokenGemCountDisplay = createTokenGemCountDisplay(entry.getKey(), entry.getValue(), GameView.tokenSizeRadius / 2);
+			HBox tokenGemCountDisplay = createTokenGemCountDisplay(entry.getKey(), entry.getValue(),
+					GameView.tokenSizeRadius / 2);
 			tokensGrid.add(tokenGemCountDisplay, col % 2, row % 3);
 			col++;
 			row++;

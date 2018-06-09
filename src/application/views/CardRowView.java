@@ -1,22 +1,18 @@
 package application.views;
 
 import java.rmi.RemoteException;
-import java.util.List;
 
 import application.controllers.GameController;
 import application.domain.Card;
 import application.domain.CardRow;
-import application.domain.CardRowImpl;
 import application.domain.CardRowObserver;
-import application.domain.Gem;
 import application.domain.TempHand;
 import javafx.geometry.Pos;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 
 /**
- * 
+ * Card row views are the rows of cards that can be seen on the playing field
  * @author Sanchez
  *
  */
@@ -30,8 +26,8 @@ public class CardRowView implements UIComponent, CardRowObserver {
 	private TempHand tempHand;
 
 	/**
-	 * 
-	 * @param cardRow a row of cards on the playingfield
+	 * Creates a new card row view
+	 * @param cardRow a row of cards on the playing field
 	 * @param gameController
 	 * @param tempHand used to determine if a card is selected or not
 	 */
@@ -49,7 +45,8 @@ public class CardRowView implements UIComponent, CardRowObserver {
 	}
 	
 	/**
-	 * update the cardrow view, like when a card is bought, reserved or selected.
+	 * Update the card row view, like when a card is bought, reserved or selected.
+	 * @return void
 	 */
 	@Override
 	public void modelChanged(CardRow cardRow) throws RemoteException 
@@ -133,7 +130,6 @@ public class CardRowView implements UIComponent, CardRowObserver {
 
         root = grid;
 	}
-
 
 	public Pane asPane() {
 		return root;

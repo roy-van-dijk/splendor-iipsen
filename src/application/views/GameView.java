@@ -21,8 +21,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+
 /**
- * 
+ * Game view contains the entire visualisation of the game after the lobby. It contains multiple sub-views as well 
  * @author Sanchez
  *
  */
@@ -57,7 +58,7 @@ public class GameView implements UIComponent, Disableable, GameObserver  {
 	private PlayerView player;
 	
 	/**
-	 * 
+	 * Creates a new game view
 	 * @param game
 	 * @param gameController
 	 */
@@ -99,7 +100,8 @@ public class GameView implements UIComponent, Disableable, GameObserver  {
 	}
 	
 	/**
-	 * build the actual game view
+	 * Build the actual game view
+	 * @return void
 	 */
 	private void buildUI()
 	{
@@ -126,15 +128,19 @@ public class GameView implements UIComponent, Disableable, GameObserver  {
 		root.setBottom(player.asPane());
 	}
 	
-	
-	
+	/**
+	 * Builds the playing field view (section with all the cards, nobles, tokens, etc.)
+	 * @throws RemoteException
+	 * @return PlayingFieldView
+	 */
 	private PlayingFieldView buildPlayingField() throws RemoteException
 	{
 		return new PlayingFieldView(game.getPlayingField(), gameController);
 	}
+	
 	/**
-	 * build the buttons the players use to sellect their action for a turn.
-	 * @return buttons
+	 * Builds the buttons the players uses to select their action for a turn
+	 * @return HBox
 	 */
 	private HBox buildButtons()
 	{
@@ -226,9 +232,9 @@ public class GameView implements UIComponent, Disableable, GameObserver  {
 	}
 	
 	/**
-	 * build the box with the player information of the opponants.
-	 * @return opponentsRow
+	 * Build the box with the player information of the opponents.
 	 * @throws RemoteException
+	 * @return Pane
 	 */
 	private Pane buildOpponents() throws RemoteException
 	{
@@ -250,6 +256,11 @@ public class GameView implements UIComponent, Disableable, GameObserver  {
 		return opponentsRows;
 	}
 	
+	/**
+	 * Builds the player view. This is the view with the player's own information
+	 * @throws RemoteException
+	 * @return PlayerView
+	 */
 	private PlayerView buildPlayer() throws RemoteException
 	{
 		return new PlayerView(game.getPlayers().get(0), gameController);

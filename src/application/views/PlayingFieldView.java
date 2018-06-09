@@ -24,13 +24,16 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 
 /**
+ * The playing field view is the section that contains all the cards, nobles,
+ * tokens, etc.
  * 
  * @author Sanchez
  *
  */
 public class PlayingFieldView implements UIComponent, Disableable, PlayingFieldObserver {
 
-	public final static int CARDSPACING = 15, TOKENSPACING = 10, TOKENSLABELSPACING = 25, TOKENSCARDSPADDING = 20, FIELDPADDING = 0;
+	public final static int CARDSPACING = 15, TOKENSPACING = 10, TOKENSLABELSPACING = 25, TOKENSCARDSPADDING = 20,
+			FIELDPADDING = 0;
 
 	private final static double NOBLES_HEIGHT_FACTOR = 0.67;
 
@@ -50,6 +53,7 @@ public class PlayingFieldView implements UIComponent, Disableable, PlayingFieldO
 	private GameController gameController;
 
 	/**
+	 * Creates a new playing field view
 	 * 
 	 * @param PlayingField
 	 *            playingField
@@ -67,14 +71,18 @@ public class PlayingFieldView implements UIComponent, Disableable, PlayingFieldO
 
 		playingField.addObserver(this);
 	}
+
 	/**
-	 * update the playingFieldView
+	 * Update the playingFieldView
+	 * 
+	 * @return void
 	 */
 	public void modelChanged(PlayingField playingField) throws RemoteException {
 		if (cardsPane.getChildren().isEmpty()) {
 			this.initializeCardRows(playingField.getCardRows(), playingField.getTempHand());
 		}
-		this.updateFieldTokens(playingField.getTokenGemCount(), playingField.getSelectableTokens(), playingField.getTempHand());
+		this.updateFieldTokens(playingField.getTokenGemCount(), playingField.getSelectableTokens(),
+				playingField.getTempHand());
 		this.updateNobles(playingField.getNobles());
 	}
 
@@ -143,7 +151,8 @@ public class PlayingFieldView implements UIComponent, Disableable, PlayingFieldO
 
 		if (gemType != Gem.JOKER) {
 			if ((tempHand.getMoveType() == MoveType.TAKE_TWO_TOKENS && tempHand.getSelectedTokensCount() < 1)
-					|| (tempHand.getMoveType() == MoveType.TAKE_THREE_TOKENS && tempHand.getSelectedTokensCount() < 3 && !tempHand.getSelectedGemTypes().contains(gemType))) {
+					|| (tempHand.getMoveType() == MoveType.TAKE_THREE_TOKENS && tempHand.getSelectedTokensCount() < 3
+							&& !tempHand.getSelectedGemTypes().contains(gemType))) {
 				tokenView.asPane().setOnMouseClicked(e -> {
 					try {
 						gameController.onFieldTokenClicked(gemType);

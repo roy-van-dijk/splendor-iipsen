@@ -9,7 +9,7 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 /**
- * Shows a new manual window.
+ * View for the manual window
  * 
  * @author Roy
  *
@@ -19,7 +19,7 @@ public class ManualWindowView {
 	private BorderPane pane;
 
 	/**
-	 * Shows a new window that contains the manual.
+	 * Shows a new window that contains the manual
 	 * 
 	 */
 	public ManualWindowView() {
@@ -55,8 +55,9 @@ public class ManualWindowView {
 	}
 
 	/**
-	 * Switches to the next page of the manual.
+	 * Switches to the next page of the manual
 	 * 
+	 * @return void
 	 */
 	public void switchPage() {
 		System.out.println("Switching manual pages");
