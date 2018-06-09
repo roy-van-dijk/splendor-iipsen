@@ -100,4 +100,9 @@ public class GameController {
 		game.getPlayingField().setDeckDeselected();
 		game.updatePlayingFieldAndPlayerView();			
 	}
+
+	public void resetTurn() throws RemoteException {
+		this.getTempHand().emptyHand();
+		game.cleanUpSelections();		
+	}
 }

@@ -199,7 +199,8 @@ public class GameView implements UIComponent, Disableable, GameObserver  {
 		btnResetTurn.getStyleClass().add("move-button");
 		btnResetTurn.setOnAction(e ->{
 			try {
-				gameController.debugNextTurn();
+				gameController.resetTurn();
+				//gameController.debugNextTurn();
 			} catch (RemoteException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
