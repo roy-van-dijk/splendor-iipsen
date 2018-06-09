@@ -73,16 +73,8 @@ public class EndTurnImpl implements EndTurn, Serializable {
 	}
 
 	private void getTokens() throws RemoteException {
-		List<Token> tokenlist = playingField.getTokenList().getAll();
-		//TokenList newtokenlist =  game.getPlayingField().getTokenList();
-		TempHand temphand = playingField.getTempHand();
-		TokenList newtokenlist1 = new TokenList();
-			for(Gem gem: temphand.getSelectedGemTypes()) {
-				
+			for(Gem gem: tempHand.getSelectedGemTypes()) {			
 				Token token = new TokenImpl(gem);
-
-				newtokenlist1.add(token);
-				System.out.println();
 				player.addToken(token);
 				playingField.removeToken(token);
 			}
@@ -93,8 +85,6 @@ public class EndTurnImpl implements EndTurn, Serializable {
 	public void endTurn() throws RemoteException {
 
 		this.getCurrentPlayer();
-		
-		TempHand tempHand = playingField.getTempHand();
 		MoveType moveType = tempHand.getMoveType();
 		
 		
@@ -118,6 +108,11 @@ public class EndTurnImpl implements EndTurn, Serializable {
 			playingField.removeCard(tempHand.getReservedCard());
 			player.addReserverveCard(tempHand.getReservedCard());
 			// TODO: Geef speler een joker
+			if(playingField.getTokenGemCount().get(Gem.JOKER) > 0){
+				Token token = new TokenImpl(Gem.JOKER);
+				player.addToken(token);
+				playingField.removeToken(token);
+			}
 		} else if(moveType == MoveType.TAKE_THREE_TOKENS || moveType == MoveType.TAKE_TWO_TOKENS) {
 			this.getTokens();
 		}
