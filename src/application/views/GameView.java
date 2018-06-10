@@ -157,7 +157,6 @@ public class GameView implements UIComponent, Disableable, GameObserver  {
 			try {
 				game.getPlayingField().getTempHand().setMoveType(MoveType.RESERVE_CARD);
 				gameController.reserveCard();
-				this.disableMoves(true);
 			} catch (RemoteException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -171,7 +170,6 @@ public class GameView implements UIComponent, Disableable, GameObserver  {
 			try {
 				game.getPlayingField().getTempHand().setMoveType(MoveType.PURCHASE_CARD);
 				gameController.purchaseCard();
-				this.disableMoves(true);
 			} catch (RemoteException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -185,7 +183,6 @@ public class GameView implements UIComponent, Disableable, GameObserver  {
 				
 				game.getPlayingField().getTempHand().setMoveType(MoveType.TAKE_TWO_TOKENS);
 				gameController.findSelectableTokens();
-				this.disableMoves(true);
 			} catch (RemoteException e1) {
 				e1.printStackTrace();
 				new AlertDialog(AlertType.ERROR, "Dit hoor je niet te zien").show();
@@ -198,7 +195,6 @@ public class GameView implements UIComponent, Disableable, GameObserver  {
 			try {
 				game.getPlayingField().getTempHand().setMoveType(MoveType.TAKE_THREE_TOKENS);
 				gameController.findSelectableTokens();
-				this.disableMoves(true);
 			} catch (RemoteException e1) {
 				e1.printStackTrace();
 				new AlertDialog(AlertType.ERROR, "Dit hoor je niet te zien").show();
@@ -210,18 +206,16 @@ public class GameView implements UIComponent, Disableable, GameObserver  {
 		btnResetTurn.setOnAction(e ->{
 			try {
 				gameController.resetTurn();
-				this.disableMoves(false);
-				this.disableEndTurn(true);
 				//gameController.debugNextTurn();
 			} catch (RemoteException e1) {
+				// TODO Auto-generated catch block
 				e1.printStackTrace();
-				new AlertDialog(AlertType.ERROR, "Er is iets goed fout gegaan jonge").show();
 			}
 		});
 		
 		btnEndTurn = new Button("End Turn");
 		btnEndTurn.getStyleClass().add("move-button");
-		btnEndTurn.setDisable(true);
+		//btnEndTurn.setDisable(true);
 		btnEndTurn.setOnAction(e -> {
 				try {
 					gameController.endTurn();
@@ -283,22 +277,10 @@ public class GameView implements UIComponent, Disableable, GameObserver  {
 		{
 			btn.setDisable(disabled);
 		}
-		//this.btnResetTurn.setDisable(false);
-		this.btnEndTurn.setDisable(true);
+		this.btnResetTurn.setDisable(false);
 		
 		this.playingField.setDisabled(disabled);
 		this.player.setDisabled(disabled);
 	}
 	
-	private void disableMoves(boolean disabled) {
-		for(Button btn : this.moveButtons)
-		{
-			btn.setDisable(disabled);
-		}
-		this.btnResetTurn.setDisable(false);
-	}
-	@Override
-	public void disableEndTurn(boolean disabled) throws RemoteException {
-		this.btnEndTurn.setDisable(disabled);
-	}
 }

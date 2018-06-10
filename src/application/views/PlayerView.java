@@ -181,7 +181,6 @@ public class PlayerView implements UIComponent, Disableable, PlayerObserver {
 						cardView.asPane().setOnMouseClicked(e -> {
 							try {
 								gameController.cardClickedFromReserve(card);
-								gameController.disableEndTurn(false);
 							} catch (RemoteException e1) {
 								// TODO Auto-generated catch block
 								e1.printStackTrace();
