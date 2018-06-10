@@ -10,17 +10,24 @@ import application.domain.LobbyImpl.LobbyStates;
 
 public interface Lobby extends Remote {
 	
-	public void addObserver(LobbyObserver o) throws RemoteException;
+	public void leaveLobby(LobbyObserver o) throws RemoteException;
 	
-	public void removeObserver(LobbyObserver o) throws RemoteException;
+	public void createPlayer(LobbyObserver o, String playerName) throws RemoteException;
+	public void disconnectPlayer(LobbyObserver o) throws RemoteException;
 	
-	public void createPlayer(String playerName) throws RemoteException;
+	public void readyPlayer(LobbyObserver o) throws RemoteException;
+	public void unassignPlayer(LobbyObserver o) throws RemoteException;
+	public void selectSlot(LobbyObserver o, PlayerSlot slot) throws RemoteException;
 	
-	public void disconnectPlayer(Player player) throws RemoteException;
+	public boolean isAssigned(LobbyObserver o) throws RemoteException;
+
+	public Player getAssignedPlayer(LobbyObserver o) throws RemoteException;
 	
-	public Map<Integer, PlayerSlot> getAssignedPlayers() throws RemoteException;
 	
+	public List<PlayerSlot> getAssignedPlayerSlots() throws RemoteException;
+	public List<PlayerSlot> getAssignableSlots() throws RemoteException;
 	public List<Player> getUnassignedPlayers() throws RemoteException;
+	
 	
 	public int getMaxPlayers() throws RemoteException;
 	
@@ -29,4 +36,5 @@ public interface Lobby extends Remote {
 	public Game getGame() throws RemoteException;
 	
 	public LobbyStates getLobbyState() throws RemoteException;
+	
 }

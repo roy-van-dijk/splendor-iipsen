@@ -8,16 +8,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 import application.StageManager;
+import application.controllers.GameController;
 import application.controllers.LobbyController;
 import application.controllers.MainMenuController;
+import application.domain.Game;
 import application.domain.Lobby;
+import application.domain.LobbyImpl.LobbyStates;
 import application.domain.LobbyObserver;
 import application.domain.Player;
 import application.domain.PlayerSlot;
+import application.util.AlertDialog;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
@@ -38,6 +43,9 @@ public class LobbyView extends UnicastRemoteObject implements UIComponent, Lobby
 
 	private static final long serialVersionUID = 1L;
 	
+	private static final int gridChildWidth = 250;
+	private static final int gridGap = 5;
+	
 	private LobbyController lobbyController;
 	
 	private BorderPane root;
@@ -55,26 +63,15 @@ public class LobbyView extends UnicastRemoteObject implements UIComponent, Lobby
 	private Label lblAssPlayers;
 	private Label lblLobbyIP;
 	
-	private final static int gridChildWidth = 250;
-	private final static int gridGap = 5;
-	
 
 	public LobbyView(Lobby lobby, LobbyController lobbyController) throws RemoteException {
 		this.lobbyController = lobbyController;
 		
 		this.buildUI();
-		
-		try {
-			lobby.addObserver(this);
-		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 
 	public void modelChanged(Lobby lobby) throws RemoteException {
 		// Avoid throwing IllegalStateException by running from a non-JavaFX thread.
-		
 		Platform.runLater(
 		  () -> {
 			  try {
@@ -83,53 +80,122 @@ public class LobbyView extends UnicastRemoteObject implements UIComponent, Lobby
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		  });
-	
-
+		  });	
 	}
-		  
-	private void updateUI(Lobby lobby) throws RemoteException {
-		int maxPlayers = lobby.getMaxPlayers();
-		String hostIP = lobby.getHostIP();
-		
-		lblLobbyIP.setText(String.format("Lobby IP: %s", hostIP));
-		
-		// TODO: update ready status of each player;
-		
-		List<Player> unassignedPlayers = lobby.getUnassignedPlayers();
-		
+	
+	private void leaveLobby()
+	{
+		StageManager.getInstance().showMainMenu();
+	}
+	
+	public void disconnect(LobbyStates lobbyState) throws RemoteException
+	{
+		Platform.runLater(() -> {
+			StageManager.getInstance().showMainMenu();
+			
+			AlertDialog dialog;
+			if(lobbyState == LobbyStates.CLOSING)
+			{
+				 dialog = new AlertDialog(AlertType.INFORMATION, "Server has been terminated. You have been disconnected.");
+			} else {
+				dialog = new AlertDialog(AlertType.INFORMATION, "You have been disconnected from the server.");
+			}
+			dialog.setHeaderText("");
+			dialog.show();
+		});
+	}
+	
+	
+	private void updateUnassignedPlayers(int maxPlayers, List<Player> unassignedPlayers) throws RemoteException
+	{
 		for(int i = 0; i < maxPlayers; i++) 
 		{
 			String displayName = "Empty slot...";
 			Label label = new Label();
+			label.getStyleClass().add("lobby-slot");
+			label.setOnMouseClicked(e -> {
+				try {
+					lobbyController.unassignPlayer(this);
+				} catch (RemoteException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			});
 			
 			if(i < unassignedPlayers.size()) 
 			{
 				displayName = unassignedPlayers.get(i).getName();
-				System.out.println(unassignedPlayers.get(i));
 				label.getStyleClass().add("active");
 			}
 			label.setText(displayName);
 			label.setPrefWidth(gridChildWidth);
 			gpane.add(label, 0, i + 2);
 		}
-		
-		List<PlayerSlot> assignedPlayerSlots = new ArrayList<PlayerSlot>(lobby.getAssignedPlayers().values());
-		for(int i = 0; i < maxPlayers; i++) 
+	}
+	
+	private void updateAssignableSlots(List<PlayerSlot> slots) throws RemoteException
+	{
+		for(int slotIdx = 0; slotIdx < slots.size(); slotIdx++) 
 		{
-			String displayName = String.format("Player %d - empty", i);
-			Label label = new Label();
+			PlayerSlot slot = slots.get(slotIdx);
 			
-			if(i < assignedPlayerSlots.size()) 
+			String displayName = String.format("Player %d - empty", slotIdx);
+			Label label = new Label();
+			label.getStyleClass().add("lobby-slot");
+			label.setOnMouseClicked(e -> {
+				try {
+					lobbyController.selectSlot(this, slot);
+				} catch (RemoteException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			});
+			if(slot.getPreviousPlayer() != null)
 			{
-				displayName = assignedPlayerSlots.get(i).getPlayer().getName();
-				label.getStyleClass().add("active");
-				label.getStyleClass().add("unchecked");
-				//label.getStyleClass().add("checked");
+				displayName = String.format("(Previously %s)", slot.getPreviousPlayer().getName());
 			}
+			if(slot.getCurrentPlayer() != null) 
+			{
+				displayName = slot.getCurrentPlayer().getName();
+				label.getStyleClass().add("active");
+				
+				if(slot.isReady())
+				{
+					label.getStyleClass().add("checked");
+				} else {
+					label.getStyleClass().add("unchecked");
+				}
+			}
+
 			label.setText(displayName);
 			label.setPrefWidth(gridChildWidth);
-			gpane.add(label, 1, i + 2);
+			gpane.add(label, 1, slotIdx + 2);
+		}
+	}
+		  
+	private void updateUI(Lobby lobby) throws RemoteException {
+		LobbyStates lobbyState = lobby.getLobbyState();
+		if(lobbyState == LobbyStates.CLOSING) {
+			System.out.println("[DEBUG] LobbyView::modelChanged()::LobbyState changed to CLOSING");
+			this.leaveLobby();
+		} 
+		else if(lobbyState == LobbyStates.STARTED_GAME) {
+			System.out.println("[DEBUG] LobbyView::modelChanged()::LobbyState changed to STARTED_GAME");
+			this.lobbyController.showGameScreen(this);			
+		} 
+		else if(lobbyState == LobbyStates.WAITING) {
+			int maxPlayers = lobby.getMaxPlayers();
+			String hostIP = lobby.getHostIP();
+			
+			lblLobbyIP.setText(String.format("Lobby IP: %s", hostIP));
+			
+			List<Player> unassignedPlayers = lobby.getUnassignedPlayers();
+			this.updateUnassignedPlayers(maxPlayers, unassignedPlayers);
+			
+			List<PlayerSlot> assignableSlots = lobby.getAssignableSlots();
+			this.updateAssignableSlots(assignableSlots);
+			
+			this.btnReady.setDisable(!lobby.isAssigned(this));
 		}
 	}
 	
@@ -178,13 +244,20 @@ public class LobbyView extends UnicastRemoteObject implements UIComponent, Lobby
 		
 		btnBack = new Button("Back");
 		btnBack.setPrefWidth(gridChildWidth);
-		btnBack.setOnAction(e -> StageManager.getInstance().showMainMenu()); // TODO: replace with call to LobbyController leaveLobby()
+		btnBack.setOnAction(e -> {
+			try {
+				lobbyController.leaveLobby(this);
+			} catch (RemoteException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			}
+		});
 		
 		btnReady = new Button("Ready");
 		btnReady.setPrefWidth(gridChildWidth);
 		btnReady.setOnAction(e -> {
 			try {
-				StageManager.getInstance().showGameScreen();
+				lobbyController.readyUp(this);
 			} catch (RemoteException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();

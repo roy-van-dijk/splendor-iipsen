@@ -52,7 +52,6 @@ public class PlayerImpl extends UnicastRemoteObject implements Player, Serializa
 		this.tokenList = new TokenList();
 	}
 	
-
 	public void reserveCardFromField(CardRow cardRow, Card card) throws RemoteException 
 	{
 		// TODO (low priority): Make reservedTokens class that incorporates this business rule
@@ -61,7 +60,7 @@ public class PlayerImpl extends UnicastRemoteObject implements Player, Serializa
 			cardRow.removeCard(card);
 			reservedCards.add(card);
 			
-			System.out.printf("%s has taken the card with costs: %s\n", this.getName() ,card.getCosts());
+			System.out.printf("[DEBUG] PlayerImpl::reserveCardFromField()::Player %s has taken the card with costs: %s\n", this.getName() ,card.getCosts());
 			this.notifyObservers();
 		}
 	}
@@ -74,7 +73,7 @@ public class PlayerImpl extends UnicastRemoteObject implements Player, Serializa
 			cardRow.removeCard(card);
 			ownedCards.add(card);
 			
-			System.out.printf("%s has bought the card with costs: %s\\n", this.getName(), card.getCosts());
+			System.out.printf("[DEBUG] PlayerImpl::purchaseCardFromField()::Player %s has bought the card with costs: %s\\n", this.getName(), card.getCosts());
 			this.notifyObservers();
 		}
 	}
@@ -115,27 +114,31 @@ public class PlayerImpl extends UnicastRemoteObject implements Player, Serializa
 		
 		return discount;
 	}
+
+	public void setName(String name) throws RemoteException{
+		this.name = name;
+	}
 	
-	public String getName() 
+	public String getName() throws RemoteException
 	{
-		System.out.printf("Getting name of: %s\n", name);
+		//System.out.printf("Getting name of: %s\n", name);
 		return name;
 	}
 	
-	public List<Card> getReservedCards() 
+	public List<Card> getReservedCards() throws RemoteException
 	{
 		return reservedCards;
 	}
-	public List<Card> getOwnedCards() 
+	public List<Card> getOwnedCards() throws RemoteException
 	{
 		return ownedCards;
 	}
 	
-	public List<Noble> getOwnedNobles() 
+	public List<Noble> getOwnedNobles() throws RemoteException
 	{
 		return ownedNobles;
 	}
-	public void addNoble(Noble noble)
+	public void addNoble(Noble noble) throws RemoteException
 	{
 		ownedNobles.add(noble);
 	}
@@ -175,7 +178,7 @@ public class PlayerImpl extends UnicastRemoteObject implements Player, Serializa
 		this.notifyObservers();
 	}
 	
-	private void notifyObservers() throws RemoteException
+	private synchronized void notifyObservers() throws RemoteException
 	{
 		for(PlayerObserver o : observers)
 		{
@@ -183,7 +186,7 @@ public class PlayerImpl extends UnicastRemoteObject implements Player, Serializa
 		}
 	}
 	
-	public void addObserver(PlayerObserver o) throws RemoteException 
+	public synchronized void addObserver(PlayerObserver o) throws RemoteException 
 	{
 		observers.add(o);
 		this.notifyObservers();

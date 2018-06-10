@@ -1,6 +1,7 @@
 package application.views;
 
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +12,7 @@ import application.domain.Gem;
 import application.domain.Noble;
 import application.domain.Player;
 import application.domain.PlayerObserver;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
@@ -35,7 +37,7 @@ import javafx.scene.text.FontWeight;
  * @author Sanchez
  *
  */
-public class PlayerView implements UIComponent, Disableable, PlayerObserver {
+public class PlayerView extends UnicastRemoteObject implements UIComponent, Disableable, PlayerObserver {
 
 	// Radio button toggle group
 	final private ToggleGroup group = new ToggleGroup();
@@ -85,12 +87,21 @@ public class PlayerView implements UIComponent, Disableable, PlayerObserver {
 	}
 
 	public void modelChanged(Player player) throws RemoteException {
-		lblPrestigeValue.setText(String.valueOf(player.getPrestige()));
-
-		this.updatePlayerTokens(player.getTokensGemCount());
-		this.updatePlayerCards(player.getOwnedCards());
-		this.updatePlayerNobles(player.getOwnedNobles());
-		this.updatePlayerReservedCards(player.getReservedCards());
+		System.out.println("[DEBUG] PlayerView::modelChanged()::Player has " + player.getTokensGemCount());
+		Platform.runLater(() ->
+		{
+			try {
+				lblPrestigeValue.setText(String.valueOf(player.getPrestige()));
+		
+				this.updatePlayerTokens(player.getTokensGemCount());
+				this.updatePlayerCards(player.getOwnedCards());
+				this.updatePlayerNobles(player.getOwnedNobles());
+				this.updatePlayerReservedCards(player.getReservedCards());
+			} catch (RemoteException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		});
 	}
 
 	private VBox buildAccessibilityMenu() {

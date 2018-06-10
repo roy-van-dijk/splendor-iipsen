@@ -86,7 +86,7 @@ public class PlayingFieldImpl extends UnicastRemoteObject implements PlayingFiel
 		}
 	}
 	
-	private void createCardRows()
+	private void createCardRows() throws RemoteException
 	{
 		// Create 3 card rows (including decks)
 		for(CardLevel level : CardLevel.values())
@@ -203,7 +203,7 @@ public class PlayingFieldImpl extends UnicastRemoteObject implements PlayingFiel
 		this.notifyObservers();
 	}
 	
-	private void notifyObservers() throws RemoteException
+	private synchronized void notifyObservers() throws RemoteException
 	{
 		for(PlayingFieldObserver o : observers)
 		{
@@ -212,7 +212,7 @@ public class PlayingFieldImpl extends UnicastRemoteObject implements PlayingFiel
 	}
 
 	@Override
-	public void addObserver(PlayingFieldObserver observer) throws RemoteException {
+	public synchronized void addObserver(PlayingFieldObserver observer) throws RemoteException {
 		this.observers.add(observer);
 		this.notifyObservers();
 	}

@@ -1,6 +1,7 @@
 package application.views;
 
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,7 @@ import application.domain.PlayerObserver;
 import application.domain.Token;
 import application.domain.TokenList;
 import application.util.Util;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -28,7 +30,7 @@ import javafx.scene.text.FontWeight;
  * @author Sanchez
  *
  */
-public class OpponentView implements UIComponent, PlayerObserver {
+public class OpponentView extends UnicastRemoteObject implements UIComponent, PlayerObserver {
 	
 	private final static double CARDS_RESIZE_FACTOR = 0.55;
 	private final static double TOKENS_RESIZE_FACTOR = 0.55;
@@ -44,7 +46,8 @@ public class OpponentView implements UIComponent, PlayerObserver {
 	public OpponentView(Player opponent) throws RemoteException {
 		this.buildUI();
 		
-
+		//System.out.println("OpponentView: registering as observer");
+		//System.out.println("OpponentView = " + opponent);
 		opponent.addObserver(this);
 	}
 	
@@ -65,11 +68,19 @@ public class OpponentView implements UIComponent, PlayerObserver {
 	
 	public void modelChanged(Player opponent) throws RemoteException
 	{
-		lblOpponentName.setText(opponent.getName());
-		lblOpponentPrestige.setText(String.valueOf(opponent.getPrestige()));
-		
-		this.updateOpponentTokens(opponent.getTokensGemCount());
-		this.updateOpponentsReservedCards(opponent.getReservedCards());
+		Platform.runLater(() ->
+		{
+			try {
+				lblOpponentName.setText(opponent.getName());
+				lblOpponentPrestige.setText(String.valueOf(opponent.getPrestige()));
+				
+				this.updateOpponentTokens(opponent.getTokensGemCount());
+				this.updateOpponentsReservedCards(opponent.getReservedCards());
+			} catch (RemoteException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		});
 	}
 	
 	private void updateOpponentsReservedCards(List<Card> opponentReservedCards)

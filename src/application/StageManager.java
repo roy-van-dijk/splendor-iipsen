@@ -38,12 +38,14 @@ public class StageManager {
 		primaryStage.getScene().setRoot(rootNode);
 	}
 
+	// Debug function (quick preview of gamescreen)
 	public void showGameScreen() throws RemoteException
 	{
+		// TODO: remove this function entirely for production release.
 		Game game = new GameImpl(4);
 
 		GameController gameController = new GameController(game);
-		GameView gameView = new GameView(game, gameController);
+		GameView gameView = new GameView(game, gameController, game.getPlayers().get(0));
 
 		this.switchScene(gameView.asPane());
 	}

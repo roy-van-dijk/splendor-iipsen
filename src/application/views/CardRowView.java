@@ -1,6 +1,7 @@
 package application.views;
 
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
 
 import application.controllers.GameController;
@@ -9,6 +10,7 @@ import application.domain.CardRow;
 import application.domain.CardRowImpl;
 import application.domain.CardRowObserver;
 import application.domain.Gem;
+import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -19,7 +21,7 @@ import javafx.scene.layout.Pane;
  * @author Sanchez
  *
  */
-public class CardRowView implements UIComponent, CardRowObserver {
+public class CardRowView extends UnicastRemoteObject implements UIComponent, CardRowObserver {
 
 	
 	/**
@@ -32,21 +34,14 @@ public class CardRowView implements UIComponent, CardRowObserver {
 	private GameController gameController;
 	
 
-	public CardRowView(CardRow cardRow, GameController gameController) {
+	public CardRowView(CardRow cardRow, GameController gameController) throws RemoteException {
 		this.gameController = gameController;
-		this.buildUI(cardRow);
+		this.buildUI();
 		
-		try {
-			cardRow.addObserver(this);
-		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		cardRow.addObserver(this);
 	}
 	
-	
-	@Override
-	public void modelChanged(CardRow cardRow) throws RemoteException 
+	private void updateCardRow(CardRow cardRow) throws RemoteException
 	{
 		grid.getChildren().clear();
 		
@@ -81,11 +76,26 @@ public class CardRowView implements UIComponent, CardRowObserver {
         	// Display cards by index
         	grid.add(cardView.asPane(), idx + 1, 0);
         }
-        
+	}
+	
+	
+	@Override
+	public void modelChanged(CardRow cardRow) throws RemoteException 
+	{
+		System.out.println("[DEBUG] CardRowView::modelChanged()::Updating card row");
+		Platform.runLater(() ->
+		{
+			try {
+				this.updateCardRow(cardRow);
+			} catch (RemoteException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		});
 	}
 
 	
-	private void buildUI(CardRow cardRow)
+	private void buildUI()
 	{
 		grid = new GridPane();
 		grid.setAlignment(Pos.CENTER);

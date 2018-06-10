@@ -3,12 +3,23 @@ package application.domain;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
+/**
+ * @author Sanchez
+ *
+ */
 public class PlayerSlotImpl extends UnicastRemoteObject implements PlayerSlot {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private boolean isReady;
-	private Player player;
+	private Player currentPlayer;
+	private Player previousPlayer;
 	
 	public PlayerSlotImpl() throws RemoteException {
-		player = null;
+		currentPlayer = null;
+		previousPlayer = null;
+		
 		isReady = false;
 	}
 
@@ -20,11 +31,28 @@ public class PlayerSlotImpl extends UnicastRemoteObject implements PlayerSlot {
 		this.isReady = isReady;
 	}
 
-	public Player getPlayer() throws RemoteException {
-		return player;
+	public Player getCurrentPlayer() throws RemoteException {
+		return currentPlayer;
 	}
 
-	public void setPlayer(Player player) throws RemoteException {
-		this.player = player;
+	public void setCurrentPlayer(Player currentPlayer) throws RemoteException {
+		this.currentPlayer = currentPlayer;
+	}
+
+	public Player getPreviousPlayer() throws RemoteException {
+		return previousPlayer;
+	}
+
+	public void setPreviousPlayer(Player previousPlayer) throws RemoteException {
+		this.previousPlayer = previousPlayer;
+	}
+
+	public void empty() throws RemoteException {
+		this.currentPlayer = null;
+		this.isReady = false;
+	}
+	
+	public boolean isAvailable() throws RemoteException {
+		return this.currentPlayer == null;
 	}
 }

@@ -3,10 +3,12 @@ package application.controllers;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.net.BindException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.rmi.server.ExportException;
 import java.rmi.server.UnicastRemoteObject;
 
 import application.StageManager;
@@ -45,8 +47,9 @@ public class MainMenuController {
 		System.out.println("Connected to lobby!");
 		
 		LobbyController lobbyController = new LobbyController(lobby);
-		lobbyController.connectPlayer(playerName);
 		LobbyView lobbyView = new LobbyView(lobby, lobbyController);
+
+		lobbyController.connectPlayer(lobbyView, playerName);
 		
 		StageManager.getInstance().switchScene(lobbyView.asPane());
 	}
@@ -56,16 +59,17 @@ public class MainMenuController {
 	 * @param playerName
 	 * @throws RemoteException
 	 * void
+	 * @throws BindException 
 	 */
-	public void hostPreviousGame(String playerName) throws RemoteException {
+	public void hostPreviousGame(String playerName) throws RemoteException, ExportException {
 		GameImpl game = new GameImpl(3); // TODO: load from binary savefile
 		LobbyImpl lobby = createLobby(game);
         
-        lobby.createPlayer(playerName);
         
 		LobbyController lobbyController = new LobbyController(lobby);
 		LobbyView lobbyView = new LobbyView(lobby, lobbyController);
-
+		lobbyController.connectPlayer(lobbyView, playerName);
+		
 		StageManager.getInstance().switchScene(lobbyView.asPane());
 	}
 	/**
@@ -73,8 +77,9 @@ public class MainMenuController {
 	 * @param playerName
 	 * @throws RemoteException
 	 * void
+	 * @throws BindException 
 	 */
-	public void hostNewGame(String playerName) throws RemoteException {
+	public void hostNewGame(String playerName) throws RemoteException, ExportException {
 		GameImpl game = new GameImpl(4);
 /*		try {
 			new ObjectOutputStream(new ByteArrayOutputStream()).writeObject(game); // Test serialization
@@ -83,11 +88,10 @@ public class MainMenuController {
 			e.printStackTrace();
 		} */
 		LobbyImpl lobby = createLobby(game);
-        
-        lobby.createPlayer(playerName);
-        
 		LobbyController lobbyController = new LobbyController(lobby);
 		LobbyView lobbyView = new LobbyView(lobby, lobbyController);
+		
+		lobbyController.connectPlayer(lobbyView, playerName);
 
 		StageManager.getInstance().switchScene(lobbyView.asPane());
 	}
@@ -98,17 +102,17 @@ public class MainMenuController {
 	 * @throws RemoteException
 	 * LobbyImpl
 	 */
-	private LobbyImpl createLobby(GameImpl game) throws RemoteException
+	private LobbyImpl createLobby(GameImpl game) throws RemoteException, ExportException
 	{
+		System.out.println("Creating server.");
 		LobbyImpl lobby = new LobbyImpl(game);
-		//Lobby lobbySkeleton = (Lobby) UnicastRemoteObject.exportObject(lobby, 0); // cast to remote object
 		System.out.println("Lobby skeleton created");
-		Registry registry = LocateRegistry.createRegistry(1099); // default port 1099 // run RMI registry on local host
+		Registry registry = LocateRegistry.createRegistry(1099);
 		System.out.println("RMI Registry starter");
-		registry.rebind("Lobby", lobby); // bind calculator to RMI registry
+		registry.rebind("Lobby", lobby); // bind lobby (auto exported) to RMI registry
+		lobby.setRegistry(registry);
         System.out.println("Lobby skeleton bound");
         System.out.println("Server running...");
-        
         return lobby;
 	}
 	/**

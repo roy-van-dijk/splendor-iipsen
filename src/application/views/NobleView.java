@@ -3,6 +3,7 @@ package application.views;
 import java.rmi.RemoteException;
 
 import application.domain.Noble;
+import application.util.ImageCache;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -41,7 +42,8 @@ public class NobleView implements UIComponent {
 
 		ImagePattern imagePattern = null;
 		try {
-			imagePattern = new ImagePattern(new Image(getNobleImagePath()));
+	    	Image image = ImageCache.getInstance().fetchImage(getNobleImagePath(), true);
+	        imagePattern = new ImagePattern(image);
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

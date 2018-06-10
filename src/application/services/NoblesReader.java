@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
@@ -21,9 +22,9 @@ import application.domain.NobleImpl;
 import application.util.Util;
 
 /**
- * This reads the cards from a csv file and converts it to objects
+ * This reads the nobles from a csv file and converts it to objects
  * 
- * @author Tom, Sanchez
+ * @author Tom
  * 
  */
 public class NoblesReader {
@@ -76,7 +77,7 @@ public class NoblesReader {
 	
 	//generate a map(gem, integer) of the cost of the noble.
 	private static Map<Gem, Integer> readBonusCosts(String[] record){
-		Map<Gem, Integer> costs = new HashMap<>();
+		Map<Gem, Integer> costs = new LinkedHashMap<>();
 		
 		for(int i = 0; i < gemList.length; i++)
 		{

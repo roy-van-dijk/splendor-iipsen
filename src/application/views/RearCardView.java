@@ -4,6 +4,7 @@ package application.views;
 import java.rmi.RemoteException;
 
 import application.domain.Card;
+import application.util.ImageCache;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -38,7 +39,8 @@ public class RearCardView extends CardView {
     	rect = new Rectangle(sizeX, sizeY);
     	
     	// Add image
-        ImagePattern imagePattern = new ImagePattern(new Image(getImagePath()));
+    	Image image = ImageCache.getInstance().fetchImage(getImagePath(), true);
+        ImagePattern imagePattern = new ImagePattern(image);
         rect.setFill(imagePattern);
         
         // Make rounded corners

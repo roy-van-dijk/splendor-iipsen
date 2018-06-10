@@ -6,6 +6,7 @@ import java.util.Map;
 
 import application.domain.Card;
 import application.domain.Gem;
+import application.util.ImageCache;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
@@ -52,7 +53,8 @@ public class FrontCardView extends CardView {
     	rect = new Rectangle(sizeX, sizeY);
     	
     	// Add image
-        ImagePattern imagePattern = new ImagePattern(new Image(getImagePath()));
+    	Image image = ImageCache.getInstance().fetchImage(getImagePath(), true);
+        ImagePattern imagePattern = new ImagePattern(image);
         rect.setFill(imagePattern);
         
 

@@ -1,6 +1,7 @@
 package application.views;
 
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -18,6 +19,7 @@ import application.domain.PlayingField;
 import application.domain.PlayingFieldObserver;
 import application.domain.TempHand;
 import application.util.ConfirmDialog;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -34,7 +36,7 @@ import javafx.scene.text.FontWeight;
  * @author Sanchez
  *
  */
-public class PlayingFieldView implements UIComponent, Disableable, PlayingFieldObserver {
+public class PlayingFieldView extends UnicastRemoteObject implements UIComponent, Disableable, PlayingFieldObserver {
 
 	public final static int CARDSPACING = 15, 
 							TOKENSPACING = 10,
@@ -72,17 +74,27 @@ public class PlayingFieldView implements UIComponent, Disableable, PlayingFieldO
 		this.tokenViews = new ArrayList<>();
 		this.buildUI();
 		
+		System.out.println("[DEBUG] PlayingFieldView()::registering as observer");
 		playingField.addObserver(this);
 	}
 	
 	public void modelChanged(PlayingField playingField) throws RemoteException
 	{
-		if(cardsPane.getChildren().isEmpty())
+		Platform.runLater(() ->
 		{
-			this.initializeCardRows(playingField.getCardRows());
-		}
-		this.updateFieldTokens(playingField.getTokenGemCount(), playingField.getSelectableTokens(), playingField.getTempHand());
-		this.updateNobles(playingField.getNobles());
+			try {
+				if(cardsPane.getChildren().isEmpty())
+				{
+					System.out.println("[DEBUG] PlayingFieldView::modelChanged()::Building card rows");
+					this.initializeCardRows(playingField.getCardRows());
+				}
+				this.updateFieldTokens(playingField.getTokenGemCount(), playingField.getSelectableTokens(), playingField.getTempHand());
+				this.updateNobles(playingField.getNobles());
+			} catch (RemoteException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		});
 	}
 	
 	private void buildUI()
@@ -114,10 +126,8 @@ public class PlayingFieldView implements UIComponent, Disableable, PlayingFieldO
 		return rowsPane;
 	}
 	
-	private void initializeCardRows(List<CardRow> cardRows)
+	private void initializeCardRows(List<CardRow> cardRows) throws RemoteException
 	{
-		System.out.println("Initializing cardrows");
-		
 		for(CardRow cardRow : cardRows)
 		{
 			CardRowView cardRowView = new CardRowView(cardRow, gameController);

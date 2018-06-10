@@ -13,7 +13,7 @@ public interface Game extends Remote {
 
 	public void nextTurn() throws RemoteException;
 	
-	public void addObserver(GameObserver o) throws RemoteException;
+	public void addObserver(GameObserver o, Player player) throws RemoteException;
 	
 	public void removeObserver(GameObserver o) throws RemoteException;
 	
@@ -35,5 +35,7 @@ public interface Game extends Remote {
 	public PlayingField getPlayingField() throws RemoteException;
 
 	public void cleanUpTurn() throws RemoteException;
+	
+	public boolean isDisabled(GameObserver o) throws RemoteException;
 
 }

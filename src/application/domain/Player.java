@@ -32,6 +32,7 @@ public interface Player extends Remote {
 	public boolean canAffordCard(Map<Gem, Integer> costs) throws RemoteException;
 	
 	public String getName() throws RemoteException;
+	public void setName(String name) throws RemoteException;
 	
 	public List<Card> getReservedCards() throws RemoteException;
 	

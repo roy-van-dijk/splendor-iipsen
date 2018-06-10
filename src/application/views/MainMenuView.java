@@ -1,8 +1,10 @@
 package application.views;
 
+import java.net.BindException;
 import java.rmi.ConnectException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.rmi.server.ExportException;
 
 import application.StageManager;
 import application.controllers.GameController;
@@ -26,8 +28,9 @@ import javafx.stage.PopupWindow;
 import javafx.stage.Stage;
 
 public class MainMenuView implements UIComponent  {
+
+	// TODO: Remove the DRYness of this class
 	
-//	private Home home;
 	private MainMenuController menuController;
 	
 	private BorderPane root;
@@ -71,13 +74,13 @@ public class MainMenuView implements UIComponent  {
 		hostIp = new TextField();
 		nickname = new TextField();
 		
-		Button join = new Button("Join");
-		Button back = new Button("Back");
+		Button btnJoin = new Button("Join");
+		Button btnBack = new Button("Back");
 		
 		hostIp.setPrefWidth(450);
 		nickname.setPrefWidth(450);
-		join.setPrefWidth(450);
-		back.setPrefWidth(450);
+		btnJoin.setPrefWidth(450);
+		btnBack.setPrefWidth(450);
 		
 		hostIp.setPromptText("Enter Host IP...");
 		nickname.setPromptText("Enter Nickname");
@@ -85,7 +88,7 @@ public class MainMenuView implements UIComponent  {
 		hostIp.getStyleClass().add("join-text");
 		nickname.getStyleClass().add("join-text");
 		
-		join.setOnAction(e -> {
+		btnJoin.setOnAction(e -> {
 			try {
 				menuController.joinLobby(hostIp.getText(), nickname.getText());
 			} catch (ConnectException e1) {
@@ -98,13 +101,13 @@ public class MainMenuView implements UIComponent  {
 				e1.printStackTrace();
 			}
 		});
-		back.setOnAction(e -> StageManager.getInstance().switchScene(buildMainMenuScreen()));
+		btnBack.setOnAction(e -> StageManager.getInstance().switchScene(buildMainMenuScreen()));
 		
 		panel.setAlignment(Pos.CENTER_LEFT); 
 		panel.setSpacing(10);
 		panel.setTranslateX(-250);
 		panel.setTranslateY(100);
-		panel.getChildren().addAll(hostIp, nickname, join, back);
+		panel.getChildren().addAll(hostIp, nickname, btnJoin, btnBack);
 		
 		root.setTop(manualButton);
 		root.setRight(panel);
@@ -162,31 +165,33 @@ public class MainMenuView implements UIComponent  {
 
 		nickname = new TextField();
 		
-		Button join = new Button("Join");
-		Button back = new Button("Back");
+		Button btnJoin = new Button("Join");
+		Button btnBack = new Button("Back");
 		
 		nickname.setPrefWidth(450);
-		join.setPrefWidth(450);
-		back.setPrefWidth(450);
+		btnJoin.setPrefWidth(450);
+		btnBack.setPrefWidth(450);
 		
 		nickname.setPromptText("Enter Nickname");
 		nickname.getStyleClass().add("join-text");
 		
-		join.setOnAction(e -> {
+		btnJoin.setOnAction(e -> {
 			try {
 					menuController.hostNewGame(nickname.getText());
+			} catch (ExportException e1) {
+				new AlertDialog(AlertType.ERROR, "You are already running a server.").show();
 			} catch (RemoteException e1) {
 				new AlertDialog(AlertType.ERROR, "Could not start a new server.").show();
 				e1.printStackTrace();
 			}
 		});
-		back.setOnAction(e -> StageManager.getInstance().switchScene(buildMainMenuScreen()));
+		btnBack.setOnAction(e -> StageManager.getInstance().switchScene(buildMainMenuScreen()));
 		
 		panel.setAlignment(Pos.CENTER_LEFT); 
 		panel.setSpacing(10);
 		panel.setTranslateX(-250);
 		panel.setTranslateY(100);
-		panel.getChildren().addAll(nickname, join, back);
+		panel.getChildren().addAll(nickname, btnJoin, btnBack);
 		
 		root.setTop(manualButton);
 		root.setRight(panel);
@@ -207,31 +212,34 @@ public class MainMenuView implements UIComponent  {
 
 		nickname = new TextField();
 		
-		Button join = new Button("Join");
-		Button back = new Button("Back");
+		Button btnJoin = new Button("Join");
+		Button btnBack = new Button("Back");
 		
 		nickname.setPrefWidth(450);
-		join.setPrefWidth(450);
-		back.setPrefWidth(450);
+		btnJoin.setPrefWidth(450);
+		btnBack.setPrefWidth(450);
 		
 		nickname.setPromptText("Enter Nickname");
 		nickname.getStyleClass().add("join-text");
 		
-		join.setOnAction(e -> {
+		btnJoin.setOnAction(e -> {
 			try {
 				menuController.hostPreviousGame(nickname.getText());
+			} catch (ExportException e1) {
+				new AlertDialog(AlertType.ERROR, "You are already running a server.").show();
+				e1.printStackTrace();
 			} catch (RemoteException e1) {
 				new AlertDialog(AlertType.ERROR, "Could not start a new server.").show();
 				e1.printStackTrace();
 			}
 		});
-		back.setOnAction(e -> StageManager.getInstance().switchScene(buildMainMenuScreen()));
+		btnBack.setOnAction(e -> StageManager.getInstance().switchScene(buildMainMenuScreen()));
 		
 		panel.setAlignment(Pos.CENTER_LEFT); 
 		panel.setSpacing(10);
 		panel.setTranslateX(-250);
 		panel.setTranslateY(100);
-		panel.getChildren().addAll(nickname, join, back);
+		panel.getChildren().addAll(nickname, btnJoin, btnBack);
 		
 		root.setTop(manualButton);
 		root.setRight(panel);

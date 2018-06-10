@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import application.services.SaveGameDAO;
+import application.views.GameView;
 
 /**
  * @author Sanchez
@@ -23,45 +24,44 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 	 */
 	private static final long serialVersionUID = -2852281344739846301L;
 	
-	public GameState gameState;
-	
-	private int currentPlayerIdx;
-	private int roundNr;
-	
-	private List<Player> players;
-	//private Map<Integer, Player> players;
+	private GameState gameState;
 	
 	private PlayingFieldImpl playingField;
 	
+	private int currentPlayerIdx;
+	private int roundNr;
 	private int maxPlayers;
 
-	private transient List<GameObserver> observers;
+	private List<Player> players; // Contains a list of PlayerImpl on server
 	
-	/*
-	 * The Game object knows how many players there are
-	 * Therefore the game object determines how many tokens and nobles there need to be created. 
-	 * This information is then passed onto the playingField, which generates those tokens and nobles.
-	 */
-
+	//private transient List<GameObserver> observers;
+	private transient Map<GameObserver, Player> observers;
+	
 	public GameImpl(int maxPlayers) throws RemoteException {
 		this.maxPlayers = maxPlayers;
 		
 		this.roundNr = 0;
-		this.currentPlayerIdx = 1; // TODO: First opponent starts first for now (1 because 0 = Player in SP)
+		this.currentPlayerIdx = -1;
 		
-		this.players = new ArrayList<Player>(); // TODO: replace with: this.players = players;
-		this.observers = new ArrayList<GameObserver>();
+		this.players = new ArrayList<Player>();
+		this.observers = new LinkedHashMap<GameObserver, Player>();
 		
 		Test_Create4Players();
 		
 		this.playingField = new PlayingFieldImpl(this.maxPlayers);
 	}
 	
+	/*public Player getPlayer(GameObserver o) throws RemoteException
+	{
+		return playersMap.get(o);
+	}*/
+
+	
 	public void nextTurn() throws RemoteException
 	{
 		System.out.println("Next turn started");
 		currentPlayerIdx++;
-		if(currentPlayerIdx >= players.size()) {
+		if(currentPlayerIdx >= players.size() || currentPlayerIdx < 0) {
 			currentPlayerIdx = 0;
 		}
 		
@@ -72,20 +72,19 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 			e.printStackTrace();
 		}
 		
-		System.out.println(currentPlayerIdx);
-		
-		// TODO: remove once lobby done
-		for(GameObserver o : observers)
-		{
-			o.setDisabled(true);
-		}
-		if(currentPlayerIdx < observers.size())
-		{
-			observers.get(currentPlayerIdx).setDisabled(false);
-		}
+		System.out.println("Current player ID = " + currentPlayerIdx);
 		this.notifyObservers();
 	}
-
+	
+	public boolean isDisabled(GameObserver o) throws RemoteException
+	{
+		Player player = observers.get(o); // THIS IS STILL A PROXY REFERENCE BECAUSE ADDOBSERVER ADDS A PROXY
+/*		System.out.printf("Checking if %s is disabled, current player = %s\n", player.getName(), this.getCurrentPlayer().getName());
+		System.out.printf("Checking if %s is disabled, current player = %s\n", player, this.getCurrentPlayer());
+		System.out.println("is equal: " + (this.getCurrentPlayer().equals(player)));*/
+		// Equals check won't work probably if one of the players is a PlayerImpl instead of a proxy ref to a Player
+		return !(player.getName().equals(this.getCurrentPlayer().getName())); // Checking for name as a workaround for the proxy-ref problem.
+	}
 	
 	public void saveGame() throws RemoteException
 	{
@@ -127,15 +126,15 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 		playingField.findSelectableCardsFromField();
 	}
 
-	public int getCurrentPlayerIdx() {
+	public int getCurrentPlayerIdx() throws RemoteException {
 		return currentPlayerIdx;
 	}
 
-	public int getRoundNr() {
+	public int getRoundNr() throws RemoteException {
 		return roundNr;
 	}
 
-	public List<Player> getPlayers() {
+	public List<Player> getPlayers() throws RemoteException {
 		return players;
 	}
 	
@@ -143,39 +142,40 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 		this.players = players;
 	}
 
-	public PlayingField getPlayingField() {
+	public PlayingField getPlayingField() throws RemoteException {
 		return playingField;
 	}
 
 	
-	public Player getCurrentPlayer() {
+	public Player getCurrentPlayer() throws RemoteException {
 		return players.get(currentPlayerIdx);
 	}
 
-	public int getMaxPlayers() {
+	public int getMaxPlayers() throws RemoteException {
 		return maxPlayers;
 	}
 
-	public GameState getGameState() {
+	public GameState getGameState() throws RemoteException {
 		return gameState;
 	}
 	
-	private void notifyObservers() throws RemoteException
+	private synchronized void notifyObservers() throws RemoteException
 	{
-		for(GameObserver o : observers)
+		System.out.println("[DEBUG] GameImpl::notifyObservers()::Notifying all game observers of change");
+		for(GameObserver o : observers.keySet())
 		{
 			o.modelChanged(this);
 		}
 	}
 
 	@Override
-	public void addObserver(GameObserver o) throws RemoteException {
-		this.observers.add(o);
+	public synchronized void addObserver(GameObserver o, Player player) throws RemoteException {
+		this.observers.put(o, player);
 		this.notifyObservers();
 	}
 
 	@Override
-	public void removeObserver(GameObserver o) throws RemoteException {
+	public synchronized void removeObserver(GameObserver o) throws RemoteException {
 		this.observers.remove(o);
 		this.notifyObservers();
 	}
@@ -183,7 +183,6 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 	@Override
 	public void cleanUpTurn() throws RemoteException {
 		playingField.getTempHand().emptyHand();
-		
 	}
 
 }

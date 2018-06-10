@@ -1,6 +1,7 @@
 package application.views;
 
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -18,6 +19,7 @@ import application.domain.Player;
 import application.domain.PlayerImpl;
 import application.domain.ReturnTokens;
 import application.util.AlertDialog;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert.AlertType;
@@ -32,7 +34,7 @@ import javafx.scene.layout.VBox;
  * @author Sanchez
  *
  */
-public class GameView implements UIComponent, Disableable, GameObserver  {
+public class GameView extends UnicastRemoteObject implements UIComponent, Disableable, GameObserver  {
 	
 	public final static int cardSizeX = 130, cardSizeY = 180; 
 	public final static int tokenSizeRadius = 45;
@@ -59,29 +61,40 @@ public class GameView implements UIComponent, Disableable, GameObserver  {
 	private Pane buttons;
 	private Pane opponents;
 	
-	private PlayingFieldView playingField;
-	private PlayerView player;
+	private PlayingFieldView playingFieldView;
+	private PlayerView playerView;
 	
+	private Player player;
 	
-	public GameView(Game game, GameController gameController) {
+	public GameView(Game game, GameController gameController, Player player) throws RemoteException {
 		this.game = game;
 		this.gameController = gameController;
+		this.player = player;
 		
 		colorBlindViews = new ArrayList<>();
 		
+		System.out.println("[DEBUG] GameView::Building GameView UI for local player: " + player.getName());
+		System.out.println(player);
 		this.buildUI();
 		
-		try {
-			game.addObserver(this);
-		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		game.addObserver(this, player);
 	}
 	
-	public void modelChanged(Game game)
+	public void modelChanged(Game game) throws RemoteException
 	{
-		
+		Platform.runLater(() ->
+		{
+			try {
+				System.out.println("[DEBUG] GameView::modelChanged()::Updating UI for local player: " + player.getName());
+				boolean disabled = game.isDisabled(this);
+				System.out.println("[DEBUG] GameView::modelChanged()::Is local player disabled? : " + disabled);
+				this.setDisabled(disabled);
+				
+			} catch (RemoteException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		});
 	}
 	
 	public static void changeColorBlindMode(ColorBlindModes mode) {
@@ -102,24 +115,29 @@ public class GameView implements UIComponent, Disableable, GameObserver  {
 		root = new BorderPane();
 		root.getStyleClass().add("game-view");
 		
-		//HBox topLayout = new HBox(10);
 		try {
-			playingField = buildPlayingField();
+			System.out.println("[DEBUG] GameView::Building playing field");
+			playingFieldView = buildPlayingField();
+			
+			System.out.println("[DEBUG] GameView::Building move buttons");
 			buttons = buildButtons();
+			
+			System.out.println("[DEBUG] GameView::Building opponents");
 			opponents = buildOpponents();
-			player = buildPlayer();
+			
+			System.out.println("[DEBUG] GameView::Building player");
+			playerView = buildPlayer();
 		} catch (RemoteException e) {
 			new AlertDialog(AlertType.ERROR, "A network error has occured while setting up one of the views.").show();
 			e.printStackTrace();
 		}
 		
-		VBox center = new VBox(playingField.asPane(), buttons);
-		VBox.setVgrow(playingField.asPane(), Priority.ALWAYS);
+		VBox center = new VBox(playingFieldView.asPane(), buttons);
+		VBox.setVgrow(playingFieldView.asPane(), Priority.ALWAYS);
 		
-		//root.setTop(topLayout);
 		root.setCenter(center);
 		root.setLeft(opponents);
-		root.setBottom(player.asPane());
+		root.setBottom(playerView.asPane());
 	}
 	
 	
@@ -235,8 +253,8 @@ public class GameView implements UIComponent, Disableable, GameObserver  {
 		List<Player> players = game.getPlayers();
 		for(Player player : players)
 		{
-			if(player.equals(players.get(0))) continue; // For now we'll assume that the first player in the list is 'our' player
-			
+			if(player.equals(this.player)) continue;
+			System.out.println("[DEBUG] GameView::buildOpponents():: Building opponent player: " + player.getName());
 			Pane opponentView = new OpponentView(player).asPane();
 			opponentsRows.getChildren().add(opponentView);
 		}
@@ -246,7 +264,7 @@ public class GameView implements UIComponent, Disableable, GameObserver  {
 	
 	private PlayerView buildPlayer() throws RemoteException
 	{
-		return new PlayerView(game.getPlayers().get(0));
+		return new PlayerView(this.player);
 	}
 	
 
@@ -262,8 +280,8 @@ public class GameView implements UIComponent, Disableable, GameObserver  {
 		}
 		this.btnResetTurn.setDisable(false);
 		
-		this.playingField.setDisabled(disabled);
-		this.player.setDisabled(disabled);
+		this.playingFieldView.setDisabled(disabled);
+		this.playerView.setDisabled(disabled);
 	}
 	
 }

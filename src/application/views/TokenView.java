@@ -4,6 +4,7 @@ import application.controllers.GameController;
 import application.domain.ColorBlindModes;
 import application.domain.Gem;
 import application.domain.Token;
+import application.util.ImageCache;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -49,7 +50,7 @@ public class TokenView implements UIComponent, ColorChangeable {
 	{
 		circle = new Circle(radius);
 		String imagePath = String.format("file:resources/tokens/token_%s.png", getTokenImageFileName());
-		Image image = new Image(imagePath);
+		Image image = ImageCache.getInstance().fetchImage(imagePath, true);
 		//Image image = ImageResources.getImage(imagePath);
         ImagePattern imagePattern = new ImagePattern(image);
         circle.setFill(imagePattern);
