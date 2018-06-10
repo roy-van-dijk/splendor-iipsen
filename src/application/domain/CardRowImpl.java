@@ -5,14 +5,16 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.EmptyStackException;
+import java.util.List;
+
+import application.util.Logger;
+import application.util.Logger.Verbosity;
 
 
 
 
 /**
  * @author Sanchez
- * This class acts like how you would expect CardDeck to act. This class makes sense as a View but it makes less sense as a model.
- * TODO: Consider pros/cons of merging it with CardDeck
  */
 public class CardRowImpl extends UnicastRemoteObject implements Serializable, CardRow {
 	
@@ -23,15 +25,22 @@ public class CardRowImpl extends UnicastRemoteObject implements Serializable, Ca
 
 	private static final int MAX_OPEN_CARDS = 4;
 	
-	private CardDeck cardDeckImpl;
-	private CardImpl[] cardSlots;
+	private CardDeck cardDeck;
+	private Card[] cardSlots;
 	private transient ArrayList<CardRowObserver> observers;
+
+	private List<Card> selectableCards;
 	
+	private int index; // TODO if enough time: Replace with CardLevel instead.
 	
-	public CardRowImpl(CardDeck cardDeckImpl) throws RemoteException {
-		this.cardDeckImpl = cardDeckImpl;
-		this.cardSlots = new CardImpl[MAX_OPEN_CARDS];
+
+	public CardRowImpl(CardDeck cardDeck, int index) throws RemoteException {
+		this.cardDeck = cardDeck;
+		this.index = index;
+
+		this.cardSlots = new Card[MAX_OPEN_CARDS];
 		this.observers = new ArrayList<>();
+		this.selectableCards = new ArrayList<>();
 		
 		this.initializeCardSlots();
 	}
@@ -53,14 +62,14 @@ public class CardRowImpl extends UnicastRemoteObject implements Serializable, Ca
 	}
 	
 
-	public CardDeck getCardDeck() {
-		return cardDeckImpl;
+	public CardDeck getCardDeck() throws RemoteException {
+		return cardDeck;
 	}
 
 	/**
 	 * @return Returns all card slots, containing either a Card object or a null. See comment @ CardRowView.buildUI() for a problem description.
 	 */
-	public Card[] getCardSlots() {
+	public Card[] getCardSlots() throws RemoteException {
 		return cardSlots;
 	}
 	
@@ -71,7 +80,7 @@ public class CardRowImpl extends UnicastRemoteObject implements Serializable, Ca
 
 
 	private synchronized void notifyObservers() throws RemoteException {
-		System.out.println("[DEBUG] CardRowImpl::notifyObservers()::Notifying all CardRow observers of change");
+		Logger.log("CardRowImpl::notifyObservers()::Notifying all CardRow observers of change", Verbosity.DEBUG);
 		for (CardRowObserver co : observers) {
 			co.modelChanged(this);
 		}
@@ -90,7 +99,7 @@ public class CardRowImpl extends UnicastRemoteObject implements Serializable, Ca
 			if(cardSlots[pos] == null)
 			{
 				try {
-					CardImpl cardFromDeck = (CardImpl) cardDeckImpl.pull();
+					Card cardFromDeck = cardDeck.pull();
 					cardSlots[pos] = cardFromDeck;
 				} 
 				catch (EmptyStackException e)
@@ -99,5 +108,56 @@ public class CardRowImpl extends UnicastRemoteObject implements Serializable, Ca
 				}
 			}
 		}
+	}
+
+	
+	@Override
+	public void findSelectableCards(MoveType moveType, Player player) throws RemoteException {
+		this.clearAll();
+		Logger.log("CardRowImpl::findSelectableCards::Checking selectable cards for player " + player.getName(), Verbosity.DEBUG);
+		Logger.log("CardRowImpl::findSelectableCards::moveType = " + moveType, Verbosity.DEBUG);
+		if(moveType == MoveType.PURCHASE_CARD) {
+			for(Card card : cardSlots) {
+				if(player.canAffordCard(card.getCosts())) {
+					Logger.log("CardRowImpl::findSelectableCards::Player can afford a card", Verbosity.DEBUG);
+					selectableCards.add(card);
+				}
+			}
+		} else if(moveType == MoveType.RESERVE_CARD){
+			for(Card card : cardSlots) {
+				selectableCards.add(card);
+			}
+			cardDeck.setSelectable();
+		}
+		this.notifyObservers();
+	}
+	
+	private void clearAll() throws RemoteException
+	{
+		cardDeck.clearSelectable();
+		cardDeck.clearSelection();
+		selectableCards.clear();
+	}
+	
+	@Override
+	public void clearSelectableCards() throws RemoteException {
+		this.clearAll();
+		this.notifyObservers();
+	}
+	
+	@Override
+	public List<Card> getSelectableCards() throws RemoteException {
+		return selectableCards;
+	}
+
+	// Why not make notifyObservers public?
+	@Override
+	public void updateView() throws RemoteException {
+		this.notifyObservers();	
+	}
+
+	@Override
+	public int getIndex() throws RemoteException {
+		return index;
 	}
 }

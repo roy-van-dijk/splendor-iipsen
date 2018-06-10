@@ -1,3 +1,4 @@
+package nl.hsleiden.splendor.test;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.AfterAll;
@@ -17,9 +18,9 @@ class TestInstellenToegankelijkheid {
 	private GameController gameController;	
 	private ColorBlindModes mode;
 	//private GameView view = new GameView(game, gameController);
+
 	//TokenView token = new TokenView(Gem, double);
 	
-
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
 	}

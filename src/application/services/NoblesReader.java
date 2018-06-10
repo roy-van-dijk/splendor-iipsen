@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -68,7 +69,7 @@ public class NoblesReader {
 
 	
 	// read data from noble (illustration and costs, prestige value is defined as constant.
-	private Noble readNoble(String[] nobleRecord) {
+	private Noble readNoble(String[] nobleRecord) throws RemoteException {
 		String illustration = nobleRecord[0];
 		Map<Gem, Integer> bonusCosts = readBonusCosts(nobleRecord);
 		Noble noble = new NobleImpl(prestigeValue, illustration, bonusCosts);

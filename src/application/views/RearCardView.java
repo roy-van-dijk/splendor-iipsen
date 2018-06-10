@@ -1,36 +1,38 @@
 package application.views;
 
-
 import java.rmi.RemoteException;
 
 import application.domain.Card;
 import application.util.ImageCache;
 import javafx.scene.image.Image;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
-import javafx.scene.shape.StrokeType;
+
 /**
+ * Displays the rear side of a card
  * 
  * @author Sanchez
  *
  */
-public class RearCardView extends CardView {	
-	
+public class RearCardView extends CardView {
+
 	private Card card;
+
 	/**
+	 * Creates a new rear card view
 	 * 
-	 * @param Card card 
-	 * @param double sizeX
-	 * @param double sizeY
+	 * @param Card
+	 *            card
+	 * @param double
+	 *            sizeX horizontal
+	 * @param double
+	 *            sizeY vertical
 	 */
 	public RearCardView(Card card, double sizeX, double sizeY) {
 		super(sizeX, sizeY);
 		this.card = card;
-		
+
 		this.buildUI();
 	}
 	
@@ -52,15 +54,15 @@ public class RearCardView extends CardView {
 	}
 
 	@Override
-	protected String getImagePath()
-	{
+	protected String getImagePath() {
 		String path = "";
 		try {
-			path = String.format("file:resources/cards/%s/%s.png", card.getLevel().name().toLowerCase(), card.getLevel().name().toLowerCase());
+			path = String.format("file:resources/cards/%s/%s.png", card.getLevel().name().toLowerCase(),
+					card.getLevel().name().toLowerCase());
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
-		
+
 		return path;
 	}
 

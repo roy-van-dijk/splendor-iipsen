@@ -4,9 +4,18 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 
 /**
+ * Is implemented by views that can be disabled
+ * 
  * @author Sanchez
  *
  */
-public interface Disableable extends Remote {
-	public void setDisabled(boolean disabled) throws RemoteException;
+public interface Disableable {
+
+	/**
+	 * Updates the view to accompany the disabled change
+	 * 
+	 * @param disabled
+	 * @throws RemoteException
+	 */
+	public void setDisabled(boolean disabled);
 }

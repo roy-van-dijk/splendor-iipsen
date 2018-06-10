@@ -1,28 +1,21 @@
 package application.controllers;
 
 import java.rmi.RemoteException;
-import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import application.StageManager;
 import application.domain.Card;
 import application.domain.CardRow;
-import application.domain.CardRowImpl;
 import application.domain.Game;
 import application.domain.Gem;
 import application.domain.MoveType;
-import application.domain.Noble;
-import application.domain.PlayingField;
-import application.domain.ReturnTokens;
-import application.services.SaveGameDAO;
+import application.domain.TempHand;
+import application.domain.Token;
+import application.domain.TokenList;
 import application.util.ConfirmDialog;
 import application.views.PopUpWindowView;
-import application.views.ReturnTokensView;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
-import javafx.stage.Stage;
 
 /**
  * @author Sanchez
@@ -35,75 +28,38 @@ public class GameController {
 		this.game = game;
 	}
 
-	public void reserveCard() throws RemoteException {
-		// Creating POC variables - basically specifying: Hey controller, I clicked on this >predefined< card
-		CardRow row = game.getPlayingField().getCardRows().get(1); // Second row
-		Card card = row.getCardSlots()[1]; // Second card
-		
-		//if(!card.equals(card2wantdezeisspeciaal)) return;
-		
-		game.getCurrentPlayer().reserveCardFromField(row, card);
-		
+	public void reserveCard(MoveType moveType) throws RemoteException {
+		game.findSelectableCards(moveType);
 	}
 	
-	public void purchaseCard() throws RemoteException {
-		game.findSelectableCards();
+	public void purchaseCard(MoveType moveType) throws RemoteException {
+		game.findSelectableCards(moveType);
 	}
 	
+	public void takeTokens(MoveType moveType) throws RemoteException {
+		game.setTokensSelectable(moveType);
+	}
+
 	public void debugNextTurn() throws RemoteException {
 		game.nextTurn();
 	}
 	
 	public void endTurn() throws RemoteException {
-		
-		//return Tokens
-		ReturnTokens model = new ReturnTokens(game.getPlayingField(), game.getCurrentPlayer());
-		ReturnTokenController controller = new ReturnTokenController(model);
-		model.moreThanTenTokens(model, controller);
-		
-		
-		//begin voor toevoegen nobles
-		//List<Noble> allNobles= game.getPlayingField().getNobles();
-		//Map<Gem, Integer> totalBonusGems = game.getCurrentPlayer().getDiscount();
-		
-		//for(Noble noble : allNobles) {
-		//	Map<Gem, Integer> nobleCost = noble.getRequirements();
-		//	if(totalBonusGems.containsKey(nobleCost) == true) 
-		//	{
-		//		game.getCurrentPlayer().addNoble(noble);
-		//		game.getPlayingField().removeNoble(noble);
-		//	}
-		//	break;
-		//}
-		
-		//game.getPlayers().get(game.getCurrentPlayerIdx()).getOwnedCards().add(game.getTurn().getBoughtCard());
-		//TODO: subtract tokens from player.
-		//game.getPlayers().get(game.getCurrentPlayerIdx()).getReservedCards().add(game.getTurn().getReservedCard());
-		 
-		//TODO: check for nobles
-		game.cleanUpTurn();
-		game.saveGame();
-		//TODO: Check win condition 
-		//TODO: Determine next player
-		
-		
-		game.nextTurn();
+		game.getEndTurn().endTurn();
 	}
 	
-	public void findSelectableTokens() throws RemoteException {
-		game.getPlayingField().setTokensSelectable();
-	}
-
+	
 	public void leaveGame() {
 		ConfirmDialog dialog = new ConfirmDialog(AlertType.CONFIRMATION);
 		dialog.setTitle("Confirmation Dialog");
 		dialog.setHeaderText("You are leaving the game");
-		dialog.setContentText("Are you ok with this?");
+		dialog.setContentText("Are you sure you wish to continue?");
 		
 		Optional<ButtonType> results = dialog.showAndWait();
 		if (results.get() == ButtonType.OK){
 			try {
 				game.saveGame();
+				// TODO: Make leave game method
 			} catch (RemoteException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -112,15 +68,32 @@ public class GameController {
 			new PopUpWindowView("Het spel is beëindigd door een van de spelers.", "Het spel is gestopt");
 		}
 	}
-
 	
-	public void onFieldCardClicked(Card card) throws RemoteException {
-		System.out.println("I am going to do something");
+	public void reserveCardFromDeck(int cardRowIdx) throws RemoteException {
+		game.reserveCardFromDeck(cardRowIdx);
 	}
 
-	public void onFieldTokenClicked(Gem gemType) throws RemoteException {
-		
-		game.getPlayingField().addTokenToTemp(gemType);
-		
+	public void onFieldCardClicked(int cardRowIdx, int cardIdx) throws RemoteException {
+		game.addCardToTempFromField(cardRowIdx, cardIdx);
+	}
+	
+	public void onReservedCardClicked(int cardIdx) throws RemoteException {
+		game.addCardToTempFromReserve(cardIdx);
+	}
+
+	public void onFieldTokenClicked(Gem gemType) throws RemoteException {	
+		game.addTokenToTemp(gemType);
+	}
+	
+	public TempHand getTempHand() throws RemoteException {
+		return game.getPlayingField().getTempHand();
+	}
+/*	public void clearDeckSelection() throws RemoteException {
+		game.getPlayingField().setDeckDeselected();
+		game.updatePlayingFieldAndPlayerView();			
+	}*/
+
+	public void resetTurn() throws RemoteException {
+		game.cleanUpSelections();		
 	}
 }

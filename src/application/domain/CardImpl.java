@@ -1,19 +1,20 @@
 package application.domain;
 
 import java.io.Serializable;
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.Map;
 
 /**
  * @author Sanchez
  *
  */
-public class CardImpl implements Card, Serializable {
+public class CardImpl extends UnicastRemoteObject implements Card, Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -2889130830902711273L;
-	
 	
 	private boolean reservedFromDeck = false;
 	private CardLevel level;
@@ -23,7 +24,7 @@ public class CardImpl implements Card, Serializable {
 	private Map<Gem, Integer> costs;
 	
 	
-	public CardImpl(CardLevel level, int prestigeValue, String illustration, Gem bonus, Map<Gem, Integer> costs) {
+	public CardImpl(CardLevel level, int prestigeValue, String illustration, Gem bonus, Map<Gem, Integer> costs) throws RemoteException {
 		this.level = level;
 		this.prestigeValue = prestigeValue;
 		this.illustration = illustration;

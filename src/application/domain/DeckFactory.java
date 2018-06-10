@@ -1,6 +1,7 @@
 package application.domain;
 
 import java.io.IOException;
+import java.rmi.RemoteException;
 import java.util.Stack;
 
 import application.services.CardsReader;
@@ -33,15 +34,15 @@ public class DeckFactory {
 		}
 	}
 	
-	public CardDeck createCardDeck(CardLevel level)
+	public CardDeck createCardDeck(CardLevel level) throws RemoteException
 	{
 		Stack<Card> cards = cardsReader.getCards(level);
 		
-		CardDeck deck = new CardDeck(cards, level);
+		CardDeck deck = new CardDeckImpl(cards, level);
 		return deck;
 	}
 	
-	public NobleDeck createNobleDeck()
+	public NobleDeck createNobleDeck() throws RemoteException
 	{
 		Stack<Noble> nobles = noblesReader.getNobles();
 		

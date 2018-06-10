@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Map;
 
 import application.services.SaveGameDAO;
+import application.util.Logger;
+import application.util.Logger.Verbosity;
 import application.views.GameView;
 
 /**
@@ -37,6 +39,10 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 	//private transient List<GameObserver> observers;
 	private transient Map<GameObserver, Player> observers;
 	
+
+	private EndTurnImpl endTurn;
+	
+
 	public GameImpl(int maxPlayers) throws RemoteException {
 		this.maxPlayers = maxPlayers;
 		
@@ -46,9 +52,11 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 		this.players = new ArrayList<Player>();
 		this.observers = new LinkedHashMap<GameObserver, Player>();
 		
-		Test_Create4Players();
+		this.Test_Create4Players();
 		
 		this.playingField = new PlayingFieldImpl(this.maxPlayers);
+		
+		this.endTurn = new EndTurnImpl(this);
 	}
 	
 	/*public Player getPlayer(GameObserver o) throws RemoteException
@@ -59,7 +67,7 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 	
 	public void nextTurn() throws RemoteException
 	{
-		System.out.println("Next turn started");
+		System.out.println("[DEBUG] GameImpl::nextTurn()::Next turn started");
 		currentPlayerIdx++;
 		if(currentPlayerIdx >= players.size() || currentPlayerIdx < 0) {
 			currentPlayerIdx = 0;
@@ -72,10 +80,10 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 			e.printStackTrace();
 		}
 		
-		System.out.println("Current player ID = " + currentPlayerIdx);
+		this.playingField.getTempHand().updatePlayer(this.getCurrentPlayer());
+		System.out.printf("[DEBUG] GameImpl::nextTurn()::Current player: %s(ID: %d)\n", this.getCurrentPlayer().getName(), currentPlayerIdx);
 		this.notifyObservers();
 	}
-	
 	public boolean isDisabled(GameObserver o) throws RemoteException
 	{
 		Player player = observers.get(o); // THIS IS STILL A PROXY REFERENCE BECAUSE ADDOBSERVER ADDS A PROXY
@@ -86,6 +94,7 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 		return !(player.getName().equals(this.getCurrentPlayer().getName())); // Checking for name as a workaround for the proxy-ref problem.
 	}
 	
+	@Override
 	public void saveGame() throws RemoteException
 	{
 		try {
@@ -103,7 +112,6 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 	private void Test_Create4Players()
 	{
 		try {
-			this.players.add(new PlayerImpl("Bob"));
 			
 			PlayerImpl player = new PlayerImpl("Michael");
 			for(int i = 0; i < 13; i++)
@@ -113,6 +121,7 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 				player.debugAddToken(new TokenImpl(allGems[randomIdx]));
 			}
 			this.players.add(player);
+			this.players.add(new PlayerImpl("Bob"));
 			this.players.add(new PlayerImpl("Peter"));
 			this.players.add(new PlayerImpl("Martin"));
 		} catch (RemoteException e) {
@@ -121,9 +130,19 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 		}
 	}
 	
-	public void findSelectableCards() throws RemoteException {
-		this.getCurrentPlayer().findSelectableCardsFromReserve();
+	@Override
+	public void findSelectableCards(MoveType moveType) throws RemoteException {
+		this.playingField.getTempHand().setMoveType(moveType);
+		
+		if(moveType == MoveType.PURCHASE_CARD) {
+			this.getCurrentPlayer().findSelectableCardsFromReserve();
+		}
 		playingField.findSelectableCardsFromField();
+	}
+	
+	@Override
+	public void setTokensSelectable(MoveType moveType) throws RemoteException {
+		this.playingField.setTokensSelectable(moveType);
 	}
 
 	public int getCurrentPlayerIdx() throws RemoteException {
@@ -179,10 +198,92 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 		this.observers.remove(o);
 		this.notifyObservers();
 	}
-
+	
 	@Override
 	public void cleanUpTurn() throws RemoteException {
 		playingField.getTempHand().emptyHand();
 	}
+
+	public void updatePlayingFieldAndPlayerView() throws RemoteException {
+		for(CardRow cardRow : playingField.getCardRows()) {
+			cardRow.updateView();
+		}
+		this.getCurrentPlayer().updatePlayerView();
+	}
+	
+	@Override
+	public void cleanUpSelections() throws RemoteException {
+		this.playingField.getTempHand().emptyHand();
+		
+		for(CardRow cardRow : playingField.getCardRows()) {
+			cardRow.clearSelectableCards();
+		}
+		playingField.newTurn();
+		this.getCurrentPlayer().clearSelectableCards();
+		this.notifyObservers();
+	}
+	
+	@Override
+	public void reserveCardFromDeck(int cardRowIdx) throws RemoteException {
+		CardRow cardRow = this.playingField.getCardRows().get(cardRowIdx);
+		Card card = cardRow.getCardDeck().top();
+		this.addCardToTempHand(card, this.playingField.getTempHand());
+		card.setReservedFromDeck(true);
+		
+		this.getPlayingField().setDeckSelected(cardRow);
+		this.updatePlayingFieldAndPlayerView();	
+		this.notifyObservers();
+	}
+	
+	@Override
+	public void addCardToTempFromField(int cardRowIdx, int cardIdx) throws RemoteException {
+		CardRow cardRow = this.playingField.getCardRows().get(cardRowIdx);
+		Card card = cardRow.getCardSlots()[cardIdx];
+		Logger.log("GameImpl::addCardToTempFromField::Card = " + card, Verbosity.DEBUG);
+		TempHand tempHand = this.playingField.getTempHand();
+		
+		this.addCardToTempHand(card, tempHand);
+		
+		if(tempHand.getMoveType() == MoveType.RESERVE_CARD)
+		{
+			this.playingField.setDeckDeselected();
+		}
+		this.updatePlayingFieldAndPlayerView();
+		this.notifyObservers();
+	}
+	
+	
+	
+	@Override
+	public void addCardToTempFromReserve(int cardIdx) throws RemoteException {
+		Card card = this.getCurrentPlayer().getReservedCards().get(cardIdx);
+		TempHand tempHand = this.getPlayingField().getTempHand();
+		
+		this.addCardToTempHand(card, tempHand);
+		
+		this.updatePlayingFieldAndPlayerView();
+		this.notifyObservers();
+	}
+
+	public EndTurn getEndTurn() throws RemoteException {
+		return endTurn;
+	}
+	
+	private void addCardToTempHand(Card card, TempHand tempHand) throws RemoteException {	
+		MoveType moveType = tempHand.getMoveType();
+		System.out.println("GameImpl::addCardToTemp()::Card = " + card);
+		if(moveType == MoveType.PURCHASE_CARD) {
+			tempHand.selectCardToBuy(card);
+		} else if(moveType == MoveType.RESERVE_CARD) {
+			tempHand.selectCardToReserve(card);
+		}
+	}
+
+	@Override
+	public void addTokenToTemp(Gem gemType) throws RemoteException {
+		this.playingField.addTokenToTemp(gemType);
+		this.notifyObservers();
+	}
+
 
 }

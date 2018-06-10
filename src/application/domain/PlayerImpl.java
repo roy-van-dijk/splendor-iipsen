@@ -4,9 +4,13 @@ import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.EmptyStackException;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
+import application.util.Logger;
+import application.util.Logger.Verbosity;
 /**
  * 
  * @author Sanchez
@@ -31,10 +35,6 @@ public class PlayerImpl extends UnicastRemoteObject implements Player, Serializa
 	
 	private TokenList tokenList;
 	
-	public void addSelectableCardFromReserve(Card card) {
-		selectableCards.add(card);
-	}
-	
 	public List<Card> getSelectableCardsFromReserve() {
 		return selectableCards;
 	}
@@ -52,8 +52,11 @@ public class PlayerImpl extends UnicastRemoteObject implements Player, Serializa
 		this.tokenList = new TokenList();
 	}
 	
-	public void reserveCardFromField(CardRow cardRow, Card card) throws RemoteException 
-	{
+	/* (non-Javadoc)
+	 * @see application.domain.Player#reserveCardFromField(application.domain.CardRow, application.domain.Card)
+	 */
+	@Override
+	public void reserveCardFromField(CardRow cardRow, Card card) throws RemoteException {
 		// TODO (low priority): Make reservedTokens class that incorporates this business rule
 		if(this.getReservedCards().size() < 3) // Business rule: max 3 reserved cards
 		{
@@ -63,56 +66,61 @@ public class PlayerImpl extends UnicastRemoteObject implements Player, Serializa
 			System.out.printf("[DEBUG] PlayerImpl::reserveCardFromField()::Player %s has taken the card with costs: %s\n", this.getName() ,card.getCosts());
 			this.notifyObservers();
 		}
-	}
 
+	}
 	
-	public void purchaseCardFromField(CardRow cardRow, Card card) throws RemoteException
-	{
-		if(this.canAffordCard(card.getCosts()))
-		{
-			cardRow.removeCard(card);
-			ownedCards.add(card);
-			
-			System.out.printf("[DEBUG] PlayerImpl::purchaseCardFromField()::Player %s has bought the card with costs: %s\\n", this.getName(), card.getCosts());
-			this.notifyObservers();
-		}
+	@Override
+	public void updatePlayerView() throws RemoteException {
+		this.notifyObservers();
 	}
 	
 	public void findSelectableCardsFromReserve() throws RemoteException {
-		selectableCards.clear();
+		this.clearSelectableCards();
 		for(Card card : this.getReservedCards()) {
 			if(this.canAffordCard(card.getCosts())) {
-				this.addSelectableCardFromReserve(card);
+				selectableCards.add(card);
 			}
 		}
-		
+		this.notifyObservers();
+	}
+	
+	@Override
+	public void clearSelectableCards() throws RemoteException {
+		selectableCards.clear();
 		this.notifyObservers();
 	}
 	
 	public boolean canAffordCard(Map<Gem, Integer> costs) throws RemoteException
 	{
+		Logger.log("PlayerImpl::canAffordCard::Player == " + this.getName(), Verbosity.DEBUG);
 		Map<Gem, Integer> gemsCount = tokenList.getTokenGemCount();
+		int jokersLeft = gemsCount.get(Gem.JOKER);
 		
 		for(Map.Entry<Gem, Integer> cost : costs.entrySet())
 		{
 			//if(!gemsCount.containsKey(cost.getKey())) return false; // Player does not even have the right tokens.
-			if((gemsCount.get(cost.getKey()) + gemsCount.get(Gem.JOKER)) < (cost.getValue() - this.getDiscount().get(cost.getKey()))) return false; // Insufficient funds
+			if(gemsCount.get(cost.getKey()) < (cost.getValue() - this.getBonus().get(cost.getKey()))) {
+				if((gemsCount.get(cost.getKey()) + jokersLeft) < (cost.getValue() - this.getBonus().get(cost.getKey()))) {
+					return false; // Insufficient funds
+				} else {
+					jokersLeft += gemsCount.get(cost.getKey()) - (cost.getValue() - this.getBonus().get(cost.getKey()));
+				}
+			}
 		}
 		return true;
 	}
 	
-	public Map<Gem, Integer> getDiscount() throws RemoteException {
-		LinkedHashMap<Gem, Integer> discount = new LinkedHashMap<Gem, Integer>();
-		
+	public Map<Gem, Integer> getBonus() throws RemoteException {
+		LinkedHashMap<Gem, Integer> bonus = new LinkedHashMap<Gem, Integer>();	
 		for(Gem gemType : Gem.values()) {
-			discount.put(gemType, 0);
+			if(gemType != Gem.JOKER) {
+				bonus.put(gemType, 0);	
+			}
 		}
-		
 		for(Card card : this.getOwnedCards()) {
-			discount.put(card.getBonusGem(), discount.get(card.getBonusGem()) + 1);
+			bonus.put(card.getBonusGem(), bonus.get(card.getBonusGem()) + 1);
 		}
-		
-		return discount;
+		return bonus;
 	}
 
 	public void setName(String name) throws RemoteException{
@@ -138,9 +146,10 @@ public class PlayerImpl extends UnicastRemoteObject implements Player, Serializa
 	{
 		return ownedNobles;
 	}
-	public void addNoble(Noble noble) throws RemoteException
-	{
+
+	public void addNoble(Noble noble) throws RemoteException {
 		ownedNobles.add(noble);
+		this.notifyObservers();
 	}
 	
 	public List<Token> getTokens() throws RemoteException {
@@ -196,6 +205,35 @@ public class PlayerImpl extends UnicastRemoteObject implements Player, Serializa
 	@Override
 	public void debugAddToken(Token token) throws RemoteException {
 		this.tokenList.add(token);
+		this.notifyObservers();
 	}
 
+	/**
+	 * 
+	 */
+	@Override
+	public void addCard(Card card) throws RemoteException {
+		this.ownedCards.add(card);
+		
+	}
+
+
+	/* (non-Javadoc)
+	 * @see application.domain.Player#addReserverveCard(application.domain.Card)
+	 */
+	@Override
+	public void addReservedCard(Card card) throws RemoteException {
+		this.reservedCards.add(card);
+		
+	}
+
+	/* (non-Javadoc)
+	 * @see application.domain.Player#addToken(application.domain.Token)
+	 */
+	@Override
+	public void addToken(Token token) throws RemoteException {
+		this.tokenList.add(token);
+		this.notifyObservers();
+		
+	}
 }

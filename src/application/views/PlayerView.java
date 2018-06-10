@@ -5,6 +5,7 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
 import application.controllers.GameController;
 import application.domain.Card;
 import application.domain.ColorBlindModes;
@@ -12,6 +13,7 @@ import application.domain.Gem;
 import application.domain.Noble;
 import application.domain.Player;
 import application.domain.PlayerObserver;
+
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
@@ -33,16 +35,23 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
 /**
+ * This is the view with the player's own information
  * 
  * @author Sanchez
  *
  */
 public class PlayerView extends UnicastRemoteObject implements UIComponent, Disableable, PlayerObserver {
 
-	// Radio button toggle group
-	final private ToggleGroup group = new ToggleGroup();
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4476145574334789147L;
 
-	private GameController gamecontroller;
+	// Radio button toggle group
+	private final ToggleGroup group = new ToggleGroup();
+
+	private GameController gameController;
+	private Player player;
 
 	private Pane root;
 
@@ -53,11 +62,20 @@ public class PlayerView extends UnicastRemoteObject implements UIComponent, Disa
 
 	private Label lblPrestigeValue;
 
-	public PlayerView(Player player) throws RemoteException {
+	/**
+	 * Creates a new player view
+	 * 
+	 * @param player
+	 *            this player.
+	 * @param gameController
+	 * @throws RemoteException
+	 */
+	public PlayerView(Player player, GameController gameController) throws RemoteException {
 
 		this.buildUI();
-
+		this.player = player;
 		player.addObserver(this);
+		this.gameController = gameController;
 	}
 
 	private void buildUI() throws RemoteException {
@@ -70,6 +88,7 @@ public class PlayerView extends UnicastRemoteObject implements UIComponent, Disa
 		lblPrestigeValue.setAlignment(Pos.CENTER);
 		lblPrestigeValue.setFont(Font.font("Times New Roman", FontWeight.EXTRA_BOLD, 50));
 		lblPrestigeValue.getStyleClass().add("prestige");
+		lblPrestigeValue.setMinWidth(135.0);
 
 		StackPane panePrestige = new StackPane(lblPrestigeValue);
 
@@ -83,11 +102,12 @@ public class PlayerView extends UnicastRemoteObject implements UIComponent, Disa
 
 		VBox accessibility = buildAccessibilityMenu();
 
-		root.getChildren().addAll(panePrestige, sep(), tokensGrid, sep(), ownedCards, sep(), ownedNobles, sep(), reservedCards, sep(), accessibility);
+		root.getChildren().addAll(panePrestige, sep(), tokensGrid, sep(), ownedCards, sep(), ownedNobles, sep(),
+				reservedCards, sep(), accessibility);
 	}
 
 	public void modelChanged(Player player) throws RemoteException {
-		System.out.println("[DEBUG] PlayerView::modelChanged()::Player has " + player.getTokensGemCount());
+		//System.out.println("[DEBUG] PlayerView::modelChanged()::Player has " + player.getTokensGemCount());
 		Platform.runLater(() ->
 		{
 			try {
@@ -159,8 +179,36 @@ public class PlayerView extends UnicastRemoteObject implements UIComponent, Disa
 	private HBox createReservedCardDisplay(List<Card> cards, int sizeX, int sizeY) {
 		HBox reservedCards = new HBox(10);
 
-		for (Card card : cards) {
+		for (int i = 0; i < cards.size(); i++) {
+			int cardIdx = i;
+			Card card = cards.get(i);
 			CardView cardView = new FrontCardView(card, sizeX, sizeY);
+
+			cardView.asPane().getStyleClass().add("dropshadow");
+
+			try {
+				if (!player.getSelectableCardsFromReserve().isEmpty()) {
+					System.out.println(gameController);
+					System.out.println(card);
+					if (gameController.getTempHand().getBoughtCard() == card) {
+						cardView.asPane().getStyleClass().remove("selectable");
+						cardView.asPane().getStyleClass().add("selected");
+					} else if (player.getSelectableCardsFromReserve().contains(card)) {
+						cardView.asPane().getStyleClass().add("selectable");
+						cardView.asPane().setOnMouseClicked(e -> {
+							try {
+								gameController.onReservedCardClicked(cardIdx);
+							} catch (RemoteException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+						});
+					}
+				}
+			} catch (RemoteException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			reservedCards.getChildren().add(cardView.asPane());
 		}
 
@@ -171,7 +219,7 @@ public class PlayerView extends UnicastRemoteObject implements UIComponent, Disa
 		ownedNobles.getChildren().clear();
 
 		VBox nobleDisplay = createNobleDisplay(nobles, 110, 110);
-		nobleDisplay.setPrefWidth(175);
+		nobleDisplay.setPrefWidth(110);
 		ownedNobles.getChildren().add(nobleDisplay);
 	}
 
@@ -183,13 +231,14 @@ public class PlayerView extends UnicastRemoteObject implements UIComponent, Disa
 		for (Noble noble : nobles) {
 			NobleView nobleView = new NobleView(noble, sizeX, sizeY);
 			nobleView.asPane().setTranslateY(offset);
-			offset = offset + 20;
+			nobleView.asPane().getStyleClass().add("dropshadow");
+			offset = offset + 35;
 			nobleStack.getChildren().add(nobleView.asPane());
 		}
 
 		nobleStack.setAlignment(Pos.CENTER);
 
-		VBox nobleDisplay = new VBox(10, nobleStack);
+		VBox nobleDisplay = new VBox(nobleStack);
 
 		return nobleDisplay;
 	}
@@ -225,37 +274,40 @@ public class PlayerView extends UnicastRemoteObject implements UIComponent, Disa
 			}
 		}
 
-		VBox d = createCardDisplay(diamondCards, diamondCards.size(), 110, 160);
-		VBox s = createCardDisplay(sapphireCards, sapphireCards.size(), 110, 160);
-		VBox e = createCardDisplay(emeraldCards, emeraldCards.size(), 110, 160);
-		VBox r = createCardDisplay(rubyCards, rubyCards.size(), 110, 160);
-		VBox o = createCardDisplay(onyxCards, onyxCards.size(), 110, 160);
+		VBox diamondDisplay = createCardDisplay(diamondCards, diamondCards.size(), 110, 160);
+		VBox sapphireDisplay = createCardDisplay(sapphireCards, sapphireCards.size(), 110, 160);
+		VBox emeraldDisplay = createCardDisplay(emeraldCards, emeraldCards.size(), 110, 160);
+		VBox rubyDisplay = createCardDisplay(rubyCards, rubyCards.size(), 110, 160);
+		VBox onyxDisplay = createCardDisplay(onyxCards, onyxCards.size(), 110, 160);
 
-		ownedCards.getChildren().addAll(d, s, e, r, o);
+		ownedCards.getChildren().addAll(diamondDisplay, sapphireDisplay, emeraldDisplay, rubyDisplay, onyxDisplay);
 	}
 
 	private VBox createCardDisplay(ArrayList<Card> cards, int count, int sizeX, int sizeY) {
-		int offset = 0;
+		int offset = 60;
 
 		StackPane cardStack = new StackPane();
 
-		for (Card card : cards) {
-			CardView cardView = new FrontCardView(card, sizeX, sizeY);
-			cardView.asPane().setTranslateY(offset);
-			offset = offset + 20;
-			cardStack.getChildren().add(cardView.asPane());
-		}
-
-		cardStack.setAlignment(Pos.CENTER);
-
 		Label cardCountLabel = new Label(String.valueOf(count));
-		cardCountLabel.setAlignment(Pos.CENTER);
+		cardCountLabel.setAlignment(Pos.TOP_CENTER);
 		cardCountLabel.getStyleClass().add("card-count");
 		cardCountLabel.setFont(Font.font("Times New Roman", FontWeight.BOLD, 40));
 		cardCountLabel.setPrefWidth(125);
 		cardCountLabel.setTextFill(Color.WHITE);
 
-		VBox ownedCardDisplay = new VBox(25, cardCountLabel, cardStack);
+		cardStack.getChildren().add(cardCountLabel);
+
+		for (Card card : cards) {
+			CardView cardView = new FrontCardView(card, sizeX, sizeY);
+			cardView.asPane().setTranslateY(offset);
+			cardView.asPane().getStyleClass().add("dropshadow");
+			offset = offset + 25;
+			cardStack.getChildren().add(cardView.asPane());
+		}
+
+		cardStack.setAlignment(Pos.TOP_CENTER);
+
+		VBox ownedCardDisplay = new VBox(10, cardStack);
 
 		return ownedCardDisplay;
 	}
@@ -275,6 +327,7 @@ public class PlayerView extends UnicastRemoteObject implements UIComponent, Disa
 
 	private HBox createTokenGemCountDisplay(Gem gemType, int count, int radius) {
 		TokenView tokenView = new TokenView(gemType, radius);
+		tokenView.asPane().getStyleClass().add("dropshadow");
 
 		Label tokenCountLabel = new Label(String.valueOf(count));
 		tokenCountLabel.setAlignment(Pos.CENTER);

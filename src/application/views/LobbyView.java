@@ -1,17 +1,11 @@
 package application.views;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.ArrayList;
 import java.util.List;
 
 import application.StageManager;
-import application.controllers.GameController;
 import application.controllers.LobbyController;
-import application.controllers.MainMenuController;
-import application.domain.Game;
 import application.domain.Lobby;
 import application.domain.LobbyImpl.LobbyStates;
 import application.domain.LobbyObserver;
@@ -21,19 +15,13 @@ import application.util.AlertDialog;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 /**
  * 
  * @author Roy
@@ -70,6 +58,9 @@ public class LobbyView extends UnicastRemoteObject implements UIComponent, Lobby
 		this.buildUI();
 	}
 
+	/**
+	 * update the lobby view
+	 */
 	public void modelChanged(Lobby lobby) throws RemoteException {
 		// Avoid throwing IllegalStateException by running from a non-JavaFX thread.
 		Platform.runLater(
@@ -77,7 +68,6 @@ public class LobbyView extends UnicastRemoteObject implements UIComponent, Lobby
 			  try {
 				  updateUI(lobby);
 			} catch (RemoteException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		  });	
@@ -172,7 +162,7 @@ public class LobbyView extends UnicastRemoteObject implements UIComponent, Lobby
 			gpane.add(label, 1, slotIdx + 2);
 		}
 	}
-		  
+	
 	private void updateUI(Lobby lobby) throws RemoteException {
 		LobbyStates lobbyState = lobby.getLobbyState();
 		if(lobbyState == LobbyStates.CLOSING) {
@@ -198,7 +188,9 @@ public class LobbyView extends UnicastRemoteObject implements UIComponent, Lobby
 			this.btnReady.setDisable(!lobby.isAssigned(this));
 		}
 	}
-	
+	/**
+	 * build up the UI on creating the lobby
+	 */
 	private void buildUI()
 	{	
 		root = new BorderPane();
@@ -212,6 +204,10 @@ public class LobbyView extends UnicastRemoteObject implements UIComponent, Lobby
 		root.setPadding(new Insets(0));
 	}
 	
+	/**
+	 * button to open manual
+	 * @return
+	 */
 	private HBox buildManualButton() {
 		HBox manualContainer = new HBox();
 		Button manualButton = new Button("?");
@@ -243,6 +239,7 @@ public class LobbyView extends UnicastRemoteObject implements UIComponent, Lobby
 		lblAssPlayers.setPrefWidth(gridChildWidth);
 		
 		btnBack = new Button("Back");
+		btnBack.setCancelButton(true);
 		btnBack.setPrefWidth(gridChildWidth);
 		btnBack.setOnAction(e -> {
 			try {
@@ -254,6 +251,7 @@ public class LobbyView extends UnicastRemoteObject implements UIComponent, Lobby
 		});
 		
 		btnReady = new Button("Ready");
+		btnReady.setDefaultButton(true);
 		btnReady.setPrefWidth(gridChildWidth);
 		btnReady.setOnAction(e -> {
 			try {

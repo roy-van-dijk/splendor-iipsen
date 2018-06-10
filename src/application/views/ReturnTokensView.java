@@ -20,6 +20,7 @@ import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.stage.Window;
 
 /**
  * 
@@ -35,7 +36,12 @@ public class ReturnTokensView {
 	private Button confirmButton;
 
 	private ReturnTokenController returnTokenController;
-
+/**
+ * 
+ * @param returnTokens refers to model return tokens
+ * @param returnTokenController
+ * @throws RemoteException
+ */
 	public ReturnTokensView(ReturnTokens returnTokens, ReturnTokenController returnTokenController)
 			throws RemoteException {
 		this.returnTokenController = returnTokenController;
@@ -53,7 +59,11 @@ public class ReturnTokensView {
 		confirmButton.setOnAction(e -> {
 			try {
 				returnTokenController.confirmButton();
+				stage.close();
+				stage.hide();//TODO moet weg
 			} catch (RemoteException e1) {
+				
+				stage.hide();//TODO moet weg
 				e1.printStackTrace();
 			}
 			stage.close();
@@ -89,17 +99,31 @@ public class ReturnTokensView {
 
 		returnTokens.registrate(this);
 	}
-
-	public void modelChanged(ReturnTokens returnTokens) {
+	/**
+	 * 
+	 * @param returnTokens
+	 * void
+	 * @throws RemoteException 
+	 */
+	public void modelChanged(ReturnTokens returnTokens) throws RemoteException {
 		this.updateTokenGemCounts(returnTokens);
 		this.updateConfirmButton(returnTokens);
 	}
-
+	/**
+	 * 
+	 * @param returnTokens
+	 * void
+	 */
 	private void updateConfirmButton(ReturnTokens returnTokens) {
 		confirmButton.setDisable(!returnTokens.isAllowConfirm());
 	}
-
-	private void updateTokenGemCounts(ReturnTokens returnTokens) {
+	/**
+	 * 
+	 * @param returnTokens
+	 * void
+	 * @throws RemoteException 
+	 */
+	private void updateTokenGemCounts(ReturnTokens returnTokens) throws RemoteException {
 		gemCounterDisplay.getChildren().clear();
 
 		LinkedHashMap<Gem, Integer> gemsCount = returnTokens.getTokenListNew().getTokenGemCount();
@@ -113,12 +137,11 @@ public class ReturnTokensView {
 		}
 	}
 
-	// the display of a gem type and amount of tokens of that type owned, with
-	// buttons to remove and add.
+	// the display of a gem type and amount of tokens of that type owned
+	// with buttons to edit the tokens you want to return
 	private VBox createTokenGemCountBox(Gem gemType, int count, int tokenSizeRadius) {
 
 		// buttons to edit amount of coins and confirmation of the turn.
-		// TODO add Button action events.
 		Button minusTokenButton = new Button("-");
 		Button plusTokenButton = new Button("+");
 
@@ -134,7 +157,6 @@ public class ReturnTokensView {
 			try {
 				returnTokenController.minusToken(gemType);
 			} catch (RemoteException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 		});
@@ -143,7 +165,6 @@ public class ReturnTokensView {
 			try {
 				returnTokenController.plusToken(gemType);
 			} catch (RemoteException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 		});
@@ -155,6 +176,10 @@ public class ReturnTokensView {
 		tokenColumn.setAlignment(Pos.CENTER);
 
 		return tokenColumn;
+	}
+	public void closeWindow() {
+		stage.hide();
+		stage.close();
 	}
 
 }

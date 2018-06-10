@@ -74,8 +74,8 @@
 
 .cards-prestige-bonus
 {
-	 -fx-background-color: rgba(200, 200, 200, 0.5);
-	 -fx-padding: 0 5px;
+	-fx-background-color: rgba(200, 200, 200, 0.5);
+	-fx-padding: 0 5px;
 }
 
 .opponents
@@ -200,6 +200,9 @@
 }
 .alert-dialog .button {
 	-fx-font-size: 30px;
+}
+.dropshadow {
+	-fx-effect: dropshadow(GAUSSIAN, rgba(0,0,0,0.5), 25, 0.4, 0, 0);
 }
 .selectable {
 	-fx-effect: dropshadow(GAUSSIAN, yellow, 30, 0.4, 0, 0); 

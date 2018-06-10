@@ -1,45 +1,32 @@
 package application.domain;
 
-
-import java.io.Serializable;
+import java.rmi.Remote;
+import java.rmi.RemoteException;
 import java.util.Stack;
 
 /**
+ * 
  * @author Sanchez
- *
  */
-public class CardDeck implements Deck<Card>, Serializable {
-	
-	private Stack<Card> cards;
-	private CardLevel level;
-	
-	public CardDeck(Stack<Card> cards, CardLevel level)
-	{
-		this.cards = cards;		
-		this.level = level;
-	}
-	
-	public CardLevel getLevel()
-	{
-		return level;
-	}
-	
-	public void add(Card card)
-	{
-		cards.push(card);
-	}
-	
-	public Card top()
-	{
-		return cards.peek();
-	}
-	
-	public Card pull()
-	{
-		return cards.pop();
-	}
 
-	public Stack<Card> getAll() {
-		return cards;
-	}
+public interface CardDeck extends Remote
+{
+	public void add(Card card) throws RemoteException;
+	public Card pull() throws RemoteException;
+	public Card top() throws RemoteException;
+	public Stack<Card> getAll() throws RemoteException;
+	
+	public CardLevel getLevel() throws RemoteException;
+	
+	public boolean isSelectable() throws RemoteException;
+	
+	public void setSelectable() throws RemoteException;
+	
+	public void clearSelectable() throws RemoteException;
+	
+	public boolean isSelected() throws RemoteException;
+	
+	public void setSelected() throws RemoteException;
+	
+	public void clearSelection() throws RemoteException;
 }

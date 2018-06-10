@@ -124,7 +124,7 @@ public class CardsReader {
 	
 	
 	// TODO: To add or not to add: private enum for record constants. e.g. [0] = CardRow.LEVEL_IDX, [1] = CardRow.PRESTIGE_IDX
-	private static Card readCard(String[] record)
+	private static Card readCard(String[] record) throws RemoteException
 	{
 		CardLevel cardLevel = CardLevel.getLevel(Util.StringToInt(record[0], 1));
 		

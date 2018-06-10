@@ -34,7 +34,7 @@ public class ReturnTokens {
 		this.removedTokens = new ArrayList<>();
 	}
 	
-	private Token getTokenFromGemType(List<Token> tokenArray, Gem gemType)
+	private Token getTokenFromGemType(List<Token> tokenArray, Gem gemType) throws RemoteException
 	{
 		for(Token token : tokenArray)
 		{
@@ -43,7 +43,7 @@ public class ReturnTokens {
 		return null;
 	}
 
-	public void removeToken(Gem gemType) 
+	public void removeToken(Gem gemType) throws RemoteException 
 	{
 		if(tokenListNew.getAll().size() > 10 && tokenListNew.getTokenGemCount().get(gemType) > 0) 
 		{
@@ -54,7 +54,7 @@ public class ReturnTokens {
 		validateNewTokens();
 	}
 
-	public void addToken(Gem gemType)  
+	public void addToken(Gem gemType) throws RemoteException  
 	{
 		Token token = this.getTokenFromGemType(removedTokens, gemType);
 		if(token != null) 
@@ -65,20 +65,20 @@ public class ReturnTokens {
 		validateNewTokens();
 	}
 	
-	public void notifyView() 
+	public void notifyView() throws RemoteException 
 	{
 		view.modelChanged(this);
 	}
 	
-	public void moreThanTenTokens(ReturnTokens model, ReturnTokenController controller) throws RemoteException
+	public void moreThanTenTokens(ReturnTokenController controller) throws RemoteException
 	{
 		if(tokenListNew.getAll().size() > 10)
 		{
-			ReturnTokensView view = new ReturnTokensView(model, controller);
+			ReturnTokensView view = new ReturnTokensView(this, controller);
 		}
 	}
 	
-	public void validateNewTokens()
+	public void validateNewTokens() throws RemoteException
 	{
 		if(tokenListNew.getAll().size() == 10) 
 		{
@@ -86,7 +86,7 @@ public class ReturnTokens {
 		} else {
 			this.allowConfirm = false;
 		}
-		notifyView();
+		this.notifyView();
 	}
 
 	public void confirmButton() throws RemoteException 
@@ -103,7 +103,7 @@ public class ReturnTokens {
 	}
 
 
-	public void registrate(ReturnTokensView view) 
+	public void registrate(ReturnTokensView view) throws RemoteException 
 	{
 		this.view = view;
 		this.view.modelChanged(this);

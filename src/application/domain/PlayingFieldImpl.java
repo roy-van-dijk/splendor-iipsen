@@ -4,11 +4,11 @@ import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Stack;
 
 /**
  * 
@@ -30,23 +30,20 @@ public class PlayingFieldImpl extends UnicastRemoteObject implements PlayingFiel
 	private List<CardRow> cardRows;
 	private List<Noble> nobles;
 	
-	private List<Card> selectableCards;
 	private List<Gem> selectableTokens;
 
 	private TokenList tokenList;
-	private TempHand turn;
+	private TempHand tempHand;
 	
 	private transient List<PlayingFieldObserver> observers;
 
 
-	private List<Card> selectableCardsFromField;
 	
 
 	public PlayingFieldImpl(int playerCount) throws RemoteException {
 		this.nobles = new ArrayList<>();
 		this.cardRows = new ArrayList<>();
 		this.tokenList = new TokenList();
-		this.selectableCards = new ArrayList<>();
 		this.selectableTokens = new ArrayList<>();
 		this.observers = new ArrayList<>();
 		
@@ -54,10 +51,10 @@ public class PlayingFieldImpl extends UnicastRemoteObject implements PlayingFiel
 		this.createNobles(noblesAmount(playerCount));
 		this.createCardRows();
 		
-		this.turn = new TempHand();
+		this.tempHand = new TempHandImpl();
 	}
 
-	private void createTokens(int baseAmount)
+	private void createTokens(int baseAmount) throws RemoteException
 	{
 		for(Gem gem : Gem.values())
 		{
@@ -75,7 +72,7 @@ public class PlayingFieldImpl extends UnicastRemoteObject implements PlayingFiel
 		}
 	}
 	
-	private void createNobles(int amount)
+	private void createNobles(int amount) throws RemoteException
 	{
 		NobleDeck deck = DeckFactory.getInstance().createNobleDeck();
 		Collections.shuffle(deck.getAll());
@@ -88,12 +85,18 @@ public class PlayingFieldImpl extends UnicastRemoteObject implements PlayingFiel
 	
 	private void createCardRows() throws RemoteException
 	{
-		// Create 3 card rows (including decks)
-		for(CardLevel level : CardLevel.values())
+		// Create 3 card rows (including decks), starting from level 3 to level 1.
+		
+		List<CardLevel> cardLevels = Arrays.asList(CardLevel.values());
+		Collections.reverse(cardLevels);
+		
+		for(int i = 0; i < cardLevels.size(); i++)
 		{
+			CardLevel level = cardLevels.get(i);
 			CardDeck deck = DeckFactory.getInstance().createCardDeck(level);
 			Collections.shuffle(deck.getAll());
-			cardRows.add(new CardRowImpl(deck));
+			
+			cardRows.add(new CardRowImpl(deck, i));
 		}
 	}
 	
@@ -124,42 +127,30 @@ public class PlayingFieldImpl extends UnicastRemoteObject implements PlayingFiel
 		return amount;
 	}
 
-	public List<CardRow> getCardRows() {
+	public List<CardRow> getCardRows() throws RemoteException {
 		return cardRows;
 	}
 
-	public List<Noble> getNobles() {
+	public List<Noble> getNobles() throws RemoteException {
 		return nobles;
 	}
 	
-	public LinkedHashMap<Gem, Integer> getTokenGemCount()
+	public LinkedHashMap<Gem, Integer> getTokenGemCount() throws RemoteException
 	{
 		return tokenList.getTokenGemCount();
 	}
 	
 	public void findSelectableCardsFromField() throws RemoteException {
-		selectableCards.clear();
 		for(CardRow cardRow : cardRows) {
-			for(Card card : cardRow.getCardSlots()) {
-				if(turn.getPlayer().canAffordCard(card.getCosts())) {
-					this.addSelectableCards(card);
-				}
-			}
+			cardRow.findSelectableCards(tempHand.getMoveType(), tempHand.getPlayer());
 		}
-		this.notifyObservers();
 	}
 	
-	
-	
-	public List<Card> getSelectableCardsFromField() throws RemoteException {
-		return selectableCardsFromField;
-	}
-	
-	public void setTokensSelectable() throws RemoteException
+	public void setTokensSelectable(MoveType moveType) throws RemoteException
 	{
 		selectableTokens.clear();
 		
-		MoveType moveType = turn.getMoveType();
+		tempHand.setMoveType(moveType);
 		
 		LinkedHashMap<Gem, Integer> gemsCount = tokenList.getTokenGemCount();
 		for(Map.Entry<Gem, Integer> gemCount : gemsCount.entrySet())
@@ -176,29 +167,24 @@ public class PlayingFieldImpl extends UnicastRemoteObject implements PlayingFiel
 		}
 		this.notifyObservers();
 	}
-	
-	
-	public List<Card> getSelectableCards() {
-		return selectableCards;
-	}
-	
-	public void addSelectableCards(Card card) {
-		selectableCardsFromField.add(card);
-	}
 
-	public List<Gem> getSelectableTokens() {
+	public List<Gem> getSelectableTokens() throws RemoteException {
 		return selectableTokens;
 	}
+	
+	public TokenList getTokenList() throws RemoteException {
+		return tokenList;
+	}
 
-	public TempHand getTempHand() {
-		return turn;
+	public TempHand getTempHand() throws RemoteException {
+		return tempHand;
 	}
 
 	@Override
 	public void addTokenToTemp(Gem gemType) throws RemoteException {
-		turn.addToken(new TokenImpl(gemType));
-		if(turn.getMoveType() == MoveType.TAKE_TWO_TOKENS) {
-			turn.addToken(new TokenImpl(gemType));		
+		tempHand.addToken(new TokenImpl(gemType));
+		if(tempHand.getMoveType() == MoveType.TAKE_TWO_TOKENS) {
+			tempHand.addToken(new TokenImpl(gemType));
 		}
 		this.notifyObservers();
 	}
@@ -226,13 +212,62 @@ public class PlayingFieldImpl extends UnicastRemoteObject implements PlayingFiel
 		this.notifyObservers();
 	}
 
-	public void removeToken(Token token) {
+
+	public void removeToken(Token token) throws RemoteException {
 		tokenList.remove(token);
-		
+	}
+
+	public void removeCard(Card card) throws RemoteException{
+		for(CardRow cardRow : cardRows) {
+			cardRow.removeCard(card);
+		}
 	}
 
 	public void newTurn() throws RemoteException {
+		selectableTokens.clear();
 		this.notifyObservers();	
 	}
 
+	public void removeNoble(Noble noble) throws RemoteException {
+		nobles.remove(noble);
+		
+	}
+
+	/* (non-Javadoc)
+	 * @see application.domain.PlayingField#getSelectableCardsFromField()
+	 */
+	@Override
+	public List<Card> getSelectableCardsFromField() throws RemoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void removeTokens(List<Token> tokens) throws RemoteException {
+		for(Token token : tokens)
+		{
+			tokenList.remove(token);
+		}
+		this.notifyObservers();
+		
+	}
+
+	@Override
+	public void setDeckSelected(CardRow selectedCardRow) throws RemoteException {
+		for(CardRow cardRow : cardRows) {
+			if(cardRow != selectedCardRow) {
+				cardRow.getCardDeck().setSelectable();
+			}
+		}
+		selectedCardRow.getCardDeck().setSelected();
+	}
+	
+	@Override
+	public void setDeckDeselected() throws RemoteException {
+		for(CardRow cardRow : cardRows) {
+			cardRow.getCardDeck().setSelectable();
+			cardRow.getCardDeck().top().setReservedFromDeck(false);
+		}
+	}
+	
 }

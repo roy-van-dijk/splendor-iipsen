@@ -1,14 +1,21 @@
 package application.domain;
 
 import java.rmi.Remote;
+import java.rmi.RemoteException;
 
 /**
+ * Represents a token
  * 
  * @author Sanchez
  *
  */
 public interface Token extends Remote {
-	
-	public Gem getGemType();
-	
+
+	/**
+	 * Gets the gem type this token is associated with
+	 * 
+	 * @return Gem
+	 */
+	public Gem getGemType() throws RemoteException;
+
 }
