@@ -56,4 +56,6 @@ public interface Game extends Remote {
 
 	public void updatePlayingFieldAndPlayerView() throws RemoteException;
 
+	public void disableEndTurn(boolean disabled) throws RemoteException;
+
 }

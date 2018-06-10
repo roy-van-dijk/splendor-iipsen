@@ -105,4 +105,9 @@ public class GameController {
 		this.getTempHand().emptyHand();
 		game.cleanUpSelections();		
 	}
+	
+	public void disableEndTurn(boolean disabled) throws RemoteException {
+		game.disableEndTurn(disabled);
+	}
+
 }

@@ -75,6 +75,7 @@ public class CardRowView implements UIComponent, CardRowObserver {
 	        	cardView.asPane().setOnMouseClicked(e -> { 
 	        		try {
 	        			gameController.cardClickedFromField(cardRow, card);
+						gameController.disableEndTurn(false);
 	        		} catch (RemoteException e1) {
 	        			// TODO Auto-generated catch block
 	        			e1.printStackTrace();
@@ -102,6 +103,7 @@ public class CardRowView implements UIComponent, CardRowObserver {
 			cardDeckView.asPane().setOnMouseClicked(e -> {
 				try {
 					gameController.reserveCardFromDeck(cardRow);
+					gameController.disableEndTurn(false);
 				} catch (RemoteException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();

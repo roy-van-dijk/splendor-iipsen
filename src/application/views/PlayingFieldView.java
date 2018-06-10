@@ -162,6 +162,13 @@ public class PlayingFieldView implements UIComponent, Disableable, PlayingFieldO
 					}
 				});
 
+			} else {
+				try {
+					gameController.disableEndTurn(false);
+				} catch (RemoteException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 
 			if (selectableTokens.contains(gemType)) {

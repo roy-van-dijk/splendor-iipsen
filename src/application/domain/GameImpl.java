@@ -220,5 +220,13 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 	public EndTurn getEndTurn() throws RemoteException {
 		return endTurn;
 	}
+	
+	@Override
+	public void disableEndTurn(boolean disabled) throws RemoteException {
+		if(currentPlayerIdx < observers.size())
+		{
+			observers.get(currentPlayerIdx).disableEndTurn(disabled);;
+		}
+	}
 
 }
