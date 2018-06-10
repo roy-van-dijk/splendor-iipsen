@@ -21,10 +21,9 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
 /**
- * Displays the front side of a card
- * 
- * @author Sanchez
+ * Displays the front side of a card.
  *
+ * @author Sanchez
  */
 public class FrontCardView extends CardView {
 
@@ -35,11 +34,11 @@ public class FrontCardView extends CardView {
 	private Card card;
 
 	/**
-	 * Creates a new front card display
-	 * 
+	 * Creates a new front card display.
+	 *
 	 * @param card
-	 * @param sizeX
-	 * @param sizeY
+	 * @param sizeX the size horizontal
+	 * @param sizeY the size vertical
 	 */
 	public FrontCardView(Card card, double sizeX, double sizeY) {
 		super(sizeX, sizeY);
@@ -53,6 +52,11 @@ public class FrontCardView extends CardView {
 		}
 	}
 
+	/**
+	 * Builds the UI.
+	 *
+	 * @throws RemoteException
+	 */
 	private void buildUI() throws RemoteException {
 		rect = new Rectangle(sizeX, sizeY);
 
@@ -72,6 +76,12 @@ public class FrontCardView extends CardView {
 		root.getChildren().addAll(rect, addCardInformation());
 	}
 
+	/**
+	 * Adds the card information.
+	 *
+	 * @return BorderPane
+	 * @throws RemoteException
+	 */
 	private BorderPane addCardInformation() throws RemoteException {
 		BorderPane borderPane = new BorderPane();
 
@@ -128,6 +138,9 @@ public class FrontCardView extends CardView {
 		return borderPane;
 	}
 
+	/* (non-Javadoc)
+	 * @see application.views.CardView#getImagePath()
+	 */
 	@Override
 	protected String getImagePath() {
 		String path = "";

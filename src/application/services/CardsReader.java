@@ -20,11 +20,11 @@ import application.domain.CardLevel;
 import application.domain.Gem;
 import application.util.Util;
 
+
 /**
- * This reads the cards from a csv file and converts it to objects
- * 
- * @author Sanchez
+ * This reads the cards from a csv file and converts it to objects.
  *
+ * @author Sanchez
  */
 public class CardsReader {
 
@@ -35,18 +35,20 @@ public class CardsReader {
 	private List<Card> allCards;
 	
 	/**
-	 * 
-	 * @throws IOException
+	 * Instantiates a new cards reader.
+	 *
+	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
 	public CardsReader() throws IOException
 	{
 		this.allCards = new ArrayList<Card>();
 		this.generateCards();
 	}
+	
 	/**
-	 * 
-	 * @throws IOException
-	 * @return Nothing
+	 * Generate cards.
+	 *
+	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
 	public void generateCards()  throws IOException
 	{
@@ -101,8 +103,10 @@ public class CardsReader {
 	
 	
 	/**
-	 * @param level - CardLevel
-	 * @return cardsArray [] Returns a stack of cards corresponding to the given level. 
+	 * Gets the cards.
+	 *
+	 * @param level
+	 * @return a stack of cards corresponding to the given level.
 	 */
 	public Stack<Card> getCards(CardLevel level)
 	{
@@ -122,6 +126,12 @@ public class CardsReader {
 	}
 	
 	
+	/**
+	 * Read card.
+	 *
+	 * @param record
+	 * @return Card
+	 */
 	// TODO: To add or not to add: private enum for record constants. e.g. [0] = CardRow.LEVEL_IDX, [1] = CardRow.PRESTIGE_IDX
 	private static Card readCard(String[] record)
 	{
@@ -137,10 +147,12 @@ public class CardsReader {
 		
 		return card;
 	}
+	
 	/**
-	 * 
-	 * @param String[] record 
-	 * @return int costs
+	 * Read costs.
+	 *
+	 * @param record
+	 * @return Map<Gem, Integer> the costs
 	 */
 	private static Map<Gem, Integer> readCosts(String[] record)
 	{
@@ -156,10 +168,12 @@ public class CardsReader {
 		
 		return costs;
 	}
+	
 	/**
-	 * 
-	 * @param String record
-	 * @return Gem[] gemList
+	 * Read bonus.
+	 *
+	 * @param record
+	 * @return Gem
 	 */
 	private static Gem readBonus(String[] record)
 	{

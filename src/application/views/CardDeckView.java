@@ -10,6 +10,7 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 
+
 /**
  * Card deck views display the back size of cards. They can be seen on the left
  * side of the playing field
@@ -22,11 +23,11 @@ public class CardDeckView extends CardView {
 	private CardDeck deck;
 
 	/**
-	 * Creates a new view of a card deck
-	 * 
+	 * Creates a new view of a card deck.
+	 *
 	 * @param deck
-	 * @param sizeX
-	 * @param sizeY
+	 * @param sizeX the size horizontal
+	 * @param sizeY the size vertical
 	 */
 	public CardDeckView(CardDeck deck, int sizeX, int sizeY) {
 		super(sizeX, sizeY);
@@ -35,6 +36,9 @@ public class CardDeckView extends CardView {
 		this.buildUI();
 	}
 
+	/**
+	 * Builds the UI.
+	 */
 	private void buildUI() {
 		rect = new Rectangle(sizeX, sizeY);
 
@@ -54,10 +58,8 @@ public class CardDeckView extends CardView {
 	}
 
 	/**
-	 * Returns the path for this card's illustration
-	 * 
-	 * @throws RemoteException
-	 * @return String
+	 * 	 *
+	 * @return String the path for this card's illustration.
 	 */
 	@Override
 	protected String getImagePath() {

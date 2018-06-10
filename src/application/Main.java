@@ -10,13 +10,17 @@ import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 
+// TODO: Auto-generated Javadoc
 /**
+ * The Class Main.
+ *
  * @author Sanchez
- *
- *
  */
 public class Main extends Application {
 	
+	/* (non-Javadoc)
+	 * @see javafx.application.Application#start(javafx.stage.Stage)
+	 */
 	@Override
 	public void start(Stage primaryStage) {	
 		try {
@@ -34,6 +38,11 @@ public class Main extends Application {
 		}
 	}
 	
+	/**
+	 * The main method.
+	 *
+	 * @param args the arguments
+	 */
 	public static void main(String[] args) {
 		// Debug loading-game code below
 		/*

@@ -12,9 +12,9 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 
 /**
- * Card row views are the rows of cards that can be seen on the playing field
- * @author Sanchez
+ * Card row views are the rows of cards that can be seen on the playing field.
  *
+ * @author Sanchez
  */
 public class CardRowView implements UIComponent, CardRowObserver {
 
@@ -26,7 +26,8 @@ public class CardRowView implements UIComponent, CardRowObserver {
 	private TempHand tempHand;
 
 	/**
-	 * Creates a new card row view
+	 * Creates a new card row view.
+	 *
 	 * @param cardRow a row of cards on the playing field
 	 * @param gameController
 	 * @param tempHand used to determine if a card is selected or not
@@ -46,7 +47,10 @@ public class CardRowView implements UIComponent, CardRowObserver {
 	
 	/**
 	 * Update the card row view, like when a card is bought, reserved or selected.
+	 *
+	 * @param cardRow
 	 * @return void
+	 * @throws RemoteException
 	 */
 	@Override
 	public void modelChanged(CardRow cardRow) throws RemoteException 
@@ -119,7 +123,8 @@ public class CardRowView implements UIComponent, CardRowObserver {
 	}
 
 	/**
-	 * 
+	 * Builds the UI.
+	 *
 	 * @param cardRow
 	 */
 	private void buildUI(CardRow cardRow)
@@ -131,6 +136,9 @@ public class CardRowView implements UIComponent, CardRowObserver {
         root = grid;
 	}
 
+	/* (non-Javadoc)
+	 * @see application.views.UIComponent#asPane()
+	 */
 	public Pane asPane() {
 		return root;
 	}

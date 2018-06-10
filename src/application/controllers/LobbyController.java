@@ -8,20 +8,27 @@ import application.domain.Lobby;
 import application.views.GameView;
 
 /**
- * @author Roy
+ * The Class LobbyController.
  *
+ * @author Roy
  */
 public class LobbyController {
 
 	private Lobby lobby;
 	
+	/**
+	 * Instantiates a new lobby controller.
+	 *
+	 * @param lobby
+	 */
 	public LobbyController(Lobby lobby) {
 		this.lobby = lobby;
 	}
+	
 	/**
-	 * Shows the GameScreen
+	 * Shows the GameScreen.
+	 *
 	 * @throws RemoteException
-	 * void
 	 */
 	public void showGameScreen() throws RemoteException
 	{
@@ -33,10 +40,10 @@ public class LobbyController {
 	}
 
 	/**
-	 * 
+	 * Connect player.
+	 *
 	 * @param playerName
 	 * @throws RemoteException
-	 * void
 	 */
 	public void connectPlayer(String playerName) throws RemoteException {
 		lobby.createPlayer(playerName);

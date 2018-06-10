@@ -17,6 +17,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
+// TODO: Auto-generated Javadoc
 /**
  * View for the main menu. Also includes views for each button that can be
  * clicked
@@ -40,9 +41,9 @@ public class MainMenuView implements UIComponent {
 	private TextField hostIp;
 
 	/**
-	 * Builds a new main menu screen
-	 * 
-	 * @param menuController
+	 * Builds a new main menu screen.
+	 *
+	 * @param menuController the menu controller
 	 */
 	public MainMenuView(MainMenuController menuController) {
 		this.menuController = menuController;
@@ -51,8 +52,8 @@ public class MainMenuView implements UIComponent {
 	}
 
 	/**
-	 * Button that opens the manual
-	 * 
+	 * Button that opens the manual.
+	 *
 	 * @return HBox
 	 */
 	private HBox buildManualButton() {
@@ -69,8 +70,8 @@ public class MainMenuView implements UIComponent {
 	}
 
 	/**
-	 * Builds a separate screen for when you click join lobby
-	 * 
+	 * Builds a separate screen for when you click join lobby.
+	 *
 	 * @return BorderPane
 	 */
 	private BorderPane buildJoinLobbyScreen() {
@@ -126,8 +127,8 @@ public class MainMenuView implements UIComponent {
 	}
 
 	/**
-	 * Builds a new screen for when you first start the game
-	 * 
+	 * Builds a new screen for when you first start the game.
+	 *
 	 * @return BorderPane
 	 */
 	private BorderPane buildMainMenuScreen() {
@@ -167,8 +168,8 @@ public class MainMenuView implements UIComponent {
 	}
 
 	/**
-	 * Builds a new screen for when you click host new game
-	 * 
+	 * Builds a new screen for when you click host new game.
+	 *
 	 * @return BorderPane
 	 */
 	private BorderPane buildHostNewGameScreen() {
@@ -214,8 +215,8 @@ public class MainMenuView implements UIComponent {
 	}
 
 	/**
-	 * Builds a new screen for when you click host previous game
-	 * 
+	 * Builds a new screen for when you click host previous game.
+	 *
 	 * @return BorderPane
 	 */
 	private BorderPane buildHostPreviousGameScreen() {
@@ -260,6 +261,9 @@ public class MainMenuView implements UIComponent {
 		return root;
 	}
 
+	/* (non-Javadoc)
+	 * @see application.views.UIComponent#asPane()
+	 */
 	public Pane asPane() {
 		return root;
 	}

@@ -11,22 +11,20 @@ import application.domain.LobbyImpl;
 import application.views.LobbyView;
 
 /**
- * Controls UI flow within the main menu
- * 
- * @author Roy
+ * Controls UI flow within the main menu.
  *
+ * @author Roy
  */
 public class MainMenuController {
 
 	/**
 	 * Sends user input (hostIP & playerName) to lobbyController to join the lobby,
-	 * then switches the view
-	 * 
+	 * then switches the view.
+	 *
 	 * @param hostIP
 	 * @param playerName
 	 * @throws RemoteException
 	 * @throws NotBoundException
-	 * void
 	 */
 	public void joinLobby(String hostIP, String playerName) throws RemoteException, NotBoundException {
 		Lobby lobby = connectToLobby(hostIP);
@@ -46,11 +44,10 @@ public class MainMenuController {
 
 	/**
 	 * Sends user input (playerName) to lobbyController to create the lobby, loads
-	 * the previous save file, then switches the view
-	 * 
+	 * the previous save file, then switches the view.
+	 *
 	 * @param playerName
 	 * @throws RemoteException
-	 * void
 	 */
 	public void hostPreviousGame(String playerName) throws RemoteException {
 		GameImpl game = new GameImpl(3); // TODO: load from binary savefile
@@ -66,11 +63,10 @@ public class MainMenuController {
 
 	/**
 	 * Sends user input (playerName) to lobbyController to create the lobby, loads a
-	 * new save file, then switches the view
-	 * 
+	 * new save file, then switches the view.
+	 *
 	 * @param playerName
 	 * @throws RemoteException
-	 * void
 	 */
 	public void hostNewGame(String playerName) throws RemoteException {
 		GameImpl game = new GameImpl(4);
@@ -90,12 +86,11 @@ public class MainMenuController {
 	}
 
 	/**
-	 * Creates a new lobby
-	 * 
+	 * Creates a new lobby.
+	 *
 	 * @param game
-	 * @return
-	 * @throws RemoteException
-	 * LobbyImpl
+	 * @return LobbyImpl
+	 * @throws RemoteException LobbyImpl
 	 */
 	private LobbyImpl createLobby(GameImpl game) throws RemoteException {
 		LobbyImpl lobby = new LobbyImpl(game);
@@ -112,13 +107,12 @@ public class MainMenuController {
 	}
 
 	/**
-	 * Connects to a lobby
-	 * 
+	 * Connects to a lobby.
+	 *
 	 * @param hostIP
-	 * @return
+	 * @return Lobby
 	 * @throws RemoteException
-	 * @throws NotBoundException
-	 * Lobby
+	 * @throws NotBoundException Lobby
 	 */
 	public Lobby connectToLobby(String hostIP) throws RemoteException, NotBoundException {
 		System.out.println("Getting access to RMI registry");

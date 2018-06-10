@@ -20,10 +20,9 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
 /**
- * View with opponent information seen on the left side of the game view
- * 
- * @author Sanchez
+ * View with opponent information seen on the left side of the game view.
  *
+ * @author Sanchez
  */
 public class OpponentView implements UIComponent, PlayerObserver {
 
@@ -39,8 +38,8 @@ public class OpponentView implements UIComponent, PlayerObserver {
 	private Label lblOpponentPrestige;
 
 	/**
-	 * Creates a new opponent view
-	 * 
+	 * Creates a new opponent view.
+	 *
 	 * @param opponent
 	 * @throws RemoteException
 	 */
@@ -50,6 +49,9 @@ public class OpponentView implements UIComponent, PlayerObserver {
 		opponent.addObserver(this);
 	}
 
+	/**
+	 * Builds the UI.
+	 */
 	private void buildUI() {
 		HBox topFrame = buildOpponentHeaderDisplay();
 
@@ -64,6 +66,9 @@ public class OpponentView implements UIComponent, PlayerObserver {
 		root.getStyleClass().add("opponent");
 	}
 
+	/* (non-Javadoc)
+	 * @see application.domain.PlayerObserver#modelChanged(application.domain.Player)
+	 */
 	public void modelChanged(Player opponent) throws RemoteException {
 		lblOpponentName.setText(opponent.getName());
 		lblOpponentPrestige.setText(String.valueOf(opponent.getPrestige()));
@@ -72,6 +77,11 @@ public class OpponentView implements UIComponent, PlayerObserver {
 		this.updateOpponentsReservedCards(opponent.getReservedCards());
 	}
 
+	/**
+	 * Update opponents reserved cards.
+	 *
+	 * @param opponentReservedCards
+	 */
 	private void updateOpponentsReservedCards(List<Card> opponentReservedCards) {
 		reservedCardsFrame.getChildren().clear();
 		for (Card reservedCard : opponentReservedCards) {
@@ -99,6 +109,11 @@ public class OpponentView implements UIComponent, PlayerObserver {
 		}
 	}
 
+	/**
+	 * Update opponent tokens.
+	 *
+	 * @param gemsCount the gems count
+	 */
 	private void updateOpponentTokens(Map<Gem, Integer> gemsCount) {
 		tokensFrame.getChildren().clear();
 
@@ -109,6 +124,11 @@ public class OpponentView implements UIComponent, PlayerObserver {
 		}
 	}
 
+	/**
+	 * Builds the opponent header display.
+	 *
+	 * @return HBox
+	 */
 	private HBox buildOpponentHeaderDisplay() {
 		HBox topFrame = new HBox(10);
 		topFrame.getStyleClass().add("opponent-header");
@@ -131,6 +151,14 @@ public class OpponentView implements UIComponent, PlayerObserver {
 		return topFrame;
 	}
 
+	/**
+	 * Creates the token gem count display.
+	 *
+	 * @param gemType the gem type
+	 * @param count the count
+	 * @param radius the radius
+	 * @return VBox
+	 */
 	private VBox createTokenGemCountDisplay(Gem gemType, int count, int radius) {
 		TokenView tokenView = new TokenView(gemType, radius * TOKENS_RESIZE_FACTOR);
 
@@ -146,6 +174,9 @@ public class OpponentView implements UIComponent, PlayerObserver {
 		return tokenFrame;
 	}
 
+	/* (non-Javadoc)
+	 * @see application.views.UIComponent#asPane()
+	 */
 	public Pane asPane() {
 		return root;
 	}

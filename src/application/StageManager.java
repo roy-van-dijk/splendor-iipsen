@@ -14,19 +14,27 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 /**
- * 
- * @author Sanchez
+ * The Class StageManager.
  *
+ * @author Sanchez
  */
 public class StageManager {
 
 	private static StageManager instance;
 	private static Stage primaryStage;
 
+	/**
+	 * Instantiates a new stage manager.
+	 */
 	// Prevents further initialization
 	private StageManager() {
 	}
 
+	/**
+	 * Gets the single instance of StageManager.
+	 *
+	 * @return single instance of StageManager
+	 */
 	public static StageManager getInstance() {
 		if (instance == null)
 			instance = new StageManager();
@@ -34,10 +42,20 @@ public class StageManager {
 		return instance;
 	}
 
+	/**
+	 * Switch scene.
+	 *
+	 * @param rootNode the root node
+	 */
 	public void switchScene(Pane rootNode) {
 		primaryStage.getScene().setRoot(rootNode);
 	}
 
+	/**
+	 * Show game screen.
+	 *
+	 * @throws RemoteException the remote exception
+	 */
 	public void showGameScreen() throws RemoteException
 	{
 		Game game = new GameImpl(4);
@@ -49,7 +67,9 @@ public class StageManager {
 	}
 
 	/**
-	 * @param stage
+	 * Start splendor.
+	 *
+	 * @param stage the stage
 	 */
 	public void startSplendor(Stage stage) {
 
@@ -69,7 +89,7 @@ public class StageManager {
 	}
 	
 	/**
-	 * Start the MainMenu
+	 * Start the MainMenu.
 	 */
 	public void showMainMenu() {
 		MainMenuController menuController = new MainMenuController();

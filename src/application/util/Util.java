@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
 
+// TODO: Auto-generated Javadoc
 /** 
  * This is a generic helper class
  * Traditionally, this is against the OOP paradigm as it is procedural programming
@@ -14,16 +15,19 @@ import java.util.Objects;
 
 public final class Util {
 
+	/**
+	 * Instantiates a new util.
+	 */
 	private Util() {
 		// Prevents instantiation
 	}
 	
 	/**
-	 * 
-	 * @param str
-	 * @param defaultValue
-	 * @return
-	 * int
+	 * String to int.
+	 *
+	 * @param str the str
+	 * @param defaultValue the default value
+	 * @return int
 	 */
 	public static int StringToInt(String str, int defaultValue)
 	{
@@ -33,11 +37,13 @@ public final class Util {
 	}
 
 	/**
-	 * 
-	 * @param map
-	 * @param value
-	 * @return
-	 * T
+	 * Gets the key by value.
+	 *
+	 * @param <T> the generic type
+	 * @param <E> the element type
+	 * @param map the map
+	 * @param value the value
+	 * @return T
 	 */
 	public static <T, E> T getKeyByValue(Map<T, E> map, E value) {
 	    for (Entry<T, E> entry : map.entrySet()) {
@@ -48,6 +54,13 @@ public final class Util {
 	    return null;
 	}
 	
+	/**
+	 * Random number string.
+	 *
+	 * @param min the min
+	 * @param max the max
+	 * @return the string
+	 */
 	// TODO: to be removed
 	public static String randomNumberString(int min, int max)
 	{

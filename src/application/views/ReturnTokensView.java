@@ -23,9 +23,9 @@ import javafx.stage.StageStyle;
 import javafx.stage.Window;
 
 /**
- * 
- * @author Tom
+ * The Class ReturnTokensView.
  *
+ * @author Tom
  */
 public class ReturnTokensView {
 
@@ -36,11 +36,13 @@ public class ReturnTokensView {
 	private Button confirmButton;
 
 	private ReturnTokenController returnTokenController;
+
 /**
- * 
+ * Instantiates a new return tokens view.
+ *
  * @param returnTokens refers to model return tokens
- * @param returnTokenController
- * @throws RemoteException
+ * @param returnTokenController the return token controller
+ * @throws RemoteException the remote exception
  */
 	public ReturnTokensView(ReturnTokens returnTokens, ReturnTokenController returnTokenController)
 			throws RemoteException {
@@ -99,27 +101,31 @@ public class ReturnTokensView {
 
 		returnTokens.registrate(this);
 	}
+	
 	/**
-	 * 
-	 * @param returnTokens
-	 * void
+	 * Model changed.
+	 *
+	 * @param returnTokens void
 	 */
 	public void modelChanged(ReturnTokens returnTokens) {
 		this.updateTokenGemCounts(returnTokens);
 		this.updateConfirmButton(returnTokens);
 	}
+	
 	/**
-	 * 
-	 * @param returnTokens
-	 * void
+	 * Update confirm button.
+	 *
+	 * @param returnTokens void
 	 */
 	private void updateConfirmButton(ReturnTokens returnTokens) {
 		confirmButton.setDisable(!returnTokens.isAllowConfirm());
 	}
+	
 	/**
-	 * 
+	 * Update token gem counts.
+	 *
 	 * @param returnTokens
-	 * void
+	 * 
 	 */
 	private void updateTokenGemCounts(ReturnTokens returnTokens) {
 		gemCounterDisplay.getChildren().clear();
@@ -134,8 +140,16 @@ public class ReturnTokensView {
 
 		}
 	}
-
+	//TODO what's this comment? 
 	// the display of a gem type and amount of tokens of that type owned
+	/**
+	 * Creates the token gem count box.
+	 *
+	 * @param gemType
+	 * @param count
+	 * @param tokenSizeRadius the token size radius
+	 * @return VBox
+	 */
 	// with buttons to edit the tokens you want to return
 	private VBox createTokenGemCountBox(Gem gemType, int count, int tokenSizeRadius) {
 
@@ -175,6 +189,10 @@ public class ReturnTokensView {
 
 		return tokenColumn;
 	}
+	
+	/**
+	 * Close window.
+	 */
 	public void closeWindow() {
 		stage.hide();
 		stage.close();

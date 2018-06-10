@@ -20,10 +20,11 @@ import java.util.ArrayList;
 import application.domain.Game;
 import application.domain.GameImpl;
 
+// TODO: Auto-generated Javadoc
 /**
+ * The Class SaveGameDAO.
+ *
  * @author Alexander
- * 
- * 
  */
 public class SaveGameDAO {
 
@@ -35,9 +36,17 @@ public class SaveGameDAO {
 	private static String basePath;
 
 
+	/**
+	 * Instantiates a new save game DAO.
+	 */
 	private SaveGameDAO() {
 	}
 
+	/**
+	 * Gets the single instance of SaveGameDAO.
+	 *
+	 * @return single instance of SaveGameDAO
+	 */
 	public static SaveGameDAO getInstance() {
 		if (instance == null)
 			instance = new SaveGameDAO();
@@ -46,12 +55,11 @@ public class SaveGameDAO {
 	}
 
 	/**
-	 * 
-	 * @param game
-	 *            Saves the game to an file void
-	 * @throws IOException 
-	 * @throws FileNotFoundException 
-	 * @throws RemoteException
+	 * Save game to file.
+	 *
+	 * @param game            Saves the game to an file void
+	 * @throws FileNotFoundException the file not found exception
+	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
 	public void saveGameToFile(GameImpl game) throws FileNotFoundException, IOException {
 		basePath = this.createSavePath("Bob.splendor");
@@ -63,13 +71,13 @@ public class SaveGameDAO {
 	}
 
 	/**
-	 * 
-	 * @param filename
+	 * Load save game.
+	 *
+	 * @param filename the filename
 	 * @return Game
-	 * @throws FileNotFoundException
-	 * @throws IOException
-	 * @throws ClassNotFoundException
-	 *             Game
+	 * @throws FileNotFoundException the file not found exception
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws ClassNotFoundException             Game
 	 */
 	public GameImpl loadSaveGame(String filename) throws FileNotFoundException, IOException, ClassNotFoundException {
 		this.createSavePath("Bob.splendor");
@@ -81,6 +89,12 @@ public class SaveGameDAO {
 		return game;
 	}
 	
+	/**
+	 * Creates the save path.
+	 *
+	 * @param save the save
+	 * @return the string
+	 */
 	public String createSavePath(String save) {
 		
 		return FileSystems.getDefault().getPath(path).toAbsolutePath().toString() + "/" +  save;

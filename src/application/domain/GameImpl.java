@@ -13,14 +13,12 @@ import java.util.Map;
 import application.services.SaveGameDAO;
 
 /**
- * @author Sanchez
+ * The Class GameImpl.
  *
+ * @author Sanchez
  */
 public class GameImpl extends UnicastRemoteObject implements Game, Serializable {
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -2852281344739846301L;
 	
 	public GameState gameState;
@@ -45,6 +43,12 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 	 * This information is then passed onto the playingField, which generates those tokens and nobles.
 	 */
 
+	/**
+	 * Instantiates a new game impl.
+	 *
+	 * @param maxPlayers
+	 * @throws RemoteException
+	 */
 	public GameImpl(int maxPlayers) throws RemoteException {
 		this.maxPlayers = maxPlayers;
 		
@@ -63,6 +67,9 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 		endTurn = new EndTurnImpl(this);
 	}
 	
+	/* (non-Javadoc)
+	 * @see application.domain.Game#nextTurn()
+	 */
 	public void nextTurn() throws RemoteException
 	{
 		System.out.println("Next turn started");
@@ -92,6 +99,9 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 		this.notifyObservers();
 	}
 
+	/* (non-Javadoc)
+	 * @see application.domain.Game#saveGame()
+	 */
 	@Override
 	public void saveGame() throws RemoteException
 	{
@@ -107,6 +117,9 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 		}
 	}
 
+	/**
+	 * Test create 4 players.
+	 */
 	private void Test_Create4Players()
 	{
 		try {
@@ -128,6 +141,9 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 		}
 	}
 	
+	/* (non-Javadoc)
+	 * @see application.domain.Game#findSelectableCards()
+	 */
 	public void findSelectableCards() throws RemoteException {
 		if(playingField.getTempHand().getMoveType() == MoveType.PURCHASE_CARD) {
 			this.getCurrentPlayer().findSelectableCardsFromReserve();
@@ -135,39 +151,74 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 		playingField.findSelectableCardsFromField();
 	}
 
+	/* (non-Javadoc)
+	 * @see application.domain.Game#getCurrentPlayerIdx()
+	 */
 	public int getCurrentPlayerIdx() {
 		return currentPlayerIdx;
 	}
 
+	/* (non-Javadoc)
+	 * @see application.domain.Game#getRoundNr()
+	 */
 	public int getRoundNr() {
 		return roundNr;
 	}
 
+	/* (non-Javadoc)
+	 * @see application.domain.Game#getPlayers()
+	 */
 	public List<Player> getPlayers() {
 		return players;
 	}
 	
+	/**
+	 * Sets the players.
+	 *
+	 * @param players
+	 */
 	public void setPlayers(List<Player> players) {
 		this.players = players;
 	}
 
+	/* (non-Javadoc)
+	 * @see application.domain.Game#getPlayingField()
+	 */
 	public PlayingField getPlayingField() {
 		return playingField;
 	}
 
 	
+	/* (non-Javadoc)
+	 * @see application.domain.Game#getCurrentPlayer()
+	 */
 	public Player getCurrentPlayer() {
 		return players.get(currentPlayerIdx);
 	}
 
+	/**
+	 * Gets the max players.
+	 *
+	 * @return maxPlayers
+	 */
 	public int getMaxPlayers() {
 		return maxPlayers;
 	}
 
+	/**
+	 * Gets the game state.
+	 *
+	 * @return GameState
+	 */
 	public GameState getGameState() {
 		return gameState;
 	}
 	
+	/**
+	 * Notify observers.
+	 *
+	 * @throws RemoteException
+	 */
 	private void notifyObservers() throws RemoteException
 	{
 		for(GameObserver o : observers)
@@ -176,18 +227,27 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see application.domain.Game#addObserver(application.domain.GameObserver)
+	 */
 	@Override
 	public void addObserver(GameObserver o) throws RemoteException {
 		this.observers.add(o);
 		this.notifyObservers();
 	}
 
+	/* (non-Javadoc)
+	 * @see application.domain.Game#removeObserver(application.domain.GameObserver)
+	 */
 	@Override
 	public void removeObserver(GameObserver o) throws RemoteException {
 		this.observers.remove(o);
 		this.notifyObservers();
 	}
 	
+	/* (non-Javadoc)
+	 * @see application.domain.Game#updatePlayingFieldAndPlayerView()
+	 */
 	@Override
 	public void updatePlayingFieldAndPlayerView() throws RemoteException {
 		for(CardRow cardRow : playingField.getCardRows()) {
@@ -196,6 +256,9 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 		this.getCurrentPlayer().updatePlayerView();
 	}
 	
+	/* (non-Javadoc)
+	 * @see application.domain.Game#cleanUpSelections()
+	 */
 	@Override
 	public void cleanUpSelections() throws RemoteException {
 		for(CardRow cardRow : playingField.getCardRows()) {
@@ -205,6 +268,9 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 		this.getCurrentPlayer().clearSelectableCards();
 	}
 	
+	/* (non-Javadoc)
+	 * @see application.domain.Game#addCardToTempFromReserve(application.domain.Card)
+	 */
 	@Override
 	public void addCardToTempFromReserve(Card card) throws RemoteException {	
 		MoveType moveType = this.getPlayingField().getTempHand().getMoveType();
@@ -216,6 +282,9 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 		this.getCurrentPlayer().updatePlayerView();
 	}
 	
+	/* (non-Javadoc)
+	 * @see application.domain.Game#getEndTurn()
+	 */
 	@Override
 	public EndTurn getEndTurn() throws RemoteException {
 		return endTurn;

@@ -8,25 +8,22 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 
+
 /**
- * Displays the rear side of a card
- * 
- * @author Sanchez
+ * Displays the rear side of a card.
  *
+ * @author Sanchez
  */
 public class RearCardView extends CardView {
 
 	private Card card;
 
 	/**
-	 * Creates a new rear card view
-	 * 
-	 * @param Card
-	 *            card
-	 * @param double
-	 *            sizeX horizontal
-	 * @param double
-	 *            sizeY vertical
+	 * Creates a new rear card view.
+	 *
+	 * @param card
+	 * @param sizeX Horizontal
+	 * @param sizeY Vertical
 	 */
 	public RearCardView(Card card, double sizeX, double sizeY) {
 		super(sizeX, sizeY);
@@ -35,6 +32,9 @@ public class RearCardView extends CardView {
 		this.buildUI();
 	}
 
+	/**
+	 * Builds the UI.
+	 */
 	private void buildUI() {
 		rect = new Rectangle(sizeX, sizeY);
 
@@ -50,6 +50,9 @@ public class RearCardView extends CardView {
 		root = new StackPane(rect);
 	}
 
+	/* (non-Javadoc)
+	 * @see application.views.CardView#getImagePath()
+	 */
 	@Override
 	protected String getImagePath() {
 		String path = "";

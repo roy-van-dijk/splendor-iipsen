@@ -29,10 +29,12 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+
+
 /**
- * 
- * @author Roy
+ * The Class LobbyView.
  *
+ * @author Roy
  */
 public class LobbyView extends UnicastRemoteObject implements UIComponent, LobbyObserver  {
 
@@ -59,7 +61,8 @@ public class LobbyView extends UnicastRemoteObject implements UIComponent, Lobby
 	private final static int gridGap = 5;
 	
 	/**
-	 * 
+	 * Instantiates a new lobby view.
+	 *
 	 * @param lobby
 	 * @param lobbyController
 	 * @throws RemoteException
@@ -77,7 +80,10 @@ public class LobbyView extends UnicastRemoteObject implements UIComponent, Lobby
 	}
 
 	/**
-	 * update the lobby view
+	 * update the lobby view.
+	 *
+	 * @param lobby
+	 * @throws RemoteException
 	 */
 	public void modelChanged(Lobby lobby) throws RemoteException {
 		// Avoid throwing IllegalStateException by running from a non-JavaFX thread.
@@ -96,6 +102,7 @@ public class LobbyView extends UnicastRemoteObject implements UIComponent, Lobby
 		  
 	/**
 	 * update the UI of the lobby.
+	 *
 	 * @param lobby
 	 * @throws RemoteException
 	 */
@@ -143,8 +150,9 @@ public class LobbyView extends UnicastRemoteObject implements UIComponent, Lobby
 			gpane.add(label, 1, i + 2);
 		}
 	}
+	
 	/**
-	 * build up the UI on creating the lobby
+	 * build up the UI on creating the lobby.
 	 */
 	private void buildUI()
 	{	
@@ -160,8 +168,9 @@ public class LobbyView extends UnicastRemoteObject implements UIComponent, Lobby
 	}
 	
 	/**
-	 * button to open manual
-	 * @return
+	 * button to open manual.
+	 *
+	 * @return HBox
 	 */
 	private HBox buildManualButton() {
 		HBox manualContainer = new HBox();
@@ -176,6 +185,11 @@ public class LobbyView extends UnicastRemoteObject implements UIComponent, Lobby
 		return manualContainer;
 	}
 	
+	/**
+	 * Builds the pane.
+	 *
+	 * @return Pane
+	 */
 	private Pane buildPane() {
 		hbox = new HBox();
 		gpane = new GridPane();
@@ -226,6 +240,9 @@ public class LobbyView extends UnicastRemoteObject implements UIComponent, Lobby
 		return hbox;
 	}
 
+	/* (non-Javadoc)
+	 * @see application.views.UIComponent#asPane()
+	 */
 	public Pane asPane() {
 		return root;
 	}

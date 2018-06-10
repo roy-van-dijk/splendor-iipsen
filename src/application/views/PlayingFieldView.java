@@ -23,6 +23,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 
+
 /**
  * The playing field view is the section that contains all the cards, nobles,
  * tokens, etc.
@@ -53,13 +54,11 @@ public class PlayingFieldView implements UIComponent, Disableable, PlayingFieldO
 	private GameController gameController;
 
 	/**
-	 * Creates a new playing field view
-	 * 
-	 * @param PlayingField
-	 *            playingField
-	 * @param GameController
-	 *            gameController
-	 * @throws RemoteException
+	 * Creates a new playing field view.
+	 *
+	 * @param playingField the playing field
+	 * @param gameController the game controller
+	 * @throws RemoteException the remote exception
 	 */
 	public PlayingFieldView(PlayingField playingField, GameController gameController) throws RemoteException {
 		this.gameController = gameController;
@@ -73,9 +72,11 @@ public class PlayingFieldView implements UIComponent, Disableable, PlayingFieldO
 	}
 
 	/**
-	 * Update the playingFieldView
-	 * 
+	 * Update the playingFieldView.
+	 *
+	 * @param playingField the playing field
 	 * @return void
+	 * @throws RemoteException the remote exception
 	 */
 	public void modelChanged(PlayingField playingField) throws RemoteException {
 		if (cardsPane.getChildren().isEmpty()) {
@@ -86,6 +87,9 @@ public class PlayingFieldView implements UIComponent, Disableable, PlayingFieldO
 		this.updateNobles(playingField.getNobles());
 	}
 
+	/**
+	 * Builds the UI.
+	 */
 	private void buildUI() {
 		rowsPane = buildCardsAndNoblesDisplay();
 		exitGamePane = buildExitGameDisplay();
@@ -100,6 +104,11 @@ public class PlayingFieldView implements UIComponent, Disableable, PlayingFieldO
 		root.setPadding(new Insets(FIELDPADDING));
 	}
 
+	/**
+	 * Builds the cards and nobles display.
+	 *
+	 * @return the v box
+	 */
 	private VBox buildCardsAndNoblesDisplay() {
 		noblesPane = new HBox(CARDSPACING);
 		noblesPane.setAlignment(Pos.CENTER);
@@ -113,6 +122,12 @@ public class PlayingFieldView implements UIComponent, Disableable, PlayingFieldO
 		return rowsPane;
 	}
 
+	/**
+	 * Initialize card rows.
+	 *
+	 * @param cardRows the card rows
+	 * @param tempHand the temp hand
+	 */
 	private void initializeCardRows(List<CardRow> cardRows, TempHand tempHand) {
 		System.out.println("Initializing cardrows");
 
@@ -125,6 +140,11 @@ public class PlayingFieldView implements UIComponent, Disableable, PlayingFieldO
 		}
 	}
 
+	/**
+	 * Update nobles.
+	 *
+	 * @param nobles the nobles
+	 */
 	private void updateNobles(List<Noble> nobles) {
 		noblesPane.getChildren().clear();
 
@@ -135,6 +155,13 @@ public class PlayingFieldView implements UIComponent, Disableable, PlayingFieldO
 		}
 	}
 
+	/**
+	 * Update field tokens.
+	 *
+	 * @param gemsCount the gems count
+	 * @param selectableTokens the selectable tokens
+	 * @param tempHand the temp hand
+	 */
 	private void updateFieldTokens(Map<Gem, Integer> gemsCount, List<Gem> selectableTokens, TempHand tempHand) {
 		tokensPane.getChildren().clear();
 
@@ -145,6 +172,16 @@ public class PlayingFieldView implements UIComponent, Disableable, PlayingFieldO
 		}
 	}
 
+	/**
+	 * Creates the token gem count display.
+	 *
+	 * @param gemType the gem type
+	 * @param count the count
+	 * @param radius the radius
+	 * @param selectableTokens the selectable tokens
+	 * @param tempHand the temp hand
+	 * @return the h box
+	 */
 	private HBox createTokenGemCountDisplay(Gem gemType, int count, int radius, List<Gem> selectableTokens,
 			TempHand tempHand) {
 		TokenView tokenView = new TokenView(gemType, radius);
@@ -183,6 +220,11 @@ public class PlayingFieldView implements UIComponent, Disableable, PlayingFieldO
 		return tokenRow;
 	}
 
+	/**
+	 * Builds the exit game display.
+	 *
+	 * @return the v box
+	 */
 	private VBox buildExitGameDisplay() {
 		Button exit = new Button("X");
 
@@ -196,10 +238,16 @@ public class PlayingFieldView implements UIComponent, Disableable, PlayingFieldO
 		return vbox;
 	}
 
+	/* (non-Javadoc)
+	 * @see application.views.UIComponent#asPane()
+	 */
 	public Pane asPane() {
 		return root;
 	}
 
+	/* (non-Javadoc)
+	 * @see application.views.Disableable#setDisabled(boolean)
+	 */
 	@Override
 	public void setDisabled(boolean disabled) throws RemoteException {
 		this.rowsPane.setDisable(disabled);

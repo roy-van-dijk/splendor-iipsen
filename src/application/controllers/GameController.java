@@ -17,37 +17,72 @@ import application.views.PopUpWindowView;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 
+// TODO: Auto-generated Javadoc
 /**
- * @author Sanchez
+ * The Class GameController.
  *
+ * @author Sanchez
  */
 public class GameController {
 	private Game game;
 
+	/**
+	 * Instantiates a new game controller.
+	 *
+	 * @param game
+	 */
 	public GameController(Game game) {
 		this.game = game;
 	}
 
+	/**
+	 * Reserve card.
+	 *
+	 * @throws RemoteException
+	 */
 	public void reserveCard() throws RemoteException {
 		game.findSelectableCards();
 	}
 	
+	/**
+	 * Purchase card.
+	 *
+	 * @throws RemoteException
+	 */
 	public void purchaseCard() throws RemoteException {
 		game.findSelectableCards();
 	}
 	
+	/**
+	 * Debug next turn.
+	 *
+	 * @throws RemoteException
+	 */
 	public void debugNextTurn() throws RemoteException {
 		game.nextTurn();
 	}
 	
+	/**
+	 * End turn.
+	 *
+	 * @throws RemoteException
+	 */
 	public void endTurn() throws RemoteException {
 		game.getEndTurn().endTurn();
 	}
 	
+	/**
+	 * Find selectable tokens.
+	 *
+	 * @throws RemoteException
+	 */
 	public void findSelectableTokens() throws RemoteException {
 		game.getPlayingField().setTokensSelectable();
 	}
 
+	/**
+	 * Leave game.
+	 */
 	public void leaveGame() {
 		ConfirmDialog dialog = new ConfirmDialog(AlertType.CONFIRMATION);
 		dialog.setTitle("Confirmation Dialog");
@@ -67,6 +102,13 @@ public class GameController {
 		}
 	}
 
+	/**
+	 * Card clicked from field.
+	 *
+	 * @param cardRow
+	 * @param card
+	 * @throws RemoteException
+	 */
 	public void cardClickedFromField(CardRow cardRow, Card card) throws RemoteException {
 		cardRow.addCardToTemp(cardRow, card, game.getPlayingField().getTempHand());
 		if(game.getPlayingField().getTempHand().getMoveType() == MoveType.RESERVE_CARD) {
@@ -75,20 +117,44 @@ public class GameController {
 		game.updatePlayingFieldAndPlayerView();
 	}
 	
+	/**
+	 * Card clicked from reserve.
+	 *
+	 * @param card
+	 * @throws RemoteException
+	 */
 	public void cardClickedFromReserve(Card card) throws RemoteException {
 		game.addCardToTempFromReserve(card);
 		game.updatePlayingFieldAndPlayerView();
 	}
 
+	/**
+	 * On field token clicked.
+	 *
+	 * @param gemType
+	 * @throws RemoteException
+	 */
 	public void onFieldTokenClicked(Gem gemType) throws RemoteException {	
 		game.getPlayingField().addTokenToTemp(gemType);
 		
 	}
 	
+	/**
+	 * Gets the temphand.
+	 *
+	 * @return TempHand
+	 * @throws RemoteException
+	 */
 	public TempHand getTempHand() throws RemoteException {
 		return game.getPlayingField().getTempHand();
 	}
 
+	/**
+	 * Reserve card from deck.
+	 *
+	 * @param cardRow 
+	 * @throws RemoteException
+	 */
 	public void reserveCardFromDeck(CardRow cardRow) throws RemoteException {
 		cardRow.addCardToTemp(cardRow, cardRow.getCardDeck().top(), this.getTempHand());
 		cardRow.getCardDeck().top().setReservedFromDeck(true);
@@ -96,11 +162,21 @@ public class GameController {
 		game.updatePlayingFieldAndPlayerView();	
 	}
 
+	/**
+	 * Clear deck selection.
+	 *
+	 * @throws RemoteException
+	 */
 	public void clearDeckSelection() throws RemoteException {
 		game.getPlayingField().setDeckDeselected();
 		game.updatePlayingFieldAndPlayerView();			
 	}
 
+	/**
+	 * Reset turn.
+	 *
+	 * @throws RemoteException
+	 */
 	public void resetTurn() throws RemoteException {
 		this.getTempHand().emptyHand();
 		game.cleanUpSelections();		

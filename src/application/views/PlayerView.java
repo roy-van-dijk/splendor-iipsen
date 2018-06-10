@@ -34,10 +34,9 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
 /**
- * This is the view with the player's own information
- * 
- * @author Sanchez
+ * This is the view with the player's own information.
  *
+ * @author Sanchez
  */
 public class PlayerView implements UIComponent, Disableable, PlayerObserver {
 
@@ -57,11 +56,10 @@ public class PlayerView implements UIComponent, Disableable, PlayerObserver {
 	private Label lblPrestigeValue;
 
 	/**
-	 * Creates a new player view
-	 * 
-	 * @param player
-	 *            this player.
-	 * @param gameController
+	 * Creates a new player view.
+	 *
+	 * @param player this player.
+	 * @param gameController the game controller
 	 * @throws RemoteException
 	 */
 	public PlayerView(Player player, GameController gameController) throws RemoteException {
@@ -72,6 +70,11 @@ public class PlayerView implements UIComponent, Disableable, PlayerObserver {
 		this.gameController = gameController;
 	}
 
+	/**
+	 * Builds the UI.
+	 *
+	 * @throws RemoteException
+	 */
 	private void buildUI() throws RemoteException {
 		root = new HBox(25);
 		root.setPadding(new Insets(15, 0, 15, 25));
@@ -100,6 +103,9 @@ public class PlayerView implements UIComponent, Disableable, PlayerObserver {
 				reservedCards, sep(), accessibility);
 	}
 
+	/* (non-Javadoc)
+	 * @see application.domain.PlayerObserver#modelChanged(application.domain.Player)
+	 */
 	public void modelChanged(Player player) throws RemoteException {
 		lblPrestigeValue.setText(String.valueOf(player.getPrestige()));
 
@@ -109,6 +115,11 @@ public class PlayerView implements UIComponent, Disableable, PlayerObserver {
 		this.updatePlayerReservedCards(player.getReservedCards());
 	}
 
+	/**
+	 * Builds the accessibility menu.
+	 *
+	 * @return the v box
+	 */
 	private VBox buildAccessibilityMenu() {
 		VBox accessibility = new VBox(10);
 		accessibility.setPadding(new Insets(0, 22, 0, 0));
@@ -154,6 +165,11 @@ public class PlayerView implements UIComponent, Disableable, PlayerObserver {
 		return accessibility;
 	}
 
+	/**
+	 * Update player reserved cards.
+	 *
+	 * @param List<Card>cards the cards
+	 */
 	private void updatePlayerReservedCards(List<Card> cards) {
 		reservedCards.getChildren().clear();
 		HBox reservedCardsDisplay = createReservedCardDisplay(cards, 110, 160);
@@ -161,6 +177,14 @@ public class PlayerView implements UIComponent, Disableable, PlayerObserver {
 		reservedCards.getChildren().add(reservedCardsDisplay);
 	}
 
+	/**
+	 * Creates the reserved card display.
+	 *
+	 * @param cards
+	 * @param sizeX the size horizontal
+	 * @param sizeY the size vertical
+	 * @return HBox
+	 */
 	private HBox createReservedCardDisplay(List<Card> cards, int sizeX, int sizeY) {
 		HBox reservedCards = new HBox(10);
 
@@ -198,6 +222,11 @@ public class PlayerView implements UIComponent, Disableable, PlayerObserver {
 		return reservedCards;
 	}
 
+	/**
+	 * Update player nobles.
+	 *
+	 * @param nobles
+	 */
 	private void updatePlayerNobles(List<Noble> nobles) {
 		ownedNobles.getChildren().clear();
 
@@ -206,6 +235,14 @@ public class PlayerView implements UIComponent, Disableable, PlayerObserver {
 		ownedNobles.getChildren().add(nobleDisplay);
 	}
 
+	/**
+	 * Creates the noble display.
+	 *
+	 * @param nobles
+	 * @param sizeX the size horizontal
+	 * @param sizeY the size vertical
+	 * @return VBox 
+	 */
 	private VBox createNobleDisplay(List<Noble> nobles, int sizeX, int sizeY) {
 		int offset = 0;
 
@@ -226,6 +263,12 @@ public class PlayerView implements UIComponent, Disableable, PlayerObserver {
 		return nobleDisplay;
 	}
 
+	/**
+	 * Update player cards.
+	 *
+	 * @param cards
+	 * @throws RemoteException
+	 */
 	private void updatePlayerCards(List<Card> cards) throws RemoteException {
 		ownedCards.getChildren().clear();
 
@@ -266,6 +309,15 @@ public class PlayerView implements UIComponent, Disableable, PlayerObserver {
 		ownedCards.getChildren().addAll(diamondDisplay, sapphireDisplay, emeraldDisplay, rubyDisplay, onyxDisplay);
 	}
 
+	/**
+	 * Creates the card display.
+	 *
+	 * @param cards
+	 * @param count 
+	 * @param sizeX the size horizontal
+	 * @param sizeY the size vertical
+	 * @return VBox
+	 */
 	private VBox createCardDisplay(ArrayList<Card> cards, int count, int sizeX, int sizeY) {
 		int offset = 60;
 
@@ -295,6 +347,12 @@ public class PlayerView implements UIComponent, Disableable, PlayerObserver {
 		return ownedCardDisplay;
 	}
 
+	/**
+	 * Update player tokens.
+	 *
+	 * @param  gemsCount
+	 * @throws RemoteException the remote exception
+	 */
 	private void updatePlayerTokens(Map<Gem, Integer> gemsCount) throws RemoteException {
 		tokensGrid.getChildren().clear();
 
@@ -308,6 +366,14 @@ public class PlayerView implements UIComponent, Disableable, PlayerObserver {
 		}
 	}
 
+	/**
+	 * Creates the token gem count display.
+	 *
+	 * @param gemType 
+	 * @param count
+	 * @param radius
+	 * @return HBox
+	 */
 	private HBox createTokenGemCountDisplay(Gem gemType, int count, int radius) {
 		TokenView tokenView = new TokenView(gemType, radius);
 		tokenView.asPane().getStyleClass().add("dropshadow");
@@ -323,6 +389,11 @@ public class PlayerView implements UIComponent, Disableable, PlayerObserver {
 		return tokenRow;
 	}
 
+	/**
+	 * Builds the manual button.
+	 *
+	 * @return HBox
+	 */
 	private HBox buildManualButton() {
 		HBox manualContainer = new HBox();
 		Button manualButton = new Button("?");
@@ -336,6 +407,11 @@ public class PlayerView implements UIComponent, Disableable, PlayerObserver {
 		return manualContainer;
 	}
 
+	/**
+	 *
+	 *
+	 * @return Seperator
+	 */
 	private Separator sep() {
 		Separator sep = new Separator();
 		sep.setOrientation(Orientation.VERTICAL);
@@ -345,10 +421,16 @@ public class PlayerView implements UIComponent, Disableable, PlayerObserver {
 		return sep;
 	}
 
+	/* (non-Javadoc)
+	 * @see application.views.UIComponent#asPane()
+	 */
 	public Pane asPane() {
 		return root;
 	}
 
+	/* (non-Javadoc)
+	 * @see application.views.Disableable#setDisabled(boolean)
+	 */
 	@Override
 	public void setDisabled(boolean disabled) {
 		reservedCards.setDisable(disabled);

@@ -4,32 +4,33 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.Map;
 
+// TODO: Auto-generated Javadoc
 /**
- * 
- * @author Sanchez
+ * The Interface Noble.
  *
+ * @author Sanchez
  */
 public interface Noble extends Remote {
 
 	/**
-	 * Gets the prestige value the noble provides
-	 * 
-	 * @return int prestigeValue
+	 * Gets the prestige value the noble provides.
+	 *
+	 * @return int
 	 * @throws RemoteException
 	 */
 	public int getPrestigeValue() throws RemoteException;
 
 	/**
-	 * Gets the requirements a player has to meet in order for the noble to visit
-	 * 
+	 * Gets the requirements a player has to meet in order for the noble to visit.
+	 *
 	 * @return Map<Gem, Integer> requirements
 	 * @throws RemoteException
 	 */
 	public Map<Gem, Integer> getRequirements() throws RemoteException;
 
 	/**
-	 * Gets the file name of the noble illustration
-	 * 
+	 * Gets the file name of the noble illustration.
+	 *
 	 * @return String illustration
 	 * @throws RemoteException
 	 */

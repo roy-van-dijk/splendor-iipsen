@@ -58,7 +58,8 @@ public class GameView implements UIComponent, Disableable, GameObserver  {
 	private PlayerView player;
 	
 	/**
-	 * Creates a new game view
+	 * Creates a new game view.
+	 *
 	 * @param game
 	 * @param gameController
 	 */
@@ -77,14 +78,20 @@ public class GameView implements UIComponent, Disableable, GameObserver  {
 			e.printStackTrace();
 		}
 	}
+	
+	/* (non-Javadoc)
+	 * @see application.domain.GameObserver#modelChanged(application.domain.Game)
+	 */
 	//TODO	MAKE THIs??
 	public void modelChanged(Game game)
 	{
 		
 	}
+	
 	/**
-	 * 
-	 * @param mode, change the colour pallet based on the type of colourblindness
+	 * Change colour blind mode.
+	 *
+	 * @param mode
 	 */
 	public static void changeColorBlindMode(ColorBlindModes mode) {
 		Iterator<ColorChangeable> i = colorBlindViews.iterator();
@@ -100,8 +107,9 @@ public class GameView implements UIComponent, Disableable, GameObserver  {
 	}
 	
 	/**
-	 * Build the actual game view
-	 * @return void
+	 * Build the actual game view.
+	 *
+	 * 
 	 */
 	private void buildUI()
 	{
@@ -130,8 +138,9 @@ public class GameView implements UIComponent, Disableable, GameObserver  {
 	
 	/**
 	 * Builds the playing field view (section with all the cards, nobles, tokens, etc.)
-	 * @throws RemoteException
+	 *
 	 * @return PlayingFieldView
+	 * @throws RemoteException 
 	 */
 	private PlayingFieldView buildPlayingField() throws RemoteException
 	{
@@ -139,7 +148,8 @@ public class GameView implements UIComponent, Disableable, GameObserver  {
 	}
 	
 	/**
-	 * Builds the buttons the players uses to select their action for a turn
+	 * Builds the buttons the players uses to select their action for a turn.
+	 *
 	 * @return HBox
 	 */
 	private HBox buildButtons()
@@ -233,8 +243,9 @@ public class GameView implements UIComponent, Disableable, GameObserver  {
 	
 	/**
 	 * Build the box with the player information of the opponents.
-	 * @throws RemoteException
+	 *
 	 * @return Pane
+	 * @throws RemoteException
 	 */
 	private Pane buildOpponents() throws RemoteException
 	{
@@ -258,8 +269,9 @@ public class GameView implements UIComponent, Disableable, GameObserver  {
 	
 	/**
 	 * Builds the player view. This is the view with the player's own information
-	 * @throws RemoteException
+	 *
 	 * @return PlayerView
+	 * @throws RemoteException
 	 */
 	private PlayerView buildPlayer() throws RemoteException
 	{
@@ -267,10 +279,16 @@ public class GameView implements UIComponent, Disableable, GameObserver  {
 	}
 	
 
+	/* (non-Javadoc)
+	 * @see application.views.UIComponent#asPane()
+	 */
 	public Pane asPane() {
 		return root;
 	}
 
+	/* (non-Javadoc)
+	 * @see application.views.Disableable#setDisabled(boolean)
+	 */
 	public void setDisabled(boolean disabled) throws RemoteException {
 
 		for(Button btn : this.moveButtons)

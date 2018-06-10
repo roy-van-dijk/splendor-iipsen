@@ -8,16 +8,15 @@ import java.util.EmptyStackException;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
 /**
- * 
- * @author Sanchez
+ * The Class PlayerImpl.
  *
+ * @author Sanchez
  */
 public class PlayerImpl extends UnicastRemoteObject implements Player, Serializable {
 	
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = 1L;
 
 	private String name;
@@ -32,10 +31,19 @@ public class PlayerImpl extends UnicastRemoteObject implements Player, Serializa
 	
 	private TokenList tokenList;
 	
+	/* (non-Javadoc)
+	 * @see application.domain.Player#getSelectableCardsFromReserve()
+	 */
 	public List<Card> getSelectableCardsFromReserve() {
 		return selectableCards;
 	}
 	
+	/**
+	 * Instantiates a new player impl.
+	 *
+	 * @param name
+	 * @throws RemoteException 
+	 */
 	public PlayerImpl(String name) throws RemoteException 
 	{
 		this.name = name;
@@ -50,6 +58,13 @@ public class PlayerImpl extends UnicastRemoteObject implements Player, Serializa
 	}
 	
 
+	/**
+	 * Addreserve card from field.
+	 *
+	 * @param cardRow
+	 * @param card
+	 * @throws RemoteException
+	 */
 	public void addreserveCardFromField(CardRow cardRow, Card card) throws RemoteException 
 	{
 		// TODO (low priority): Make reservedTokens class that incorporates this business rule
@@ -64,6 +79,13 @@ public class PlayerImpl extends UnicastRemoteObject implements Player, Serializa
 	}
 
 	
+	/**
+	 * Purchase card from field.
+	 *
+	 * @param cardRow
+	 * @param card
+	 * @throws RemoteException
+	 */
 	public void purchaseCardFromField(CardRow cardRow, Card card) throws RemoteException
 	{
 		if(this.canAffordCard(card.getCosts()))
@@ -76,11 +98,17 @@ public class PlayerImpl extends UnicastRemoteObject implements Player, Serializa
 		}
 	}
 	
+	/* (non-Javadoc)
+	 * @see application.domain.Player#updatePlayerView()
+	 */
 	@Override
 	public void updatePlayerView() throws RemoteException {
 		this.notifyObservers();
 	}
 	
+	/* (non-Javadoc)
+	 * @see application.domain.Player#findSelectableCardsFromReserve()
+	 */
 	public void findSelectableCardsFromReserve() throws RemoteException {
 		this.clearSelectableCards();
 		for(Card card : this.getReservedCards()) {
@@ -91,12 +119,18 @@ public class PlayerImpl extends UnicastRemoteObject implements Player, Serializa
 		this.notifyObservers();
 	}
 	
+	/* (non-Javadoc)
+	 * @see application.domain.Player#clearSelectableCards()
+	 */
 	@Override
 	public void clearSelectableCards() throws RemoteException {
 		selectableCards.clear();
 		this.notifyObservers();
 	}
 	
+	/* (non-Javadoc)
+	 * @see application.domain.Player#canAffordCard(java.util.Map)
+	 */
 	public boolean canAffordCard(Map<Gem, Integer> costs) throws RemoteException
 	{
 		Map<Gem, Integer> gemsCount = tokenList.getTokenGemCount();
@@ -116,6 +150,9 @@ public class PlayerImpl extends UnicastRemoteObject implements Player, Serializa
 		return true;
 	}
 	
+	/* (non-Javadoc)
+	 * @see application.domain.Player#getBonus()
+	 */
 	public Map<Gem, Integer> getBonus() throws RemoteException {
 		LinkedHashMap<Gem, Integer> bonus = new LinkedHashMap<Gem, Integer>();	
 		for(Gem gemType : Gem.values()) {
@@ -129,39 +166,64 @@ public class PlayerImpl extends UnicastRemoteObject implements Player, Serializa
 		return bonus;
 	}
 	
+	/* (non-Javadoc)
+	 * @see application.domain.Player#getName()
+	 */
 	public String getName() 
 	{
 		System.out.printf("Getting name of: %s\n", name);
 		return name;
 	}
 	
+	/* (non-Javadoc)
+	 * @see application.domain.Player#getReservedCards()
+	 */
 	public List<Card> getReservedCards() 
 	{
 		return reservedCards;
 	}
+	
+	/* (non-Javadoc)
+	 * @see application.domain.Player#getOwnedCards()
+	 */
 	public List<Card> getOwnedCards() 
 	{
 		return ownedCards;
 	}
 	
+	/* (non-Javadoc)
+	 * @see application.domain.Player#getOwnedNobles()
+	 */
 	public List<Noble> getOwnedNobles() 
 	{
 		return ownedNobles;
 	}
 	
+	/* (non-Javadoc)
+	 * @see application.domain.Player#addNoble(application.domain.Noble)
+	 */
 	public void addNoble(Noble noble) throws RemoteException {
 		ownedNobles.add(noble);
 		this.notifyObservers();
 	}
 	
+	/* (non-Javadoc)
+	 * @see application.domain.Player#getTokens()
+	 */
 	public List<Token> getTokens() throws RemoteException {
 		return tokenList.getAll();
 	}
 
+	/* (non-Javadoc)
+	 * @see application.domain.Player#getTokensGemCount()
+	 */
 	public Map<Gem, Integer> getTokensGemCount() throws RemoteException {
 		return tokenList.getTokenGemCount();
 	}
 
+	/* (non-Javadoc)
+	 * @see application.domain.Player#getPrestige()
+	 */
 	public int getPrestige() throws RemoteException
 	{
 		int prestige = 0;
@@ -179,6 +241,9 @@ public class PlayerImpl extends UnicastRemoteObject implements Player, Serializa
 		return prestige;
 	}
 	
+	/* (non-Javadoc)
+	 * @see application.domain.Player#returnTokensToField(java.util.List, application.domain.PlayingField)
+	 */
 	public void returnTokensToField(List<Token> tokens, PlayingField field) throws RemoteException
 	{
 		for(Token token : tokens)
@@ -189,6 +254,11 @@ public class PlayerImpl extends UnicastRemoteObject implements Player, Serializa
 		this.notifyObservers();
 	}
 	
+	/**
+	 * Notify observers.
+	 *
+	 * @throws RemoteException
+	 */
 	private void notifyObservers() throws RemoteException
 	{
 		for(PlayerObserver o : observers)
@@ -197,6 +267,9 @@ public class PlayerImpl extends UnicastRemoteObject implements Player, Serializa
 		}
 	}
 	
+	/* (non-Javadoc)
+	 * @see application.domain.Player#addObserver(application.domain.PlayerObserver)
+	 */
 	public void addObserver(PlayerObserver o) throws RemoteException 
 	{
 		observers.add(o);
@@ -204,14 +277,17 @@ public class PlayerImpl extends UnicastRemoteObject implements Player, Serializa
 	}
 
 
+	/* (non-Javadoc)
+	 * @see application.domain.Player#debugAddToken(application.domain.Token)
+	 */
 	@Override
 	public void debugAddToken(Token token) throws RemoteException {
 		this.tokenList.add(token);
 		this.notifyObservers();
 	}
 
-	/**
-	 * 
+	/* (non-Javadoc)
+	 * @see application.domain.Player#addCard(application.domain.Card)
 	 */
 	@Override
 	public void addCard(Card card) throws RemoteException {

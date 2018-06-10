@@ -10,22 +10,20 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-
+//TODO perhaps a new constructor to create a different background of the view
 /**
- * 
  * General pop-up view view that can be used to communicate information to a
- * player
- * 
- * @author Alexander
+ * player.
  *
+ * @author Alexander
  */
 public class PopUpWindowView {
 
 	private BorderPane pane;
 
 	/**
-	 * Creates a new pop-up screen and displays it
-	 * 
+	 * Creates a new pop-up screen and displays it.
+	 *
 	 * @param paragraphText
 	 * @param title
 	 */
