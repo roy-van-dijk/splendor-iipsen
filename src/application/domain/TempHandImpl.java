@@ -33,12 +33,18 @@ public class TempHandImpl extends UnicastRemoteObject implements Serializable, T
 	private int selectedTokensCount;
 	private List<Gem> selectedGemTypes;
 	
+	/**
+	 * temporary hand of player (basically selected tokens or cards)
+	 * @throws RemoteException
+	 */
 	public TempHandImpl() throws RemoteException
 	{
 		this.selectedGemTypes = new ArrayList<>();
 		this.tokenList = new TokenList();
 	}
-	
+	/**
+	 * update information about player
+	 */
 	public void updatePlayer(Player player) throws RemoteException {
 		this.player = player;
 	}
@@ -66,7 +72,9 @@ public class TempHandImpl extends UnicastRemoteObject implements Serializable, T
 	public TokenList getTokenList() throws RemoteException {
 		return tokenList;
 	}
-	
+	/**
+	 * add token to tempHand
+	 */
 	public void addToken(Token token) throws RemoteException {
 		selectedTokensCount++;
 		tokenList.add(token);
@@ -99,6 +107,9 @@ public class TempHandImpl extends UnicastRemoteObject implements Serializable, T
 		Logger.log(String.format("%s has emptied his hand \n", player.getName()), Verbosity.DEBUG);
 	}
 	
+	/**
+	 * clear selected cards and tokens
+	 */
 	public boolean isEmpty() throws RemoteException {
 		return reservedCard == null && boughtCard == null && tokenList.getAll().isEmpty() && selectedGemTypes.isEmpty();
 	}

@@ -41,6 +41,11 @@ public class TokenList implements Serializable {
 		tokens.add(token);
 	}
 	
+	/**
+	 * remove a token
+	 * @param token
+	 * @throws RemoteException
+	 */
 	public void remove(Token token) throws RemoteException {
 		for(Token t : tokens) {
 			if(t.getGemType() == token.getGemType()) {

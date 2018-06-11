@@ -101,7 +101,10 @@ public class ReturnTokensView {
 		returnTokens.registrate(this);
 	}
 	
-
+/**
+ * model changed, update token gem count and update button, or close view
+ * @param returnTokens
+ */
 	public void modelChanged(ReturnTokens returnTokens) {
 		Platform.runLater(() -> 
 		{

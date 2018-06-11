@@ -178,13 +178,28 @@ public interface Game extends Remote {
 	 * @throws RemoteException
 	 */
 	public void addTokenToTemp(Gem gemType) throws RemoteException;
-	
+	/**
+	 * 
+	 * @return
+	 * @throws RemoteException
+	 */
 	public boolean reserveCardInventoryFull() throws RemoteException;
-	
+	/**
+	 * close the curent running game
+	 * @throws RemoteException
+	 */
 	public void terminateGame() throws RemoteException;
-
+	/**
+	 * winner of the game
+	 * @param winningPlayer
+	 * @throws RemoteException
+	 */
 	public void playerHasWon(Player winningPlayer) throws RemoteException;
-
+	/**
+	 * get the winning player
+	 * @return
+	 * @throws RemoteException
+	 */
 	public Player getWinningPlayer() throws RemoteException;
 
 }

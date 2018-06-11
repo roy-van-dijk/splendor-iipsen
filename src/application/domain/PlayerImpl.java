@@ -118,6 +118,7 @@ public class PlayerImpl extends UnicastRemoteObject implements Player, Serializa
 		Map<Gem, Integer> gemsCount = tokenList.getTokenGemCount();
 		int jokersLeft = gemsCount.get(Gem.JOKER);
 		
+		//this can be made more readable (if there is time) by making a few funcitons.
 		for(Map.Entry<Gem, Integer> cost : costs.entrySet())
 		{
 			//if(!gemsCount.containsKey(cost.getKey())) return false; // Player does not even have the right tokens.
