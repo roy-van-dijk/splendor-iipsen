@@ -108,6 +108,7 @@ public class MainMenuView implements UIComponent {
 				menuController.joinLobby(hostIp.getText(), nickname.getText());
 			} catch (ConnectException e1) {
 				new AlertDialog(AlertType.ERROR, "Could not connect to the server. Server may be offline.").show();
+				e1.printStackTrace();
 			} catch (RemoteException e1) {
 				new AlertDialog(AlertType.ERROR, "Something went wrong while connecting to the server.").show();
 				e1.printStackTrace();

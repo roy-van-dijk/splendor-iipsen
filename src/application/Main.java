@@ -58,6 +58,7 @@ public class Main extends Application {
 		*/
 		
 		try {
+			System.out.println(InetAddress.getLocalHost().getHostAddress());
 			System.setProperty("java.rmi.server.hostname", InetAddress.getLocalHost().getHostAddress());
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
