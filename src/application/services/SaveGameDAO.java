@@ -67,7 +67,7 @@ public class SaveGameDAO {
 			ObjectOutputStream output = new ObjectOutputStream(new FileOutputStream(basePath));
 			output.writeObject(game);
 			output.close();
-			System.out.println("Game saved to "+  this.basePath);
+			System.out.println("Game saved to " + basePath);
 	}
 
 	/**

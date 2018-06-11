@@ -57,19 +57,13 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 		this.players = new ArrayList<Player>();
 		this.observers = new LinkedHashMap<GameObserver, Player>();
 		
-		this.Test_Create4Players();
+		this.debugCreate4Players();
 		
 		this.playingField = new PlayingFieldImpl(this.maxPlayers);
 		
 		this.endTurn = new EndTurnImpl(this);
 	}
 	
-
-	/*public Player getPlayer(GameObserver o) throws RemoteException
-	{
-		return playersMap.get(o);
-	}*/
-
 	
 	/* (non-Javadoc)
 	 * @see application.domain.Game#nextTurn()
@@ -128,19 +122,18 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 	/**
 	 * Test create 4 players.
 	 */
-	private void Test_Create4Players()
+	private void debugCreate4Players()
 	{
 		try {
 			
 			PlayerImpl player = new PlayerImpl("Michael");
-			/*
 			for(int i = 0; i < 13; i++)
 			{
 				Gem[] allGems = Gem.values();
 				int randomIdx = (int) (Math.random() * allGems.length);
 				player.debugAddToken(new TokenImpl(allGems[randomIdx]));
 			}
-			*/
+			
 			this.players.add(player);
 			this.players.add(new PlayerImpl("Bob"));
 			this.players.add(new PlayerImpl("Peter"));

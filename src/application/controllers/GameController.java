@@ -95,13 +95,13 @@ public class GameController {
 		
 		Optional<ButtonType> results = dialog.showAndWait();
 		if (results.get() == ButtonType.OK){
-			try {
-				game.saveGame();
+			/*try {
+				//game.saveGame();
 				// TODO: Make leave game method
 			} catch (RemoteException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
+			}*/
 			StageManager.getInstance().showMainMenu();		
 			new PopUpWindowView("Het spel is be�indigd door een van de spelers.", "Het spel is gestopt");
 		}
