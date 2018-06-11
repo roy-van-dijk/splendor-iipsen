@@ -3,12 +3,18 @@ package application.domain;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Class PlayerSlotImpl.
+ * @author Sanchez
+ *
  */
 public class PlayerSlotImpl extends UnicastRemoteObject implements PlayerSlot {
+	
+	private static final long serialVersionUID = 1L;
 	private boolean isReady;
-	private Player player;
+	private Player currentPlayer;
+	private Player previousPlayer;
 	
 	/**
 	 * Instantiates a new player slot impl.
@@ -16,7 +22,9 @@ public class PlayerSlotImpl extends UnicastRemoteObject implements PlayerSlot {
 	 * @throws RemoteException
 	 */
 	public PlayerSlotImpl() throws RemoteException {
-		player = null;
+		currentPlayer = null;
+		previousPlayer = null;
+		
 		isReady = false;
 	}
 
@@ -34,17 +42,47 @@ public class PlayerSlotImpl extends UnicastRemoteObject implements PlayerSlot {
 		this.isReady = isReady;
 	}
 
+
 	/* (non-Javadoc)
-	 * @see application.domain.PlayerSlot#getPlayer()
+	 * @see application.domain.PlayerSlot#getCurrentPlayer()
 	 */
-	public Player getPlayer() throws RemoteException {
-		return player;
+	public Player getCurrentPlayer() throws RemoteException {
+		return currentPlayer;
 	}
 
 	/* (non-Javadoc)
-	 * @see application.domain.PlayerSlot#setPlayer(application.domain.Player)
+	 * @see application.domain.PlayerSlot#setCurrentPlayer(application.domain.Player)
 	 */
-	public void setPlayer(Player player) throws RemoteException {
-		this.player = player;
+	public void setCurrentPlayer(Player currentPlayer) throws RemoteException {
+		this.currentPlayer = currentPlayer;
+	}
+
+	/* (non-Javadoc)
+	 * @see application.domain.PlayerSlot#getPreviousPlayer()
+	 */
+	public Player getPreviousPlayer() throws RemoteException {
+		return previousPlayer;
+	}
+
+	/* (non-Javadoc)
+	 * @see application.domain.PlayerSlot#setPreviousPlayer(application.domain.Player)
+	 */
+	public void setPreviousPlayer(Player previousPlayer) throws RemoteException {
+		this.previousPlayer = previousPlayer;
+	}
+
+	/* (non-Javadoc)
+	 * @see application.domain.PlayerSlot#empty()
+	 */
+	public void empty() throws RemoteException {
+		this.currentPlayer = null;
+		this.isReady = false;
+	}
+	
+	/* (non-Javadoc)
+	 * @see application.domain.PlayerSlot#isAvailable()
+	 */
+	public boolean isAvailable() throws RemoteException {
+		return this.currentPlayer == null;
 	}
 }

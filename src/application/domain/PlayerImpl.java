@@ -58,44 +58,22 @@ public class PlayerImpl extends UnicastRemoteObject implements Player, Serializa
 	}
 	
 
-	/**
-	 * Addreserve card from field.
-	 *
-	 * @param cardRow
-	 * @param card
-	 * @throws RemoteException
+	/* (non-Javadoc)
+	 * @see application.domain.Player#reserveCardFromField(application.domain.CardRow, application.domain.Card)
 	 */
-	public void addreserveCardFromField(CardRow cardRow, Card card) throws RemoteException 
-	{
+	@Override
+	public void reserveCardFromField(CardRow cardRow, Card card) throws RemoteException {
 		// TODO (low priority): Make reservedTokens class that incorporates this business rule
 		if(this.getReservedCards().size() < 3) // Business rule: max 3 reserved cards
 		{
 			cardRow.removeCard(card);
 			reservedCards.add(card);
 			
-			System.out.printf("%s has taken the card with costs: %s\n", this.getName() ,card.getCosts());
+			System.out.printf("[DEBUG] PlayerImpl::reserveCardFromField()::Player %s has taken the card with costs: %s\n", this.getName() ,card.getCosts());
 			this.notifyObservers();
 		}
-	}
 
-	
-	/**
-	 * Purchase card from field.
-	 *
-	 * @param cardRow
-	 * @param card
-	 * @throws RemoteException
-	 */
-	public void purchaseCardFromField(CardRow cardRow, Card card) throws RemoteException
-	{
-		if(this.canAffordCard(card.getCosts()))
-		{
-			cardRow.removeCard(card);
-			ownedCards.add(card);
-			
-			System.out.printf("%s has bought the card with costs: %s\\n", this.getName(), card.getCosts());
-			this.notifyObservers();
-		}
+
 	}
 	
 	/* (non-Javadoc)
@@ -133,6 +111,7 @@ public class PlayerImpl extends UnicastRemoteObject implements Player, Serializa
 	 */
 	public boolean canAffordCard(Map<Gem, Integer> costs) throws RemoteException
 	{
+		Logger.log("PlayerImpl::canAffordCard::Player == " + this.getName(), Verbosity.DEBUG);
 		Map<Gem, Integer> gemsCount = tokenList.getTokenGemCount();
 		int jokersLeft = gemsCount.get(Gem.JOKER);
 		
@@ -165,43 +144,32 @@ public class PlayerImpl extends UnicastRemoteObject implements Player, Serializa
 		}
 		return bonus;
 	}
+
+	public void setName(String name) throws RemoteException{
+		this.name = name;
+	}
 	
-	/* (non-Javadoc)
-	 * @see application.domain.Player#getName()
-	 */
-	public String getName() 
+
+	public String getName() throws RemoteException
 	{
-		System.out.printf("Getting name of: %s\n", name);
+		//System.out.printf("Getting name of: %s\n", name);
 		return name;
 	}
 	
-	/* (non-Javadoc)
-	 * @see application.domain.Player#getReservedCards()
-	 */
-	public List<Card> getReservedCards() 
+	public List<Card> getReservedCards() throws RemoteException
 	{
 		return reservedCards;
 	}
-	
-	/* (non-Javadoc)
-	 * @see application.domain.Player#getOwnedCards()
-	 */
-	public List<Card> getOwnedCards() 
+	public List<Card> getOwnedCards() throws RemoteException
 	{
 		return ownedCards;
 	}
 	
-	/* (non-Javadoc)
-	 * @see application.domain.Player#getOwnedNobles()
-	 */
-	public List<Noble> getOwnedNobles() 
+	public List<Noble> getOwnedNobles() throws RemoteException
 	{
 		return ownedNobles;
 	}
-	
-	/* (non-Javadoc)
-	 * @see application.domain.Player#addNoble(application.domain.Noble)
-	 */
+
 	public void addNoble(Noble noble) throws RemoteException {
 		ownedNobles.add(noble);
 		this.notifyObservers();
@@ -254,12 +222,7 @@ public class PlayerImpl extends UnicastRemoteObject implements Player, Serializa
 		this.notifyObservers();
 	}
 	
-	/**
-	 * Notify observers.
-	 *
-	 * @throws RemoteException
-	 */
-	private void notifyObservers() throws RemoteException
+	private synchronized void notifyObservers() throws RemoteException
 	{
 		for(PlayerObserver o : observers)
 		{
@@ -267,10 +230,7 @@ public class PlayerImpl extends UnicastRemoteObject implements Player, Serializa
 		}
 	}
 	
-	/* (non-Javadoc)
-	 * @see application.domain.Player#addObserver(application.domain.PlayerObserver)
-	 */
-	public void addObserver(PlayerObserver o) throws RemoteException 
+	public synchronized void addObserver(PlayerObserver o) throws RemoteException 
 	{
 		observers.add(o);
 		this.notifyObservers();
@@ -297,28 +257,10 @@ public class PlayerImpl extends UnicastRemoteObject implements Player, Serializa
 
 
 	/* (non-Javadoc)
-	 * @see application.domain.Player#reserveCardFromField(application.domain.CardRow, application.domain.Card)
-	 */
-	@Override
-	public void reserveCardFromField(CardRow cardRow, Card card) throws RemoteException {
-		// TODO (low priority): Make reservedTokens class that incorporates this business rule
-		if(this.getReservedCards().size() < 3) // Business rule: max 3 reserved cards
-		{
-			cardRow.removeCard(card);
-			reservedCards.add(card);
-			
-			System.out.printf("%s has taken the card with costs: %s\n", this.getName() ,card.getCosts());
-			this.notifyObservers();
-		}
-
-	}
-		
-
-	/* (non-Javadoc)
 	 * @see application.domain.Player#addReserverveCard(application.domain.Card)
 	 */
 	@Override
-	public void addReserverveCard(Card card) throws RemoteException {
+	public void addReservedCard(Card card) throws RemoteException {
 		this.reservedCards.add(card);
 		
 	}

@@ -2,47 +2,52 @@ package application.domain;
 
 import java.io.Serializable;
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.EmptyStackException;
 import java.util.List;
 
+import application.util.Logger;
+import application.util.Logger.Verbosity;
 
+
+// TODO: Auto-generated Javadoc
 /**
  * The Class CardRowImpl.
  *
  * @author Sanchez
- * This class acts like how you would expect CardDeck to act. This class makes sense as a View but it makes less sense as a model.
- * TODO: Consider pros/cons of merging it with CardDeck
  */
-public class CardRowImpl implements Serializable, CardRow {
+public class CardRowImpl extends UnicastRemoteObject implements Serializable, CardRow {
 	
 	private static final long serialVersionUID = 7939191665883088567L;
 
 	private static final int MAX_OPEN_CARDS = 4;
 	
 	private CardDeck cardDeck;
-	private CardImpl[] cardSlots;
+	private Card[] cardSlots;
 	private transient ArrayList<CardRowObserver> observers;
 
 	private List<Card> selectableCards;
 	
+	private int index; // TODO if enough time: Replace with CardLevel instead.
+	
+
 	/**
 	 * Instantiates a new card row impl.
 	 *
-	 * @param cardDeckImpl
+	 * @param cardDeck
+	 * @param index
+	 * @throws RemoteException
 	 */
-	public CardRowImpl(CardDeck cardDeckImpl) {
-		this.cardDeck = cardDeckImpl;
-		this.cardSlots = new CardImpl[MAX_OPEN_CARDS];
+	public CardRowImpl(CardDeck cardDeck, int index) throws RemoteException {
+		this.cardDeck = cardDeck;
+		this.index = index;
+
+		this.cardSlots = new Card[MAX_OPEN_CARDS];
 		this.observers = new ArrayList<>();
 		this.selectableCards = new ArrayList<>();
 		
-		try {
-			fillCardSlots();
-		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		this.initializeCardSlots();
 	}
 	
 	/* (non-Javadoc)
@@ -50,16 +55,68 @@ public class CardRowImpl implements Serializable, CardRow {
 	 */
 	public void removeCard(Card card) throws RemoteException
 	{
+		boolean debugCardFound = false;
 		for(int i = 0; i < cardSlots.length; i++)
 		{
-			if(cardSlots[i].equals(card))
+			if(cardSlots[i].equals(card)) // won't work with RMI because - Left: CardImpls, Right: ProxyRefs to Card
 			{
 				cardSlots[i] = null;
+				debugCardFound = true;
+				fillCardSlots();
 			}
 		}
-		this.fillCardSlots();
+		System.out.println("[DEBUG] CardRowImpl::removeCard()::Card to be removed found? " + debugCardFound);
+		this.notifyObservers();
 	}
 	
+
+	/* (non-Javadoc)
+	 * @see application.domain.CardRow#getCardDeck()
+	 */
+	public CardDeck getCardDeck() throws RemoteException {
+		return cardDeck;
+	}
+
+	/**
+	 * Gets the card slots.
+	 *
+	 * @return Returns all card slots, containing either a Card object or a null. See comment @ CardRowView.buildUI() for a problem description.
+	 * @throws RemoteException the remote exception
+	 */
+	public Card[] getCardSlots() throws RemoteException {
+		return cardSlots;
+	}
+	
+	/* (non-Javadoc)
+	 * @see application.domain.CardRow#addObserver(application.domain.CardRowObserver)
+	 */
+	public synchronized void addObserver(CardRowObserver observer) throws RemoteException {
+		observers.add(observer);
+		this.notifyObservers();
+	}
+
+
+	/**
+	 * Notify observers.
+	 *
+	 * @throws RemoteException
+	 */
+	private synchronized void notifyObservers() throws RemoteException {
+		Logger.log("CardRowImpl::notifyObservers()::Notifying all CardRow observers of change", Verbosity.DEBUG);
+		for (CardRowObserver co : observers) {
+			co.modelChanged(this);
+		}
+	}
+	
+	/**
+	 * Initialize card slots.
+	 *
+	 * @throws RemoteException
+	 */
+	private void initializeCardSlots() throws RemoteException
+	{
+		this.fillCardSlots();
+	}
 	
 	/**
 	 * Fill card slots.
@@ -74,7 +131,7 @@ public class CardRowImpl implements Serializable, CardRow {
 			if(cardSlots[pos] == null)
 			{
 				try {
-					CardImpl cardFromDeck = (CardImpl) cardDeck.pull();
+					Card cardFromDeck = cardDeck.pull();
 					cardSlots[pos] = cardFromDeck;
 				} 
 				catch (EmptyStackException e)
@@ -83,67 +140,22 @@ public class CardRowImpl implements Serializable, CardRow {
 				}
 			}
 		}
-		this.notifyObservers();
-	}
-	
-	/* (non-Javadoc)
-	 * @see application.domain.CardRow#addCardToTemp(application.domain.CardRow, application.domain.Card, application.domain.TempHand)
-	 */
-	@Override
-	public void addCardToTemp(CardRow cardRow, Card card, TempHand tempHand) throws RemoteException {	
-		MoveType moveType = tempHand.getMoveType();
-		if(moveType == MoveType.PURCHASE_CARD) {
-			tempHand.selectCardToBuy(card);
-		} else if(moveType == MoveType.RESERVE_CARD) {
-			tempHand.selectCardToReserve(card);
-		}
-	}
-	
 
-	/* (non-Javadoc)
-	 * @see application.domain.CardRow#getCardDeck()
-	 */
-	public CardDeck getCardDeck() {
-		return cardDeck;
 	}
 
-	/**
-	 * Gets the card slots.
-	 *
-	 * @return Returns all card slots, containing either a Card object or a null. See comment @ CardRowView.buildUI() for a problem description.
-	 */
-	public Card[] getCardSlots() {
-		return cardSlots;
-	}
-	
-	/**
-	 * Notify observers.
-	 *
-	 * @throws RemoteException
-	 */
-	private void notifyObservers() throws RemoteException {
-		for (CardRowObserver co : observers) {
-			co.modelChanged(this);
-		}
-	}
-
-	/* (non-Javadoc)
-	 * @see application.domain.CardRow#addObserver(application.domain.CardRowObserver)
-	 */
-	public void addObserver(CardRowObserver observer) throws RemoteException {
-		observers.add(observer);
-		this.notifyObservers();
-	}
 	
 	/* (non-Javadoc)
 	 * @see application.domain.CardRow#findSelectableCards(application.domain.MoveType, application.domain.Player)
 	 */
 	@Override
 	public void findSelectableCards(MoveType moveType, Player player) throws RemoteException {
-		this.clearSelectableCards();
+		this.clearAll();
+		Logger.log("CardRowImpl::findSelectableCards::Checking selectable cards for player " + player.getName(), Verbosity.DEBUG);
+		Logger.log("CardRowImpl::findSelectableCards::moveType = " + moveType, Verbosity.DEBUG);
 		if(moveType == MoveType.PURCHASE_CARD) {
 			for(Card card : cardSlots) {
 				if(player.canAffordCard(card.getCosts())) {
+					Logger.log("CardRowImpl::findSelectableCards::Player can afford a card", Verbosity.DEBUG);
 					selectableCards.add(card);
 				}
 			}
@@ -156,14 +168,25 @@ public class CardRowImpl implements Serializable, CardRow {
 		this.notifyObservers();
 	}
 	
+
+	/**
+	 * Clear all.
+	 *
+	 * @throws RemoteException
+	 */
+	private void clearAll() throws RemoteException
+	{
+		cardDeck.clearSelectable();
+		cardDeck.clearSelection();
+		selectableCards.clear();
+	}
+	
 	/* (non-Javadoc)
 	 * @see application.domain.CardRow#clearSelectableCards()
 	 */
 	@Override
 	public void clearSelectableCards() throws RemoteException {
-		cardDeck.clearSelectable();
-		cardDeck.clearSelection();
-		selectableCards.clear();
+		this.clearAll();
 		this.notifyObservers();
 	}
 	
@@ -171,10 +194,11 @@ public class CardRowImpl implements Serializable, CardRow {
 	 * @see application.domain.CardRow#getSelectableCards()
 	 */
 	@Override
-	public List<Card> getSelectableCards() {
+	public List<Card> getSelectableCards() throws RemoteException {
 		return selectableCards;
 	}
 
+	// Why not make notifyObservers public?
 	/* (non-Javadoc)
 	 * @see application.domain.CardRow#updateView()
 	 */
@@ -182,5 +206,12 @@ public class CardRowImpl implements Serializable, CardRow {
 	public void updateView() throws RemoteException {
 		this.notifyObservers();	
 	}
-	
+
+	/* (non-Javadoc)
+	 * @see application.domain.CardRow#getIndex()
+	 */
+	@Override
+	public int getIndex() throws RemoteException {
+		return index;
+	}
 }

@@ -3,6 +3,8 @@ package application;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
+import application.util.Logger;
+import application.util.Logger.Verbosity;
 import application.views.ManualWindowView;
 import javafx.application.Application;
 import javafx.scene.input.KeyCode;
@@ -30,9 +32,9 @@ public class Main extends Application {
 		          }
 		        });
 			StageManager.getInstance().startSplendor(primaryStage);
-			StageManager.getInstance().showGameScreen();
+			//StageManager.getInstance().showGameScreen();
 			
-			primaryStage.setMaximized(true);
+			//primaryStage.setMaximized(true);
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -44,6 +46,9 @@ public class Main extends Application {
 	 * @param args the arguments
 	 */
 	public static void main(String[] args) {
+		
+		Logger.currentVerbosity = Verbosity.DEBUG;
+		
 		// Debug loading-game code below
 		/*
 		try {

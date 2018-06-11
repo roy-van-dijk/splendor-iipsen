@@ -7,6 +7,7 @@ import java.util.List;
 import application.controllers.ReturnTokenController;
 import application.views.ReturnTokensView;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Class ReturnTokens.
  */
@@ -48,9 +49,10 @@ public class ReturnTokens {
 	 *
 	 * @param tokenArray
 	 * @param gemType
-	 * @return null|Token from gem type
+	 * @return Token
+	 * @throws RemoteException
 	 */
-	private Token getTokenFromGemType(List<Token> tokenArray, Gem gemType)
+	private Token getTokenFromGemType(List<Token> tokenArray, Gem gemType) throws RemoteException
 	{
 		for(Token token : tokenArray)
 		{
@@ -60,11 +62,12 @@ public class ReturnTokens {
 	}
 
 	/**
-	 * Removes the token from the tokenlist.
+	 * Removes the token.
 	 *
 	 * @param gemType
+	 * @throws RemoteException
 	 */
-	public void removeToken(Gem gemType) 
+	public void removeToken(Gem gemType) throws RemoteException 
 	{
 		if(tokenListNew.getAll().size() > 10 && tokenListNew.getTokenGemCount().get(gemType) > 0) 
 		{
@@ -76,11 +79,12 @@ public class ReturnTokens {
 	}
 
 	/**
-	 * Adds the token to tokenlist.
+	 * Adds the token.
 	 *
 	 * @param gemType
+	 * @throws RemoteException
 	 */
-	public void addToken(Gem gemType)  
+	public void addToken(Gem gemType) throws RemoteException  
 	{
 		Token token = this.getTokenFromGemType(removedTokens, gemType);
 		if(token != null) 
@@ -93,8 +97,10 @@ public class ReturnTokens {
 	
 	/**
 	 * Notify view.
+	 *
+	 * @throws RemoteException
 	 */
-	public void notifyView() 
+	public void notifyView() throws RemoteException 
 	{
 		view.modelChanged(this);
 	}
@@ -102,22 +108,23 @@ public class ReturnTokens {
 	/**
 	 * More than ten tokens.
 	 *
-	 * @param model
 	 * @param controller
 	 * @throws RemoteException
 	 */
-	public void moreThanTenTokens(ReturnTokens model, ReturnTokenController controller) throws RemoteException
+	public void moreThanTenTokens(ReturnTokenController controller) throws RemoteException
 	{
 		if(tokenListNew.getAll().size() > 10)
 		{
-			ReturnTokensView view = new ReturnTokensView(model, controller);
+			ReturnTokensView view = new ReturnTokensView(this, controller);
 		}
 	}
 	
 	/**
 	 * Validate new tokens.
+	 *
+	 * @throws RemoteException
 	 */
-	public void validateNewTokens()
+	public void validateNewTokens() throws RemoteException
 	{
 		if(tokenListNew.getAll().size() == 10) 
 		{
@@ -125,7 +132,7 @@ public class ReturnTokens {
 		} else {
 			this.allowConfirm = false;
 		}
-		notifyView();
+		this.notifyView();
 	}
 
 	/**
@@ -138,14 +145,13 @@ public class ReturnTokens {
 		if(allowConfirm)
 		{
 			player.returnTokensToField(removedTokens, playingField);
-
 		}
 	}
 
 	/**
 	 * Gets the token list new.
 	 *
-	 * @return the token list new
+	 * @return TokenList
 	 */
 	public TokenList getTokenListNew() 
 	{
@@ -156,9 +162,10 @@ public class ReturnTokens {
 	/**
 	 * Registrate.
 	 *
-	 * @param view the view
+	 * @param view
+	 * @throws RemoteException
 	 */
-	public void registrate(ReturnTokensView view) 
+	public void registrate(ReturnTokensView view) throws RemoteException 
 	{
 		this.view = view;
 		this.view.modelChanged(this);

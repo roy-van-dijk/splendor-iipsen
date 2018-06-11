@@ -29,7 +29,7 @@ public class GameController {
 	/**
 	 * Instantiates a new game controller.
 	 *
-	 * @param game
+	 * @param game the game
 	 */
 	public GameController(Game game) {
 		this.game = game;
@@ -38,21 +38,33 @@ public class GameController {
 	/**
 	 * Reserve card.
 	 *
+	 * @param moveType
 	 * @throws RemoteException
 	 */
-	public void reserveCard() throws RemoteException {
-		game.findSelectableCards();
+	public void reserveCard(MoveType moveType) throws RemoteException {
+		game.findSelectableCards(moveType);
 	}
 	
 	/**
 	 * Purchase card.
 	 *
+	 * @param moveType
 	 * @throws RemoteException
 	 */
-	public void purchaseCard() throws RemoteException {
-		game.findSelectableCards();
+	public void purchaseCard(MoveType moveType) throws RemoteException {
+		game.findSelectableCards(moveType);
 	}
 	
+	/**
+	 * Take tokens.
+	 *
+	 * @param moveType
+	 * @throws RemoteException
+	 */
+	public void takeTokens(MoveType moveType) throws RemoteException {
+		game.setTokensSelectable(moveType);
+	}
+
 	/**
 	 * Debug next turn.
 	 *
@@ -71,61 +83,59 @@ public class GameController {
 		game.getEndTurn().endTurn();
 	}
 	
+	
 	/**
-	 * Find selectable tokens.
-	 *
-	 * @throws RemoteException
-	 */
-	public void findSelectableTokens() throws RemoteException {
-		game.getPlayingField().setTokensSelectable();
-	}
-
-	/**
-	 * Leave game.
+	 * Leave game show an Confimartion Dialoag and bring te player to the mainscreen
 	 */
 	public void leaveGame() {
 		ConfirmDialog dialog = new ConfirmDialog(AlertType.CONFIRMATION);
 		dialog.setTitle("Confirmation Dialog");
 		dialog.setHeaderText("You are leaving the game");
-		dialog.setContentText("Are you ok with this?");
+		dialog.setContentText("Are you sure you wish to continue?");
 		
 		Optional<ButtonType> results = dialog.showAndWait();
 		if (results.get() == ButtonType.OK){
 			try {
 				game.saveGame();
+				// TODO: Make leave game method
 			} catch (RemoteException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			StageManager.getInstance().showMainMenu();		
-			new PopUpWindowView("Het spel is beëindigd door een van de spelers.", "Het spel is gestopt");
+			new PopUpWindowView("Het spel is beï¿½indigd door een van de spelers.", "Het spel is gestopt");
 		}
-	}
-
-	/**
-	 * Card clicked from field.
-	 *
-	 * @param cardRow
-	 * @param card
-	 * @throws RemoteException
-	 */
-	public void cardClickedFromField(CardRow cardRow, Card card) throws RemoteException {
-		cardRow.addCardToTemp(cardRow, card, game.getPlayingField().getTempHand());
-		if(game.getPlayingField().getTempHand().getMoveType() == MoveType.RESERVE_CARD) {
-			game.getPlayingField().setDeckDeselected();
-		}
-		game.updatePlayingFieldAndPlayerView();
 	}
 	
 	/**
-	 * Card clicked from reserve.
+	 * Reserve card from deck.
 	 *
-	 * @param card
+	 * @param cardRowIdx 
 	 * @throws RemoteException
 	 */
-	public void cardClickedFromReserve(Card card) throws RemoteException {
-		game.addCardToTempFromReserve(card);
-		game.updatePlayingFieldAndPlayerView();
+	public void reserveCardFromDeck(int cardRowIdx) throws RemoteException {
+		game.reserveCardFromDeck(cardRowIdx);
+	}
+
+	/**
+	 * On field card clicked.
+	 *
+	 * @param cardRowIdx
+	 * @param cardIdx
+	 * @throws RemoteException
+	 */
+	public void onFieldCardClicked(int cardRowIdx, int cardIdx) throws RemoteException {
+		game.addCardToTempFromField(cardRowIdx, cardIdx);
+	}
+	
+	/**
+	 * On reserved card clicked.
+	 *
+	 * @param cardIdx
+	 * @throws RemoteException
+	 */
+	public void onReservedCardClicked(int cardIdx) throws RemoteException {
+		game.addCardToTempFromReserve(cardIdx);
 	}
 
 	/**
@@ -135,12 +145,11 @@ public class GameController {
 	 * @throws RemoteException
 	 */
 	public void onFieldTokenClicked(Gem gemType) throws RemoteException {	
-		game.getPlayingField().addTokenToTemp(gemType);
-		
+		game.addTokenToTemp(gemType);
 	}
 	
 	/**
-	 * Gets the temphand.
+	 * Gets the temp hand.
 	 *
 	 * @return TempHand
 	 * @throws RemoteException
@@ -148,37 +157,17 @@ public class GameController {
 	public TempHand getTempHand() throws RemoteException {
 		return game.getPlayingField().getTempHand();
 	}
-
-	/**
-	 * Reserve card from deck.
-	 *
-	 * @param cardRow 
-	 * @throws RemoteException
-	 */
-	public void reserveCardFromDeck(CardRow cardRow) throws RemoteException {
-		cardRow.addCardToTemp(cardRow, cardRow.getCardDeck().top(), this.getTempHand());
-		cardRow.getCardDeck().top().setReservedFromDeck(true);
-		game.getPlayingField().setDeckSelected(cardRow);
-		game.updatePlayingFieldAndPlayerView();	
-	}
-
-	/**
-	 * Clear deck selection.
-	 *
-	 * @throws RemoteException
-	 */
-	public void clearDeckSelection() throws RemoteException {
+/*	public void clearDeckSelection() throws RemoteException {
 		game.getPlayingField().setDeckDeselected();
 		game.updatePlayingFieldAndPlayerView();			
-	}
+	}*/
 
 	/**
-	 * Reset turn.
-	 *
-	 * @throws RemoteException
-	 */
-	public void resetTurn() throws RemoteException {
-		this.getTempHand().emptyHand();
+ * Reset turn.
+ *
+ * @throws RemoteException the remote exception
+ */
+public void resetTurn() throws RemoteException {
 		game.cleanUpSelections();		
 	}
 }

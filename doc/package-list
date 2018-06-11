@@ -1,1 +1,6 @@
+application
+application.controllers
 application.domain
+application.services
+application.util
+application.views

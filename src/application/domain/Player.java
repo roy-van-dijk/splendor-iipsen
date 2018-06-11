@@ -88,6 +88,9 @@ public interface Player extends Remote {
 	 * @throws RemoteException
 	 */
 	public String getName() throws RemoteException;
+	
+	public void setName(String name) throws RemoteException;
+
 
 	/**
 	 * Gets all the cards that are in the player's reserve.
@@ -167,7 +170,7 @@ public interface Player extends Remote {
 	 * @param card 
 	 * @throws RemoteException
 	 */
-	public void addReserverveCard(Card card) throws RemoteException;
+	public void addReservedCard(Card card) throws RemoteException;
 
 	/**
 	 * Adds a token to the player's owned tokens.

@@ -1,15 +1,23 @@
 package application.controllers;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.net.BindException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.rmi.server.ExportException;
+import java.rmi.server.UnicastRemoteObject;
+
 import application.StageManager;
 import application.domain.GameImpl;
 import application.domain.Lobby;
 import application.domain.LobbyImpl;
 import application.views.LobbyView;
 
+// TODO: Auto-generated Javadoc
 /**
  * Controls UI flow within the main menu.
  *
@@ -22,23 +30,18 @@ public class MainMenuController {
 	 * then switches the view.
 	 *
 	 * @param hostIP
-	 * @param playerName
+	 * @param playerName 
 	 * @throws RemoteException
 	 * @throws NotBoundException
 	 */
 	public void joinLobby(String hostIP, String playerName) throws RemoteException, NotBoundException {
 		Lobby lobby = connectToLobby(hostIP);
-
-		/*
-		 * System.out.println(lobby.getGame().toString()); lobby.getGame().nextTurn();
-		 */
-
 		System.out.println("Connected to lobby!");
 
 		LobbyController lobbyController = new LobbyController(lobby);
-		lobbyController.connectPlayer(playerName);
 		LobbyView lobbyView = new LobbyView(lobby, lobbyController);
-
+		lobbyController.connectPlayer(lobbyView, playerName);
+		
 		StageManager.getInstance().switchScene(lobbyView.asPane());
 	}
 
@@ -48,16 +51,17 @@ public class MainMenuController {
 	 *
 	 * @param playerName
 	 * @throws RemoteException
+	 * @throws ExportException
 	 */
-	public void hostPreviousGame(String playerName) throws RemoteException {
+	public void hostPreviousGame(String playerName) throws RemoteException, ExportException {
 		GameImpl game = new GameImpl(3); // TODO: load from binary savefile
+		
 		LobbyImpl lobby = createLobby(game);
-
-		lobby.createPlayer(playerName);
-
 		LobbyController lobbyController = new LobbyController(lobby);
 		LobbyView lobbyView = new LobbyView(lobby, lobbyController);
-
+		
+		lobbyController.connectPlayer(lobbyView, playerName);
+		
 		StageManager.getInstance().switchScene(lobbyView.asPane());
 	}
 
@@ -67,8 +71,9 @@ public class MainMenuController {
 	 *
 	 * @param playerName
 	 * @throws RemoteException
+	 * @throws ExportException
 	 */
-	public void hostNewGame(String playerName) throws RemoteException {
+	public void hostNewGame(String playerName) throws RemoteException, ExportException {
 		GameImpl game = new GameImpl(4);
 		/*
 		 * try { new ObjectOutputStream(new ByteArrayOutputStream()).writeObject(game);
@@ -76,11 +81,10 @@ public class MainMenuController {
 		 * block e.printStackTrace(); }
 		 */
 		LobbyImpl lobby = createLobby(game);
-
-		lobby.createPlayer(playerName);
-
 		LobbyController lobbyController = new LobbyController(lobby);
 		LobbyView lobbyView = new LobbyView(lobby, lobbyController);
+		
+		lobbyController.connectPlayer(lobbyView, playerName);
 
 		StageManager.getInstance().switchScene(lobbyView.asPane());
 	}
@@ -90,20 +94,26 @@ public class MainMenuController {
 	 *
 	 * @param game
 	 * @return LobbyImpl
-	 * @throws RemoteException LobbyImpl
+	 * @throws RemoteException
+	 * @throws ExportException
 	 */
-	private LobbyImpl createLobby(GameImpl game) throws RemoteException {
-		LobbyImpl lobby = new LobbyImpl(game);
-		// Lobby lobbySkeleton = (Lobby) UnicastRemoteObject.exportObject(lobby, 0); //
-		// cast to remote object
-		System.out.println("Lobby skeleton created");
-		Registry registry = LocateRegistry.createRegistry(1099); // default port 1099 // run RMI registry on local host
-		System.out.println("RMI Registry starter");
-		registry.rebind("Lobby", lobby); // bind calculator to RMI registry
-		System.out.println("Lobby skeleton bound");
-		System.out.println("Server running...");
 
-		return lobby;
+	private LobbyImpl createLobby(GameImpl game) throws RemoteException, ExportException
+	{
+		System.out.println("Creating server.");
+		
+		LobbyImpl lobby = new LobbyImpl(game);
+		System.out.println("Lobby skeleton created");
+		
+		Registry registry = LocateRegistry.createRegistry(1099);
+		System.out.println("RMI Registry starter");
+		
+		registry.rebind("Lobby", lobby); // bind lobby (auto exported) to RMI registry
+		lobby.setRegistry(registry);
+        System.out.println("Lobby skeleton bound");
+        
+        System.out.println("Server running...");
+        return lobby;
 	}
 
 	/**

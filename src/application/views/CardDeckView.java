@@ -3,6 +3,7 @@ package application.views;
 import java.rmi.RemoteException;
 
 import application.domain.CardDeck;
+import application.util.ImageCache;
 import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -43,7 +44,8 @@ public class CardDeckView extends CardView {
 		rect = new Rectangle(sizeX, sizeY);
 
 		// Add image
-		ImagePattern imagePattern = new ImagePattern(new Image(getImagePath()));
+    	Image image = ImageCache.getInstance().fetchImage(getImagePath(), true);
+        ImagePattern imagePattern = new ImagePattern(image);
 		rect.setFill(imagePattern);
 
 		// Make rounded corners
@@ -64,8 +66,13 @@ public class CardDeckView extends CardView {
 	@Override
 	protected String getImagePath() {
 		String path = "";
-		path = String.format("file:resources/cards/%s/%s.png", deck.getLevel().name().toLowerCase(),
-				deck.getLevel().name().toLowerCase());
+		try {
+			path = String.format("file:resources/cards/%s/%s.png", deck.getLevel().name().toLowerCase(),
+					deck.getLevel().name().toLowerCase());
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return path;
 	}
 }

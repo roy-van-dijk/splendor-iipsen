@@ -9,7 +9,7 @@ import java.rmi.RemoteException;
  *
  * @author Sanchez
  */
-public interface Disableable extends Remote {
+public interface Disableable {
 
 	/**
 	 * Updates the view to accompany the disabled change.
@@ -17,5 +17,5 @@ public interface Disableable extends Remote {
 	 * @param disabled
 	 * @throws RemoteException
 	 */
-	public void setDisabled(boolean disabled) throws RemoteException;
+	public void setDisabled(boolean disabled);
 }

@@ -1,6 +1,7 @@
 package application.views;
 
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -13,6 +14,9 @@ import application.domain.Noble;
 import application.domain.PlayingField;
 import application.domain.PlayingFieldObserver;
 import application.domain.TempHand;
+import application.util.ConfirmDialog;
+import application.util.Util;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -31,7 +35,12 @@ import javafx.scene.text.Font;
  * @author Sanchez
  *
  */
-public class PlayingFieldView implements UIComponent, Disableable, PlayingFieldObserver {
+public class PlayingFieldView extends UnicastRemoteObject implements UIComponent, Disableable, PlayingFieldObserver {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8204038345887970683L;
 
 	public final static int CARDSPACING = 15, TOKENSPACING = 10, TOKENSLABELSPACING = 25, TOKENSCARDSPADDING = 20,
 			FIELDPADDING = 0;
@@ -47,18 +56,20 @@ public class PlayingFieldView implements UIComponent, Disableable, PlayingFieldO
 
 	private VBox exitGamePane;
 
+	// What are these lists used for?
 	private List<CardRowView> cardRowViews;
 	private List<NobleView> nobleViews;
 	private List<TokenView> tokenViews;
 
 	private GameController gameController;
 
+
 	/**
-	 * Creates a new playing field view.
+	 * Instantiates a new playing field view.
 	 *
-	 * @param playingField the playing field
-	 * @param gameController the game controller
-	 * @throws RemoteException the remote exception
+	 * @param playingField
+	 * @param gameController
+	 * @throws RemoteException
 	 */
 	public PlayingFieldView(PlayingField playingField, GameController gameController) throws RemoteException {
 		this.gameController = gameController;
@@ -67,26 +78,38 @@ public class PlayingFieldView implements UIComponent, Disableable, PlayingFieldO
 		this.nobleViews = new ArrayList<>();
 		this.tokenViews = new ArrayList<>();
 		this.buildUI();
-
+		
+		System.out.println("[DEBUG] PlayingFieldView()::registering as observer");
 		playingField.addObserver(this);
 	}
-
+	
+	
 	/**
 	 * Update the playingFieldView.
 	 *
-	 * @param playingField the playing field
-	 * @return void
-	 * @throws RemoteException the remote exception
+	 * @param playingField
+	 * @throws RemoteException
 	 */
-	public void modelChanged(PlayingField playingField) throws RemoteException {
-		if (cardsPane.getChildren().isEmpty()) {
-			this.initializeCardRows(playingField.getCardRows(), playingField.getTempHand());
-		}
-		this.updateFieldTokens(playingField.getTokenGemCount(), playingField.getSelectableTokens(),
-				playingField.getTempHand());
-		this.updateNobles(playingField.getNobles());
+	public void modelChanged(PlayingField playingField) throws RemoteException
+	{
+		Platform.runLater(() ->
+		{
+			try {
+				if(cardsPane.getChildren().isEmpty())
+				{
+					System.out.println("[DEBUG] PlayingFieldView::modelChanged()::Building card rows");
+					this.initializeCardRows(playingField.getCardRows(), playingField.getTempHand());
+				}
+				this.updateFieldTokens(playingField.getTokenGemCount(), playingField.getSelectableTokens(), playingField.getTempHand());
+				this.updateNobles(playingField.getNobles());
+			} catch (RemoteException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		});
 	}
 
+	
 	/**
 	 * Builds the UI.
 	 */
@@ -107,7 +130,7 @@ public class PlayingFieldView implements UIComponent, Disableable, PlayingFieldO
 	/**
 	 * Builds the cards and nobles display.
 	 *
-	 * @return the v box
+	 * @return VBox
 	 */
 	private VBox buildCardsAndNoblesDisplay() {
 		noblesPane = new HBox(CARDSPACING);
@@ -121,18 +144,17 @@ public class PlayingFieldView implements UIComponent, Disableable, PlayingFieldO
 		HBox.setHgrow(rowsPane, Priority.ALWAYS);
 		return rowsPane;
 	}
-
+	
 	/**
 	 * Initialize card rows.
 	 *
-	 * @param cardRows the card rows
-	 * @param tempHand the temp hand
+	 * @param cardRows
+	 * @param tempHand
+	 * @throws RemoteException
 	 */
-	private void initializeCardRows(List<CardRow> cardRows, TempHand tempHand) {
+	private void initializeCardRows(List<CardRow> cardRows, TempHand tempHand) throws RemoteException {
 		System.out.println("Initializing cardrows");
-
-		Collections.reverse(cardRows);
-
+		
 		for (CardRow cardRow : cardRows) {
 			CardRowView cardRowView = new CardRowView(cardRow, gameController, tempHand);
 			cardRowViews.add(cardRowView);
@@ -143,7 +165,7 @@ public class PlayingFieldView implements UIComponent, Disableable, PlayingFieldO
 	/**
 	 * Update nobles.
 	 *
-	 * @param nobles the nobles
+	 * @param nobles
 	 */
 	private void updateNobles(List<Noble> nobles) {
 		noblesPane.getChildren().clear();
@@ -155,14 +177,17 @@ public class PlayingFieldView implements UIComponent, Disableable, PlayingFieldO
 		}
 	}
 
+	
+	
 	/**
 	 * Update field tokens.
 	 *
-	 * @param gemsCount the gems count
-	 * @param selectableTokens the selectable tokens
-	 * @param tempHand the temp hand
+	 * @param gemsCount
+	 * @param selectableTokens
+	 * @param tempHand
+	 * @throws RemoteException
 	 */
-	private void updateFieldTokens(Map<Gem, Integer> gemsCount, List<Gem> selectableTokens, TempHand tempHand) {
+	private void updateFieldTokens(Map<Gem, Integer> gemsCount, List<Gem> selectableTokens, TempHand tempHand) throws RemoteException {
 		tokensPane.getChildren().clear();
 
 		for (Map.Entry<Gem, Integer> entry : gemsCount.entrySet()) {
@@ -172,18 +197,20 @@ public class PlayingFieldView implements UIComponent, Disableable, PlayingFieldO
 		}
 	}
 
+	
 	/**
 	 * Creates the token gem count display.
 	 *
-	 * @param gemType the gem type
-	 * @param count the count
-	 * @param radius the radius
-	 * @param selectableTokens the selectable tokens
-	 * @param tempHand the temp hand
-	 * @return the h box
+	 * @param gemType
+	 * @param count
+	 * @param radius
+	 * @param selectableTokens
+	 * @param tempHand
+	 * @return HBox
+	 * @throws RemoteException
 	 */
 	private HBox createTokenGemCountDisplay(Gem gemType, int count, int radius, List<Gem> selectableTokens,
-			TempHand tempHand) {
+			TempHand tempHand) throws RemoteException {
 		TokenView tokenView = new TokenView(gemType, radius);
 
 		if (gemType != Gem.JOKER) {
@@ -223,7 +250,7 @@ public class PlayingFieldView implements UIComponent, Disableable, PlayingFieldO
 	/**
 	 * Builds the exit game display.
 	 *
-	 * @return the v box
+	 * @return VBox
 	 */
 	private VBox buildExitGameDisplay() {
 		Button exit = new Button("X");
@@ -249,7 +276,7 @@ public class PlayingFieldView implements UIComponent, Disableable, PlayingFieldO
 	 * @see application.views.Disableable#setDisabled(boolean)
 	 */
 	@Override
-	public void setDisabled(boolean disabled) throws RemoteException {
+	public void setDisabled(boolean disabled)  {
 		this.rowsPane.setDisable(disabled);
 		this.tokensPane.setDisable(disabled);
 	}

@@ -1,11 +1,13 @@
 package application.domain;
 
 import java.io.IOException;
+import java.rmi.RemoteException;
 import java.util.Stack;
 
 import application.services.CardsReader;
 import application.services.NoblesReader;
 
+// TODO: Auto-generated Javadoc
 /**
  * A factory for creating Deck objects.
  *
@@ -46,21 +48,25 @@ public class DeckFactory {
 	 *
 	 * @param level
 	 * @return CardDeck
+	 * @throws RemoteException
 	 */
-	public CardDeck createCardDeck(CardLevel level)
+	public CardDeck createCardDeck(CardLevel level) throws RemoteException
 	{
 		Stack<Card> cards = cardsReader.getCards(level);
 		
-		CardDeck deck = new CardDeck(cards, level);
+		CardDeck deck = new CardDeckImpl(cards, level);
 		return deck;
 	}
+	
+
 	
 	/**
 	 * Creates a new Deck object.
 	 *
 	 * @return NobleDeck
+	 * @throws RemoteException the remote exception
 	 */
-	public NobleDeck createNobleDeck()
+	public NobleDeck createNobleDeck() throws RemoteException
 	{
 		Stack<Noble> nobles = noblesReader.getNobles();
 		

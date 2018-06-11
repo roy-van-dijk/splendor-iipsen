@@ -14,58 +14,104 @@ import application.domain.LobbyImpl.LobbyStates;
 public interface Lobby extends Remote {
 	
 	/**
-	 * Adds the observer.
+	 * Leave lobby.
 	 *
 	 * @param o the LobbyObserver
 	 * @throws RemoteException
 	 */
-	public void addObserver(LobbyObserver o) throws RemoteException;
-	
-	/**
-	 * Removes the observer.
-	 *
-	 * @param o the LobbyObserver
-	 * @throws RemoteException
-	 */
-	public void removeObserver(LobbyObserver o) throws RemoteException;
+	public void leaveLobby(LobbyObserver o) throws RemoteException;
 	
 	/**
 	 * Creates the player.
 	 *
-	 * @param playerName 
+	 * @param o the LobbyObservver
+	 * @param playerName
 	 * @throws RemoteException
 	 */
-	public void createPlayer(String playerName) throws RemoteException;
+	public void createPlayer(LobbyObserver o, String playerName) throws RemoteException;
 	
 	/**
 	 * Disconnect player.
 	 *
-	 * @param player
-	 * @throws RemoteException
+	 * @param o the LobbyObserver
+	 * @throws RemoteException the remote exception
 	 */
-	public void disconnectPlayer(Player player) throws RemoteException;
+	public void disconnectPlayer(LobbyObserver o) throws RemoteException;
 	
 	/**
-	 * Gets the assigned players.
+	 * Ready player.
 	 *
-	 * @return the assigned players
+	 * @param o the LobbyObserver
 	 * @throws RemoteException
 	 */
-	public Map<Integer, PlayerSlot> getAssignedPlayers() throws RemoteException;
+	public void readyPlayer(LobbyObserver o) throws RemoteException;
+	
+	/**
+	 * Unassign player.
+	 *
+	 * @param o the LobbyObserver
+	 * @throws RemoteException
+	 */
+	public void unassignPlayer(LobbyObserver o) throws RemoteException;
+	
+	/**
+	 * Select slot.
+	 *
+	 * @param o the LobbyObserver
+	 * @param slot the PlayerSlot
+	 * @throws RemoteException the remote exception
+	 */
+	public void selectSlot(LobbyObserver o, PlayerSlot slot) throws RemoteException;
+	
+	/**
+	 * Checks if is assigned.
+	 *
+	 * @param o the LobbbyObserver
+	 * @return true, if is assigned
+	 * @throws RemoteException
+	 */
+	public boolean isAssigned(LobbyObserver o) throws RemoteException;
+
+	/**
+	 * Gets the assigned player.
+	 *
+	 * @param o the LobbyObserver
+	 * @return Player
+	 * @throws RemoteException
+	 */
+	public Player getAssignedPlayer(LobbyObserver o) throws RemoteException;
+	
+	
+	/**
+	 * Gets the assigned player slots.
+	 *
+	 * @return List<PlayerSlot>
+	 * @throws RemoteException
+	 */
+	public List<PlayerSlot> getAssignedPlayerSlots() throws RemoteException;
+	
+	/**
+	 * Gets the assignable slots.
+	 *
+	 * @return List<Player
+	 * @throws RemoteException the remote exception
+	 */
+	public List<PlayerSlot> getAssignableSlots() throws RemoteException;
 	
 	/**
 	 * Gets the unassigned players.
 	 *
-	 * @return the unassigned players
-	 * @throws RemoteException
+	 * @return List<Player>
+	 * @throws RemoteException the remote exception
 	 */
 	public List<Player> getUnassignedPlayers() throws RemoteException;
+	
 	
 	/**
 	 * Gets the max players.
 	 *
 	 * @return the max players
-	 * @throws RemoteException
+	 * @throws RemoteException the remote exception
 	 */
 	public int getMaxPlayers() throws RemoteException;
 	
@@ -73,7 +119,7 @@ public interface Lobby extends Remote {
 	 * Gets the host IP.
 	 *
 	 * @return the host IP
-	 * @throws RemoteException
+	 * @throws RemoteException the remote exception
 	 */
 	public String getHostIP() throws RemoteException;
 
@@ -81,7 +127,7 @@ public interface Lobby extends Remote {
 	 * Gets the game.
 	 *
 	 * @return the game
-	 * @throws RemoteException
+	 * @throws RemoteException the remote exception
 	 */
 	public Game getGame() throws RemoteException;
 	
@@ -89,7 +135,8 @@ public interface Lobby extends Remote {
 	 * Gets the lobby state.
 	 *
 	 * @return LobbyStates
-	 * @throws RemoteException
+	 * @throws RemoteException the remote exception
 	 */
 	public LobbyStates getLobbyState() throws RemoteException;
+	
 }

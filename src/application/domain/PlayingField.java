@@ -18,7 +18,7 @@ public interface PlayingField extends Remote {
 	 * Gets all card rows that are currently on the field.
 	 *
 	 * @return List<CardRow>
-	 * @throws RemoteException the remote exception
+	 * @throws RemoteException
 	 */
 	public List<CardRow> getCardRows() throws RemoteException;
 
@@ -26,7 +26,7 @@ public interface PlayingField extends Remote {
 	 * Gets all nobles currently on the field.
 	 *
 	 * @return List<Noble>
-	 * @throws RemoteException the remote exception
+	 * @throws RemoteException
 	 */
 	public List<Noble> getNobles() throws RemoteException;
 
@@ -65,22 +65,22 @@ public interface PlayingField extends Remote {
 	 * Gets all selectable (affordable) cards currently on the field.
 	 *
 	 * @return List<Card>
-	 * @throws RemoteException
+	 * @throws RemoteException the remote exception
 	 */
 	public List<Card> getSelectableCardsFromField() throws RemoteException;
 
 	/**
 	 * Adds the passed token to the player's temporary hand.
 	 *
-	 * @param gemType the gem type
-	 * @throws RemoteException the remote exception
+	 * @param gemType
+	 * @throws RemoteException
 	 */
 	public void addTokenToTemp(Gem gemType) throws RemoteException;
 
 	/**
 	 * Adds an observer to the playing field that other classes can listen to.
 	 *
-	 * @param observer
+	 * @param observer the observer
 	 * @throws RemoteException
 	 */
 	public void addObserver(PlayingFieldObserver observer) throws RemoteException;
@@ -93,12 +93,14 @@ public interface PlayingField extends Remote {
 	 */
 	public void addTokens(List<Token> tokens) throws RemoteException;
 
+	
 	/**
-	 * Marks selectable (affordable) tokens.
+	 * Sets the tokens selectable.
 	 *
+	 * @param moveType the new tokens selectable
 	 * @throws RemoteException
 	 */
-	public void setTokensSelectable() throws RemoteException;
+	public void setTokensSelectable(MoveType moveType) throws RemoteException;
 
 	/**
 	 * Switches the current turn to that of the next player.
@@ -110,7 +112,7 @@ public interface PlayingField extends Remote {
 	/**
 	 * Removes the passed noble from the field.
 	 *
-	 * @param noble the noble
+	 * @param noble
 	 * @throws RemoteException
 	 */
 	public void removeNoble(Noble noble) throws RemoteException;
@@ -118,7 +120,7 @@ public interface PlayingField extends Remote {
 	/**
 	 * Removes the passed card from the field.
 	 *
-	 * @param card the card
+	 * @param card
 	 * @throws RemoteException
 	 */
 	public void removeCard(Card card) throws RemoteException;
@@ -126,7 +128,7 @@ public interface PlayingField extends Remote {
 	/**
 	 * Removes the passed tokens from the field.
 	 *
-	 * @param tokens	 
+	 * @param List<tokens>
 	 * @throws RemoteException
 	 */
 	public void removeTokens(List<Token> tokens) throws RemoteException;
@@ -142,7 +144,7 @@ public interface PlayingField extends Remote {
 	/**
 	 * Removes the passed token from the field.
 	 *
-	 * @param token the token
+	 * @param token
 	 * @throws RemoteException
 	 */
 	public void removeToken(Token token) throws RemoteException;
@@ -150,7 +152,7 @@ public interface PlayingField extends Remote {
 	/**
 	 * Marks a deck as selected.
 	 *
-	 * @param cardRow the new deck selected
+	 * @param cardRow
 	 * @throws RemoteException
 	 */
 	public void setDeckSelected(CardRow cardRow) throws RemoteException;

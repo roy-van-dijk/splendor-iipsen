@@ -25,6 +25,12 @@
 	-fx-background-color: #8c7100;
 }
 
+.button:disabled {
+	-fx-background-color: gray;
+	-fx-text-fill:rgb(192,192,192);
+	-fx-cursor: default;
+}
+
 .buttons-view
 {
 	-fx-padding: 10px;
@@ -207,6 +213,14 @@
 .popup-view {
 	-fx-background-image: url("../../resources/misc/splendor.jpg");
 	-fx-background-size: cover;
+}
+
+.lobby-slot {
+	-fx-cursor: hand;
+}
+
+.lobby-slot:hover {
+	-fx-background-color: #dab000;
 }
 
 .ReturnTokensView .button {

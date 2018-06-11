@@ -1,5 +1,7 @@
 package application.views;
 
+import java.rmi.RemoteException;
+
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 
@@ -30,6 +32,7 @@ public abstract class CardView implements UIComponent {
 	 * Returns the path for this card's illustration.
 	 *
 	 * @return String
+	 * @throws RemoteException 
 	 */
 	protected abstract String getImagePath();
 

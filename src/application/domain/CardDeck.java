@@ -1,119 +1,98 @@
 package application.domain;
 
-
-import java.io.Serializable;
+import java.rmi.Remote;
+import java.rmi.RemoteException;
 import java.util.Stack;
 
 /**
- * The Class CardDeck.
+ * The Interface CardDeck.
  *
  * @author Sanchez
  */
-public class CardDeck implements Deck<Card>, Serializable {
-	
-	private Stack<Card> cards;
-	private CardLevel level;
-	private boolean isSelectable;
-	private boolean isSelected;
+public interface CardDeck extends Remote
+{
 	
 	/**
-	 * Instantiates a new card deck.
+	 * Adds the.
 	 *
-	 * @param cards
-	 * @param level
+	 * @param card the card
+	 * @throws RemoteException
 	 */
-	public CardDeck(Stack<Card> cards, CardLevel level)
-	{
-		this.cards = cards;		
-		this.level = level;
-	}
+	public void add(Card card) throws RemoteException;
+	
+	/**
+	 * Pull.
+	 *
+	 * @return the card
+	 * @throws RemoteException
+	 */
+	public Card pull() throws RemoteException;
+	
+	/**
+	 * Top.
+	 *
+	 * @return Card
+	 * @throws RemoteException
+	 */
+	public Card top() throws RemoteException;
+	
+	/**
+	 * Gets the all.
+	 *
+	 * @return Stack<Card>
+	 * @throws RemoteException
+	 */
+	public Stack<Card> getAll() throws RemoteException;
 	
 	/**
 	 * Gets the level.
 	 *
 	 * @return CardLevel
+	 * @throws RemoteException
 	 */
-	public CardLevel getLevel()
-	{
-		return level;
-	}
-	
-	/* (non-Javadoc)
-	 * @see application.domain.Deck#add(java.lang.Object)
-	 */
-	public void add(Card card)
-	{
-		cards.push(card);
-	}
-	
-	/* (non-Javadoc)
-	 * @see application.domain.Deck#top()
-	 */
-	public Card top()
-	{
-		return cards.peek();
-	}
-	
-	/* (non-Javadoc)
-	 * @see application.domain.Deck#pull()
-	 */
-	public Card pull()
-	{
-		return cards.pop();
-	}
-
-	/* (non-Javadoc)
-	 * @see application.domain.Deck#getAll()
-	 */
-	public Stack<Card> getAll() {
-		return cards;
-	}
+	public CardLevel getLevel() throws RemoteException;
 	
 	/**
 	 * Checks if is selectable.
 	 *
 	 * @return true, if is selectable
+	 * @throws RemoteException
 	 */
-	public boolean isSelectable() {
-		return isSelectable;
-	}
+	public boolean isSelectable() throws RemoteException;
 	
 	/**
 	 * Sets the selectable.
+	 *
+	 * @throws RemoteException
 	 */
-	public void setSelectable() {
-		isSelectable = true;
-		isSelected = false;
-	}
+	public void setSelectable() throws RemoteException;
 	
 	/**
 	 * Clear selectable.
+	 *
+	 * @throws RemoteException
 	 */
-	public void clearSelectable() {
-		isSelectable = false;
-	}
+	public void clearSelectable() throws RemoteException;
 	
 	/**
 	 * Checks if is selected.
 	 *
 	 * @return true, if is selected
+	 * @throws RemoteException
 	 */
-	public boolean isSelected() {
-		return isSelected;
-	}
+	public boolean isSelected() throws RemoteException;
 	
 	/**
 	 * Sets the selected.
+	 *
+	 * @throws RemoteException
 	 */
-	public void setSelected() {
-		isSelected = true;
-		isSelectable = false;
-	}
+	public void setSelected() throws RemoteException;
 	
 	/**
 	 * Clear selection.
+	 *
+	 * @throws RemoteException
 	 */
-	public void clearSelection() {
-		isSelected = false;
-	}
+	public void clearSelection() throws RemoteException;
 }

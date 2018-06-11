@@ -5,6 +5,7 @@ import java.util.Map;
 
 import application.domain.Card;
 import application.domain.Gem;
+import application.util.ImageCache;
 import javafx.geometry.HPos;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
@@ -58,22 +59,24 @@ public class FrontCardView extends CardView {
 	 * @throws RemoteException
 	 */
 	private void buildUI() throws RemoteException {
-		rect = new Rectangle(sizeX, sizeY);
+    	rect = new Rectangle(sizeX, sizeY);
+    	
+    	// Add image
+    	Image image = ImageCache.getInstance().fetchImage(getImagePath(), true);
+        ImagePattern imagePattern = new ImagePattern(image);
+        rect.setFill(imagePattern);
+        
 
-		// Add image
-		ImagePattern imagePattern = new ImagePattern(new Image(getImagePath()));
-		rect.setFill(imagePattern);
-
-		// Make rounded corners
-		rect.setArcHeight(10);
-		rect.setArcWidth(10);
-
-		// Add to root node
-
-		root = new StackPane();
-		root.setMaxSize(rect.getWidth(), rect.getHeight());
-
-		root.getChildren().addAll(rect, addCardInformation());
+        // Make rounded corners
+        rect.setArcHeight(10);
+        rect.setArcWidth(10);
+        
+        // Add to root node
+        
+        root = new StackPane();
+        root.setMaxSize(rect.getWidth(), rect.getHeight());
+        
+        root.getChildren().addAll(rect, addCardInformation());        
 	}
 
 	/**

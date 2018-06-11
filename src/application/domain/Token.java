@@ -1,10 +1,11 @@
 package application.domain;
 
 import java.rmi.Remote;
+import java.rmi.RemoteException;
 
 /**
- * Gameplayer token.
- *
+ * Represents a token
+ * 
  * @author Sanchez
  */
 public interface Token extends Remote {
@@ -13,7 +14,8 @@ public interface Token extends Remote {
 	 * Gets the gem type this token is associated with.
 	 *
 	 * @return Gem
+	 * @throws RemoteException
 	 */
-	public Gem getGemType();
+	public Gem getGemType() throws RemoteException;
 
 }

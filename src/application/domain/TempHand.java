@@ -1,175 +1,133 @@
 package application.domain;
 
-import java.io.Serializable;
+import java.rmi.Remote;
 import java.rmi.RemoteException;
-import java.util.ArrayList;
 import java.util.List;
 
-import javafx.scene.Node;
 
-//TODO javadoc Re-check
+// TODO: Auto-generated Javadoc
 /**
- *  
- *
- * @author Kees
+ * The Interface TempHand.
  */
-///Turn is tijdelijk hand
-// TODO: give Turn a remote interface.
-public class TempHand implements Serializable {
-	
-	private Card boughtCard;
-	private Card reservedCard;
-	private TokenList tokenList;
-	private Player player;
-	
-	private MoveType moveType;
-
-	private int selectedTokensCount;
-	private List<Gem> selectedGemTypes;
-	
-	/**
-	 * Instantiates a new temp hand.
-	 */
-	public TempHand() 
-	{
-		this.selectedGemTypes = new ArrayList<>();
-		this.tokenList = new TokenList();
-	}
+public interface TempHand extends Remote {
 	
 	/**
 	 * Update player.
 	 *
 	 * @param player
+	 * @throws RemoteException
 	 */
-	public void updatePlayer(Player player) {
-		this.player = player;
-	}
+	public void updatePlayer(Player player) throws RemoteException;
 	
 	/**
 	 * Select card to buy.
 	 *
 	 * @param card
+	 * @throws RemoteException
 	 */
-	public void selectCardToBuy(Card card) {
-		boughtCard = card;
-	}
+	public void selectCardToBuy(Card card) throws RemoteException;
 	
 	/**
 	 * Select card to reserve.
 	 *
 	 * @param card
+	 * @throws RemoteException
 	 */
-	public void selectCardToReserve(Card card) {
-		reservedCard = card;
-	}
+	public void selectCardToReserve(Card card) throws RemoteException;
 	
 	/**
 	 * Gets the bought card.
 	 *
 	 * @return Card
+	 * @throws RemoteException
 	 */
-	public Card getBoughtCard() {
-		return boughtCard;
-	}
+	public Card getBoughtCard() throws RemoteException;
 	
 	/**
 	 * Gets the reserved card.
 	 *
-	 * @return Card the reserved card
+	 * @return Card
+	 * @throws RemoteException
 	 */
-	public Card getReservedCard() {
-		return reservedCard;
-	}
+	public Card getReservedCard() throws RemoteException;
 	
 	/**
 	 * Sets the token list.
 	 *
-	 * @param tokenList the new token list
+	 * @param tokenList
+	 * @throws RemoteException
 	 */
-	public void setTokenList(TokenList tokenList) {
-		this.tokenList = tokenList;
-	}
+	public void setTokenList(TokenList tokenList) throws RemoteException;
 	
 	/**
 	 * Gets the token list.
 	 *
-	 * @return tokenlist
+	 * @return TokenList
+	 * @throws RemoteException
 	 */
-	public TokenList getTokenList() {
-		return tokenList;
-	}
+	public TokenList getTokenList() throws RemoteException;
 	
 	/**
-	 * Adds the token to tokenlist.
+	 * Adds the token.
 	 *
 	 * @param token
+	 * @throws RemoteException
 	 */
-	public void addToken(Token token) {
-		selectedTokensCount++;
-		tokenList.add(token);
-		selectedGemTypes.add(token.getGemType());
-	}
+	public void addToken(Token token) throws RemoteException;
 	
 	/**
 	 * Gets the selected tokens count.
 	 *
 	 * @return the selected tokens count
+	 * @throws RemoteException
 	 */
-	public int getSelectedTokensCount() {
-		return selectedTokensCount;
-	}
+	public int getSelectedTokensCount() throws RemoteException;
 	
 	/**
 	 * Gets the selected gem types.
 	 *
 	 * @return List<Gem>
+	 * @throws RemoteException
 	 */
-	public List<Gem> getSelectedGemTypes() {
-		return selectedGemTypes;
-	}
+	public List<Gem> getSelectedGemTypes() throws RemoteException;
+	
 	
 	/**
 	 * Clear the hand of the current player.
 	 *
 	 * @throws RemoteException
 	 */
-	public void emptyHand() throws RemoteException 
-	{
-		selectedGemTypes.clear();
-		tokenList.getAll().clear();
-		reservedCard = null;
-		boughtCard = null;
-		selectedTokensCount = 0;
-		//System.out.printf("%s has emptied his hand \n", player.getName());
-	}
+	public void emptyHand() throws RemoteException;
 
+	/**
+	 * Checks if is empty.
+	 *
+	 * @return true, if is empty
+	 * @throws RemoteException
+	 */
+	public boolean isEmpty() throws RemoteException;
+	
 	/**
 	 * Gets the move type.
 	 *
 	 * @return MoveType
+	 * @throws RemoteException
 	 */
-	public MoveType getMoveType() 
-	{
-		return moveType;
-	}
+	public MoveType getMoveType() throws RemoteException;
 
 	/**
 	 * Sets the move type.
 	 *
-	 * @param moveType the new move type
+	 * @param moveType
+	 * @throws RemoteException
 	 */
-	public void setMoveType(MoveType moveType) 
-	{
-		this.moveType = moveType;
-	}
+	public void setMoveType(MoveType moveType) throws RemoteException;
 	
 	/**
 	 * Gets the player.
 	 *
 	 * @return Player
+	 * @throws RemoteException
 	 */
-	public Player getPlayer() {
-		return player;
-	}
-	
+	public Player getPlayer() throws RemoteException;
 }

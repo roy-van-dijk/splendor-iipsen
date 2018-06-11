@@ -3,6 +3,7 @@ package application.views;
 import java.rmi.RemoteException;
 
 import application.domain.Card;
+import application.util.ImageCache;
 import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.ImagePattern;
@@ -21,7 +22,7 @@ public class RearCardView extends CardView {
 	/**
 	 * Creates a new rear card view.
 	 *
-	 * @param card
+	 * @param card 
 	 * @param sizeX Horizontal
 	 * @param sizeY Vertical
 	 */
@@ -31,23 +32,25 @@ public class RearCardView extends CardView {
 
 		this.buildUI();
 	}
-
+	
 	/**
 	 * Builds the UI.
 	 */
-	private void buildUI() {
-		rect = new Rectangle(sizeX, sizeY);
-
-		// Add image
-		ImagePattern imagePattern = new ImagePattern(new Image(getImagePath()));
-		rect.setFill(imagePattern);
-
-		// Make rounded corners
-		rect.setArcHeight(10);
-		rect.setArcWidth(10);
-
-		// Add to root node
-		root = new StackPane(rect);
+	private void buildUI()
+	{
+    	rect = new Rectangle(sizeX, sizeY);
+    	
+    	// Add image
+    	Image image = ImageCache.getInstance().fetchImage(getImagePath(), true);
+        ImagePattern imagePattern = new ImagePattern(image);
+        rect.setFill(imagePattern);
+        
+        // Make rounded corners
+        rect.setArcHeight(10);
+        rect.setArcWidth(10);
+        
+        // Add to root node
+        root = new StackPane(rect);
 	}
 
 	/* (non-Javadoc)

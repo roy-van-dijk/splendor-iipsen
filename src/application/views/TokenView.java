@@ -1,8 +1,12 @@
 package application.views;
 
+import java.rmi.RemoteException;
+
 import application.domain.ColorBlindModes;
 import application.domain.Gem;
 import application.domain.Token;
+import application.util.ImageCache;
+
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
@@ -43,8 +47,9 @@ public class TokenView implements UIComponent, ColorChangeable {
 	 *
 	 * @param token
 	 * @param radius
+	 * @throws RemoteException 
 	 */
-	public TokenView(Token token, double radius) {
+	public TokenView(Token token, double radius) throws RemoteException {
 		this(token.getGemType(), radius);
 	}
 
@@ -54,11 +59,10 @@ public class TokenView implements UIComponent, ColorChangeable {
 	private void buildUI() {
 		circle = new Circle(radius);
 		String imagePath = String.format("file:resources/tokens/token_%s.png", getTokenImageFileName());
-		Image image = new Image(imagePath);
-		// Image image = ImageResources.getImage(imagePath);
-		ImagePattern imagePattern = new ImagePattern(image);
-		circle.setFill(imagePattern);
-
+		Image image = ImageCache.getInstance().fetchImage(imagePath, true);
+        ImagePattern imagePattern = new ImagePattern(image);
+        circle.setFill(imagePattern);
+       
 		root = new StackPane(circle);
 	}
 

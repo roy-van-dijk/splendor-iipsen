@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -53,15 +54,16 @@ public class PlayingFieldImpl extends UnicastRemoteObject implements PlayingFiel
 		this.createNobles(noblesAmount(playerCount));
 		this.createCardRows();
 		
-		this.tempHand = new TempHand();
+		this.tempHand = new TempHandImpl();
 	}
-
+	
 	/**
 	 * Creates the tokens.
 	 *
 	 * @param baseAmount
+	 * @throws RemoteException
 	 */
-	private void createTokens(int baseAmount)
+	private void createTokens(int baseAmount) throws RemoteException
 	{
 		for(Gem gem : Gem.values())
 		{
@@ -83,8 +85,9 @@ public class PlayingFieldImpl extends UnicastRemoteObject implements PlayingFiel
 	 * Creates the nobles.
 	 *
 	 * @param amount
+	 * @throws RemoteException
 	 */
-	private void createNobles(int amount)
+	private void createNobles(int amount) throws RemoteException
 	{
 		NobleDeck deck = DeckFactory.getInstance().createNobleDeck();
 		Collections.shuffle(deck.getAll());
@@ -97,15 +100,23 @@ public class PlayingFieldImpl extends UnicastRemoteObject implements PlayingFiel
 	
 	/**
 	 * Creates the card rows.
+	 *
+	 * @throws RemoteException
 	 */
-	private void createCardRows()
+	private void createCardRows() throws RemoteException
 	{
-		// Create 3 card rows (including decks)
-		for(CardLevel level : CardLevel.values())
+		// Create 3 card rows (including decks), starting from level 3 to level 1.
+		
+		List<CardLevel> cardLevels = Arrays.asList(CardLevel.values());
+		Collections.reverse(cardLevels);
+		
+		for(int i = 0; i < cardLevels.size(); i++)
 		{
+			CardLevel level = cardLevels.get(i);
 			CardDeck deck = DeckFactory.getInstance().createCardDeck(level);
 			Collections.shuffle(deck.getAll());
-			cardRows.add(new CardRowImpl(deck));
+			
+			cardRows.add(new CardRowImpl(deck, i));
 		}
 	}
 	
@@ -151,21 +162,21 @@ public class PlayingFieldImpl extends UnicastRemoteObject implements PlayingFiel
 	/* (non-Javadoc)
 	 * @see application.domain.PlayingField#getCardRows()
 	 */
-	public List<CardRow> getCardRows() {
+	public List<CardRow> getCardRows() throws RemoteException {
 		return cardRows;
 	}
 
 	/* (non-Javadoc)
 	 * @see application.domain.PlayingField#getNobles()
 	 */
-	public List<Noble> getNobles() {
+	public List<Noble> getNobles() throws RemoteException {
 		return nobles;
 	}
 	
 	/* (non-Javadoc)
 	 * @see application.domain.PlayingField#getTokenGemCount()
 	 */
-	public LinkedHashMap<Gem, Integer> getTokenGemCount()
+	public LinkedHashMap<Gem, Integer> getTokenGemCount() throws RemoteException
 	{
 		return tokenList.getTokenGemCount();
 	}
@@ -180,13 +191,13 @@ public class PlayingFieldImpl extends UnicastRemoteObject implements PlayingFiel
 	}
 	
 	/* (non-Javadoc)
-	 * @see application.domain.PlayingField#setTokensSelectable()
+	 * @see application.domain.PlayingField#setTokensSelectable(application.domain.MoveType)
 	 */
-	public void setTokensSelectable() throws RemoteException
+	public void setTokensSelectable(MoveType moveType) throws RemoteException
 	{
 		selectableTokens.clear();
 		
-		MoveType moveType = tempHand.getMoveType();
+		tempHand.setMoveType(moveType);
 		
 		LinkedHashMap<Gem, Integer> gemsCount = tokenList.getTokenGemCount();
 		for(Map.Entry<Gem, Integer> gemCount : gemsCount.entrySet())
@@ -207,21 +218,21 @@ public class PlayingFieldImpl extends UnicastRemoteObject implements PlayingFiel
 	/* (non-Javadoc)
 	 * @see application.domain.PlayingField#getSelectableTokens()
 	 */
-	public List<Gem> getSelectableTokens() {
+	public List<Gem> getSelectableTokens() throws RemoteException {
 		return selectableTokens;
 	}
 	
 	/* (non-Javadoc)
 	 * @see application.domain.PlayingField#getTokenList()
 	 */
-	public TokenList getTokenList() {
+	public TokenList getTokenList() throws RemoteException {
 		return tokenList;
 	}
 
 	/* (non-Javadoc)
 	 * @see application.domain.PlayingField#getTempHand()
 	 */
-	public TempHand getTempHand() {
+	public TempHand getTempHand() throws RemoteException {
 		return tempHand;
 	}
 
@@ -240,9 +251,9 @@ public class PlayingFieldImpl extends UnicastRemoteObject implements PlayingFiel
 	/**
 	 * Notify observers.
 	 *
-	 * @throws RemoteException
+	 * @throws RemoteException the remote exception
 	 */
-	private void notifyObservers() throws RemoteException
+	private synchronized void notifyObservers() throws RemoteException
 	{
 		for(PlayingFieldObserver o : observers)
 		{
@@ -254,7 +265,7 @@ public class PlayingFieldImpl extends UnicastRemoteObject implements PlayingFiel
 	 * @see application.domain.PlayingField#addObserver(application.domain.PlayingFieldObserver)
 	 */
 	@Override
-	public void addObserver(PlayingFieldObserver observer) throws RemoteException {
+	public synchronized void addObserver(PlayingFieldObserver observer) throws RemoteException {
 		this.observers.add(observer);
 		this.notifyObservers();
 	}
@@ -271,11 +282,11 @@ public class PlayingFieldImpl extends UnicastRemoteObject implements PlayingFiel
 		this.notifyObservers();
 	}
 
-
+	
 	/* (non-Javadoc)
 	 * @see application.domain.PlayingField#removeToken(application.domain.Token)
 	 */
-	public void removeToken(Token token) {
+	public void removeToken(Token token) throws RemoteException {
 		tokenList.remove(token);
 	}
 

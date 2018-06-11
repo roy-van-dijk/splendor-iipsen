@@ -22,7 +22,7 @@ public interface CardRow extends Remote {
 	/**
 	 * Adds an observer to the card row that other classes can listen to.
 	 *
-	 * @param observer
+	 * @param observer the observer
 	 * @throws RemoteException
 	 */
 	public void addObserver(CardRowObserver observer) throws RemoteException;
@@ -47,23 +47,14 @@ public interface CardRow extends Remote {
 	 * Gets all the cards in this card row that the current player can afford.
 	 *
 	 * @return List<Card>
-	 */
-	public List<Card> getSelectableCards();
-
-	/**
-	 * Adds the passed card to the player's temporary hand.
-	 *
-	 * @param cardRow
-	 * @param card
-	 * @param tempHand
 	 * @throws RemoteException
 	 */
-	public void addCardToTemp(CardRow cardRow, Card card, TempHand tempHand) throws RemoteException;
+	public List<Card> getSelectableCards() throws RemoteException;
 
 	/**
 	 * Notifies all observers of this card row of any changes.
 	 *
-	 * @throws RemoteException
+	 * @throws RemoteException the remote exception
 	 */
 	public void updateView() throws RemoteException;
 
@@ -82,5 +73,13 @@ public interface CardRow extends Remote {
 	 * @throws RemoteException
 	 */
 	public void findSelectableCards(MoveType moveType, Player player) throws RemoteException;
+	
+	/**
+	 * Gets the index.
+	 *
+	 * @return the index
+	 * @throws RemoteException the remote exception
+	 */
+	public int getIndex() throws RemoteException;
 
 }

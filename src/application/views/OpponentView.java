@@ -1,6 +1,7 @@
 package application.views;
 
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
 import java.util.Map;
 
@@ -8,6 +9,7 @@ import application.domain.Card;
 import application.domain.Gem;
 import application.domain.Player;
 import application.domain.PlayerObserver;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -19,13 +21,20 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
+// TODO: Auto-generated Javadoc
 /**
  * View with opponent information seen on the left side of the game view.
  *
  * @author Sanchez
  */
-public class OpponentView implements UIComponent, PlayerObserver {
-
+public class OpponentView extends UnicastRemoteObject implements UIComponent, PlayerObserver {
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1628350266144323015L;
+	
+	
 	private final static double CARDS_RESIZE_FACTOR = 0.55;
 	private final static double TOKENS_RESIZE_FACTOR = 0.55;
 
@@ -40,8 +49,8 @@ public class OpponentView implements UIComponent, PlayerObserver {
 	/**
 	 * Creates a new opponent view.
 	 *
-	 * @param opponent
-	 * @throws RemoteException
+	 * @param opponent the opponent
+	 * @throws RemoteException the remote exception
 	 */
 	public OpponentView(Player opponent) throws RemoteException {
 		this.buildUI();
@@ -70,33 +79,42 @@ public class OpponentView implements UIComponent, PlayerObserver {
 	 * @see application.domain.PlayerObserver#modelChanged(application.domain.Player)
 	 */
 	public void modelChanged(Player opponent) throws RemoteException {
-		lblOpponentName.setText(opponent.getName());
-		lblOpponentPrestige.setText(String.valueOf(opponent.getPrestige()));
-
-		this.updateOpponentTokens(opponent.getTokensGemCount());
-		this.updateOpponentsReservedCards(opponent.getReservedCards());
+		
+		Platform.runLater(() ->
+		{
+			try {
+				lblOpponentName.setText(opponent.getName());
+				lblOpponentPrestige.setText(String.valueOf(opponent.getPrestige()));
+				
+				this.updateOpponentTokens(opponent.getTokensGemCount());
+				this.updateOpponentsReservedCards(opponent.getReservedCards());
+			} catch (RemoteException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		});
 	}
 
 	/**
 	 * Update opponents reserved cards.
 	 *
-	 * @param opponentReservedCards
+	 * @param opponentReservedCards the opponent reserved cards
 	 */
 	private void updateOpponentsReservedCards(List<Card> opponentReservedCards) {
 		reservedCardsFrame.getChildren().clear();
 		for (Card reservedCard : opponentReservedCards) {
-			CardView card;
+			CardView cardView;
 			try {
 				if (reservedCard.isReservedFromDeck()) {
-					card = new RearCardView(reservedCard, GameView.cardSizeX * CARDS_RESIZE_FACTOR,
+					cardView = new RearCardView(reservedCard, GameView.cardSizeX * CARDS_RESIZE_FACTOR,
 							GameView.cardSizeY * CARDS_RESIZE_FACTOR);
 				} else {
-					card = new FrontCardView(reservedCard, GameView.cardSizeX * CARDS_RESIZE_FACTOR,
+					cardView = new FrontCardView(reservedCard, GameView.cardSizeX * CARDS_RESIZE_FACTOR,
 							GameView.cardSizeY * CARDS_RESIZE_FACTOR);
 				}
-				card.asPane().getStyleClass().addAll("opponent");
+				cardView.asPane().getStyleClass().addAll("opponent");
 
-				StackPane paneCard = new StackPane(card.asPane());
+				StackPane paneCard = new StackPane(cardView.asPane());
 				paneCard.setAlignment(Pos.CENTER);
 				HBox.setHgrow(paneCard, Priority.ALWAYS);
 

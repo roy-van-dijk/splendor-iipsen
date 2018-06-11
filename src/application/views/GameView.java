@@ -1,6 +1,7 @@
 package application.views;
 
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -13,6 +14,10 @@ import application.domain.GameObserver;
 import application.domain.MoveType;
 import application.domain.Player;
 import application.util.AlertDialog;
+import application.util.Logger;
+import application.util.Logger.Verbosity;
+import javafx.application.Platform;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -27,7 +32,13 @@ import javafx.scene.layout.VBox;
  * @author Sanchez
  *
  */
-public class GameView implements UIComponent, Disableable, GameObserver  {
+public class GameView extends UnicastRemoteObject implements UIComponent, Disableable, GameObserver  {
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 506196798346655004L;
+	
 	
 	public final static int cardSizeX = 130, cardSizeY = 180; 
 	public final static int tokenSizeRadius = 45;
@@ -54,42 +65,58 @@ public class GameView implements UIComponent, Disableable, GameObserver  {
 	private Pane buttons;
 	private Pane opponents;
 	
-	private PlayingFieldView playingField;
-	private PlayerView player;
-	
-	/**
-	 * Creates a new game view.
-	 *
-	 * @param game
-	 * @param gameController
-	 */
-	public GameView(Game game, GameController gameController) {
+	private PlayingFieldView playingFieldView;
+	private PlayerView playerView;
+
+	private Player player;
+
+/**
+ * Creates a new game view.
+ *
+ * @param game
+ * @param gameController
+ * @param player
+ * @throws RemoteException
+ */
+	public GameView(Game game, GameController gameController, Player player) throws RemoteException {
 		this.game = game;
 		this.gameController = gameController;
+		this.player = player;
 		
 		colorBlindViews = new ArrayList<>();
 		
+		Logger.log("GameView::Building GameView UI for local player: " + player.getName(), Verbosity.DEBUG);
 		this.buildUI();
 		
-		try {
-			game.addObserver(this);
-		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		game.addObserver(this, player);
 	}
 	
 	/* (non-Javadoc)
 	 * @see application.domain.GameObserver#modelChanged(application.domain.Game)
 	 */
-	//TODO	MAKE THIs??
-	public void modelChanged(Game game)
+	public void modelChanged(Game game) throws RemoteException
 	{
-		
+		Platform.runLater(() ->
+		{
+			try {
+				Logger.log("GameView::modelChanged()::Updating UI for local player: " + player.getName(), Verbosity.DEBUG);
+				boolean disabled = game.isDisabled(this);
+				Logger.log("GameView::modelChanged()::Is local player disabled? : " + disabled, Verbosity.DEBUG);
+				this.setDisabled(disabled);
+				if(!disabled)
+				{
+					btnEndTurn.setDisable(game.getPlayingField().getTempHand().isEmpty());
+				}
+				
+			} catch (RemoteException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		});
 	}
 	
 	/**
-	 * Change colour blind mode.
+	 * Change color blind mode.
 	 *
 	 * @param mode
 	 */
@@ -116,31 +143,36 @@ public class GameView implements UIComponent, Disableable, GameObserver  {
 		root = new BorderPane();
 		root.getStyleClass().add("game-view");
 		
-		//HBox topLayout = new HBox(10);
 		try {
-			playingField = buildPlayingField();
+			System.out.println("[DEBUG] GameView::Building playing field");
+			playingFieldView = buildPlayingField();
+			
+			System.out.println("[DEBUG] GameView::Building move buttons");
 			buttons = buildButtons();
+			
+			System.out.println("[DEBUG] GameView::Building opponents");
 			opponents = buildOpponents();
-			player = buildPlayer();
+			
+			System.out.println("[DEBUG] GameView::Building player");
+			playerView = buildPlayer();
 		} catch (RemoteException e) {
 			new AlertDialog(AlertType.ERROR, "A network error has occured while setting up one of the views.").show();
 			e.printStackTrace();
 		}
 		
-		VBox center = new VBox(playingField.asPane(), buttons);
-		VBox.setVgrow(playingField.asPane(), Priority.ALWAYS);
+		VBox center = new VBox(playingFieldView.asPane(), buttons);
+		VBox.setVgrow(playingFieldView.asPane(), Priority.ALWAYS);
 		
-		//root.setTop(topLayout);
 		root.setCenter(center);
 		root.setLeft(opponents);
-		root.setBottom(player.asPane());
+		root.setBottom(playerView.asPane());
 	}
 	
 	/**
 	 * Builds the playing field view (section with all the cards, nobles, tokens, etc.)
 	 *
 	 * @return PlayingFieldView
-	 * @throws RemoteException 
+	 * @throws RemoteException
 	 */
 	private PlayingFieldView buildPlayingField() throws RemoteException
 	{
@@ -165,8 +197,7 @@ public class GameView implements UIComponent, Disableable, GameObserver  {
 		btnReserveCard.getStyleClass().add("move-button");
 		btnReserveCard.setOnAction(e -> {
 			try {
-				game.getPlayingField().getTempHand().setMoveType(MoveType.RESERVE_CARD);
-				gameController.reserveCard();
+				gameController.reserveCard(MoveType.RESERVE_CARD);
 			} catch (RemoteException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -178,8 +209,7 @@ public class GameView implements UIComponent, Disableable, GameObserver  {
 		btnPurchaseCard.setOnAction(e -> {
 			// POC -> belongs in GameController
 			try {
-				game.getPlayingField().getTempHand().setMoveType(MoveType.PURCHASE_CARD);
-				gameController.purchaseCard();
+				gameController.purchaseCard(MoveType.PURCHASE_CARD);
 			} catch (RemoteException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -190,9 +220,7 @@ public class GameView implements UIComponent, Disableable, GameObserver  {
 		btnTakeTwoTokens.getStyleClass().add("move-button");
 		btnTakeTwoTokens.setOnAction(e ->{
 			try {
-				
-				game.getPlayingField().getTempHand().setMoveType(MoveType.TAKE_TWO_TOKENS);
-				gameController.findSelectableTokens();
+				gameController.takeTokens(MoveType.TAKE_TWO_TOKENS);
 			} catch (RemoteException e1) {
 				e1.printStackTrace();
 				new AlertDialog(AlertType.ERROR, "Dit hoor je niet te zien").show();
@@ -203,8 +231,7 @@ public class GameView implements UIComponent, Disableable, GameObserver  {
 		btnTakeThreeTokens.getStyleClass().add("move-button");		
 		btnTakeThreeTokens.setOnAction(e ->{
 			try {
-				game.getPlayingField().getTempHand().setMoveType(MoveType.TAKE_THREE_TOKENS);
-				gameController.findSelectableTokens();
+				gameController.takeTokens(MoveType.TAKE_THREE_TOKENS);
 			} catch (RemoteException e1) {
 				e1.printStackTrace();
 				new AlertDialog(AlertType.ERROR, "Dit hoor je niet te zien").show();
@@ -245,7 +272,7 @@ public class GameView implements UIComponent, Disableable, GameObserver  {
 	 * Build the box with the player information of the opponents.
 	 *
 	 * @return Pane
-	 * @throws RemoteException
+	 * @throws RemoteException the remote exception
 	 */
 	private Pane buildOpponents() throws RemoteException
 	{
@@ -258,8 +285,8 @@ public class GameView implements UIComponent, Disableable, GameObserver  {
 		List<Player> players = game.getPlayers();
 		for(Player player : players)
 		{
-			if(player.equals(players.get(0))) continue; // For now we'll assume that the first player in the list is 'our' player
-			
+			if(player.equals(this.player)) continue;
+			System.out.println("[DEBUG] GameView::buildOpponents():: Building opponent player: " + player.getName());
 			Pane opponentView = new OpponentView(player).asPane();
 			opponentsRows.getChildren().add(opponentView);
 		}
@@ -271,11 +298,11 @@ public class GameView implements UIComponent, Disableable, GameObserver  {
 	 * Builds the player view. This is the view with the player's own information
 	 *
 	 * @return PlayerView
-	 * @throws RemoteException
+	 * @throws RemoteException the remote exception
 	 */
 	private PlayerView buildPlayer() throws RemoteException
 	{
-		return new PlayerView(game.getPlayers().get(0), gameController);
+		return new PlayerView(this.player, gameController);
 	}
 	
 
@@ -289,16 +316,15 @@ public class GameView implements UIComponent, Disableable, GameObserver  {
 	/* (non-Javadoc)
 	 * @see application.views.Disableable#setDisabled(boolean)
 	 */
-	public void setDisabled(boolean disabled) throws RemoteException {
+	public void setDisabled(boolean disabled) {
 
 		for(Button btn : this.moveButtons)
 		{
 			btn.setDisable(disabled);
 		}
-		this.btnResetTurn.setDisable(false);
 		
-		this.playingField.setDisabled(disabled);
-		this.player.setDisabled(disabled);
+		this.playingFieldView.setDisabled(disabled);
+		this.playerView.setDisabled(disabled);
 	}
 	
 }

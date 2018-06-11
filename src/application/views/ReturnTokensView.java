@@ -102,12 +102,8 @@ public class ReturnTokensView {
 		returnTokens.registrate(this);
 	}
 	
-	/**
-	 * Model changed.
-	 *
-	 * @param returnTokens void
-	 */
-	public void modelChanged(ReturnTokens returnTokens) {
+
+	public void modelChanged(ReturnTokens returnTokens) throws RemoteException {
 		this.updateTokenGemCounts(returnTokens);
 		this.updateConfirmButton(returnTokens);
 	}
@@ -115,7 +111,7 @@ public class ReturnTokensView {
 	/**
 	 * Update confirm button.
 	 *
-	 * @param returnTokens void
+	 * @param returnTokens
 	 */
 	private void updateConfirmButton(ReturnTokens returnTokens) {
 		confirmButton.setDisable(!returnTokens.isAllowConfirm());
@@ -125,9 +121,9 @@ public class ReturnTokensView {
 	 * Update token gem counts.
 	 *
 	 * @param returnTokens
-	 * 
+	 * @throws RemoteException
 	 */
-	private void updateTokenGemCounts(ReturnTokens returnTokens) {
+	private void updateTokenGemCounts(ReturnTokens returnTokens) throws RemoteException {
 		gemCounterDisplay.getChildren().clear();
 
 		LinkedHashMap<Gem, Integer> gemsCount = returnTokens.getTokenListNew().getTokenGemCount();

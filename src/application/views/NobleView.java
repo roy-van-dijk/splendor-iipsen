@@ -4,6 +4,7 @@ import java.rmi.RemoteException;
 import java.util.Map;
 import application.domain.Gem;
 import application.domain.Noble;
+import application.util.ImageCache;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
@@ -74,13 +75,8 @@ public class NobleView implements UIComponent {
 	private void buildUI() throws RemoteException {
 		Rectangle rect = new Rectangle(sizeX, sizeY);
 
-		ImagePattern imagePattern = null;
-		try {
-			imagePattern = new ImagePattern(new Image(getNobleImagePath()));
-		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+    	Image image = ImageCache.getInstance().fetchImage(getNobleImagePath(), true);
+    	ImagePattern imagePattern = new ImagePattern(image);
 		rect.setFill(imagePattern);
 
 		rect.setArcHeight(10);

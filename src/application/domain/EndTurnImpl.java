@@ -4,38 +4,40 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Serializable;
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import application.controllers.ReturnTokenController;
 import application.services.SaveGameDAO;
+import application.util.Logger;
+import application.util.Logger.Verbosity;
 
 // TODO: Kees Need to fill the method Endturn()
 /**
  * The Class EndTurnImpl.
  */
-public class EndTurnImpl implements EndTurn, Serializable {
+public class EndTurnImpl extends UnicastRemoteObject implements EndTurn, Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5685833325676205128L;
 	private Game game;
 	private PlayingField playingField;
 	private TempHand tempHand;
 	private Player player;
-	
 	/**
-	 * Instantiates a new end turn impl.
-	 *
+	 * 
 	 * @param game
+	 * @throws RemoteException
 	 */
-	public EndTurnImpl(Game game) {
+	public EndTurnImpl(Game game) throws RemoteException {
 		this.game = game;
-		try {
-			playingField = game.getPlayingField();
-			tempHand = playingField.getTempHand();
-		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
+		this.playingField = game.getPlayingField();
+		this.tempHand = playingField.getTempHand();
 	}
 	
 	/**
@@ -133,11 +135,11 @@ public class EndTurnImpl implements EndTurn, Serializable {
 			/**
 			 * Add temphand cards to the player
 			 */
-			Card boughtCard = tempHand.getBoughtCard();
+			Card boughtCard = tempHand.getBoughtCard(); // TODO: This is a proxy from clients. 
 			if(player.getReservedCards().contains(boughtCard)) {
 				player.getReservedCards().remove(boughtCard);
 			} else {
-				playingField.removeCard(boughtCard);
+				playingField.removeCard(boughtCard); // removeCard doesn't work with proxies
 			}
 			player.addCard(boughtCard);
 			this.removeTokenCost();	
@@ -145,13 +147,14 @@ public class EndTurnImpl implements EndTurn, Serializable {
 			/**
 			 * Adds the reservecard to the player
 			 */
+			Logger.log("EndTurnImpl::endTurn::Reserved card = " + tempHand.getReservedCard(), Verbosity.DEBUG);
 			playingField.removeCard(tempHand.getReservedCard());
 			for(CardRow cardRow : playingField.getCardRows()) {
 				if(cardRow.getCardDeck().isSelected()) {
 					cardRow.getCardDeck().pull();
 				}
 			}
-			player.addReserverveCard(tempHand.getReservedCard());
+			player.addReservedCard(tempHand.getReservedCard());
 			// TODO: Geef speler een joker
 			if(playingField.getTokenGemCount().get(Gem.JOKER) > 0){
 				Token token = new TokenImpl(Gem.JOKER);
@@ -164,14 +167,18 @@ public class EndTurnImpl implements EndTurn, Serializable {
 		/**
 		 * Create the returntokens if the an player has moren then 10 tokens
 		 */
+		// TODO: needs rewrite
 		ReturnTokens model = new ReturnTokens(playingField, player);
 		ReturnTokenController controller = new ReturnTokenController(model);
 
 		List<Token> tokens = player.getTokens();
 		
 		if(tokens.size() > 10) {
-			System.out.println("I'v got " + tokens.size() + " Tokens");
-			model.moreThanTenTokens(model, controller);
+			System.out.println("I've got " + tokens.size() + " Tokens");
+			//model.moreThanTenTokens(model, controller);
+			/*
+			 * TODO: Figure out a way to create the ReturnTokenView locally (only for the Player/GameObserver that has too many tokens)
+			 */
 
 		}
 		

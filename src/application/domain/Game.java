@@ -5,6 +5,7 @@ import java.util.List;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Interface Game.
  *
@@ -23,9 +24,10 @@ public interface Game extends Remote {
 	 * Adds the observer.
 	 *
 	 * @param o the GameObserver
+	 * @param player
 	 * @throws RemoteException
 	 */
-	public void addObserver(GameObserver o) throws RemoteException;
+	public void addObserver(GameObserver o, Player player) throws RemoteException;
 	
 	/**
 	 * Removes the observer.
@@ -45,15 +47,16 @@ public interface Game extends Remote {
 	/**
 	 * Find selectable cards.
 	 *
+	 * @param moveType 
 	 * @throws RemoteException
 	 */
-	public void findSelectableCards() throws RemoteException;
+	public void findSelectableCards(MoveType moveType) throws RemoteException;
 	
 	/**
 	 * Gets the current player idx.
 	 *
 	 * @return the current player idx
-	 * @throws RemoteException the remote exception
+	 * @throws RemoteException
 	 */
 	public int getCurrentPlayerIdx() throws RemoteException;
 	
@@ -76,7 +79,7 @@ public interface Game extends Remote {
 	/**
 	 * Gets the players.
 	 *
-	 * @return the players
+	 * @return List<Player>
 	 * @throws RemoteException
 	 */
 	public List<Player> getPlayers() throws RemoteException;
@@ -89,13 +92,47 @@ public interface Game extends Remote {
 	 */
 	public PlayingField getPlayingField() throws RemoteException;
 
+
+	/**
+	 * Clean up turn.
+	 *
+	 * @throws RemoteException
+	 */
+	public void cleanUpTurn() throws RemoteException;
+	
+	/**
+	 * Checks if is disabled.
+	 *
+	 * @param o the GameObserver
+	 * @return true, if is disabled
+	 * @throws RemoteException
+	 */
+	public boolean isDisabled(GameObserver o) throws RemoteException;
+
+	/**
+	 * Reserve card from deck.
+	 *
+	 * @param cardRowIdx
+	 * @throws RemoteException
+	 */
+	public void reserveCardFromDeck(int cardRowIdx) throws RemoteException;
+	
+	/**
+	 * Adds the card to temp from field.
+	 *
+	 * @param cardRowIdx
+	 * @param cardIdx
+	 * @throws RemoteException
+	 */
+	public void addCardToTempFromField(int cardRowIdx, int cardIdx) throws RemoteException;
+	
 	/**
 	 * Adds the card to temp from reserve.
 	 *
-	 * @param card
+	 * @param cardIdx
 	 * @throws RemoteException
 	 */
-	public void addCardToTempFromReserve(Card card) throws RemoteException;
+	public void addCardToTempFromReserve(int cardIdx) throws RemoteException;
 
 	/**
 	 * Gets the end turn.
@@ -118,5 +155,23 @@ public interface Game extends Remote {
 	 * @throws RemoteException
 	 */
 	public void updatePlayingFieldAndPlayerView() throws RemoteException;
+
+	/**
+	 * Sets the tokens selectable.
+	 *
+	 * @param moveType
+	 * @throws RemoteException
+	 */
+	public void setTokensSelectable(MoveType moveType) throws RemoteException;
+
+	/**
+	 * Adds the token to temp.
+	 *
+	 * @param gemType
+	 * @throws RemoteException
+	 */
+	public void addTokenToTemp(Gem gemType) throws RemoteException;
+
+
 
 }

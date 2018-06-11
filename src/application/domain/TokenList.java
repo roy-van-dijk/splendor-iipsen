@@ -1,6 +1,7 @@
 package application.domain;
 
 import java.io.Serializable;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -40,34 +41,29 @@ public class TokenList implements Serializable {
 		tokens.add(token);
 	}
 	
-	/**
-	 * Removes an token from tokens
-	 *
-	 * @param token
-	 */
-	public void remove(Token token) {
+	public void remove(Token token) throws RemoteException {
 		for(Token t : tokens) {
 			if(t.getGemType() == token.getGemType()) {
-			tokens.remove(t); return;
-		}
+				tokens.remove(t); return;
+			}
 		}
 	}
 	
 	/**
 	 * Gets all the tokens 
 	 *
-	 * @return tokens as a List type
+	 * @return List<Token>
 	 */
 	public List<Token> getAll() {
 		return tokens;
 	}
 	
 	/**
-	 * TODO: Consider making this part of a view rather than an a model.
-	 *
-	 * @return LinkedHashMap - a Map containing gems and their amount of occurrences in this TokenList
+	 * TODO: Consider making this part of a view rather than an a model
+	 * @return a Map containing gems and their amount of occurrences in this TokenList
+	 * @throws RemoteException 
 	 */
-	public LinkedHashMap<Gem, Integer> getTokenGemCount() {
+	public LinkedHashMap<Gem, Integer> getTokenGemCount() throws RemoteException {
 		LinkedHashMap<Gem, Integer> gemsCount = new LinkedHashMap<Gem, Integer>();
 		
 		// Initialize map

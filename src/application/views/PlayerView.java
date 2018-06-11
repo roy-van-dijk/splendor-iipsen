@@ -1,9 +1,11 @@
 package application.views;
 
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
 import application.controllers.GameController;
 import application.domain.Card;
 import application.domain.ColorBlindModes;
@@ -11,7 +13,8 @@ import application.domain.Gem;
 import application.domain.Noble;
 import application.domain.Player;
 import application.domain.PlayerObserver;
-import application.domain.TempHand;
+
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
@@ -21,12 +24,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Separator;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -38,10 +39,15 @@ import javafx.scene.text.FontWeight;
  *
  * @author Sanchez
  */
-public class PlayerView implements UIComponent, Disableable, PlayerObserver {
+public class PlayerView extends UnicastRemoteObject implements UIComponent, Disableable, PlayerObserver {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4476145574334789147L;
 
 	// Radio button toggle group
-	final private ToggleGroup group = new ToggleGroup();
+	private final ToggleGroup group = new ToggleGroup();
 
 	private GameController gameController;
 	private Player player;
@@ -107,12 +113,21 @@ public class PlayerView implements UIComponent, Disableable, PlayerObserver {
 	 * @see application.domain.PlayerObserver#modelChanged(application.domain.Player)
 	 */
 	public void modelChanged(Player player) throws RemoteException {
-		lblPrestigeValue.setText(String.valueOf(player.getPrestige()));
-
-		this.updatePlayerTokens(player.getTokensGemCount());
-		this.updatePlayerCards(player.getOwnedCards());
-		this.updatePlayerNobles(player.getOwnedNobles());
-		this.updatePlayerReservedCards(player.getReservedCards());
+		//System.out.println("[DEBUG] PlayerView::modelChanged()::Player has " + player.getTokensGemCount());
+		Platform.runLater(() ->
+		{
+			try {
+				lblPrestigeValue.setText(String.valueOf(player.getPrestige()));
+		
+				this.updatePlayerTokens(player.getTokensGemCount());
+				this.updatePlayerCards(player.getOwnedCards());
+				this.updatePlayerNobles(player.getOwnedNobles());
+				this.updatePlayerReservedCards(player.getReservedCards());
+			} catch (RemoteException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		});
 	}
 
 	/**
@@ -188,7 +203,9 @@ public class PlayerView implements UIComponent, Disableable, PlayerObserver {
 	private HBox createReservedCardDisplay(List<Card> cards, int sizeX, int sizeY) {
 		HBox reservedCards = new HBox(10);
 
-		for (Card card : cards) {
+		for (int i = 0; i < cards.size(); i++) {
+			int cardIdx = i;
+			Card card = cards.get(i);
 			CardView cardView = new FrontCardView(card, sizeX, sizeY);
 
 			cardView.asPane().getStyleClass().add("dropshadow");
@@ -204,7 +221,7 @@ public class PlayerView implements UIComponent, Disableable, PlayerObserver {
 						cardView.asPane().getStyleClass().add("selectable");
 						cardView.asPane().setOnMouseClicked(e -> {
 							try {
-								gameController.cardClickedFromReserve(card);
+								gameController.onReservedCardClicked(cardIdx);
 							} catch (RemoteException e1) {
 								// TODO Auto-generated catch block
 								e1.printStackTrace();

@@ -4,8 +4,10 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
@@ -20,11 +22,11 @@ import application.domain.Noble;
 import application.domain.NobleImpl;
 import application.util.Util;
 
-// TODO: Auto-generated Javadoc
 /**
- * This reads the cards from a csv file and converts it to objects.
- *
- * @author Tom, Sanchez
+ * This reads the nobles from a csv file and converts it to objects
+ * 
+ * @author Tom
+ * 
  */
 public class NoblesReader {
 	
@@ -89,7 +91,7 @@ public class NoblesReader {
 	 * @return the noble
 	 */
 	// read data from noble (illustration and costs, prestige value is defined as constant.
-	private Noble readNoble(String[] nobleRecord) {
+	private Noble readNoble(String[] nobleRecord) throws RemoteException {
 		String illustration = nobleRecord[0];
 		Map<Gem, Integer> bonusCosts = readBonusCosts(nobleRecord);
 		Noble noble = new NobleImpl(prestigeValue, illustration, bonusCosts);
@@ -104,7 +106,7 @@ public class NoblesReader {
 	 */
 	//generate a map(gem, integer) of the cost of the noble.
 	private static Map<Gem, Integer> readBonusCosts(String[] record){
-		Map<Gem, Integer> costs = new HashMap<>();
+		Map<Gem, Integer> costs = new LinkedHashMap<>();
 		
 		for(int i = 0; i < gemList.length; i++)
 		{
