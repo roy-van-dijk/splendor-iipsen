@@ -11,16 +11,14 @@ import application.util.Logger;
 import application.util.Logger.Verbosity;
 
 
-
-
+// TODO: Auto-generated Javadoc
 /**
+ * The Class CardRowImpl.
+ *
  * @author Sanchez
  */
 public class CardRowImpl extends UnicastRemoteObject implements Serializable, CardRow {
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 7939191665883088567L;
 
 	private static final int MAX_OPEN_CARDS = 4;
@@ -34,6 +32,13 @@ public class CardRowImpl extends UnicastRemoteObject implements Serializable, Ca
 	private int index; // TODO if enough time: Replace with CardLevel instead.
 	
 
+	/**
+	 * Instantiates a new card row impl.
+	 *
+	 * @param cardDeck
+	 * @param index
+	 * @throws RemoteException
+	 */
 	public CardRowImpl(CardDeck cardDeck, int index) throws RemoteException {
 		this.cardDeck = cardDeck;
 		this.index = index;
@@ -45,6 +50,9 @@ public class CardRowImpl extends UnicastRemoteObject implements Serializable, Ca
 		this.initializeCardSlots();
 	}
 	
+	/* (non-Javadoc)
+	 * @see application.domain.CardRow#removeCard(application.domain.Card)
+	 */
 	public void removeCard(Card card) throws RemoteException
 	{
 		boolean debugCardFound = false;
@@ -62,23 +70,37 @@ public class CardRowImpl extends UnicastRemoteObject implements Serializable, Ca
 	}
 	
 
+	/* (non-Javadoc)
+	 * @see application.domain.CardRow#getCardDeck()
+	 */
 	public CardDeck getCardDeck() throws RemoteException {
 		return cardDeck;
 	}
 
 	/**
+	 * Gets the card slots.
+	 *
 	 * @return Returns all card slots, containing either a Card object or a null. See comment @ CardRowView.buildUI() for a problem description.
+	 * @throws RemoteException the remote exception
 	 */
 	public Card[] getCardSlots() throws RemoteException {
 		return cardSlots;
 	}
 	
+	/* (non-Javadoc)
+	 * @see application.domain.CardRow#addObserver(application.domain.CardRowObserver)
+	 */
 	public synchronized void addObserver(CardRowObserver observer) throws RemoteException {
 		observers.add(observer);
 		this.notifyObservers();
 	}
 
 
+	/**
+	 * Notify observers.
+	 *
+	 * @throws RemoteException
+	 */
 	private synchronized void notifyObservers() throws RemoteException {
 		Logger.log("CardRowImpl::notifyObservers()::Notifying all CardRow observers of change", Verbosity.DEBUG);
 		for (CardRowObserver co : observers) {
@@ -86,11 +108,21 @@ public class CardRowImpl extends UnicastRemoteObject implements Serializable, Ca
 		}
 	}
 	
+	/**
+	 * Initialize card slots.
+	 *
+	 * @throws RemoteException
+	 */
 	private void initializeCardSlots() throws RemoteException
 	{
 		this.fillCardSlots();
 	}
 	
+	/**
+	 * Fill card slots.
+	 *
+	 * @throws RemoteException
+	 */
 	private void fillCardSlots() throws RemoteException
 	{
 		for(int pos = 0; pos < cardSlots.length; pos++)
@@ -108,9 +140,13 @@ public class CardRowImpl extends UnicastRemoteObject implements Serializable, Ca
 				}
 			}
 		}
+
 	}
 
 	
+	/* (non-Javadoc)
+	 * @see application.domain.CardRow#findSelectableCards(application.domain.MoveType, application.domain.Player)
+	 */
 	@Override
 	public void findSelectableCards(MoveType moveType, Player player) throws RemoteException {
 		this.clearAll();
@@ -132,6 +168,12 @@ public class CardRowImpl extends UnicastRemoteObject implements Serializable, Ca
 		this.notifyObservers();
 	}
 	
+
+	/**
+	 * Clear all.
+	 *
+	 * @throws RemoteException
+	 */
 	private void clearAll() throws RemoteException
 	{
 		cardDeck.clearSelectable();
@@ -139,23 +181,35 @@ public class CardRowImpl extends UnicastRemoteObject implements Serializable, Ca
 		selectableCards.clear();
 	}
 	
+	/* (non-Javadoc)
+	 * @see application.domain.CardRow#clearSelectableCards()
+	 */
 	@Override
 	public void clearSelectableCards() throws RemoteException {
 		this.clearAll();
 		this.notifyObservers();
 	}
 	
+	/* (non-Javadoc)
+	 * @see application.domain.CardRow#getSelectableCards()
+	 */
 	@Override
 	public List<Card> getSelectableCards() throws RemoteException {
 		return selectableCards;
 	}
 
 	// Why not make notifyObservers public?
+	/* (non-Javadoc)
+	 * @see application.domain.CardRow#updateView()
+	 */
 	@Override
 	public void updateView() throws RemoteException {
 		this.notifyObservers();	
 	}
 
+	/* (non-Javadoc)
+	 * @see application.domain.CardRow#getIndex()
+	 */
 	@Override
 	public int getIndex() throws RemoteException {
 		return index;

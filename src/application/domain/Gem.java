@@ -4,10 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Enum for the 7 different gem types
- * 
- * @author Sanchez
+ * Enum for the 7 different gem types.
  *
+ * @author Sanchez
  */
 public enum Gem {
 	DIAMOND, 
@@ -18,11 +17,11 @@ public enum Gem {
 	JOKER;
 
 	/**
-	 * Gets the hue offset of a gem type based on the current color blind mode
-	 * 
-	 * @param Gem gem
-	 * @param ColorBlindModes mode
-	 * @return Double hueOffset
+	 * Gets the hue offset of a gem type based on the current color blind mode.
+	 *
+	 * @param gem
+	 * @param mode
+	 * @return Double
 	 */
 	public double hueOffset(Gem gem, ColorBlindModes mode) {
 		Map<ColorBlindModes, Double> hueMap = new HashMap<>();

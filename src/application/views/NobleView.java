@@ -21,11 +21,11 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
+
 /**
- * Displays nobles
- * 
- * @author Sanchez
+ * Displays nobles.
  *
+ * @author Sanchez
  */
 public class NobleView implements UIComponent {
 
@@ -38,11 +38,11 @@ public class NobleView implements UIComponent {
 	private double sizeX, sizeY;
 
 	/**
-	 * Create view of a noble with size x and y
-	 * 
+	 * Create view of a noble with size x and y.
+	 *
 	 * @param noble
-	 * @param sizeX
-	 * @param sizeY
+	 * @param sizeX the size horzizontal
+	 * @param sizeY the size vertical
 	 */
 	public NobleView(Noble noble, double sizeX, double sizeY) {
 		this.noble = noble;
@@ -57,16 +57,21 @@ public class NobleView implements UIComponent {
 	}
 
 	/**
-	 * Returns the path for this noble's illustration
-	 * 
-	 * @throws RemoteException
+	 * Returns the path for this noble's illustration.
+	 *
 	 * @return String
+	 * @throws RemoteException
 	 */
 	public String getNobleImagePath() throws RemoteException {
 		String illustration = String.valueOf(noble.getIllustration());
 		return String.format("file:resources/nobles/%s.png", illustration);
 	}
 
+	/**
+	 * Builds the UI.
+	 *
+	 * @throws RemoteException
+	 */
 	private void buildUI() throws RemoteException {
 		Rectangle rect = new Rectangle(sizeX, sizeY);
 
@@ -80,6 +85,12 @@ public class NobleView implements UIComponent {
 		root = new StackPane(rect, addNobleInformation());
 	}
 
+	/**
+	 * Adds the noble information.
+	 *
+	 * @return BorderPane
+	 * @throws RemoteException
+	 */
 	private BorderPane addNobleInformation() throws RemoteException {
 		BorderPane borderPane = new BorderPane();
 
@@ -131,6 +142,9 @@ public class NobleView implements UIComponent {
 		return borderPane;
 	}
 
+	/* (non-Javadoc)
+	 * @see application.views.UIComponent#asPane()
+	 */
 	public Pane asPane() {
 		return root;
 	}

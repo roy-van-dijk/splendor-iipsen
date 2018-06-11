@@ -15,10 +15,9 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 
 /**
- * Display of every token in the game
- * 
- * @author Sanchez
+ * Display of every token in the game.
  *
+ * @author Sanchez
  */
 public class TokenView implements UIComponent, ColorChangeable {
 
@@ -29,8 +28,8 @@ public class TokenView implements UIComponent, ColorChangeable {
 	private Circle circle;
 
 	/**
-	 * Creates a new token view
-	 * 
+	 * Creates a new token view.
+	 *
 	 * @param gem
 	 * @param radius
 	 */
@@ -44,8 +43,8 @@ public class TokenView implements UIComponent, ColorChangeable {
 	}
 
 	/**
-	 * Creates a new token view
-	 * 
+	 * Creates a new token view.
+	 *
 	 * @param token
 	 * @param radius
 	 * @throws RemoteException 
@@ -54,6 +53,9 @@ public class TokenView implements UIComponent, ColorChangeable {
 		this(token.getGemType(), radius);
 	}
 
+	/**
+	 * Builds the UI.
+	 */
 	private void buildUI() {
 		circle = new Circle(radius);
 		String imagePath = String.format("file:resources/tokens/token_%s.png", getTokenImageFileName());
@@ -77,8 +79,8 @@ public class TokenView implements UIComponent, ColorChangeable {
 
 	/**
 	 * Returns the token view as a pane so that it can be modified with JavaFX
-	 * methods
-	 * 
+	 * methods.
+	 *
 	 * @return Pane
 	 */
 	public Pane asPane() {
@@ -86,7 +88,9 @@ public class TokenView implements UIComponent, ColorChangeable {
 	}
 
 	/**
-	 * Updates the token view's colour based on the colour blind mode that is applied
+	 * Updates the token view's colour based on the colour blind mode that is applied.
+	 *
+	 * @param mode the mode
 	 * @return void
 	 */
 	@Override

@@ -15,160 +15,152 @@ import java.util.List;
 public interface PlayingField extends Remote {
 
 	/**
-	 * Gets all card rows that are currently on the field
-	 * 
-	 * @throws RemoteException
+	 * Gets all card rows that are currently on the field.
+	 *
 	 * @return List<CardRow>
+	 * @throws RemoteException
 	 */
 	public List<CardRow> getCardRows() throws RemoteException;
 
 	/**
-	 * Gets all nobles currently on the field
-	 * 
-	 * @throws RemoteException
+	 * Gets all nobles currently on the field.
+	 *
 	 * @return List<Noble>
+	 * @throws RemoteException
 	 */
 	public List<Noble> getNobles() throws RemoteException;
 
 	/**
-	 * Gets the amount of each gem token currently on the field
-	 * 
-	 * @throws RemoteException
+	 * Gets the amount of each gem token currently on the field.
+	 *
 	 * @return LinkedHashMap<Gem,Integer>
+	 * @throws RemoteException
 	 */
 	public LinkedHashMap<Gem, Integer> getTokenGemCount() throws RemoteException;
 
 	/**
-	 * Gets all the selectable (affordable) tokens currently on the field
-	 * 
-	 * @throws RemoteException
+	 * Gets all the selectable (affordable) tokens currently on the field.
+	 *
 	 * @return List<Gem>
+	 * @throws RemoteException
 	 */
 	public List<Gem> getSelectableTokens() throws RemoteException;
 
 	/**
-	 * Gets the player's temporary hard
-	 * 
-	 * @throws RemoteException
+	 * Gets the player's temporary hard.
+	 *
 	 * @return TempHand
+	 * @throws RemoteException
 	 */
 	public TempHand getTempHand() throws RemoteException;
 
 	/**
-	 * Finds all selectable (affordable) cards currently on the field
-	 * 
+	 * Finds all selectable (affordable) cards currently on the field.
+	 *
 	 * @throws RemoteException
-	 * @return void
 	 */
 	public void findSelectableCardsFromField() throws RemoteException;
 
 	/**
-	 * Gets all selectable (affordable) cards currently on the field
-	 * 
-	 * @throws RemoteException
+	 * Gets all selectable (affordable) cards currently on the field.
+	 *
 	 * @return List<Card>
+	 * @throws RemoteException the remote exception
 	 */
 	public List<Card> getSelectableCardsFromField() throws RemoteException;
 
 	/**
-	 * Adds the passed token to the player's temporary hand
-	 * 
+	 * Adds the passed token to the player's temporary hand.
+	 *
+	 * @param gemType
 	 * @throws RemoteException
-	 * @return void
 	 */
 	public void addTokenToTemp(Gem gemType) throws RemoteException;
 
 	/**
-	 * Adds an observer to the playing field that other classes can listen to
-	 * 
-	 * @param observer
+	 * Adds an observer to the playing field that other classes can listen to.
+	 *
+	 * @param observer the observer
 	 * @throws RemoteException
-	 * @return void
 	 */
 	public void addObserver(PlayingFieldObserver observer) throws RemoteException;
 
 	/**
-	 * Adds the passed tokens to the playing field
-	 * 
+	 * Adds the passed tokens to the playing field.
+	 *
 	 * @param tokens
 	 * @throws RemoteException
-	 * @return void
 	 */
 	public void addTokens(List<Token> tokens) throws RemoteException;
 
+	
 	/**
-	 * Marks selectable (affordable) tokens
-	 * 
-	 * @param moveType
+	 * Sets the tokens selectable.
+	 *
+	 * @param moveType the new tokens selectable
 	 * @throws RemoteException
-	 * @return void
 	 */
 	public void setTokensSelectable(MoveType moveType) throws RemoteException;
 
 	/**
-	 * Switches the current turn to that of the next player
-	 * 
+	 * Switches the current turn to that of the next player.
+	 *
 	 * @throws RemoteException
-	 * @return void
 	 */
 	public void newTurn() throws RemoteException;
 
 	/**
-	 * Removes the passed noble from the field
-	 * 
+	 * Removes the passed noble from the field.
+	 *
 	 * @param noble
 	 * @throws RemoteException
-	 * @return void
 	 */
 	public void removeNoble(Noble noble) throws RemoteException;
 
 	/**
-	 * Removes the passed card from the field
-	 * 
+	 * Removes the passed card from the field.
+	 *
 	 * @param card
-	 * @return void
+	 * @throws RemoteException
 	 */
 	public void removeCard(Card card) throws RemoteException;
 
 	/**
-	 * Removes the passed tokens from the field
-	 * 
-	 * @param tokens
+	 * Removes the passed tokens from the field.
+	 *
+	 * @param List<tokens>
 	 * @throws RemoteException
-	 * @return void
 	 */
 	public void removeTokens(List<Token> tokens) throws RemoteException;
 
 	/**
-	 * Gets a list of all tokens currently on the field
-	 * 
-	 * @throws RemoteException
+	 * Gets a list of all tokens currently on the field.
+	 *
 	 * @return TokenList
+	 * @throws RemoteException
 	 */
 	public TokenList getTokenList() throws RemoteException;
 
 	/**
-	 * Removes the passed token from the field
-	 * 
+	 * Removes the passed token from the field.
+	 *
 	 * @param token
 	 * @throws RemoteException
 	 */
 	public void removeToken(Token token) throws RemoteException;
 
 	/**
-	 * Marks a deck as selected
-	 * 
+	 * Marks a deck as selected.
+	 *
 	 * @param cardRow
 	 * @throws RemoteException
-	 * @return void
 	 */
 	public void setDeckSelected(CardRow cardRow) throws RemoteException;
 
 	/**
-	 * Unmarks a deck as selected
-	 * 
+	 * Unmarks a deck as selected.
+	 *
 	 * @throws RemoteException
-	 * @return void
 	 */
 	public void setDeckDeselected() throws RemoteException;
 

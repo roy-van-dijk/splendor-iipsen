@@ -16,14 +16,12 @@ import application.util.Logger.Verbosity;
 import application.views.GameView;
 
 /**
- * @author Sanchez
+ * The Class GameImpl.
  *
+ * @author Sanchez
  */
 public class GameImpl extends UnicastRemoteObject implements Game, Serializable {
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -2852281344739846301L;
 	
 	private GameState gameState;
@@ -44,6 +42,12 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 	private EndTurnImpl endTurn;
 	
 
+	/**
+	 * Instantiates a new game impl.
+	 *
+	 * @param maxPlayers the max players
+	 * @throws RemoteException the remote exception
+	 */
 	public GameImpl(int maxPlayers) throws RemoteException {
 		this.maxPlayers = maxPlayers;
 		
@@ -60,12 +64,16 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 		this.endTurn = new EndTurnImpl(this);
 	}
 	
+
 	/*public Player getPlayer(GameObserver o) throws RemoteException
 	{
 		return playersMap.get(o);
 	}*/
 
 	
+	/* (non-Javadoc)
+	 * @see application.domain.Game#nextTurn()
+	 */
 	public void nextTurn() throws RemoteException
 	{
 		System.out.println("[DEBUG] GameImpl::nextTurn()::Next turn started");
@@ -85,6 +93,10 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 		System.out.printf("[DEBUG] GameImpl::nextTurn()::Current player: %s(ID: %d)\n", this.getCurrentPlayer().getName(), currentPlayerIdx);
 		this.notifyObservers();
 	}
+
+	/* (non-Javadoc)
+	 * @see application.domain.Game#isDisabled(application.domain.GameObserver)
+	 */
 	public boolean isDisabled(GameObserver o) throws RemoteException
 	{
 		Player player = observers.get(o); // THIS IS STILL A PROXY REFERENCE BECAUSE ADDOBSERVER ADDS A PROXY
@@ -95,6 +107,9 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 		return !(player.getName().equals(this.getCurrentPlayer().getName())); // Checking for name as a workaround for the proxy-ref problem.
 	}
 	
+	/* (non-Javadoc)
+	 * @see application.domain.Game#saveGame()
+	 */
 	@Override
 	public void saveGame() throws RemoteException
 	{
@@ -110,6 +125,9 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 		}
 	}
 
+	/**
+	 * Test create 4 players.
+	 */
 	private void Test_Create4Players()
 	{
 		try {
@@ -133,6 +151,9 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 		}
 	}
 	
+	/* (non-Javadoc)
+	 * @see application.domain.Game#findSelectableCards(application.domain.MoveType)
+	 */
 	@Override
 	public void findSelectableCards(MoveType moveType) throws RemoteException {
 		this.playingField.getTempHand().setMoveType(moveType);
@@ -156,44 +177,86 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 		return reserveCardInventoryFull;
 	}
 	
+	/* (non-Javadoc)
+	 * @see application.domain.Game#setTokensSelectable(application.domain.MoveType)
+	 */
 	@Override
 	public void setTokensSelectable(MoveType moveType) throws RemoteException {
 		this.playingField.setTokensSelectable(moveType);
 	}
 
+
+	/* (non-Javadoc)
+	 * @see application.domain.Game#getCurrentPlayerIdx()
+	 */
 	public int getCurrentPlayerIdx() throws RemoteException {
 		return currentPlayerIdx;
 	}
 
+	/* (non-Javadoc)
+	 * @see application.domain.Game#getRoundNr()
+	 */
 	public int getRoundNr() throws RemoteException {
 		return roundNr;
 	}
 
+	/* (non-Javadoc)
+	 * @see application.domain.Game#getPlayers()
+	 */
 	public List<Player> getPlayers() throws RemoteException {
 		return players;
 	}
 	
+	/**
+	 * Sets the players.
+	 *
+	 * @param players the new players
+	 */
 	public void setPlayers(List<Player> players) {
 		this.players = players;
 	}
 
+	/* (non-Javadoc)
+	 * @see application.domain.Game#getPlayingField()
+	 */
 	public PlayingField getPlayingField() throws RemoteException {
 		return playingField;
 	}
 
 	
+
+	/* (non-Javadoc)
+	 * @see application.domain.Game#getCurrentPlayer()
+	 */
 	public Player getCurrentPlayer() throws RemoteException {
 		return players.get(currentPlayerIdx);
 	}
 
+	/**
+	 * Gets the max players.
+	 *
+	 * @return the max players
+	 * @throws RemoteException the remote exception
+	 */
 	public int getMaxPlayers() throws RemoteException {
 		return maxPlayers;
 	}
 
+	/**
+	 * Gets the game state.
+	 *
+	 * @return GameSate
+	 * @throws RemoteException
+	 */
 	public GameState getGameState() throws RemoteException {
 		return gameState;
 	}
 	
+	/**
+	 * Notify observers.
+	 *
+	 * @throws RemoteException
+	 */
 	private synchronized void notifyObservers() throws RemoteException
 	{
 		System.out.println("[DEBUG] GameImpl::notifyObservers()::Notifying all game observers of change");
@@ -203,23 +266,35 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see application.domain.Game#addObserver(application.domain.GameObserver)
+	 */
 	@Override
 	public synchronized void addObserver(GameObserver o, Player player) throws RemoteException {
 		this.observers.put(o, player);
 		this.notifyObservers();
 	}
 
+	/* (non-Javadoc)
+	 * @see application.domain.Game#removeObserver(application.domain.GameObserver)
+	 */
 	@Override
 	public synchronized void removeObserver(GameObserver o) throws RemoteException {
 		this.observers.remove(o);
 		this.notifyObservers();
 	}
 	
+	/* (non-Javadoc)
+	 * @see application.domain.Game#updatePlayingFieldAndPlayerView()
+	 */
 	@Override
 	public void cleanUpTurn() throws RemoteException {
 		playingField.getTempHand().emptyHand();
 	}
 
+	/* (non-Javadoc)
+	 * @see application.domain.Game#updatePlayingFieldAndPlayerView()
+	 */
 	public void updatePlayingFieldAndPlayerView() throws RemoteException {
 		for(CardRow cardRow : playingField.getCardRows()) {
 			cardRow.updateView();
@@ -227,6 +302,9 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 		this.getCurrentPlayer().updatePlayerView();
 	}
 	
+	/* (non-Javadoc)
+	 * @see application.domain.Game#cleanUpSelections()
+	 */
 	@Override
 	public void cleanUpSelections() throws RemoteException {
 		this.playingField.getTempHand().emptyHand();
@@ -239,6 +317,9 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 		this.notifyObservers();
 	}
 	
+	/* (non-Javadoc)
+	 * @see application.domain.Game#addCardToTempFromReserve(application.domain.Card)
+	 */
 	@Override
 	public void reserveCardFromDeck(int cardRowIdx) throws RemoteException {
 		CardRow cardRow = this.playingField.getCardRows().get(cardRowIdx);
@@ -251,6 +332,9 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 		this.notifyObservers();
 	}
 	
+	/* (non-Javadoc)
+	 * @see application.domain.Game#addCardToTempFromField(int, int)
+	 */
 	@Override
 	public void addCardToTempFromField(int cardRowIdx, int cardIdx) throws RemoteException {
 		CardRow cardRow = this.playingField.getCardRows().get(cardRowIdx);
@@ -268,8 +352,9 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 		this.notifyObservers();
 	}
 	
-	
-	
+	/* (non-Javadoc)
+	 * @see application.domain.Game#addCardToTempFromReserve(int)
+	 */
 	@Override
 	public void addCardToTempFromReserve(int cardIdx) throws RemoteException {
 		Card card = this.getCurrentPlayer().getReservedCards().get(cardIdx);
@@ -281,10 +366,20 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 		this.notifyObservers();
 	}
 
+	/* (non-Javadoc)
+	 * @see application.domain.Game#getEndTurn()
+	 */
 	public EndTurn getEndTurn() throws RemoteException {
 		return endTurn;
 	}
 	
+	/**
+	 * Adds the card to temp hand.
+	 *
+	 * @param card
+	 * @param tempHand
+	 * @throws RemoteException
+	 */
 	private void addCardToTempHand(Card card, TempHand tempHand) throws RemoteException {	
 		MoveType moveType = tempHand.getMoveType();
 		System.out.println("GameImpl::addCardToTemp()::Card = " + card);
@@ -295,6 +390,9 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see application.domain.Game#addTokenToTemp(application.domain.Gem)
+	 */
 	@Override
 	public void addTokenToTemp(Gem gemType) throws RemoteException {
 		this.playingField.addTokenToTemp(gemType);

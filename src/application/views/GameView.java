@@ -69,10 +69,14 @@ public class GameView extends UnicastRemoteObject implements UIComponent, Disabl
 	private PlayerView playerView;
 
 	private Player player;
+
 /**
- * Creates a new game view
+ * Creates a new game view.
+ *
  * @param game
  * @param gameController
+ * @param player
+ * @throws RemoteException
  */
 	public GameView(Game game, GameController gameController, Player player) throws RemoteException {
 		this.game = game;
@@ -87,6 +91,9 @@ public class GameView extends UnicastRemoteObject implements UIComponent, Disabl
 		game.addObserver(this, player);
 	}
 	
+	/* (non-Javadoc)
+	 * @see application.domain.GameObserver#modelChanged(application.domain.Game)
+	 */
 	public void modelChanged(Game game) throws RemoteException
 	{
 		Platform.runLater(() ->
@@ -107,9 +114,11 @@ public class GameView extends UnicastRemoteObject implements UIComponent, Disabl
 			}
 		});
 	}
+	
 	/**
-	 * 
-	 * @param mode, change the color pallet based on the type of color blindness
+	 * Change color blind mode.
+	 *
+	 * @param mode
 	 */
 	public static void changeColorBlindMode(ColorBlindModes mode) {
 		Iterator<ColorChangeable> i = colorBlindViews.iterator();
@@ -125,8 +134,9 @@ public class GameView extends UnicastRemoteObject implements UIComponent, Disabl
 	}
 	
 	/**
-	 * Build the actual game view
-	 * @return void
+	 * Build the actual game view.
+	 *
+	 * 
 	 */
 	private void buildUI()
 	{
@@ -160,8 +170,9 @@ public class GameView extends UnicastRemoteObject implements UIComponent, Disabl
 	
 	/**
 	 * Builds the playing field view (section with all the cards, nobles, tokens, etc.)
-	 * @throws RemoteException
+	 *
 	 * @return PlayingFieldView
+	 * @throws RemoteException
 	 */
 	private PlayingFieldView buildPlayingField() throws RemoteException
 	{
@@ -169,7 +180,8 @@ public class GameView extends UnicastRemoteObject implements UIComponent, Disabl
 	}
 	
 	/**
-	 * Builds the buttons the players uses to select their action for a turn
+	 * Builds the buttons the players uses to select their action for a turn.
+	 *
 	 * @return HBox
 	 * @throws RemoteException 
 	 */
@@ -266,8 +278,9 @@ public class GameView extends UnicastRemoteObject implements UIComponent, Disabl
 	
 	/**
 	 * Build the box with the player information of the opponents.
-	 * @throws RemoteException
+	 *
 	 * @return Pane
+	 * @throws RemoteException the remote exception
 	 */
 	private Pane buildOpponents() throws RemoteException
 	{
@@ -291,8 +304,9 @@ public class GameView extends UnicastRemoteObject implements UIComponent, Disabl
 	
 	/**
 	 * Builds the player view. This is the view with the player's own information
-	 * @throws RemoteException
+	 *
 	 * @return PlayerView
+	 * @throws RemoteException the remote exception
 	 */
 	private PlayerView buildPlayer() throws RemoteException
 	{
@@ -300,10 +314,16 @@ public class GameView extends UnicastRemoteObject implements UIComponent, Disabl
 	}
 	
 
+	/* (non-Javadoc)
+	 * @see application.views.UIComponent#asPane()
+	 */
 	public Pane asPane() {
 		return root;
 	}
 
+	/* (non-Javadoc)
+	 * @see application.views.Disableable#setDisabled(boolean)
+	 */
 	public void setDisabled(boolean disabled) {
 
 		for(Button btn : this.moveButtons)

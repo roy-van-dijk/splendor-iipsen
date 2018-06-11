@@ -21,11 +21,11 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
+// TODO: Auto-generated Javadoc
 /**
- * View with opponent information seen on the left side of the game view
- * 
- * @author Sanchez
+ * View with opponent information seen on the left side of the game view.
  *
+ * @author Sanchez
  */
 public class OpponentView extends UnicastRemoteObject implements UIComponent, PlayerObserver {
 	
@@ -47,10 +47,10 @@ public class OpponentView extends UnicastRemoteObject implements UIComponent, Pl
 	private Label lblOpponentPrestige;
 
 	/**
-	 * Creates a new opponent view
-	 * 
-	 * @param opponent
-	 * @throws RemoteException
+	 * Creates a new opponent view.
+	 *
+	 * @param opponent the opponent
+	 * @throws RemoteException the remote exception
 	 */
 	public OpponentView(Player opponent) throws RemoteException {
 		this.buildUI();
@@ -58,6 +58,9 @@ public class OpponentView extends UnicastRemoteObject implements UIComponent, Pl
 		opponent.addObserver(this);
 	}
 
+	/**
+	 * Builds the UI.
+	 */
 	private void buildUI() {
 		HBox topFrame = buildOpponentHeaderDisplay();
 
@@ -71,7 +74,10 @@ public class OpponentView extends UnicastRemoteObject implements UIComponent, Pl
 		root = new VBox(topFrame, tokensFrame, reservedCardsFrame);
 		root.getStyleClass().add("opponent");
 	}
-	
+
+	/* (non-Javadoc)
+	 * @see application.domain.PlayerObserver#modelChanged(application.domain.Player)
+	 */
 	public void modelChanged(Player opponent) throws RemoteException {
 		
 		Platform.runLater(() ->
@@ -89,6 +95,11 @@ public class OpponentView extends UnicastRemoteObject implements UIComponent, Pl
 		});
 	}
 
+	/**
+	 * Update opponents reserved cards.
+	 *
+	 * @param opponentReservedCards the opponent reserved cards
+	 */
 	private void updateOpponentsReservedCards(List<Card> opponentReservedCards) {
 		reservedCardsFrame.getChildren().clear();
 		for (Card reservedCard : opponentReservedCards) {
@@ -116,6 +127,11 @@ public class OpponentView extends UnicastRemoteObject implements UIComponent, Pl
 		}
 	}
 
+	/**
+	 * Update opponent tokens.
+	 *
+	 * @param gemsCount the gems count
+	 */
 	private void updateOpponentTokens(Map<Gem, Integer> gemsCount) {
 		tokensFrame.getChildren().clear();
 
@@ -126,6 +142,11 @@ public class OpponentView extends UnicastRemoteObject implements UIComponent, Pl
 		}
 	}
 
+	/**
+	 * Builds the opponent header display.
+	 *
+	 * @return HBox
+	 */
 	private HBox buildOpponentHeaderDisplay() {
 		HBox topFrame = new HBox(10);
 		topFrame.getStyleClass().add("opponent-header");
@@ -148,6 +169,14 @@ public class OpponentView extends UnicastRemoteObject implements UIComponent, Pl
 		return topFrame;
 	}
 
+	/**
+	 * Creates the token gem count display.
+	 *
+	 * @param gemType the gem type
+	 * @param count the count
+	 * @param radius the radius
+	 * @return VBox
+	 */
 	private VBox createTokenGemCountDisplay(Gem gemType, int count, int radius) {
 		TokenView tokenView = new TokenView(gemType, radius * TOKENS_RESIZE_FACTOR);
 
@@ -163,6 +192,9 @@ public class OpponentView extends UnicastRemoteObject implements UIComponent, Pl
 		return tokenFrame;
 	}
 
+	/* (non-Javadoc)
+	 * @see application.views.UIComponent#asPane()
+	 */
 	public Pane asPane() {
 		return root;
 	}
