@@ -15,7 +15,7 @@ import application.util.Logger;
 import application.util.Logger.Verbosity;
 import application.views.GameView;
 
-/**
+	/**
  * The Class GameImpl.
  *
  * @author Sanchez
