@@ -165,14 +165,14 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 	}
 	//TODO not yet tested
 	public boolean reserveCardInventoryFull() throws RemoteException
-	{
-		if(this.getCurrentPlayer().getReservedCards().size() == 3)
+	{System.out.println("getreservedcard inv size" + getCurrentPlayer().getReservedCards().size());
+		if(getCurrentPlayer().getReservedCards().size() == 3)
 		{
-			reserveCardInventoryFull = false;
+			reserveCardInventoryFull = true;
 		}
 		else 
 		{
-			reserveCardInventoryFull = true;
+			reserveCardInventoryFull = false;
 		}
 		return reserveCardInventoryFull;
 	}
