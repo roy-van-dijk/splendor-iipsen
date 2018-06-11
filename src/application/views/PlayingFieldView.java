@@ -212,28 +212,28 @@ public class PlayingFieldView extends UnicastRemoteObject implements UIComponent
 	private HBox createTokenGemCountDisplay(Gem gemType, int count, int radius, List<Gem> selectableTokens,
 			TempHand tempHand) throws RemoteException {
 		TokenView tokenView = new TokenView(gemType, radius);
-
-		if (gemType != Gem.JOKER) {
-			if ((tempHand.getMoveType() == MoveType.TAKE_TWO_TOKENS && tempHand.getSelectedTokensCount() < 1)
-					|| (tempHand.getMoveType() == MoveType.TAKE_THREE_TOKENS && tempHand.getSelectedTokensCount() < 3
-							&& !tempHand.getSelectedGemTypes().contains(gemType))) {
-				tokenView.asPane().setOnMouseClicked(e -> {
-					try {
-						gameController.onFieldTokenClicked(gemType);
-					} catch (RemoteException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-				});
-
-			}
-
-			if (selectableTokens.contains(gemType)) {
-				tokenView.asPane().getStyleClass().add("selectable");
-			}
-			if (tempHand.getTokenList().getTokenGemCount().get(gemType) > 0) {
-				tokenView.asPane().getStyleClass().remove("selectable");
-				tokenView.asPane().getStyleClass().add("selected");
+		if (selectableTokens.contains(gemType)) {
+			tokenView.asPane().getStyleClass().add("selectable");
+			if (gemType != Gem.JOKER) {
+				if ((tempHand.getMoveType() == MoveType.TAKE_TWO_TOKENS && tempHand.getSelectedTokensCount() < 1)
+						|| (tempHand.getMoveType() == MoveType.TAKE_THREE_TOKENS && tempHand.getSelectedTokensCount() < 3
+								&& !tempHand.getSelectedGemTypes().contains(gemType))) {
+					tokenView.asPane().setOnMouseClicked(e -> {
+						try {
+							gameController.onFieldTokenClicked(gemType);
+						} catch (RemoteException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+					});
+	
+				}
+	
+				
+				if (tempHand.getTokenList().getTokenGemCount().get(gemType) > 0) {
+					tokenView.asPane().getStyleClass().remove("selectable");
+					tokenView.asPane().getStyleClass().add("selected");
+				}
 			}
 		}
 
