@@ -42,6 +42,7 @@ public class GameController {
 	 * @throws RemoteException
 	 */
 	public void reserveCard(MoveType moveType) throws RemoteException {
+		game.findSelectableCards(moveType);
 	}
 	
 	/**
@@ -162,11 +163,11 @@ public class GameController {
 	}*/
 
 	/**
- * Reset turn.
- *
- * @throws RemoteException the remote exception
- */
-public void resetTurn() throws RemoteException {
+	 * Reset turn.
+	 *
+	 * @throws RemoteException the remote exception
+	 */
+	public void resetTurn() throws RemoteException {
 		game.cleanUpSelections();		
 	}
 	
