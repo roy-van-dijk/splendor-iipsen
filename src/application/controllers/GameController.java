@@ -96,15 +96,17 @@ public class GameController {
 		dialog.setHeaderText("You are leaving the game");
 		dialog.setContentText("Are you sure you wish to continue?");
 		
+		
 		Optional<ButtonType> results = dialog.showAndWait();
 		if (results.get() == ButtonType.OK){
-			/*try {
-				//game.saveGame();
-				// TODO: Make leave game method
+			try {
+				
+				game.saveGame();
+				terminateGame();
 			} catch (RemoteException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}*/
+			}
+			
 			StageManager.getInstance().showMainMenu();		
 			new PopUpWindowView("Het spel is be�indigd door een van de spelers.", "Het spel is gestopt");
 		}

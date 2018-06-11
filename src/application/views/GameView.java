@@ -342,7 +342,9 @@ public class GameView extends UnicastRemoteObject implements UIComponent, Disabl
 		this.playingFieldView.setDisabled(disabled);
 		this.playerView.setDisabled(disabled);
 	}
-
+/**
+ * close game for player. dialog is commented out because of double message
+ */
 	@Override
 	public void disconnect(GameState gameState) throws RemoteException {
 		Platform.runLater(() -> {
