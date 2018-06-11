@@ -45,10 +45,9 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 	/**
 	 * Instantiates a new game impl.
 	 *
-	 * @param maxPlayers the max players
 	 * @throws RemoteException the remote exception
 	 */
-	public GameImpl(int maxPlayers) throws RemoteException {
+	public GameImpl() throws RemoteException {
 		this.maxPlayers = maxPlayers;
 		
 		this.roundNr = 0;
