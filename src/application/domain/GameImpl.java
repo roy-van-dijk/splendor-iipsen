@@ -168,11 +168,11 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 	{
 		if(this.getCurrentPlayer().getReservedCards().size() == 3)
 		{
-			reserveCardInventoryFull = false;
+			reserveCardInventoryFull = true;
 		}
 		else 
 		{
-			reserveCardInventoryFull = true;
+			reserveCardInventoryFull = false;
 		}
 		return reserveCardInventoryFull;
 	}
