@@ -1,15 +1,19 @@
 package application.views;
 
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.Map;
 
 import application.domain.Card;
+import application.domain.ColorBlindModes;
 import application.domain.Gem;
 import application.util.ImageCache;
 import javafx.geometry.HPos;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -26,13 +30,14 @@ import javafx.scene.text.FontWeight;
  *
  * @author Sanchez
  */
-public class FrontCardView extends CardView {
+public class FrontCardView extends CardView implements ColorChangeable{
 
 	private final static double CIRCLE_RESIZE_FACTOR = 0.17;
 	private final static double PRESTIGELABEL_RESIZE_FACTOR = 0.23;
 	private final static double GEM_RESIZE_FACTOR = 0.35;
 
 	private Card card;
+	private ArrayList<Circle> costCircles;
 
 	/**
 	 * Creates a new front card display.
@@ -44,6 +49,8 @@ public class FrontCardView extends CardView {
 	public FrontCardView(Card card, double sizeX, double sizeY) {
 		super(sizeX, sizeY);
 		this.card = card;
+		
+		GameView.colorBlindViews.add(this);
 
 		try {
 			this.buildUI();
@@ -60,6 +67,7 @@ public class FrontCardView extends CardView {
 	 */
 	private void buildUI() throws RemoteException {
     	rect = new Rectangle(sizeX, sizeY);
+    	costCircles = new ArrayList<Circle>();
     	
     	// Add image
     	Image image = ImageCache.getInstance().fetchImage(getImagePath(), true);
@@ -122,8 +130,9 @@ public class FrontCardView extends CardView {
 			if (entry.getValue() != 0) {
 				double circleRadius = ((this.sizeX + this.sizeY) / 2.0) * CIRCLE_RESIZE_FACTOR;
 				Circle costCircle = new Circle(circleRadius);
-				String circlePath = String.format("file:resources/costs/circle_%s.png",
-						entry.getKey().toString().toLowerCase());
+				costCircle.getProperties().put("GemType", entry.getKey().toString().toUpperCase());
+				costCircles.add(costCircle);
+				String circlePath = String.format("file:resources/costs/circle_%s.png", entry.getKey().toString().toLowerCase());
 				ImagePattern imagePattern = new ImagePattern(new Image(circlePath));
 				costCircle.setFill(imagePattern);
 
@@ -155,6 +164,24 @@ public class FrontCardView extends CardView {
 		}
 
 		return path;
+	}
+
+	/**
+	 * Updates the card view's circle colours based on the colour blind mode that is applied.
+	 *
+	 * @param mode the mode
+	 * @return void
+	 */
+	@Override
+	public void updateView(ColorBlindModes mode) {
+		for(Circle c : costCircles) {
+			Gem gemType = Gem.valueOf(c.getProperties().get("GemType").toString());
+			double hueOffset = gemType.hueOffset(gemType, mode);
+			ColorAdjust colorAdjust = new ColorAdjust();
+			colorAdjust.setHue(+hueOffset);
+			c.setEffect(colorAdjust);	
+			
+		}
 	}
 
 }
