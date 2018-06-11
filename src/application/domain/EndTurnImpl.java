@@ -33,6 +33,7 @@ public class EndTurnImpl extends UnicastRemoteObject implements EndTurn, Seriali
 	private PlayingField playingField;
 	private TempHand tempHand;
 	private Player player;
+	private boolean returningTokens;
 	/**
 	 * 
 	 * @param game
@@ -43,15 +44,75 @@ public class EndTurnImpl extends UnicastRemoteObject implements EndTurn, Seriali
 		
 		this.playingField = game.getPlayingField();
 		this.tempHand = playingField.getTempHand();
+		
+		this.returningTokens = false;
 	}
 	
-	/**
-	 * Gets the current player.
-	 *
-	 * @throws RemoteException
+	public boolean returningTokens() throws RemoteException {
+		return returningTokens;
+	}
+	
+	/* (non-Javadoc)
+	 * @see application.domain.EndTurn#endTurn()
 	 */
-	private void getCurrentPlayer() throws RemoteException {
-		this.player = game.getCurrentPlayer(); //TODO fix the name of method
+	@Override
+	public void endTurn() throws RemoteException {
+
+		this.player = game.getCurrentPlayer();
+		MoveType moveType = tempHand.getMoveType();
+		
+		if(!returningTokens) {
+			if(moveType == MoveType.PURCHASE_CARD) {
+				/**
+				 * Add temphand cards to the player
+				 */
+				Card boughtCard = tempHand.getBoughtCard(); 
+				if(player.getReservedCards().contains(boughtCard)) {
+					player.getReservedCards().remove(boughtCard);
+				} else {
+					playingField.removeCard(boughtCard);
+				}
+				player.addCard(boughtCard);
+				this.removeTokenCost();	
+			} else if(moveType == MoveType.RESERVE_CARD) {
+				/**
+				 * Adds the reservecard to the player
+				 */
+				Logger.log("EndTurnImpl::endTurn::Reserved card = " + tempHand.getReservedCard(), Verbosity.DEBUG);
+				playingField.removeCard(tempHand.getReservedCard());
+				for(CardRow cardRow : playingField.getCardRows()) {
+					if(cardRow.getCardDeck().isSelected()) {
+						cardRow.getCardDeck().pull();
+					}
+				}
+				player.addReservedCard(tempHand.getReservedCard());
+				// Geef speler een joker
+				if(playingField.getTokenGemCount().get(Gem.JOKER) > 0){
+					Token token = new TokenImpl(Gem.JOKER);
+					player.addToken(token);
+					playingField.removeToken(token);
+				}
+			} else if(moveType == MoveType.TAKE_THREE_TOKENS || moveType == MoveType.TAKE_TWO_TOKENS) {
+				this.getTokens();
+			}
+		}
+		/**
+		 * Create the returntokens if the an player has moren then 10 tokens
+		 */
+		List<Token> tokens = player.getTokens();
+		
+		if(tokens.size() > 10) {
+			System.out.println("I've got " + tokens.size() + " Tokens");
+			this.returningTokens = true;
+			this.game.notifyObservers();
+		} else {
+			this.returningTokens = false;
+			this.checkNobleVisits();		
+			this.cleanUpTurn();
+			this.checkWinner();
+			game.saveGame();	
+			game.nextTurn();
+		}
 	}
 
 	/**
@@ -119,82 +180,11 @@ public class EndTurnImpl extends UnicastRemoteObject implements EndTurn, Seriali
 	 * @throws RemoteException
 	 */
 	private void getTokens() throws RemoteException {
-			for(Gem gem: tempHand.getSelectedGemTypes()) {			
-				Token token = new TokenImpl(gem);
-				player.addToken(token);
-				playingField.removeToken(token);
-			}
-		
-	}
-
-	/* (non-Javadoc)
-	 * @see application.domain.EndTurn#endTurn()
-	 */
-	@Override
-	public void endTurn() throws RemoteException {
-
-		this.getCurrentPlayer();
-		MoveType moveType = tempHand.getMoveType();
-		
-		if(moveType == MoveType.PURCHASE_CARD) {
-			/**
-			 * Add temphand cards to the player
-			 */
-			Card boughtCard = tempHand.getBoughtCard(); // TODO: This is a proxy from clients. 
-			if(player.getReservedCards().contains(boughtCard)) {
-				player.getReservedCards().remove(boughtCard);
-			} else {
-				playingField.removeCard(boughtCard); // removeCard doesn't work with proxies
-			}
-			player.addCard(boughtCard);
-			this.removeTokenCost();	
-		} else if(moveType == MoveType.RESERVE_CARD) {
-			/**
-			 * Adds the reservecard to the player
-			 */
-			Logger.log("EndTurnImpl::endTurn::Reserved card = " + tempHand.getReservedCard(), Verbosity.DEBUG);
-			playingField.removeCard(tempHand.getReservedCard());
-			for(CardRow cardRow : playingField.getCardRows()) {
-				if(cardRow.getCardDeck().isSelected()) {
-					cardRow.getCardDeck().pull();
-				}
-			}
-			player.addReservedCard(tempHand.getReservedCard());
-			// TODO: Geef speler een joker
-			if(playingField.getTokenGemCount().get(Gem.JOKER) > 0){
-				Token token = new TokenImpl(Gem.JOKER);
-				player.addToken(token);
-				playingField.removeToken(token);
-			}
-		} else if(moveType == MoveType.TAKE_THREE_TOKENS || moveType == MoveType.TAKE_TWO_TOKENS) {
-			this.getTokens();
+		for(Gem gem: tempHand.getSelectedGemTypes()) {			
+			Token token = new TokenImpl(gem);
+			player.addToken(token);
+			playingField.removeToken(token);
 		}
-		/**
-		 * Create the returntokens if the an player has moren then 10 tokens
-		 */
-		// TODO: needs rewrite
-		ReturnTokens model = new ReturnTokens(playingField, player);
-		ReturnTokenController controller = new ReturnTokenController(model);
-
-		List<Token> tokens = player.getTokens();
-		
-		if(tokens.size() > 10) {
-			System.out.println("I've got " + tokens.size() + " Tokens");
-			//model.moreThanTenTokens(model, controller);
-			/*
-			 * TODO: Figure out a way to create the ReturnTokenView locally (only for the Player/GameObserver that has too many tokens)
-			 */
-
-		}
-		
-		this.checkNobleVisits();		
-		this.cleanUpTurn();
-		
-		// TODO: Check winner
-		this.checkWinner();
-		
-		game.saveGame();	
-		game.nextTurn();
 	}
 	
 	private void checkWinner() throws RemoteException {

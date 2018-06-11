@@ -4,7 +4,8 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 
-import application.controllers.ReturnTokenController;
+import application.util.Logger;
+import application.util.Logger.Verbosity;
 import application.views.ReturnTokensView;
 
 // TODO: Auto-generated Javadoc
@@ -12,11 +13,18 @@ import application.views.ReturnTokensView;
  * The Class ReturnTokens.
  */
 public class ReturnTokens {
+	
+	public enum ReturnTokenState { RETURNING, DONE };
+	
+	private ReturnTokenState returningState = ReturnTokenState.RETURNING;
+
+	
 	private TokenList tokenListNew;
 	private List<Token> removedTokens;
 	
 	private Player player;
 	private PlayingField playingField;
+	private EndTurn endTurn;
 	
 	private ReturnTokensView view;
 	
@@ -27,19 +35,16 @@ public class ReturnTokens {
 	 *
 	 * @param playingField
 	 * @param player
+	 * @throws RemoteException 
 	 */
-	public ReturnTokens(PlayingField playingField, Player player)
+	public ReturnTokens(Game game) throws RemoteException
 	{
-		this.player = player;
-		this.playingField = playingField;
+		this.player = game.getCurrentPlayer();
+		this.playingField = game.getPlayingField();
+		this.endTurn = game.getEndTurn();
+		this.tokenListNew = new TokenList(player.getTokens());
 		
 		this.allowConfirm = false;
-		try {
-			this.tokenListNew = new TokenList(player.getTokens());
-		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
 		this.removedTokens = new ArrayList<>();
 	}
@@ -77,6 +82,11 @@ public class ReturnTokens {
 		}
 		validateNewTokens();
 	}
+	
+
+	public ReturnTokenState getReturningState() {
+		return returningState;
+	}
 
 	/**
 	 * Adds the token.
@@ -100,23 +110,9 @@ public class ReturnTokens {
 	 *
 	 * @throws RemoteException
 	 */
-	public void notifyView() throws RemoteException 
+	public void notifyView() 
 	{
 		view.modelChanged(this);
-	}
-	
-	/**
-	 * More than ten tokens.
-	 *
-	 * @param controller
-	 * @throws RemoteException
-	 */
-	public void moreThanTenTokens(ReturnTokenController controller) throws RemoteException
-	{
-		if(tokenListNew.getAll().size() > 10)
-		{
-			ReturnTokensView view = new ReturnTokensView(this, controller);
-		}
 	}
 	
 	/**
@@ -124,7 +120,7 @@ public class ReturnTokens {
 	 *
 	 * @throws RemoteException
 	 */
-	public void validateNewTokens() throws RemoteException
+	public void validateNewTokens()
 	{
 		if(tokenListNew.getAll().size() == 10) 
 		{
@@ -144,7 +140,15 @@ public class ReturnTokens {
 	{
 		if(allowConfirm)
 		{
+			//Logger.log("ReturnTokens::confirmButton()::Returning tokens", Verbosity.DEBUG);
 			player.returnTokensToField(removedTokens, playingField);
+			//Logger.log("ReturnTokens::confirmButton()::Tokens returned", Verbosity.DEBUG);
+			this.returningState = ReturnTokenState.DONE;
+			//Logger.log("ReturnTokens::confirmButton()::Ending turn", Verbosity.DEBUG);
+			this.endTurn.endTurn();
+			//Logger.log("ReturnTokens::confirmButton()::Turn ended", Verbosity.DEBUG);
+			
+			this.notifyView();
 		}
 	}
 
@@ -165,7 +169,7 @@ public class ReturnTokens {
 	 * @param view
 	 * @throws RemoteException
 	 */
-	public void registrate(ReturnTokensView view) throws RemoteException 
+	public void registrate(ReturnTokensView view) 
 	{
 		this.view = view;
 		this.view.modelChanged(this);

@@ -11,6 +11,7 @@ import application.controllers.GameController;
 import application.domain.ColorBlindModes;
 import application.domain.Game;
 import application.domain.GameObserver;
+import application.domain.GameState;
 import application.domain.MoveType;
 import application.domain.Player;
 import application.util.AlertDialog;
@@ -111,7 +112,10 @@ public class GameView extends UnicastRemoteObject implements UIComponent, Disabl
 				if(game.getWinningPlayer() != null) {
 					new PopUpWindowView(game.getWinningPlayer().getName() + " has won the game!", "A player has won");
 				}
-				
+				if(game.getEndTurn().returningTokens())
+				{
+					gameController.showReturnTokensWindow();
+				}			
 			} catch (RemoteException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

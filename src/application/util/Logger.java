@@ -3,6 +3,10 @@ package application.util;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * @author Sanchez
+ *
+ */
 public class Logger {
 	
 	public enum Verbosity { 

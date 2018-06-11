@@ -38,6 +38,13 @@ public interface Game extends Remote {
 	public void removeObserver(GameObserver o) throws RemoteException;
 	
 	/**
+	 * Notify observers.
+	 *
+	 * @throws RemoteException
+	 */
+	public void notifyObservers() throws RemoteException;
+	
+	/**
 	 * Save the game.
 	 *
 	 * @throws RemoteException
