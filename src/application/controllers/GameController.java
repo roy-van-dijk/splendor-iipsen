@@ -193,7 +193,10 @@ public class GameController {
 		ReturnTokenController controller = new ReturnTokenController(data);
 		ReturnTokensView view = new ReturnTokensView(data, controller);
 	}
-
+/**
+ * 
+ * @throws RemoteException
+ */
 	public void terminateGame() throws RemoteException {
 		game.terminateGame();
 		
