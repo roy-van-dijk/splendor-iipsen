@@ -108,14 +108,14 @@ public class GameView extends UnicastRemoteObject implements UIComponent, Disabl
 				{
 					btnReserveCard.setDisable(gameController.reserveCardInventoryFull());
 					btnEndTurn.setDisable(game.getPlayingField().getTempHand().isEmpty());
+					if(game.getEndTurn().returningTokens())
+					{
+						gameController.showReturnTokensWindow();
+					}	
 				}
 				if(game.getWinningPlayer() != null) {
 					new PopUpWindowView(game.getWinningPlayer().getName() + " has won the game!", "A player has won");
-				}
-				if(game.getEndTurn().returningTokens())
-				{
-					gameController.showReturnTokensWindow();
-				}			
+				}		
 			} catch (RemoteException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
