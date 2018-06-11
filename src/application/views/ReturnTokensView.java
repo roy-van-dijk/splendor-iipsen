@@ -6,6 +6,8 @@ import java.util.Map;
 import application.controllers.ReturnTokenController;
 import application.domain.Gem;
 import application.domain.ReturnTokens;
+import application.domain.ReturnTokens.ReturnTokenState;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -44,17 +46,14 @@ public class ReturnTokensView {
  * @param returnTokenController the return token controller
  * @throws RemoteException the remote exception
  */
-	public ReturnTokensView(ReturnTokens returnTokens, ReturnTokenController returnTokenController)
-			throws RemoteException {
+	public ReturnTokensView(ReturnTokens returnTokens, ReturnTokenController returnTokenController) {
 		this.returnTokenController = returnTokenController;
 		this.pane = new BorderPane();
 
 		Label labelText = new Label("You have more than 10 tokens. Please discard tokens until you have 10.");
 		labelText.setFont(Font.font(23.0));
 
-		gemCounterDisplay = new HBox(); // big hbox placed in the middle of the
-										// pane with in it up to 6 for the gems
-										// of the player.
+		gemCounterDisplay = new HBox(); // big hbox placed in the middle of the pane with in it up to 6 for the gems of the player.
 		gemCounterDisplay.setAlignment(Pos.CENTER);
 
 		confirmButton = new Button("Confirm");
@@ -103,9 +102,21 @@ public class ReturnTokensView {
 	}
 	
 
-	public void modelChanged(ReturnTokens returnTokens) throws RemoteException {
-		this.updateTokenGemCounts(returnTokens);
-		this.updateConfirmButton(returnTokens);
+	public void modelChanged(ReturnTokens returnTokens) {
+		Platform.runLater(() -> 
+		{
+			try {
+				if(returnTokens.getReturningState() == ReturnTokenState.DONE) {  
+					stage.close();
+				} else {
+					this.updateTokenGemCounts(returnTokens);
+					this.updateConfirmButton(returnTokens);
+				}
+			} catch (RemoteException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		});
 	}
 	
 	/**
@@ -185,13 +196,4 @@ public class ReturnTokensView {
 
 		return tokenColumn;
 	}
-	
-	/**
-	 * Close window.
-	 */
-	public void closeWindow() {
-		stage.hide();
-		stage.close();
-	}
-
 }
