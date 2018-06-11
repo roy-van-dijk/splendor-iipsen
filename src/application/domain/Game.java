@@ -180,6 +180,8 @@ public interface Game extends Remote {
 	public void addTokenToTemp(Gem gemType) throws RemoteException;
 	
 	public boolean reserveCardInventoryFull() throws RemoteException;
+	
+	public void terminateGame() throws RemoteException;
 
 
 

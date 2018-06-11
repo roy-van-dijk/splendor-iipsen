@@ -20,4 +20,7 @@ public interface GameObserver extends Remote {
 	 * @throws RemoteException
 	 */
 	public void modelChanged(Game game) throws RemoteException;
+
+	public void disconnect(GameState gameState) throws RemoteException;
+
 }

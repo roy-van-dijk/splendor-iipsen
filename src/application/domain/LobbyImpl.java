@@ -184,6 +184,7 @@ public class LobbyImpl extends UnicastRemoteObject implements Lobby {
 			}
 		}
 		this.game.setPlayers(players);
+		this.game.setRegistry(this.registry);
 		this.lobbyState = LobbyStates.STARTED_GAME;
 		this.game.nextTurn();
 	}

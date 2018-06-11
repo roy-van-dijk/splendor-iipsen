@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
+import application.StageManager;
 import application.controllers.GameController;
 import application.domain.ColorBlindModes;
 import application.domain.Game;
@@ -14,6 +15,7 @@ import application.domain.GameObserver;
 import application.domain.GameState;
 import application.domain.MoveType;
 import application.domain.Player;
+import application.domain.LobbyImpl.LobbyStates;
 import application.util.AlertDialog;
 import application.util.Logger;
 import application.util.Logger.Verbosity;
@@ -336,6 +338,24 @@ public class GameView extends UnicastRemoteObject implements UIComponent, Disabl
 		
 		this.playingFieldView.setDisabled(disabled);
 		this.playerView.setDisabled(disabled);
+	}
+
+	@Override
+	public void disconnect(GameState gameState) throws RemoteException {
+		Platform.runLater(() -> {
+			StageManager.getInstance().showMainMenu();
+			
+			AlertDialog dialog;
+			if(gameState == GameState.CLOSING)
+			{
+				 dialog = new AlertDialog(AlertType.INFORMATION, "Server has been terminated. You have been disconnected.");
+			} else {
+				dialog = new AlertDialog(AlertType.INFORMATION, "You have been disconnected from the server.");
+			}
+			dialog.setHeaderText("");
+			dialog.show();
+		});
+		
 	}
 	
 }

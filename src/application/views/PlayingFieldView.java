@@ -1,19 +1,26 @@
 package application.views;
 
 import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+
+import application.StageManager;
 import application.controllers.GameController;
 import application.domain.CardRow;
+import application.domain.GameState;
 import application.domain.Gem;
 import application.domain.MoveType;
 import application.domain.Noble;
 import application.domain.PlayingField;
 import application.domain.PlayingFieldObserver;
 import application.domain.TempHand;
+import application.domain.LobbyImpl.LobbyStates;
+import application.util.AlertDialog;
 import application.util.ConfirmDialog;
 import application.util.Util;
 import javafx.application.Platform;
@@ -21,6 +28,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
@@ -260,6 +268,11 @@ public class PlayingFieldView extends UnicastRemoteObject implements UIComponent
 		vbox.getChildren().add(exit);
 
 		exit.setOnAction(e -> {
+			try {
+				gameController.terminateGame();
+			} catch (RemoteException e1) {
+				e1.printStackTrace();
+			}
 			gameController.leaveGame();
 		});
 		return vbox;

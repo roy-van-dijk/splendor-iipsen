@@ -7,6 +7,7 @@ import application.StageManager;
 import application.domain.Card;
 import application.domain.CardRow;
 import application.domain.Game;
+import application.domain.GameImpl;
 import application.domain.Gem;
 import application.domain.MoveType;
 import application.domain.ReturnTokens;
@@ -173,15 +174,29 @@ public class GameController {
 		game.cleanUpSelections();		
 	}
 	
-	//TODO Not yet tested
+	/**
+	 * 
+	 * @return 
+	 * @throws RemoteException
+	 */
 	public boolean reserveCardInventoryFull() throws RemoteException {
 		return game.reserveCardInventoryFull();
 	}
-	
+	/**
+	 * 
+	 * @throws Open Return Tokens view
+	 */
 	public void showReturnTokensWindow() throws RemoteException {
 		ReturnTokens data = new ReturnTokens(game);
 		ReturnTokenController controller = new ReturnTokenController(data);
 		ReturnTokensView view = new ReturnTokensView(data, controller);
 	}
+
+	public void terminateGame() throws RemoteException {
+		game.terminateGame();
+		
+	}
+	
+	
 	
 }

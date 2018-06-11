@@ -3,7 +3,10 @@ package application.domain;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Serializable;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -26,6 +29,8 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 	
 	private GameState gameState;
 	
+	private transient Registry registry;
+	
 	private PlayingFieldImpl playingField;
 	
 	private int currentPlayerIdx;
@@ -38,7 +43,7 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 	private transient Map<GameObserver, Player> observers;
 
 	private EndTurnImpl endTurn;
-	
+
 
 	/**
 	 * Instantiates a new game impl.
@@ -387,6 +392,35 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 	public void addTokenToTemp(Gem gemType) throws RemoteException {
 		this.playingField.addTokenToTemp(gemType);
 		this.notifyObservers();
+	}
+	
+	public void terminateGame() throws RemoteException
+	{	
+		this.gameState = GameState.CLOSING;
+		this.disconnectAllPlayers();
+		
+		UnicastRemoteObject.unexportObject(this, true);
+		try {
+			this.registry.unbind("Lobby");
+		} catch (NotBoundException e) {
+			e.printStackTrace();
+		}
+		UnicastRemoteObject.unexportObject(this.registry, true);
+		System.out.println("[DEBUG] GameImpl::terminateGame()::Server terminated.");
+	}
+
+
+	private void disconnectAllPlayers() throws RemoteException {
+		System.out.println("[DEBUG] GameImpl::disconnectAllPlayers()::Disconnecting all observers.");
+		for(GameObserver o : observers.keySet())
+		{
+			o.disconnect(gameState);
+		}
+	}
+
+
+	public void setRegistry(Registry registry) {
+		this.registry = registry;
 	}
 
 
