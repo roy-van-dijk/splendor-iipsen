@@ -17,6 +17,7 @@ public interface EndTurn extends Remote {
 	 *
 	 * @throws RemoteException the remote exception
 	 */
-	void endTurn() throws RemoteException;
-
+	public void endTurn() throws RemoteException;
+	
+	public boolean returningTokens() throws RemoteException;
 }

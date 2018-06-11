@@ -34,10 +34,9 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 	private boolean reserveCardInventoryFull;
 
 	private List<Player> players; // Contains a list of PlayerImpl on server
+	private Player winningPlayer;
 	
-	//private transient List<GameObserver> observers;
 	private transient Map<GameObserver, Player> observers;
-	
 
 	private EndTurnImpl endTurn;
 	
@@ -50,7 +49,7 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 	public GameImpl() throws RemoteException {
 		this.maxPlayers = maxPlayers;
 		
-		this.roundNr = 0;
+		this.roundNr = 1;
 		this.currentPlayerIdx = -1;
 		
 		this.players = new ArrayList<Player>();
@@ -74,6 +73,8 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 		if(currentPlayerIdx >= players.size() || currentPlayerIdx < 0) {
 			currentPlayerIdx = 0;
 		}
+
+		roundNr++;
 		
 		try {
 			playingField.newTurn();
@@ -92,12 +93,8 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 	 */
 	public boolean isDisabled(GameObserver o) throws RemoteException
 	{
-		Player player = observers.get(o); // THIS IS STILL A PROXY REFERENCE BECAUSE ADDOBSERVER ADDS A PROXY
-/*		System.out.printf("Checking if %s is disabled, current player = %s\n", player.getName(), this.getCurrentPlayer().getName());
-		System.out.printf("Checking if %s is disabled, current player = %s\n", player, this.getCurrentPlayer());
-		System.out.println("is equal: " + (this.getCurrentPlayer().equals(player)));*/
-		// Equals check won't work probably if one of the players is a PlayerImpl instead of a proxy ref to a Player
-		return !(player.getName().equals(this.getCurrentPlayer().getName())); // Checking for name as a workaround for the proxy-ref problem.
+		Player player = observers.get(o);
+		return !(player.getName().equals(this.getCurrentPlayer().getName())); 
 	}
 	
 	/* (non-Javadoc)
@@ -155,6 +152,8 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 		}
 		playingField.findSelectableCardsFromField();
 	}
+	
+	
 	//TODO not yet tested
 	public boolean reserveCardInventoryFull() throws RemoteException
 	{
@@ -250,7 +249,7 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 	 *
 	 * @throws RemoteException
 	 */
-	private synchronized void notifyObservers() throws RemoteException
+	public synchronized void notifyObservers() throws RemoteException
 	{
 		System.out.println("[DEBUG] GameImpl::notifyObservers()::Notifying all game observers of change");
 		for(GameObserver o : observers.keySet())
@@ -307,6 +306,7 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 		}
 		playingField.newTurn();
 		this.getCurrentPlayer().clearSelectableCards();
+		this.winningPlayer = null;
 		this.notifyObservers();
 	}
 	
@@ -390,6 +390,18 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 	public void addTokenToTemp(Gem gemType) throws RemoteException {
 		this.playingField.addTokenToTemp(gemType);
 		this.notifyObservers();
+	}
+
+
+	@Override
+	public void playerHasWon(Player winningPlayer) throws RemoteException {
+		this.winningPlayer = winningPlayer;
+		this.notifyObservers();
+	}
+	
+	@Override
+	public Player getWinningPlayer() {
+		return winningPlayer;
 	}
 
 

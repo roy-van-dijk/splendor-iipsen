@@ -64,10 +64,10 @@ public class SaveGameDAO {
 	public void saveGameToFile(GameImpl game) throws FileNotFoundException, IOException {
 		basePath = this.createSavePath("Bob.splendor");
 		
-			ObjectOutputStream output = new ObjectOutputStream(new FileOutputStream(basePath));
-			output.writeObject(game);
-			output.close();
-			System.out.println("Game saved to " + basePath);
+		ObjectOutputStream output = new ObjectOutputStream(new FileOutputStream(basePath));
+		output.writeObject(game);
+		output.close();
+		System.out.println("Game saved to " + basePath);
 	}
 
 	/**

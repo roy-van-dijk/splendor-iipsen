@@ -9,11 +9,13 @@ import application.domain.CardRow;
 import application.domain.Game;
 import application.domain.Gem;
 import application.domain.MoveType;
+import application.domain.ReturnTokens;
 import application.domain.TempHand;
 import application.domain.Token;
 import application.domain.TokenList;
 import application.util.ConfirmDialog;
 import application.views.PopUpWindowView;
+import application.views.ReturnTokensView;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 
@@ -174,6 +176,12 @@ public class GameController {
 	//TODO Not yet tested
 	public boolean reserveCardInventoryFull() throws RemoteException {
 		return game.reserveCardInventoryFull();
+	}
+	
+	public void showReturnTokensWindow() throws RemoteException {
+		ReturnTokens data = new ReturnTokens(game);
+		ReturnTokenController controller = new ReturnTokenController(data);
+		ReturnTokensView view = new ReturnTokensView(data, controller);
 	}
 	
 }
