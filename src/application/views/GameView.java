@@ -105,6 +105,7 @@ public class GameView extends UnicastRemoteObject implements UIComponent, Disabl
 				this.setDisabled(disabled);
 				if(!disabled)
 				{
+					btnReserveCard.setDisable(gameController.reserveCardInventoryFull());
 					btnEndTurn.setDisable(game.getPlayingField().getTempHand().isEmpty());
 				}
 				
@@ -196,8 +197,6 @@ public class GameView extends UnicastRemoteObject implements UIComponent, Disabl
 		// Make separate button class
 		btnReserveCard = new Button("Reserve Card");
 		btnReserveCard.getStyleClass().add("move-button");
-		//TODO Not yet tested
-		btnReserveCard.setDisable(gameController.reserveCardInventoryFull());
 		btnReserveCard.setOnAction(e -> {
 			try {
 				gameController.resetTurn();

@@ -186,6 +186,7 @@ public class PlayerView extends UnicastRemoteObject implements UIComponent, Disa
 	 * @param List<Card>cards the cards
 	 */
 	private void updatePlayerReservedCards(List<Card> cards) {
+		
 		reservedCards.getChildren().clear();
 		HBox reservedCardsDisplay = createReservedCardDisplay(cards, 110, 160);
 		reservedCardsDisplay.setPrefWidth(350);
