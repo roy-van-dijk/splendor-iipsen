@@ -155,10 +155,12 @@ public class EndTurnImpl extends UnicastRemoteObject implements EndTurn, Seriali
 			int[] totalTokensNeeded = this.neededTokens(cost, playerGems);
 			int tokensNeeded = totalTokensNeeded[0];
 			int jokersNeeded =  totalTokensNeeded[1];
+			List<Token> tokensToPlayingField= new ArrayList<>();
 			
 			for(int i = 0; i < tokensNeeded; i++) {
 				for(Token token : player.getTokens()) {
 					if(token.getGemType() == cost.getKey()) {
+						tokensToPlayingField.add(token);
 						player.getTokens().remove(token);
 						break;
 					}
@@ -168,11 +170,14 @@ public class EndTurnImpl extends UnicastRemoteObject implements EndTurn, Seriali
 			for(int i = 0; i < jokersNeeded; i++) {
 				for(Token token : player.getTokens()) {
 					if(token.getGemType() == Gem.JOKER) {
+						tokensToPlayingField.add(token);
 						player.getTokens().remove(token);
 						break;
 					}
 				}
 			}	
+			
+			playingField.addTokens(tokensToPlayingField);
 		}
 	}
 	
