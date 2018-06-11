@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.rmi.RemoteException;
+import java.rmi.server.RemoteRef;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
@@ -21,7 +22,7 @@ import application.services.SaveGameDAO;
  */
 class TestOpslaanSpel {
 	private GameImpl game;
-
+	private int maxPlayers = 4;
 	/**
 	 * Sets the up before class.
 	 *
@@ -47,7 +48,7 @@ class TestOpslaanSpel {
 	 */
 	@BeforeEach
 	void setUp() throws Exception {
-		game = new GameImpl();
+		game = new GameImpl(maxPlayers);
 		
 		
 	}

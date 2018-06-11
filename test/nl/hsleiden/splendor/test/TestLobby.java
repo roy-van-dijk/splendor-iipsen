@@ -38,7 +38,7 @@ class TestLobby {
 	private GameImpl game;
 	
 	private String hostIP;
-	private int maxPlayers;
+	private int maxPlayers = 4;
 	
 	private Registry registry;
 	/**
@@ -63,7 +63,7 @@ class TestLobby {
 	 */
 	@BeforeEach
 	void setUp() throws Exception {
-		game = new GameImpl();
+		game = new GameImpl(maxPlayers);
 		lobby = new LobbyImpl(game);
 	}
 
