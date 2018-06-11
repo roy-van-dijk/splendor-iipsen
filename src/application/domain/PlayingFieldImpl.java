@@ -288,6 +288,7 @@ public class PlayingFieldImpl extends UnicastRemoteObject implements PlayingFiel
 	 */
 	public void removeToken(Token token) throws RemoteException {
 		tokenList.remove(token);
+		this.notifyObservers();
 	}
 
 	/* (non-Javadoc)

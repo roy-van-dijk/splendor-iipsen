@@ -183,6 +183,8 @@ public interface Game extends Remote {
 	
 	public void terminateGame() throws RemoteException;
 
+	public void playerHasWon(Player winningPlayer) throws RemoteException;
 
+	public Player getWinningPlayer() throws RemoteException;
 
 }

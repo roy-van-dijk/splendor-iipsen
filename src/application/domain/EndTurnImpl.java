@@ -11,8 +11,10 @@ import java.util.Map;
 
 import application.controllers.ReturnTokenController;
 import application.services.SaveGameDAO;
+import application.util.AlertDialog;
 import application.util.Logger;
 import application.util.Logger.Verbosity;
+import javafx.scene.control.Alert.AlertType;
 
 // TODO: Kees Need to fill the method Endturn()
 /**
@@ -23,6 +25,9 @@ public class EndTurnImpl extends UnicastRemoteObject implements EndTurn, Seriali
 	/**
 	 * 
 	 */
+	public enum LastRound {NOT_LAST_ROUND, LAST_ROUND}
+	
+	private LastRound isLastRound = LastRound.NOT_LAST_ROUND;
 	private static final long serialVersionUID = 5685833325676205128L;
 	private Game game;
 	private PlayingField playingField;
@@ -104,6 +109,7 @@ public class EndTurnImpl extends UnicastRemoteObject implements EndTurn, Seriali
 			this.returningTokens = false;
 			this.checkNobleVisits();		
 			this.cleanUpTurn();
+			this.checkWinner();
 			game.saveGame();	
 			game.nextTurn();
 		}
@@ -180,10 +186,36 @@ public class EndTurnImpl extends UnicastRemoteObject implements EndTurn, Seriali
 			playingField.removeToken(token);
 		}
 	}
-
-
 	
-	
+	private void checkWinner() throws RemoteException {
+		
+		if((game.getRoundNr() % game.getPlayers().size()) == 0) {
+			Player winningPlayer = player;
+			for(Player player : game.getPlayers()) {
+				if(player.getPrestige() > winningPlayer.getPrestige()) {
+					winningPlayer = player;
+				}
+			}
+			if(winningPlayer.getPrestige() >= 15) {
+				// TODO: Speler heeft gewonnen
+				game.playerHasWon(winningPlayer);
+			}
+		}
+		
+		
+		
+//		if(player.getPrestige() >= 15 && (game.getRoundNr() % game.getPlayers().size()) == 0) {
+//			//Speler met hoogste prestige heeft gewonnen
+//			int mostPrestige = 0;
+//			for(Player player : game.getPlayers()) {
+//				if(player.getPrestige() > mostPrestige) {
+//					mostPrestige = player.getPrestige();
+//				}
+//			}
+//			new AlertDialog(AlertType.INFORMATION, "Je hebt gewonnen pik").show();
+//		}
+	}
+
 	/**
 	 * Removes the token cost.
 	 *

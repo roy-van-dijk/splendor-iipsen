@@ -113,8 +113,11 @@ public class GameView extends UnicastRemoteObject implements UIComponent, Disabl
 					if(game.getEndTurn().returningTokens())
 					{
 						gameController.showReturnTokensWindow();
-					}
-				}				
+					}	
+				}
+				if(game.getWinningPlayer() != null) {
+					new PopUpWindowView(game.getWinningPlayer().getName() + " has won the game!", "A player has won");
+				}		
 			} catch (RemoteException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

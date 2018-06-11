@@ -47,7 +47,7 @@ class TestOpslaanSpel {
 	 */
 	@BeforeEach
 	void setUp() throws Exception {
-		game = new GameImpl(4);
+		game = new GameImpl();
 		
 		
 	}
@@ -74,12 +74,11 @@ class TestOpslaanSpel {
 		try {
 			game.saveGame();
 		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
+			fail("Not yet implemented");
 			e.printStackTrace();
 		}
 		File file2 =  new File(SaveGameDAO.getInstance().createSavePath("Bob.splendor"));
 		assertNotSame(length, file2.lastModified());
-		//assertEquals()
 	}
 	
 
