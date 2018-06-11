@@ -15,7 +15,8 @@ public class ConfirmDialog extends javafx.scene.control.Alert{
 
 	/**
 	 * Shows a new confirm dialog window.
-	 * @param AlertType alertType
+	 *
+	 * @param alertType
 	 */
 	public ConfirmDialog(AlertType alertType) {
 		super(alertType);

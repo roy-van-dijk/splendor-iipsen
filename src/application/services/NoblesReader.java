@@ -37,11 +37,22 @@ public class NoblesReader {
 	
 	private List<Noble> allNobles;
 	
+	/**
+	 * Instantiates a new nobles reader.
+	 *
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	public NoblesReader() throws IOException {
 		this.allNobles = new ArrayList<Noble>();
 		this.generateNobles();
 	}
 
+	/**
+	 * Generate nobles.
+	 *
+	 * @throws FileNotFoundException the file not found exception
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	//generate noble array from csv file.
 	private void generateNobles() throws FileNotFoundException, IOException {
 		try (
@@ -58,6 +69,11 @@ public class NoblesReader {
 		}
 	}
 	
+	/**
+	 * Gets the nobles.
+	 *
+	 * @return the nobles
+	 */
 	// get stack of nobles
 	public Stack<Noble> getNobles() {
 		Stack<Noble> nobleArray = new Stack<>();	
@@ -68,6 +84,12 @@ public class NoblesReader {
 	}
 
 	
+	/**
+	 * Read noble.
+	 *
+	 * @param nobleRecord the noble record
+	 * @return the noble
+	 */
 	// read data from noble (illustration and costs, prestige value is defined as constant.
 	private Noble readNoble(String[] nobleRecord) throws RemoteException {
 		String illustration = nobleRecord[0];
@@ -76,6 +98,12 @@ public class NoblesReader {
 		return noble;
 	}
 	
+	/**
+	 * Read bonus costs.
+	 *
+	 * @param record the record
+	 * @return the map
+	 */
 	//generate a map(gem, integer) of the cost of the noble.
 	private static Map<Gem, Integer> readBonusCosts(String[] record){
 		Map<Gem, Integer> costs = new LinkedHashMap<>();

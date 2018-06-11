@@ -5,67 +5,174 @@ import java.util.List;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
+// TODO: Auto-generated Javadoc
 /**
- * @author Sanchez
+ * The Interface Game.
  *
+ * @author Sanchez
  */
 public interface Game extends Remote {
 
+	/**
+	 * Next turn.
+	 *
+	 * @throws RemoteException
+	 */
 	public void nextTurn() throws RemoteException;
 	
+	/**
+	 * Adds the observer.
+	 *
+	 * @param o the GameObserver
+	 * @param player
+	 * @throws RemoteException
+	 */
 	public void addObserver(GameObserver o, Player player) throws RemoteException;
 	
+	/**
+	 * Removes the observer.
+	 *
+	 * @param o the GameObserver
+	 * @throws RemoteException
+	 */
 	public void removeObserver(GameObserver o) throws RemoteException;
 	
+	/**
+	 * Save the game.
+	 *
+	 * @throws RemoteException
+	 */
 	public void saveGame() throws RemoteException;
 	
+	/**
+	 * Find selectable cards.
+	 *
+	 * @param moveType 
+	 * @throws RemoteException
+	 */
 	public void findSelectableCards(MoveType moveType) throws RemoteException;
 	
+	/**
+	 * Gets the current player idx.
+	 *
+	 * @return the current player idx
+	 * @throws RemoteException
+	 */
 	public int getCurrentPlayerIdx() throws RemoteException;
 	
 	/**
-	 * 
-	 * @return
+	 * Gets the current player.
+	 *
+	 * @return Player
 	 * @throws RemoteException
-	 * Player
 	 */
 	public Player getCurrentPlayer() throws RemoteException;
 
+	/**
+	 * Gets the round nr.
+	 *
+	 * @return the round nr
+	 * @throws RemoteException
+	 */
 	public int getRoundNr() throws RemoteException;
 
 	/**
-	 * 
-	 * @return
+	 * Gets the players.
+	 *
+	 * @return List<Player>
 	 * @throws RemoteException
-	 * List<Player>
 	 */
 	public List<Player> getPlayers() throws RemoteException;
+	
 	/**
-	 * 
-	 * @return
+	 * Gets the playing field.
+	 *
+	 * @return PlayingField
 	 * @throws RemoteException
-	 * PlayingField
 	 */
 	public PlayingField getPlayingField() throws RemoteException;
 
 
+	/**
+	 * Clean up turn.
+	 *
+	 * @throws RemoteException
+	 */
 	public void cleanUpTurn() throws RemoteException;
 	
+	/**
+	 * Checks if is disabled.
+	 *
+	 * @param o the GameObserver
+	 * @return true, if is disabled
+	 * @throws RemoteException
+	 */
 	public boolean isDisabled(GameObserver o) throws RemoteException;
 
+	/**
+	 * Reserve card from deck.
+	 *
+	 * @param cardRowIdx
+	 * @throws RemoteException
+	 */
 	public void reserveCardFromDeck(int cardRowIdx) throws RemoteException;
+	
+	/**
+	 * Adds the card to temp from field.
+	 *
+	 * @param cardRowIdx
+	 * @param cardIdx
+	 * @throws RemoteException
+	 */
 	public void addCardToTempFromField(int cardRowIdx, int cardIdx) throws RemoteException;
+	
+	/**
+	 * Adds the card to temp from reserve.
+	 *
+	 * @param cardIdx
+	 * @throws RemoteException
+	 */
 	public void addCardToTempFromReserve(int cardIdx) throws RemoteException;
 
+	/**
+	 * Gets the end turn.
+	 *
+	 * @return EndTurn
+	 * @throws RemoteException
+	 */
 	public EndTurn getEndTurn() throws RemoteException;
 
+	/**
+	 * Clean up selections.
+	 *
+	 * @throws RemoteException
+	 */
 	public void cleanUpSelections() throws RemoteException;
 
+	/**
+	 * Update playing field and player view.
+	 *
+	 * @throws RemoteException
+	 */
 	public void updatePlayingFieldAndPlayerView() throws RemoteException;
 
+	/**
+	 * Sets the tokens selectable.
+	 *
+	 * @param moveType
+	 * @throws RemoteException
+	 */
 	public void setTokensSelectable(MoveType moveType) throws RemoteException;
 
+	/**
+	 * Adds the token to temp.
+	 *
+	 * @param gemType
+	 * @throws RemoteException
+	 */
 	public void addTokenToTemp(Gem gemType) throws RemoteException;
+	
+	public boolean reserveCardInventoryFull() throws RemoteException;
 
 
 

@@ -27,6 +27,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 
+
 /**
  * The playing field view is the section that contains all the cards, nobles,
  * tokens, etc.
@@ -62,11 +63,12 @@ public class PlayingFieldView extends UnicastRemoteObject implements UIComponent
 
 	private GameController gameController;
 
+
 	/**
-	 * Creates a new playing field view
-	 * 
-	 * @param PlayingField playingField
-	 * @param GameController gameController
+	 * Instantiates a new playing field view.
+	 *
+	 * @param playingField
+	 * @param gameController
 	 * @throws RemoteException
 	 */
 	public PlayingFieldView(PlayingField playingField, GameController gameController) throws RemoteException {
@@ -83,9 +85,10 @@ public class PlayingFieldView extends UnicastRemoteObject implements UIComponent
 	
 	
 	/**
-	 * Update the playingFieldView
-	 * 
-	 * @return void
+	 * Update the playingFieldView.
+	 *
+	 * @param playingField
+	 * @throws RemoteException
 	 */
 	public void modelChanged(PlayingField playingField) throws RemoteException
 	{
@@ -106,7 +109,10 @@ public class PlayingFieldView extends UnicastRemoteObject implements UIComponent
 		});
 	}
 
-
+	
+	/**
+	 * Builds the UI.
+	 */
 	private void buildUI() {
 		rowsPane = buildCardsAndNoblesDisplay();
 		exitGamePane = buildExitGameDisplay();
@@ -121,6 +127,11 @@ public class PlayingFieldView extends UnicastRemoteObject implements UIComponent
 		root.setPadding(new Insets(FIELDPADDING));
 	}
 
+	/**
+	 * Builds the cards and nobles display.
+	 *
+	 * @return VBox
+	 */
 	private VBox buildCardsAndNoblesDisplay() {
 		noblesPane = new HBox(CARDSPACING);
 		noblesPane.setAlignment(Pos.CENTER);
@@ -134,6 +145,13 @@ public class PlayingFieldView extends UnicastRemoteObject implements UIComponent
 		return rowsPane;
 	}
 	
+	/**
+	 * Initialize card rows.
+	 *
+	 * @param cardRows
+	 * @param tempHand
+	 * @throws RemoteException
+	 */
 	private void initializeCardRows(List<CardRow> cardRows, TempHand tempHand) throws RemoteException {
 		System.out.println("Initializing cardrows");
 		
@@ -144,6 +162,11 @@ public class PlayingFieldView extends UnicastRemoteObject implements UIComponent
 		}
 	}
 
+	/**
+	 * Update nobles.
+	 *
+	 * @param nobles
+	 */
 	private void updateNobles(List<Noble> nobles) {
 		noblesPane.getChildren().clear();
 
@@ -154,6 +177,16 @@ public class PlayingFieldView extends UnicastRemoteObject implements UIComponent
 		}
 	}
 
+	
+	
+	/**
+	 * Update field tokens.
+	 *
+	 * @param gemsCount
+	 * @param selectableTokens
+	 * @param tempHand
+	 * @throws RemoteException
+	 */
 	private void updateFieldTokens(Map<Gem, Integer> gemsCount, List<Gem> selectableTokens, TempHand tempHand) throws RemoteException {
 		tokensPane.getChildren().clear();
 
@@ -164,9 +197,17 @@ public class PlayingFieldView extends UnicastRemoteObject implements UIComponent
 		}
 	}
 
+	
 	/**
-	 * @author Kees
-	 * @throws RemoteException 
+	 * Creates the token gem count display.
+	 *
+	 * @param gemType
+	 * @param count
+	 * @param radius
+	 * @param selectableTokens
+	 * @param tempHand
+	 * @return HBox
+	 * @throws RemoteException
 	 */
 	private HBox createTokenGemCountDisplay(Gem gemType, int count, int radius, List<Gem> selectableTokens,
 			TempHand tempHand) throws RemoteException {
@@ -206,6 +247,11 @@ public class PlayingFieldView extends UnicastRemoteObject implements UIComponent
 		return tokenRow;
 	}
 
+	/**
+	 * Builds the exit game display.
+	 *
+	 * @return VBox
+	 */
 	private VBox buildExitGameDisplay() {
 		Button exit = new Button("X");
 
@@ -219,10 +265,16 @@ public class PlayingFieldView extends UnicastRemoteObject implements UIComponent
 		return vbox;
 	}
 
+	/* (non-Javadoc)
+	 * @see application.views.UIComponent#asPane()
+	 */
 	public Pane asPane() {
 		return root;
 	}
 
+	/* (non-Javadoc)
+	 * @see application.views.Disableable#setDisabled(boolean)
+	 */
 	@Override
 	public void setDisabled(boolean disabled)  {
 		this.rowsPane.setDisable(disabled);

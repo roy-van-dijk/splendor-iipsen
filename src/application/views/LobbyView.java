@@ -22,10 +22,11 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+
 /**
- * 
- * @author Roy
+ * The Class LobbyView.
  *
+ * @author Roy
  */
 public class LobbyView extends UnicastRemoteObject implements UIComponent, LobbyObserver  {
 
@@ -51,7 +52,13 @@ public class LobbyView extends UnicastRemoteObject implements UIComponent, Lobby
 	private Label lblAssPlayers;
 	private Label lblLobbyIP;
 	
-
+	/**
+	 * Instantiates a new lobby view.
+	 *
+	 * @param lobby
+	 * @param lobbyController
+	 * @throws RemoteException
+	 */
 	public LobbyView(Lobby lobby, LobbyController lobbyController) throws RemoteException {
 		this.lobbyController = lobbyController;
 		
@@ -59,7 +66,10 @@ public class LobbyView extends UnicastRemoteObject implements UIComponent, Lobby
 	}
 
 	/**
-	 * update the lobby view
+	 * update the lobby view.
+	 *
+	 * @param lobby
+	 * @throws RemoteException
 	 */
 	public void modelChanged(Lobby lobby) throws RemoteException {
 		// Avoid throwing IllegalStateException by running from a non-JavaFX thread.
@@ -73,11 +83,18 @@ public class LobbyView extends UnicastRemoteObject implements UIComponent, Lobby
 		  });	
 	}
 	
+	/**
+	 * Leave lobby and return the player to showMainMenu.
+	 */
 	private void leaveLobby()
 	{
 		StageManager.getInstance().showMainMenu();
 	}
+
 	
+	/* (non-Javadoc)
+	 * @see application.domain.LobbyObserver#disconnect(application.domain.LobbyImpl.LobbyStates)
+	 */
 	public void disconnect(LobbyStates lobbyState) throws RemoteException
 	{
 		Platform.runLater(() -> {
@@ -96,6 +113,13 @@ public class LobbyView extends UnicastRemoteObject implements UIComponent, Lobby
 	}
 	
 	
+	/**
+	 * Update unassigned players.
+	 *
+	 * @param maxPlayers
+	 * @param unassignedPlayers
+	 * @throws RemoteException
+	 */
 	private void updateUnassignedPlayers(int maxPlayers, List<Player> unassignedPlayers) throws RemoteException
 	{
 		for(int i = 0; i < maxPlayers; i++) 
@@ -123,6 +147,12 @@ public class LobbyView extends UnicastRemoteObject implements UIComponent, Lobby
 		}
 	}
 	
+	/**
+	 * Update assignable slots.
+	 *
+	 * @param slots
+	 * @throws RemoteException
+	 */
 	private void updateAssignableSlots(List<PlayerSlot> slots) throws RemoteException
 	{
 		for(int slotIdx = 0; slotIdx < slots.size(); slotIdx++) 
@@ -163,6 +193,12 @@ public class LobbyView extends UnicastRemoteObject implements UIComponent, Lobby
 		}
 	}
 	
+	/**
+	 * Update UI.
+	 *
+	 * @param lobby
+	 * @throws RemoteException
+	 */
 	private void updateUI(Lobby lobby) throws RemoteException {
 		LobbyStates lobbyState = lobby.getLobbyState();
 		if(lobbyState == LobbyStates.CLOSING) {
@@ -188,8 +224,9 @@ public class LobbyView extends UnicastRemoteObject implements UIComponent, Lobby
 			this.btnReady.setDisable(!lobby.isAssigned(this));
 		}
 	}
+	
 	/**
-	 * build up the UI on creating the lobby
+	 * build up the UI on creating the lobby.
 	 */
 	private void buildUI()
 	{	
@@ -205,8 +242,9 @@ public class LobbyView extends UnicastRemoteObject implements UIComponent, Lobby
 	}
 	
 	/**
-	 * button to open manual
-	 * @return
+	 * button to open manual.
+	 *
+	 * @return HBox
 	 */
 	private HBox buildManualButton() {
 		HBox manualContainer = new HBox();
@@ -221,6 +259,11 @@ public class LobbyView extends UnicastRemoteObject implements UIComponent, Lobby
 		return manualContainer;
 	}
 	
+	/**
+	 * Builds the pane of the Lobby.
+	 *
+	 * @return Pane
+	 */
 	private Pane buildPane() {
 		hbox = new HBox();
 		gpane = new GridPane();
@@ -280,6 +323,9 @@ public class LobbyView extends UnicastRemoteObject implements UIComponent, Lobby
 		return hbox;
 	}
 
+	/* (non-Javadoc)
+	 * @see application.views.UIComponent#asPane()
+	 */
 	public Pane asPane() {
 		return root;
 	}

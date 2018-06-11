@@ -4,8 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author Sanchez
+ * The Enum CardLevel.
  *
+ * @author Sanchez
  */
 public enum CardLevel {
 	LEVEL1(1),
@@ -14,6 +15,11 @@ public enum CardLevel {
 	
 	private int level;
 
+    /**
+     * Instantiates a new card level.
+     *
+     * @param level
+     */
     private CardLevel(int level) {
 		this.level = level;
 	}
@@ -28,6 +34,12 @@ public enum CardLevel {
     }
     
     
+	/**
+	 * Gets the level.
+	 *
+	 * @param level
+	 * @return CardLevel
+	 */
 	public static CardLevel getLevel(int level)
 	{
 		return map.get(level);

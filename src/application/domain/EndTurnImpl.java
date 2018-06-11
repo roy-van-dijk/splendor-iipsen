@@ -14,6 +14,10 @@ import application.services.SaveGameDAO;
 import application.util.Logger;
 import application.util.Logger.Verbosity;
 
+// TODO: Kees Need to fill the method Endturn()
+/**
+ * The Class EndTurnImpl.
+ */
 public class EndTurnImpl extends UnicastRemoteObject implements EndTurn, Serializable {
 	
 	/**
@@ -24,7 +28,11 @@ public class EndTurnImpl extends UnicastRemoteObject implements EndTurn, Seriali
 	private PlayingField playingField;
 	private TempHand tempHand;
 	private Player player;
-	
+	/**
+	 * 
+	 * @param game
+	 * @throws RemoteException
+	 */
 	public EndTurnImpl(Game game) throws RemoteException {
 		this.game = game;
 		
@@ -32,10 +40,20 @@ public class EndTurnImpl extends UnicastRemoteObject implements EndTurn, Seriali
 		this.tempHand = playingField.getTempHand();
 	}
 	
+	/**
+	 * Gets the current player.
+	 *
+	 * @throws RemoteException
+	 */
 	private void getCurrentPlayer() throws RemoteException {
-		this.player = game.getCurrentPlayer();
+		this.player = game.getCurrentPlayer(); //TODO fix the name of method
 	}
 
+	/**
+	 * Check noble visits.
+	 *
+	 * @throws RemoteException
+	 */
 	private void checkNobleVisits() throws RemoteException{
 		
 		List<Noble> allNobles= playingField.getNobles();
@@ -50,6 +68,14 @@ public class EndTurnImpl extends UnicastRemoteObject implements EndTurn, Seriali
 		
 	}
 	
+	/**
+	 * Check playing field nobles.
+	 *
+	 * @param allNobles
+	 * @param totalBonusGems
+	 * @return List<Noble>
+	 * @throws RemoteException
+	 */
 	private List<Noble> checkPlayingFieldNobles(List<Noble> allNobles, Map<Gem, Integer> totalBonusGems) throws RemoteException {
 		
 		List<Noble> visitingNobles = new ArrayList<Noble>();
@@ -65,6 +91,13 @@ public class EndTurnImpl extends UnicastRemoteObject implements EndTurn, Seriali
 		return visitingNobles;
 	}
 
+	/**
+	 * Compare noble and bonus gems.
+	 *
+	 * @param nobleCost
+	 * @param totalBonusGems
+	 * @return true, if successful
+	 */
 	private boolean compareNobleAndBonusGems(Map<Gem, Integer> nobleCost, Map<Gem, Integer> totalBonusGems) {
 		for(Map.Entry<Gem, Integer> nobleCostEntry : nobleCost.entrySet()) {
 		//for(Gem gemType : Gem.values()) 
@@ -75,6 +108,11 @@ public class EndTurnImpl extends UnicastRemoteObject implements EndTurn, Seriali
 		return true;	
 	}
 
+	/**
+	 * Gets the tokens.
+	 *
+	 * @throws RemoteException
+	 */
 	private void getTokens() throws RemoteException {
 			for(Gem gem: tempHand.getSelectedGemTypes()) {			
 				Token token = new TokenImpl(gem);
@@ -84,6 +122,9 @@ public class EndTurnImpl extends UnicastRemoteObject implements EndTurn, Seriali
 		
 	}
 
+	/* (non-Javadoc)
+	 * @see application.domain.EndTurn#endTurn()
+	 */
 	@Override
 	public void endTurn() throws RemoteException {
 
@@ -147,6 +188,11 @@ public class EndTurnImpl extends UnicastRemoteObject implements EndTurn, Seriali
 		game.nextTurn();
 	}
 	
+	/**
+	 * Removes the token cost.
+	 *
+	 * @throws RemoteException
+	 */
 	private void removeTokenCost() throws RemoteException {
 		Map<Gem, Integer> playerGems = player.getTokensGemCount();
 		Map<Gem, Integer> costs = tempHand.getBoughtCard().getCosts();
@@ -155,10 +201,12 @@ public class EndTurnImpl extends UnicastRemoteObject implements EndTurn, Seriali
 			int[] totalTokensNeeded = this.neededTokens(cost, playerGems);
 			int tokensNeeded = totalTokensNeeded[0];
 			int jokersNeeded =  totalTokensNeeded[1];
+			List<Token> tokensToPlayingField= new ArrayList<>();
 			
 			for(int i = 0; i < tokensNeeded; i++) {
 				for(Token token : player.getTokens()) {
 					if(token.getGemType() == cost.getKey()) {
+						tokensToPlayingField.add(token);
 						player.getTokens().remove(token);
 						break;
 					}
@@ -168,14 +216,25 @@ public class EndTurnImpl extends UnicastRemoteObject implements EndTurn, Seriali
 			for(int i = 0; i < jokersNeeded; i++) {
 				for(Token token : player.getTokens()) {
 					if(token.getGemType() == Gem.JOKER) {
+						tokensToPlayingField.add(token);
 						player.getTokens().remove(token);
 						break;
 					}
 				}
 			}	
+			
+			playingField.addTokens(tokensToPlayingField);
 		}
 	}
 	
+	/**
+	 * Needed tokens.
+	 *
+	 * @param cost
+	 * @param playerGems
+	 * @return totalTokensNeeded
+	 * @throws RemoteException
+	 */
 	private int[] neededTokens(Map.Entry<Gem, Integer> cost, Map<Gem, Integer> playerGems) throws RemoteException {
 		int[] totalTokensNeeded = new int[3];
 		int jokersNeeded = 0;
@@ -197,6 +256,12 @@ public class EndTurnImpl extends UnicastRemoteObject implements EndTurn, Seriali
 		return totalTokensNeeded;
 	}
 	
+	/**
+	 * Clean up turn.
+	 * Emptys's the temphand
+	 *
+	 * @throws RemoteException
+	 */
 	private void cleanUpTurn() throws RemoteException {
 		tempHand.emptyHand();
 		game.cleanUpSelections();

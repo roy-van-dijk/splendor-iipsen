@@ -7,8 +7,16 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 
+/**
+ * The Interface EndTurn.
+ */
 public interface EndTurn extends Remote {
 
+	/**
+	 * End turn.
+	 *
+	 * @throws RemoteException the remote exception
+	 */
 	void endTurn() throws RemoteException;
 
 }

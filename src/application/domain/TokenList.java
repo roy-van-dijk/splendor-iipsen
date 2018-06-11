@@ -5,23 +5,38 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+// TODO: Re-check the JavaDoc
+
 /**
- * 
- * @author Sanchez
+ * The Class TokenList.
  *
+ * @author Sanchez
  */
 public class TokenList implements Serializable {
 	private List<Token> tokens;
 
+	/**
+	 * Instantiates a new token list.
+	 */
 	public TokenList() {
 		this.tokens = new ArrayList<Token>();
 	}
 	
+	/**
+	 * Instantiates a new token list.
+	 *
+	 * @param tokens
+	 */
 	public TokenList(List<Token> tokens)
 	{
 		this.tokens = tokens;
 	}
 
+	/**
+	 * Adds a Token to the tokens 
+	 *
+	 * @param token
+	 */
 	public void add(Token token) {
 		tokens.add(token);
 	}
@@ -32,9 +47,13 @@ public class TokenList implements Serializable {
 				tokens.remove(t); return;
 			}
 		}
-		//tokens.remove(token);
 	}
 	
+	/**
+	 * Gets all the tokens 
+	 *
+	 * @return List<Token>
+	 */
 	public List<Token> getAll() {
 		return tokens;
 	}

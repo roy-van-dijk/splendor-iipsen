@@ -19,8 +19,9 @@ import java.util.Map.Entry;
 import application.util.Util;
 
 /**
- * @author Sanchez
+ * The Class LobbyImpl.
  *
+ * @author Sanchez
  */
 public class LobbyImpl extends UnicastRemoteObject implements Lobby {
 
@@ -28,6 +29,9 @@ public class LobbyImpl extends UnicastRemoteObject implements Lobby {
 	
 	private static final int MIN_PLAYERS_TO_START = 1;
 	
+	/**
+	 * The Enum LobbyStates.
+	 */
 	public enum LobbyStates { WAITING, STARTED_GAME, CLOSING };
 	
 	private LobbyStates lobbyState; 
@@ -48,6 +52,12 @@ public class LobbyImpl extends UnicastRemoteObject implements Lobby {
 	private Map<LobbyObserver, Player> playersMap; // for unassigned & assigned players
 	
 	
+	/**
+	 * Instantiates a new lobby impl.
+	 *
+	 * @param game
+	 * @throws RemoteException
+	 */
 	public LobbyImpl(GameImpl game) throws RemoteException {
 		this.game = game;
 		this.maxPlayers = game.getMaxPlayers();
@@ -66,6 +76,11 @@ public class LobbyImpl extends UnicastRemoteObject implements Lobby {
 		this.createPlayerSlots();
 	}
 	
+	/**
+	 * Disconnect all players.
+	 *
+	 * @throws RemoteException
+	 */
 	private void disconnectAllPlayers() throws RemoteException
 	{
 		System.out.println("[DEBUG] LobbyImpl::disconnectAllPlayers()::Disconnecting all observers.");
@@ -77,6 +92,9 @@ public class LobbyImpl extends UnicastRemoteObject implements Lobby {
 		assignedPlayersMap.clear();
 	}
 	
+	/* (non-Javadoc)
+	 * @see application.domain.Lobby#leaveLobby(application.domain.LobbyObserver)
+	 */
 	public void leaveLobby(LobbyObserver o) throws RemoteException {
 		if(host.equals(o)) // Only host can terminate the lobby
 		{
@@ -90,6 +108,11 @@ public class LobbyImpl extends UnicastRemoteObject implements Lobby {
 		}
 	}
 	
+	/**
+	 * Terminate lobby.
+	 *
+	 * @throws RemoteException
+	 */
 	private void terminateLobby() throws RemoteException
 	{
 		System.out.println("[DEBUG] LobbyImpl::terminateLobby()::Terminating server.");
@@ -108,6 +131,11 @@ public class LobbyImpl extends UnicastRemoteObject implements Lobby {
 		System.out.println("[DEBUG] LobbyImpl::terminateLobby()::Server terminated.");
 	}
 	
+	/**
+	 * Creates the player slots.
+	 *
+	 * @throws RemoteException
+	 */
 	private void createPlayerSlots() throws RemoteException
 	{
 		List<Player> previousPlayers = game.getPlayers();
@@ -122,11 +150,19 @@ public class LobbyImpl extends UnicastRemoteObject implements Lobby {
 		}
 	}
 	
+	/* (non-Javadoc)
+	 * @see application.domain.Lobby#getAssignedPlayer(application.domain.LobbyObserver)
+	 */
 	public Player getAssignedPlayer(LobbyObserver o) throws RemoteException
 	{
 		return assignedPlayersMap.get(o).getCurrentPlayer();
 	}
 	
+	/**
+	 * Start game.
+	 *
+	 * @throws RemoteException
+	 */
 	private void startGame() throws RemoteException
 	{
 		System.out.println("[DEBUG] LobbyImpl::startGame()::Setting up players");
@@ -152,6 +188,9 @@ public class LobbyImpl extends UnicastRemoteObject implements Lobby {
 		this.game.nextTurn();
 	}
 	
+	/* (non-Javadoc)
+	 * @see application.domain.Lobby#readyPlayer(application.domain.LobbyObserver)
+	 */
 	public void readyPlayer(LobbyObserver o) throws RemoteException
 	{
 		this.assignedPlayersMap.get(o).setReady(true);
@@ -160,6 +199,12 @@ public class LobbyImpl extends UnicastRemoteObject implements Lobby {
 		this.notifyObservers();
 	}
 	
+	/**
+	 * Clear player slot.
+	 *
+	 * @param o the LobbyObserver
+	 * @throws RemoteException the remote exception
+	 */
 	private void clearPlayerSlot(LobbyObserver o) throws RemoteException
 	{
 		if(assignedPlayersMap.containsKey(o))
@@ -168,6 +213,9 @@ public class LobbyImpl extends UnicastRemoteObject implements Lobby {
 		}
 	}
 	
+	/* (non-Javadoc)
+	 * @see application.domain.Lobby#unassignPlayer(application.domain.LobbyObserver)
+	 */
 	public void unassignPlayer(LobbyObserver o) throws RemoteException
 	{
 		this.clearPlayerSlot(o); // Clear previous slot
@@ -177,6 +225,9 @@ public class LobbyImpl extends UnicastRemoteObject implements Lobby {
 		this.notifyObservers();
 	}
 	
+	/* (non-Javadoc)
+	 * @see application.domain.Lobby#selectSlot(application.domain.LobbyObserver, application.domain.PlayerSlot)
+	 */
 	public void selectSlot(LobbyObserver o, PlayerSlot slot) throws RemoteException
 	{
 		if(!slot.isAvailable()) return;
@@ -188,6 +239,11 @@ public class LobbyImpl extends UnicastRemoteObject implements Lobby {
 		this.notifyObservers();
 	}
 	
+	/**
+	 * Check ready players.
+	 *
+	 * @throws RemoteException the remote exception
+	 */
 	private void checkReadyPlayers() throws RemoteException
 	{
 		boolean allReady = true;
@@ -203,8 +259,10 @@ public class LobbyImpl extends UnicastRemoteObject implements Lobby {
 			this.startGame();
 		}
 	}
-	
 	// Probably would've done this onGameStart but this is the way its defined in the technical design.
+	/* (non-Javadoc)
+	 * @see application.domain.Lobby#createPlayer(application.domain.LobbyObserver, java.lang.String)
+	 */
 	public void createPlayer(LobbyObserver o, String playerName) throws RemoteException {
 		System.out.printf("[DEBUG] LobbyImpl::createPlayer()::Player '%s' has connected to the lobby!\n", playerName);
 		
@@ -220,6 +278,9 @@ public class LobbyImpl extends UnicastRemoteObject implements Lobby {
 		this.notifyObservers();
 	}
 	
+	/* (non-Javadoc)
+	 * @see application.domain.Lobby#disconnectPlayer(application.domain.LobbyObserver)
+	 */
 	public void disconnectPlayer(LobbyObserver o) throws RemoteException {
 		this.clearPlayerSlot(o);
 		assignedPlayersMap.remove(o);
@@ -227,6 +288,11 @@ public class LobbyImpl extends UnicastRemoteObject implements Lobby {
 		this.notifyObservers();
 	}
 
+	/**
+	 * Notify observers.
+	 *
+	 * @throws RemoteException
+	 */
 	private void notifyObservers() throws RemoteException
 	{
 		System.out.println("[DEBUG] LobbyImpl::notifyObservers()::Notifying all lobby observers of change");
@@ -236,18 +302,30 @@ public class LobbyImpl extends UnicastRemoteObject implements Lobby {
 		}
 	}
 	
+	/* (non-Javadoc)
+	 * @see application.domain.Lobby#isAssigned(application.domain.LobbyObserver)
+	 */
 	public boolean isAssigned(LobbyObserver o) throws RemoteException {
 		return assignedPlayersMap.containsKey(o);
 	}
 	
+	/* (non-Javadoc)
+	 * @see application.domain.Lobby#getAssignedPlayerSlots()
+	 */
 	public List<PlayerSlot> getAssignedPlayerSlots() throws RemoteException {
 		return new ArrayList<PlayerSlot>(assignedPlayersMap.values());
 	}
-
+	
+	/* (non-Javadoc)
+	 * @see application.domain.Lobby#getAssignableSlots()
+	 */
 	public List<PlayerSlot> getAssignableSlots() {
 		return new ArrayList<PlayerSlot>(assignableSlots.values());
 	}
 
+	/* (non-Javadoc)
+	 * @see application.domain.Lobby#getUnassignedPlayers()
+	 */
 	public List<Player> getUnassignedPlayers() throws RemoteException {
 		List<Player> unassignedPlayers = new ArrayList<Player>();
 		
@@ -261,18 +339,30 @@ public class LobbyImpl extends UnicastRemoteObject implements Lobby {
 		return unassignedPlayers;
 	}
 
+	/* (non-Javadoc)
+	 * @see application.domain.Lobby#getMaxPlayers()
+	 */
 	public int getMaxPlayers() throws RemoteException {
 		return maxPlayers;
 	}
 	
+	/* (non-Javadoc)
+	 * @see application.domain.Lobby#getHostIP()
+	 */
 	public String getHostIP() throws RemoteException {
 		return hostIP;
 	}
 
+	/* (non-Javadoc)
+	 * @see application.domain.Lobby#getGame()
+	 */
 	public GameImpl getGame() throws RemoteException {
 		return game;//(Game) UnicastRemoteObject.exportObject(game, 1099);
 	}
 	
+	/* (non-Javadoc)
+	 * @see application.domain.Lobby#getLobbyState()
+	 */
 	public LobbyStates getLobbyState() throws RemoteException {
 		return lobbyState;
 	}
@@ -281,6 +371,14 @@ public class LobbyImpl extends UnicastRemoteObject implements Lobby {
 		return registry;
 	}
 */
+	
+	
+	
+	/**
+	* Sets the registry.
+ 	*
+ 	* @param registry the new registry
+ 	*/
 	public void setRegistry(Registry registry) {
 		this.registry = registry;
 	}

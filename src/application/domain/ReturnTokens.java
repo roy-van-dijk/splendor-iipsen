@@ -7,6 +7,10 @@ import java.util.List;
 import application.controllers.ReturnTokenController;
 import application.views.ReturnTokensView;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class ReturnTokens.
+ */
 public class ReturnTokens {
 	private TokenList tokenListNew;
 	private List<Token> removedTokens;
@@ -18,6 +22,12 @@ public class ReturnTokens {
 	
 	private boolean allowConfirm;
 
+	/**
+	 * Instantiates a new return tokens.
+	 *
+	 * @param playingField
+	 * @param player
+	 */
 	public ReturnTokens(PlayingField playingField, Player player)
 	{
 		this.player = player;
@@ -34,6 +44,14 @@ public class ReturnTokens {
 		this.removedTokens = new ArrayList<>();
 	}
 	
+	/**
+	 * Gets the token from gem type.
+	 *
+	 * @param tokenArray
+	 * @param gemType
+	 * @return Token
+	 * @throws RemoteException
+	 */
 	private Token getTokenFromGemType(List<Token> tokenArray, Gem gemType) throws RemoteException
 	{
 		for(Token token : tokenArray)
@@ -43,6 +61,12 @@ public class ReturnTokens {
 		return null;
 	}
 
+	/**
+	 * Removes the token.
+	 *
+	 * @param gemType
+	 * @throws RemoteException
+	 */
 	public void removeToken(Gem gemType) throws RemoteException 
 	{
 		if(tokenListNew.getAll().size() > 10 && tokenListNew.getTokenGemCount().get(gemType) > 0) 
@@ -54,6 +78,12 @@ public class ReturnTokens {
 		validateNewTokens();
 	}
 
+	/**
+	 * Adds the token.
+	 *
+	 * @param gemType
+	 * @throws RemoteException
+	 */
 	public void addToken(Gem gemType) throws RemoteException  
 	{
 		Token token = this.getTokenFromGemType(removedTokens, gemType);
@@ -65,11 +95,22 @@ public class ReturnTokens {
 		validateNewTokens();
 	}
 	
+	/**
+	 * Notify view.
+	 *
+	 * @throws RemoteException
+	 */
 	public void notifyView() throws RemoteException 
 	{
 		view.modelChanged(this);
 	}
 	
+	/**
+	 * More than ten tokens.
+	 *
+	 * @param controller
+	 * @throws RemoteException
+	 */
 	public void moreThanTenTokens(ReturnTokenController controller) throws RemoteException
 	{
 		if(tokenListNew.getAll().size() > 10)
@@ -78,6 +119,11 @@ public class ReturnTokens {
 		}
 	}
 	
+	/**
+	 * Validate new tokens.
+	 *
+	 * @throws RemoteException
+	 */
 	public void validateNewTokens() throws RemoteException
 	{
 		if(tokenListNew.getAll().size() == 10) 
@@ -89,6 +135,11 @@ public class ReturnTokens {
 		this.notifyView();
 	}
 
+	/**
+	 * Confirm button.
+	 *
+	 * @throws RemoteException
+	 */
 	public void confirmButton() throws RemoteException 
 	{
 		if(allowConfirm)
@@ -97,12 +148,23 @@ public class ReturnTokens {
 		}
 	}
 
+	/**
+	 * Gets the token list new.
+	 *
+	 * @return TokenList
+	 */
 	public TokenList getTokenListNew() 
 	{
 		return tokenListNew;
 	}
 
 
+	/**
+	 * Registrate.
+	 *
+	 * @param view
+	 * @throws RemoteException
+	 */
 	public void registrate(ReturnTokensView view) throws RemoteException 
 	{
 		this.view = view;
@@ -110,6 +172,11 @@ public class ReturnTokens {
 	}
 
 
+	/**
+	 * Checks if is allow confirm.
+	 *
+	 * @return true, if is allow confirm
+	 */
 	public boolean isAllowConfirm() 
 	{
 		return allowConfirm;

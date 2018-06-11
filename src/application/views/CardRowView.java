@@ -21,9 +21,9 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 
 /**
- * Card row views are the rows of cards that can be seen on the playing field
- * @author Sanchez
+ * Card row views are the rows of cards that can be seen on the playing field.
  *
+ * @author Sanchez
  */
 public class CardRowView extends UnicastRemoteObject implements UIComponent, CardRowObserver {
 
@@ -35,10 +35,12 @@ public class CardRowView extends UnicastRemoteObject implements UIComponent, Car
 	private TempHand tempHand;
 
 	/**
-	 * Creates a new card row view
+	 * Creates a new card row view.
+	 *
 	 * @param cardRow a row of cards on the playing field
 	 * @param gameController
-	 * @param tempHand used to determine if a card is selected or not
+	 * @param tempHand
+	 * @throws RemoteException
 	 */
 	public CardRowView(CardRow cardRow, GameController gameController, TempHand tempHand) throws RemoteException {
 		this.tempHand = tempHand;
@@ -50,7 +52,9 @@ public class CardRowView extends UnicastRemoteObject implements UIComponent, Car
 
 	/**
 	 * Update the card row view, like when a card is bought, reserved or selected.
-	 * @return void
+	 *
+	 * @param cardRow
+	 * @throws RemoteException
 	 */	
 	private void updateCardRow(CardRow cardRow) throws RemoteException
 	{
@@ -118,6 +122,9 @@ public class CardRowView extends UnicastRemoteObject implements UIComponent, Car
 	}
 	
 	
+	/* (non-Javadoc)
+	 * @see application.domain.CardRowObserver#modelChanged(application.domain.CardRow)
+	 */
 	@Override
 	public void modelChanged(CardRow cardRow) throws RemoteException 
 	{
@@ -142,6 +149,9 @@ public class CardRowView extends UnicastRemoteObject implements UIComponent, Car
         root = grid;
 	}
 
+	/* (non-Javadoc)
+	 * @see application.views.UIComponent#asPane()
+	 */
 	public Pane asPane() {
 		return root;
 	}

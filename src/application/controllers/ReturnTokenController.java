@@ -14,14 +14,16 @@ import application.domain.TokenList;
 import application.views.ReturnTokensView;
 
 /**
- * @author Tom
+ * The Class ReturnTokenController.
  *
+ * @author Tom
  */
 public class ReturnTokenController {
 	private ReturnTokens returnTokens;
 
 	/**
-	 * 
+	 * Instantiates a new return token controller.
+	 *
 	 * @param returnTokens
 	 */
 	public ReturnTokenController(ReturnTokens returnTokens) {
@@ -29,28 +31,29 @@ public class ReturnTokenController {
 	}
 
 	/**
-	 * 
+	 * Minus token.
+	 *
 	 * @param gemType
 	 * @throws RemoteException
-	 * void
 	 */
 	public void minusToken(Gem gemType) throws RemoteException {
 		returnTokens.removeToken(gemType);
 	}
-/**
- * 
- * @param gemType
- * @throws RemoteException
- * void
- */
+
+	/**
+	 * Plus token.
+	 *
+	 * @param gemType
+	 * @throws RemoteException
+	 */
 	public void plusToken(Gem gemType) throws RemoteException {
 		returnTokens.addToken(gemType);
 	}
 
 	/**
-	 * 
+	 * Confirm button.
+	 *
 	 * @throws RemoteException
-	 *             void
 	 */
 	public void confirmButton() throws RemoteException {
 		returnTokens.confirmButton();
