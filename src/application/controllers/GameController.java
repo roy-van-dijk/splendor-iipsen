@@ -29,7 +29,6 @@ public class GameController {
 	}
 
 	public void reserveCard(MoveType moveType) throws RemoteException {
-		game.findSelectableCards(moveType);
 	}
 	
 	public void purchaseCard(MoveType moveType) throws RemoteException {
@@ -96,4 +95,10 @@ public class GameController {
 	public void resetTurn() throws RemoteException {
 		game.cleanUpSelections();		
 	}
+	
+	//TODO Not yet tested
+	public boolean reserveCardInventoryFull() throws RemoteException {
+		return game.reserveCardInventoryFull();
+	}
+	
 }

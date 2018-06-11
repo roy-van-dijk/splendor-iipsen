@@ -33,6 +33,7 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 	private int currentPlayerIdx;
 	private int roundNr;
 	private int maxPlayers;
+	private boolean reserveCardInventoryFull;
 
 	private List<Player> players; // Contains a list of PlayerImpl on server
 	
@@ -140,6 +141,19 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 			this.getCurrentPlayer().findSelectableCardsFromReserve();
 		}
 		playingField.findSelectableCardsFromField();
+	}
+	//TODO not yet tested
+	public boolean reserveCardInventoryFull() throws RemoteException
+	{
+		if(this.getCurrentPlayer().getReservedCards().size() == 3)
+		{
+			reserveCardInventoryFull = false;
+		}
+		else 
+		{
+			reserveCardInventoryFull = true;
+		}
+		return reserveCardInventoryFull;
 	}
 	
 	@Override

@@ -171,8 +171,9 @@ public class GameView extends UnicastRemoteObject implements UIComponent, Disabl
 	/**
 	 * Builds the buttons the players uses to select their action for a turn
 	 * @return HBox
+	 * @throws RemoteException 
 	 */
-	private HBox buildButtons()
+	private HBox buildButtons() throws RemoteException
 	{
 		HBox buttons = new HBox(20);
 		buttons.getStyleClass().add("buttons-view");
@@ -183,6 +184,8 @@ public class GameView extends UnicastRemoteObject implements UIComponent, Disabl
 		// Make separate button class
 		btnReserveCard = new Button("Reserve Card");
 		btnReserveCard.getStyleClass().add("move-button");
+		//TODO Not yet tested
+		btnReserveCard.setDisable(gameController.reserveCardInventoryFull());
 		btnReserveCard.setOnAction(e -> {
 			try {
 				gameController.resetTurn();
@@ -192,6 +195,7 @@ public class GameView extends UnicastRemoteObject implements UIComponent, Disabl
 				e1.printStackTrace();
 			}
 		});
+		
 		
 		btnPurchaseCard = new Button("Purchase Card");
 		btnPurchaseCard.getStyleClass().add("move-button");
