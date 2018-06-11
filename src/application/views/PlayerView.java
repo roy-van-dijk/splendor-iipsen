@@ -13,7 +13,7 @@ import application.domain.Gem;
 import application.domain.Noble;
 import application.domain.Player;
 import application.domain.PlayerObserver;
-
+import application.domain.TempHand;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
@@ -185,24 +185,28 @@ public class PlayerView extends UnicastRemoteObject implements UIComponent, Disa
 	 *
 	 * @param List<Card>cards the cards
 	 */
-	private void updatePlayerReservedCards(List<Card> cards) {
+	private void updatePlayerReservedCards(List<Card> cards) throws RemoteException {
 		reservedCards.getChildren().clear();
-		HBox reservedCardsDisplay = createReservedCardDisplay(cards, 110, 160);
+		HBox reservedCardsDisplay = updateReservedCardDisplay(cards, 110, 160);
 		reservedCardsDisplay.setPrefWidth(350);
 		reservedCards.getChildren().add(reservedCardsDisplay);
 	}
 
 	/**
-	 * Creates the reserved card display.
+	 * Updates the reserved card display.
 	 *
 	 * @param cards
 	 * @param sizeX the size horizontal
 	 * @param sizeY the size vertical
 	 * @return HBox
 	 */
-	private HBox createReservedCardDisplay(List<Card> cards, int sizeX, int sizeY) {
+	private HBox updateReservedCardDisplay(List<Card> cards, int sizeX, int sizeY) throws RemoteException {
 		HBox reservedCards = new HBox(10);
 
+		TempHand tempHand = gameController.getTempHand();
+		Card boughtCard = tempHand.getBoughtCard();
+		List<Card> selectableReservedCards = player.getSelectableCardsFromReserve();
+		
 		for (int i = 0; i < cards.size(); i++) {
 			int cardIdx = i;
 			Card card = cards.get(i);
@@ -210,28 +214,23 @@ public class PlayerView extends UnicastRemoteObject implements UIComponent, Disa
 
 			cardView.asPane().getStyleClass().add("dropshadow");
 
-			try {
-				if (!player.getSelectableCardsFromReserve().isEmpty()) {
-					System.out.println(gameController);
-					System.out.println(card);
-					if (gameController.getTempHand().getBoughtCard() == card) {
-						cardView.asPane().getStyleClass().remove("selectable");
-						cardView.asPane().getStyleClass().add("selected");
-					} else if (player.getSelectableCardsFromReserve().contains(card)) {
-						cardView.asPane().getStyleClass().add("selectable");
-						cardView.asPane().setOnMouseClicked(e -> {
-							try {
-								gameController.onReservedCardClicked(cardIdx);
-							} catch (RemoteException e1) {
-								// TODO Auto-generated catch block
-								e1.printStackTrace();
-							}
-						});
-					}
+			if (!selectableReservedCards.isEmpty()) {
+				System.out.println(gameController);
+				System.out.println(card);
+				if ((boughtCard != null && boughtCard.equals(card))) {
+					cardView.asPane().getStyleClass().remove("selectable");
+					cardView.asPane().getStyleClass().add("selected");
+				} else if (selectableReservedCards.contains(card)) {
+					cardView.asPane().getStyleClass().add("selectable");
+					cardView.asPane().setOnMouseClicked(e -> {
+						try {
+							gameController.onReservedCardClicked(cardIdx);
+						} catch (RemoteException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+					});
 				}
-			} catch (RemoteException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 			}
 			reservedCards.getChildren().add(cardView.asPane());
 		}
