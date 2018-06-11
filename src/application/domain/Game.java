@@ -174,6 +174,8 @@ public interface Game extends Remote {
 	
 	public boolean reserveCardInventoryFull() throws RemoteException;
 
+	public void playerHasWon(Player winningPlayer) throws RemoteException;
 
+	public Player getWinningPlayer() throws RemoteException;
 
 }

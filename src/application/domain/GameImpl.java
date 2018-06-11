@@ -34,6 +34,7 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 	private boolean reserveCardInventoryFull;
 
 	private List<Player> players; // Contains a list of PlayerImpl on server
+	private Player winningPlayer;
 	
 	//private transient List<GameObserver> observers;
 	private transient Map<GameObserver, Player> observers;
@@ -51,7 +52,7 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 	public GameImpl(int maxPlayers) throws RemoteException {
 		this.maxPlayers = maxPlayers;
 		
-		this.roundNr = 0;
+		this.roundNr = 1;
 		this.currentPlayerIdx = -1;
 		
 		this.players = new ArrayList<Player>();
@@ -75,6 +76,8 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 		if(currentPlayerIdx >= players.size() || currentPlayerIdx < 0) {
 			currentPlayerIdx = 0;
 		}
+
+		roundNr++;
 		
 		try {
 			playingField.newTurn();
@@ -308,6 +311,7 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 		}
 		playingField.newTurn();
 		this.getCurrentPlayer().clearSelectableCards();
+		this.winningPlayer = null;
 		this.notifyObservers();
 	}
 	
@@ -391,6 +395,18 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 	public void addTokenToTemp(Gem gemType) throws RemoteException {
 		this.playingField.addTokenToTemp(gemType);
 		this.notifyObservers();
+	}
+
+
+	@Override
+	public void playerHasWon(Player winningPlayer) throws RemoteException {
+		this.winningPlayer = winningPlayer;
+		this.notifyObservers();
+	}
+	
+	@Override
+	public Player getWinningPlayer() {
+		return winningPlayer;
 	}
 
 
