@@ -16,11 +16,15 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import application.controllers.LobbyController;
+import application.controllers.MainMenuController;
 import application.domain.GameImpl;
 import application.domain.Gem;
+import application.domain.Lobby;
 import application.domain.LobbyImpl;
 import application.domain.LobbyObserver;
 import application.domain.LobbyImpl.LobbyStates;
+import application.views.LobbyView;
 
 /**
  * @author Alexander
@@ -63,8 +67,10 @@ class TestLobby {
 	 */
 	@BeforeEach
 	void setUp() throws Exception {
+		MainMenuController main = new MainMenuController();
 		game = new GameImpl(maxPlayers);
 		lobby = new LobbyImpl(game);
+		
 	}
 
 	/**
@@ -96,9 +102,4 @@ class TestLobby {
 			e.printStackTrace();
 		}
 	}
-	@Test 
-	void test() {
-		
-	}
-
 }
