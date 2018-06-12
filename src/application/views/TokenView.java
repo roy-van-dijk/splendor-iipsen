@@ -58,7 +58,7 @@ public class TokenView implements UIComponent, ColorChangeable {
 	 */
 	private void buildUI() {
 		circle = new Circle(radius);
-		String imagePath = String.format("file:resources/tokens/token_%s.png", getTokenImageFileName());
+		String imagePath = String.format("resources/tokens/token_%s.png", getTokenImageFileName());
 		Image image = ImageCache.getInstance().fetchImage(imagePath, true);
         ImagePattern imagePattern = new ImagePattern(image);
         circle.setFill(imagePattern);

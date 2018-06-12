@@ -18,6 +18,19 @@ public final class Util {
 		// Prevents instantiation
 	}
 	
+	
+	public static String getCSSname()
+	{
+		String css = "application.css";
+		String sourceLocation = Util.class.getProtectionDomain().getCodeSource().getLocation().toExternalForm();
+		if(sourceLocation.contains(".jar")) {
+			css = "application_deployed.css";
+		}
+		System.out.println("Source location: " + Util.class.getProtectionDomain().getCodeSource().getLocation().toExternalForm());
+		return css;
+	}
+	
+	
 	/**
 	 * String to int.
 	 *

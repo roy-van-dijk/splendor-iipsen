@@ -71,7 +71,7 @@ public class NobleView implements UIComponent, ColorChangeable {
 	 */
 	public String getNobleImagePath() throws RemoteException {
 		String illustration = String.valueOf(noble.getIllustration());
-		return String.format("file:resources/nobles/%s.png", illustration);
+		return String.format("resources/nobles/%s.png", illustration);
 	}
 
 	/**
@@ -127,8 +127,11 @@ public class NobleView implements UIComponent, ColorChangeable {
 				Rectangle requirementRect = new Rectangle(rectSizeX, rectSizeY);
 				requirementRect.getProperties().put("GemType", entry.getKey().toString().toUpperCase());
 				requirementRects.add(requirementRect);
-				String rectanglePath = String.format("file:resources/requirements/rectangle_%s.png", entry.getKey().toString().toLowerCase());
-				ImagePattern imagePattern = new ImagePattern(new Image(rectanglePath));
+				
+				String rectanglePath = String.format("resources/requirements/rectangle_%s.png", entry.getKey().toString().toLowerCase());
+				Image image = ImageCache.getInstance().fetchImage(rectanglePath, false);
+				
+				ImagePattern imagePattern = new ImagePattern(image);
 				requirementRect.setFill(imagePattern);
 
 				Label requirementLabel = new Label(String.valueOf(entry.getValue()));

@@ -3,6 +3,7 @@ package application.services;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -53,7 +54,7 @@ public class NoblesReader {
 	//generate noble array from csv file.
 	private void generateNobles() throws FileNotFoundException, IOException {
 		try (
-				FileInputStream file = new FileInputStream(noblesFile);
+				InputStream file = this.getClass().getClassLoader().getResourceAsStream(noblesFile);
 				InputStreamReader reader = new InputStreamReader(file);
 				CSVReader csvReader = new CSVReaderBuilder(reader).withSkipLines(2).build();
 			){

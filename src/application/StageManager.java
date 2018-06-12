@@ -1,11 +1,13 @@
 package application;
 
+import java.io.InputStream;
 import java.rmi.RemoteException;
 
 import application.controllers.GameController;
 import application.controllers.MainMenuController;
 import application.domain.Game;
 import application.domain.GameImpl;
+import application.util.Util;
 import application.views.GameView;
 import application.views.MainMenuView;
 import javafx.scene.Scene;
@@ -75,10 +77,11 @@ public class StageManager {
 	public void startSplendor(Stage stage) {
 
 		Scene scene = new Scene(new Pane(), 1800, 1000);
-		scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+		scene.getStylesheets().add(getClass().getResource(Util.getCSSname()).toExternalForm());
 		
 		primaryStage = stage;
-		primaryStage.getIcons().add(new Image(("file:resources/misc/splendor-icon.png")));
+		InputStream file = this.getClass().getClassLoader().getResourceAsStream("resources/misc/splendor-icon.png");
+		primaryStage.getIcons().add(new Image((file)));
 		//primaryStage.initStyle(StageStyle.UNDECORATED); // borderless
 		//primaryStage.setMaximized(true);
 		primaryStage.setTitle("Splendor");

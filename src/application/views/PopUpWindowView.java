@@ -1,5 +1,6 @@
 package application.views;
 
+import application.util.Util;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.effect.DropShadow;
@@ -33,7 +34,7 @@ public class PopUpWindowView {
 		pane = new BorderPane();
 
 		Scene scene = new Scene(pane, 750, 500);
-		scene.getStylesheets().add(getClass().getResource("../application.css").toExternalForm());
+		scene.getStylesheets().add(getClass().getResource("../" + Util.getCSSname()).toExternalForm());
 
 		VBox box = new VBox();
 		box.setAlignment(Pos.CENTER);

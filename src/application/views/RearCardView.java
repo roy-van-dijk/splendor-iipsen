@@ -60,7 +60,7 @@ public class RearCardView extends CardView {
 	protected String getImagePath() {
 		String path = "";
 		try {
-			path = String.format("file:resources/cards/%s/%s.png", card.getLevel().name().toLowerCase(),
+			path = String.format("resources/cards/%s/%s.png", card.getLevel().name().toLowerCase(),
 					card.getLevel().name().toLowerCase());
 		} catch (RemoteException e) {
 			e.printStackTrace();

@@ -1,5 +1,6 @@
 package application.util;
 
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -42,11 +43,12 @@ public class ImageCache {
 	 * This will throw an exception if the image is used in an ImagePattern before it's finished loading.
 	 * @return Image
 	 */
-	public Image fetchImage(String path, boolean backgroundLoading) {
+	public synchronized Image fetchImage(String path, boolean backgroundLoading) {
 		Image image = images.get(path);
 		if(image == null)
 		{
-			image = new Image(path, false);
+			InputStream file = this.getClass().getClassLoader().getResourceAsStream(path);
+			image = new Image(file);
 			images.put(path, image);
 		}
 		return image;

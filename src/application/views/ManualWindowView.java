@@ -1,5 +1,6 @@
 package application.views;
 
+import application.util.Util;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -30,7 +31,7 @@ public class ManualWindowView {
 
 		Button nextPage = new Button("Next");
 
-		scene.getStylesheets().add(getClass().getResource("../application.css").toExternalForm());
+		scene.getStylesheets().add(getClass().getResource("../" + Util.getCSSname()).toExternalForm());
 
 		nextPage.getStyleClass().add("manual-navigation-button");
 

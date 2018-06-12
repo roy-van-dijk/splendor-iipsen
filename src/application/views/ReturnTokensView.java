@@ -8,6 +8,7 @@ import application.controllers.ReturnTokenController;
 import application.domain.Gem;
 import application.domain.ReturnTokens;
 import application.domain.ReturnTokens.ReturnTokenState;
+import application.util.Util;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -86,7 +87,7 @@ public class ReturnTokensView {
 		bpane.getStyleClass().add("modal");
 
 		Scene scene = new Scene(bpane, 1000, 700);
-		scene.getStylesheets().add(getClass().getResource("../application.css").toExternalForm());
+		scene.getStylesheets().add(getClass().getResource("../" + Util.getCSSname()).toExternalForm());
 		scene.setFill(Color.TRANSPARENT);
 
 		stage = new Stage();

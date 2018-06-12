@@ -31,7 +31,7 @@ public class ConfirmDialog extends javafx.scene.control.Alert{
 		
 		DialogPane dialogPane = this.getDialogPane();
 		
-		dialogPane.getScene().getStylesheets().add(getClass().getResource("../application.css").toExternalForm());
+		dialogPane.getScene().getStylesheets().add(getClass().getResource("../" + Util.getCSSname()).toExternalForm());
 		dialogPane.getScene().setFill(null);
 		dialogPane.getStyleClass().add("alert-dialog");
 		

@@ -114,7 +114,7 @@ public class PlayerImpl extends UnicastRemoteObject implements Reinitializable, 
 	 */
 	public boolean canAffordCard(Map<Gem, Integer> costs) throws RemoteException
 	{
-		Logger.log("PlayerImpl::canAffordCard::Player == " + this.getName(), Verbosity.DEBUG);
+		//Logger.log("PlayerImpl::canAffordCard::Player == " + this.getName(), Verbosity.DEBUG);
 		Map<Gem, Integer> gemsCount = tokenList.getTokenGemCount();
 		int jokersLeft = gemsCount.get(Gem.JOKER);
 		

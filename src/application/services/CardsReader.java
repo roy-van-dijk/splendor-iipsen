@@ -1,7 +1,9 @@
 package application.services;
 
+import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -52,7 +54,7 @@ public class CardsReader {
 	public void generateCards()  throws IOException
 	{
 		try (
-	    		FileInputStream file = new FileInputStream(cardsFile);
+				InputStream file = this.getClass().getClassLoader().getResourceAsStream(cardsFile);
     		 	InputStreamReader reader = new InputStreamReader(file);
 	    		CSVReader csvReader = new CSVReaderBuilder(reader).withSkipLines(2).build();
 	        ) 

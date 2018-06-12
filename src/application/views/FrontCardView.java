@@ -106,7 +106,7 @@ public class FrontCardView extends CardView implements ColorChangeable{
 		prestigeLabel.setFont(Font.font("Arial", FontWeight.EXTRA_BOLD, prestigeLabelSize));
 
 		Gem bonusGem = card.getBonusGem();
-		String gemPath = String.format("file:resources/gems/%s.png", bonusGem.toString().toLowerCase());
+		String gemPath = String.format("resources/gems/%s.png", bonusGem.toString().toLowerCase());
 		ImageView bonusImage = new ImageView(new Image(gemPath));
 		// System.out.printf("Card dimensions: X: %.2f, Y: %.2f\n", this.sizeX,
 		// this.sizeY);
@@ -131,8 +131,12 @@ public class FrontCardView extends CardView implements ColorChangeable{
 				Circle costCircle = new Circle(circleRadius);
 				costCircle.getProperties().put("GemType", entry.getKey().toString().toUpperCase());
 				costCircles.add(costCircle);
-				String circlePath = String.format("file:resources/costs/circle_%s.png", entry.getKey().toString().toLowerCase());
-				ImagePattern imagePattern = new ImagePattern(new Image(circlePath));
+				
+				
+				String circlePath = String.format("resources/costs/circle_%s.png", entry.getKey().toString().toLowerCase());
+				Image image = ImageCache.getInstance().fetchImage(circlePath, false);
+				
+				ImagePattern imagePattern = new ImagePattern(image);
 				costCircle.setFill(imagePattern);
 
 				Label costLabel = new Label(String.valueOf(entry.getValue()));
@@ -156,7 +160,7 @@ public class FrontCardView extends CardView implements ColorChangeable{
 	protected String getImagePath() {
 		String path = "";
 		try {
-			path = String.format("file:resources/cards/%s/%s.jpg", card.getLevel().name().toLowerCase(),
+			path = String.format("resources/cards/%s/%s.jpg", card.getLevel().name().toLowerCase(),
 					card.getIllustration());
 		} catch (RemoteException e) {
 			e.printStackTrace();

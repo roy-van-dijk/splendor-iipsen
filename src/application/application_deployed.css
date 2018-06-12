@@ -38,12 +38,12 @@
 
 .game-view
 {
-	-fx-background-image: url("../../resources/resources/misc/bg_wood.jpg");
+	-fx-background-image: url("../../resources/misc/bg_wood.jpg");
 }
 
 .home-view
 {
-	-fx-background-image: url("../../resources/resources/misc/splendor.jpg");
+	-fx-background-image: url("../../resources/misc/splendor.jpg");
 }
 
 .prestige
@@ -153,10 +153,10 @@
 	-fx-font-size: 25px;
 }
 
-.page-1 { -fx-background-image: url("../../resources/resources/manual/page-1.png"); }
-.page-2 { -fx-background-image: url("../../resources/resources/manual/page-2.png"); }
-.page-3 { -fx-background-image: url("../../resources/resources/manual/page-3.png"); }
-.page-4 { -fx-background-image: url("../../resources/resources/manual/page-4.png"); }
+.page-1 { -fx-background-image: url("../../resources/manual/page-1.png"); }
+.page-2 { -fx-background-image: url("../../resources/manual/page-2.png"); }
+.page-3 { -fx-background-image: url("../../resources/manual/page-3.png"); }
+.page-4 { -fx-background-image: url("../../resources/manual/page-4.png"); }
 
 .lobby-grid .label {
 	-fx-text-fill: gray;
@@ -175,8 +175,8 @@
 	-fx-background-position: 97% center;
 }
 
-.lobby-grid .label.checked 	 { -fx-background-image: url("../../resources/resources/misc/checked.png"); }
-.lobby-grid .label.unchecked { -fx-background-image: url("../../resources/resources/misc/unchecked.png"); }
+.lobby-grid .label.checked 	 { -fx-background-image: url("../../resources/misc/checked.png"); }
+.lobby-grid .label.unchecked { -fx-background-image: url("../../resources/misc/unchecked.png"); }
 
 .join-panel .join-text {
 	-fx-font-size: 45px;
@@ -211,7 +211,7 @@
 	-fx-effect: dropshadow(GAUSSIAN, blue, 30, 0.4, 0, 0);
 }
 .popup-view {
-	-fx-background-image: url("../../resources/resources/misc/splendor.jpg");
+	-fx-background-image: url("../../resources/misc/splendor.jpg");
 	-fx-background-size: cover;
 }
 
