@@ -462,10 +462,13 @@ public class GameImpl extends UnicastRemoteObject implements Reinitializable, Ga
 		this.registry = registry;
 	}
 	
+	/**
+	 * check if the current player can afford any cards from playingfield or the reserved cards from the player
+	 * if the player can buy a card, return true, else return false.
+	 */
 	public boolean anyCardsPurchasable() throws RemoteException {
 		Player player = this.getCurrentPlayer();
 		List<CardRow> playingFieldCardRows = getPlayingField().getCardRows();
-
 
 		for(CardRow cardRow : playingFieldCardRows)
 		{
@@ -488,6 +491,9 @@ public class GameImpl extends UnicastRemoteObject implements Reinitializable, Ga
 		return false;
 	}
 
+	/**
+	 * reinitialize observers*
+	 */
 	@Override
 	public void reinitializeObservers() {
 		this.observers = new LinkedHashMap<GameObserver, Player>();
