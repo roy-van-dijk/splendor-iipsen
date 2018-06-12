@@ -25,7 +25,7 @@ public class SaveGameDAO {
 	
 	private GameImpl game;
 	
-	private static String path = "saves";
+	private static String directory = "";
 	private static String basePath;
 
 
@@ -66,13 +66,12 @@ public class SaveGameDAO {
 	/**
 	 * Load save game.
 	 *
-	 * @param filename the filename
 	 * @return Game
 	 * @throws FileNotFoundException the file not found exception
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 * @throws ClassNotFoundException             Game
 	 */
-	public GameImpl loadSaveGame(String filename) throws FileNotFoundException, IOException, ClassNotFoundException {
+	public GameImpl loadSaveGame() throws FileNotFoundException, IOException, ClassNotFoundException {
 		basePath = this.createSavePath("Bob.splendor");
 		ObjectInputStream read = new ObjectInputStream(new FileInputStream(basePath));
 		game = (GameImpl) read.readObject();
@@ -91,7 +90,7 @@ public class SaveGameDAO {
 	 */
 	public String createSavePath(String save) {
 		
-		return FileSystems.getDefault().getPath(path).toAbsolutePath().toString() + "/" +  save;
+		return FileSystems.getDefault().getPath(directory).toAbsolutePath().toString() + "/" +  save;
 	}
 	
 }

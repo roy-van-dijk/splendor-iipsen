@@ -55,7 +55,7 @@ public class MainMenuController {
 	 * @throws FileNotFoundException 
 	 */
 	public void hostPreviousGame(String playerName) throws FileNotFoundException, ClassNotFoundException, IOException {
-		GameImpl game = SaveGameDAO.getInstance().loadSaveGame("");
+		GameImpl game = SaveGameDAO.getInstance().loadSaveGame();
 		
 		LobbyImpl lobby = createLobby(game);
 		LobbyController lobbyController = new LobbyController(lobby);
