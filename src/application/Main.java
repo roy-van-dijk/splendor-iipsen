@@ -30,10 +30,8 @@ public class Main extends Application {
 		        	  new ManualWindowView();
 		          }
 		        });
+			primaryStage.setMaximized(true);
 			StageManager.getInstance().startSplendor(primaryStage);
-			//StageManager.getInstance().showGameScreen();
-			
-			//primaryStage.setMaximized(true);
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
