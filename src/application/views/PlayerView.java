@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import application.StageManager;
 import application.controllers.GameController;
 import application.domain.Card;
 import application.domain.ColorBlindModes;
@@ -24,6 +25,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Separator;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -141,6 +143,9 @@ public class PlayerView extends UnicastRemoteObject implements UIComponent, Disa
 		accessibility.setAlignment(Pos.BOTTOM_RIGHT);
 
 		HBox btnManual = buildManualButton();
+		
+
+		
 		RadioButton rbAccNormal = new RadioButton();
 		RadioButton rbAccDeuteranopia = new RadioButton();
 		RadioButton rbAccProtanopia = new RadioButton();
