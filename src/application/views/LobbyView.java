@@ -228,7 +228,10 @@ public class LobbyView extends UnicastRemoteObject implements UIComponent, Lobby
 				else {
 					this.btnReady.setDisable(!lobby.isAssigned(this));
 				}
-			}			
+			}
+			else {
+				this.btnReady.setDisable(!lobby.isAssigned(this));
+			}
 		}
 	}
 	
