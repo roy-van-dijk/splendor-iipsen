@@ -1,5 +1,7 @@
 package application.views;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.rmi.ConnectException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -8,6 +10,7 @@ import java.rmi.server.ExportException;
 import application.StageManager;
 import application.controllers.MainMenuController;
 import application.util.AlertDialog;
+import application.util.LobbyFullException;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert.AlertType;
@@ -113,6 +116,9 @@ public class MainMenuView implements UIComponent {
 				e1.printStackTrace();
 			} catch (NotBoundException e1) {
 				new AlertDialog(AlertType.ERROR, "The server is not configured properly.").show();
+				e1.printStackTrace();
+			} catch (LobbyFullException e1) {
+				new AlertDialog(AlertType.ERROR, "The server is full.").show();
 				e1.printStackTrace();
 			}
 		});
@@ -259,6 +265,15 @@ public class MainMenuView implements UIComponent {
 				e1.printStackTrace();
 			} catch (RemoteException e1) {
 				new AlertDialog(AlertType.ERROR, "Could not start a new server.").show();
+				e1.printStackTrace();
+			} catch (FileNotFoundException e1) {
+				new AlertDialog(AlertType.ERROR, "No previous savegame was found.").show();
+				e1.printStackTrace();
+			} catch (ClassNotFoundException e1) {
+				new AlertDialog(AlertType.ERROR, "Something went wrong while loading the previous savegame.").show();
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				new AlertDialog(AlertType.ERROR, "Something went wrong while loading the previous savegame.").show();
 				e1.printStackTrace();
 			}
 		});

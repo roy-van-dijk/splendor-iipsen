@@ -23,7 +23,7 @@ import application.views.GameView;
  *
  * @author Sanchez
  */
-public class GameImpl extends UnicastRemoteObject implements Game, Serializable {
+public class GameImpl extends UnicastRemoteObject implements Reinitializable, Game, Serializable {
 	
 	private static final long serialVersionUID = -2852281344739846301L;
 	
@@ -62,7 +62,7 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 		this.players = new ArrayList<Player>();
 		this.observers = new LinkedHashMap<GameObserver, Player>();
 		
-		this.debugCreate4Players();
+		//this.debugCreate4Players();
 		
 		this.playingField = new PlayingFieldImpl(this.maxPlayers);
 		
@@ -405,7 +405,7 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 		
 		UnicastRemoteObject.unexportObject(this, true);
 		try {
-			this.registry.unbind("game");
+			this.registry.unbind("Lobby");
 		} catch (NotBoundException e) {
 			e.printStackTrace();
 		}
@@ -447,5 +447,15 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 		this.registry = registry;
 	}
 
-
+	@Override
+	public void reinitializeObservers() {
+		this.observers = new LinkedHashMap<GameObserver, Player>();
+		this.playingField.reinitializeObservers();
+		
+		for(int i = 0; i < players.size(); i++)
+		{
+			PlayerImpl player = (PlayerImpl) players.get(i);
+			player.reinitializeObservers();
+		}
+	}
 }

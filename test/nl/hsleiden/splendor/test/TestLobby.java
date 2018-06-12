@@ -42,7 +42,7 @@ class TestLobby {
 	private GameImpl game;
 	
 	private String hostIP;
-	private int maxPlayers = 4;
+	private int maxPlayers;
 	
 	private Registry registry;
 	/**
@@ -70,7 +70,7 @@ class TestLobby {
 		MainMenuController main = new MainMenuController();
 		game = new GameImpl(maxPlayers);
 		lobby = new LobbyImpl(game);
-		
+
 	}
 
 	/**
