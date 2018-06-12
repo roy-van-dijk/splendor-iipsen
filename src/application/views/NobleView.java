@@ -162,8 +162,7 @@ public class NobleView implements UIComponent, ColorChangeable {
 	/**
 	 * Updates the noble view's circle colours based on the colour blind mode that is applied.
 	 *
-	 * @param mode the mode
-	 * @return void
+	 * @param mode
 	 */
 	@Override
 	public void updateView(ColorBlindModes mode) {

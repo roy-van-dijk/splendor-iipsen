@@ -6,7 +6,6 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Stack;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class CardDeckImpl.
  *
@@ -28,9 +27,9 @@ public class CardDeckImpl extends UnicastRemoteObject implements CardDeck, Seria
 	/**
 	 * Instantiates a new card deck impl.
 	 *
-	 * @param cards the cards
-	 * @param level the level
-	 * @throws RemoteException the remote exception
+	 * @param cards
+	 * @param level
+	 * @throws RemoteException
 	 */
 	public CardDeckImpl(Stack<Card> cards, CardLevel level) throws RemoteException
 	{

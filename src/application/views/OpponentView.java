@@ -21,7 +21,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
-// TODO: Auto-generated Javadoc
 /**
  * View with opponent information seen on the left side of the game view.
  *
@@ -98,7 +97,7 @@ public class OpponentView extends UnicastRemoteObject implements UIComponent, Pl
 	/**
 	 * Update opponents reserved cards.
 	 *
-	 * @param opponentReservedCards the opponent reserved cards
+	 * @param opponentReservedCards
 	 */
 	private void updateOpponentsReservedCards(List<Card> opponentReservedCards) {
 		reservedCardsFrame.getChildren().clear();
@@ -127,7 +126,7 @@ public class OpponentView extends UnicastRemoteObject implements UIComponent, Pl
 	/**
 	 * Update opponent tokens.
 	 *
-	 * @param gemsCount the gems count
+	 * @param gemsCount
 	 */
 	private void updateOpponentTokens(Map<Gem, Integer> gemsCount) {
 		tokensFrame.getChildren().clear();
@@ -168,9 +167,9 @@ public class OpponentView extends UnicastRemoteObject implements UIComponent, Pl
 	/**
 	 * Creates the token gem count display.
 	 *
-	 * @param gemType the gem type
-	 * @param count the count
-	 * @param radius the radius
+	 * @param gemType
+	 * @param count
+	 * @param radius
 	 * @return VBox
 	 */
 	private VBox createTokenGemCountDisplay(Gem gemType, int count, int radius) {

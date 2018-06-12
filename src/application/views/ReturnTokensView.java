@@ -157,7 +157,7 @@ public class ReturnTokensView {
 	 *
 	 * @param gemType
 	 * @param count
-	 * @param tokenSizeRadius the token size radius
+	 * @param tokenSizeRadius
 	 * @return VBox
 	 */
 	// with buttons to edit the tokens you want to return

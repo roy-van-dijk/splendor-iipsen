@@ -8,7 +8,6 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Modality;
 import javafx.stage.StageStyle;
 
-// TODO: Auto-generated Javadoc
 /**
  * Shows a new alert dialog window.
  * @author Sanchez

@@ -1,6 +1,5 @@
 package application.domain;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Interface Reinitializable.
  */
