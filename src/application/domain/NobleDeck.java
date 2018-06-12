@@ -5,7 +5,6 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
 import java.util.Stack;
 
-// TODO: Re-check docs
 
 /**
  * The Class NobleDeck.

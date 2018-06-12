@@ -15,6 +15,8 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import application.domain.CardImpl;
+import application.domain.CardLevel;
 import application.domain.GameImpl;
 import application.domain.Gem;
 import application.domain.Player;
@@ -89,8 +91,6 @@ class TestPlayingField {
 	@Test
 	void playersetTest() throws RemoteException {
 		TempHand temphand = playingField.getTempHand();
-		TokenImpl token = new TokenImpl(Gem.DIAMOND);
-		temphand.addToken(token);
 		player = new PlayerImpl("kees");
 		game = new GameImpl(1);
 		List<Player> players = new ArrayList<Player>();
@@ -102,5 +102,21 @@ class TestPlayingField {
 		assertEquals(game.getPlayers().get(0), player); 
 		
 	} 
+	
+	@Test
+	void testWinnarPlaying() throws RemoteException {
+		player = new PlayerImpl("kees");
+		game = new GameImpl(1);
+		List<Player> players = new ArrayList<Player>();
+		players.add(player);
+		game.setPlayers(players);
+		CardImpl card = new CardImpl(CardLevel.LEVEL1, 13, null, null, null);
+		game.nextTurn();
+		game.getCurrentPlayer().addCard(card);
+		System.out.println(game.getPlayers().get(0).getPrestige());
+		
+		System.out.println(game.getWinningPlayer());
+		
+	}
 
 }

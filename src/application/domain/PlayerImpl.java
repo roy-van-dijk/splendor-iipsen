@@ -12,6 +12,7 @@ import java.util.Map;
 import application.util.Logger;
 import application.util.Logger.Verbosity;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Class PlayerImpl.
  *
@@ -44,8 +45,8 @@ public class PlayerImpl extends UnicastRemoteObject implements Reinitializable, 
 	/**
 	 * Instantiates a new player impl.
 	 *
-	 * @param name
-	 * @throws RemoteException 
+	 * @param name the name
+	 * @throws RemoteException the remote exception
 	 */
 	public PlayerImpl(String name) throws RemoteException 
 	{
@@ -149,31 +150,50 @@ public class PlayerImpl extends UnicastRemoteObject implements Reinitializable, 
 		return bonus;
 	}
 
+	/* (non-Javadoc)
+	 * @see application.domain.Player#setName(java.lang.String)
+	 */
 	public void setName(String name) throws RemoteException{
 		this.name = name;
 	}
 	
 
+	/* (non-Javadoc)
+	 * @see application.domain.Player#getName()
+	 */
 	public String getName() throws RemoteException
 	{
 		//System.out.printf("Getting name of: %s\n", name);
 		return name;
 	}
 	
+	/* (non-Javadoc)
+	 * @see application.domain.Player#getReservedCards()
+	 */
 	public List<Card> getReservedCards() throws RemoteException
 	{
 		return reservedCards;
 	}
+	
+	/* (non-Javadoc)
+	 * @see application.domain.Player#getOwnedCards()
+	 */
 	public List<Card> getOwnedCards() throws RemoteException
 	{
 		return ownedCards;
 	}
 	
+	/* (non-Javadoc)
+	 * @see application.domain.Player#getOwnedNobles()
+	 */
 	public List<Noble> getOwnedNobles() throws RemoteException
 	{
 		return ownedNobles;
 	}
 
+	/* (non-Javadoc)
+	 * @see application.domain.Player#addNoble(application.domain.Noble)
+	 */
 	public void addNoble(Noble noble) throws RemoteException {
 		ownedNobles.add(noble);
 		this.notifyObservers();
@@ -226,6 +246,11 @@ public class PlayerImpl extends UnicastRemoteObject implements Reinitializable, 
 		this.notifyObservers();
 	}
 	
+	/**
+	 * Notify observers.
+	 *
+	 * @throws RemoteException the remote exception
+	 */
 	private synchronized void notifyObservers() throws RemoteException
 	{
 		for(PlayerObserver o : observers)
@@ -234,6 +259,9 @@ public class PlayerImpl extends UnicastRemoteObject implements Reinitializable, 
 		}
 	}
 	
+	/* (non-Javadoc)
+	 * @see application.domain.Player#addObserver(application.domain.PlayerObserver)
+	 */
 	public synchronized void addObserver(PlayerObserver o) throws RemoteException 
 	{
 		observers.add(o);
@@ -279,6 +307,9 @@ public class PlayerImpl extends UnicastRemoteObject implements Reinitializable, 
 		
 	}
 
+	/* (non-Javadoc)
+	 * @see application.domain.Reinitializable#reinitializeObservers()
+	 */
 	@Override
 	public void reinitializeObservers() {
 		this.observers = new ArrayList<>();

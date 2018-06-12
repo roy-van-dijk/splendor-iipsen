@@ -8,7 +8,6 @@ import application.util.Logger;
 import application.util.Logger.Verbosity;
 import application.views.ReturnTokensView;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class ReturnTokens.
  */
@@ -107,8 +106,6 @@ public class ReturnTokens {
 	
 	/**
 	 * Notify view.
-	 *
-	 * @throws RemoteException
 	 */
 	public void notifyView() 
 	{

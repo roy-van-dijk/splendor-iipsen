@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 
+// TODO: Auto-generated Javadoc
 /**
  * The Interface EndTurn.
  */
@@ -19,5 +20,11 @@ public interface EndTurn extends Remote {
 	 */
 	public void endTurn() throws RemoteException;
 	
+	/**
+	 * Returning tokens.
+	 *
+	 * @return true, if successful
+	 * @throws RemoteException
+	 */
 	public boolean returningTokens() throws RemoteException;
 }

@@ -7,6 +7,7 @@ import java.util.Map;
 import application.domain.LobbyImpl.LobbyStates;
 import application.util.LobbyFullException;
 
+// TODO: Auto-generated Javadoc
 /**
  * A lobby for players to be able to join.
  *
@@ -35,7 +36,7 @@ public interface Lobby extends Remote {
 	 * Disconnect player.
 	 *
 	 * @param o the LobbyObserver
-	 * @throws RemoteException the remote exception
+	 * @throws RemoteException
 	 */
 	public void disconnectPlayer(LobbyObserver o) throws RemoteException;
 	
@@ -51,7 +52,7 @@ public interface Lobby extends Remote {
 	 * Unassign player.
 	 *
 	 * @param o the LobbyObserver
-	 * @throws RemoteException
+	 * @throws RemoteException 
 	 */
 	public void unassignPlayer(LobbyObserver o) throws RemoteException;
 	
@@ -60,7 +61,7 @@ public interface Lobby extends Remote {
 	 *
 	 * @param o the LobbyObserver
 	 * @param slotIdx the PlayerSlot
-	 * @throws RemoteException the remote exception
+	 * @throws RemoteException 
 	 */
 	public void selectSlot(LobbyObserver o, int slotIdx) throws RemoteException;
 	
@@ -69,7 +70,7 @@ public interface Lobby extends Remote {
 	 *
 	 * @param o the LobbbyObserver
 	 * @return true, if is assigned
-	 * @throws RemoteException
+	 * @throws RemoteException 
 	 */
 	public boolean isAssigned(LobbyObserver o) throws RemoteException;
 
@@ -78,7 +79,7 @@ public interface Lobby extends Remote {
 	 *
 	 * @param o the LobbbyObserver
 	 * @return true, if is ready
-	 * @throws RemoteException
+	 * @throws RemoteException 
 	 */
 	public boolean isReady(LobbyObserver o) throws RemoteException;
 	
@@ -103,8 +104,8 @@ public interface Lobby extends Remote {
 	/**
 	 * Gets the assignable slots.
 	 *
-	 * @return List<Player
-	 * @throws RemoteException the remote exception
+	 * @return List<Player>
+	 * @throws RemoteException
 	 */
 	public List<PlayerSlot> getAssignableSlots() throws RemoteException;
 	
@@ -112,7 +113,7 @@ public interface Lobby extends Remote {
 	 * Gets the unassigned players.
 	 *
 	 * @return List<Player>
-	 * @throws RemoteException the remote exception
+	 * @throws RemoteException
 	 */
 	public List<Player> getUnassignedPlayers() throws RemoteException;
 	
@@ -121,7 +122,7 @@ public interface Lobby extends Remote {
 	 * Gets the max players.
 	 *
 	 * @return the max players
-	 * @throws RemoteException the remote exception
+	 * @throws RemoteException
 	 */
 	public int getMaxPlayers() throws RemoteException;
 	
@@ -129,7 +130,7 @@ public interface Lobby extends Remote {
 	 * Gets the host IP.
 	 *
 	 * @return the host IP
-	 * @throws RemoteException the remote exception
+	 * @throws RemoteException
 	 */
 	public String getHostIP() throws RemoteException;
 
@@ -137,7 +138,7 @@ public interface Lobby extends Remote {
 	 * Gets the game.
 	 *
 	 * @return the game
-	 * @throws RemoteException the remote exception
+	 * @throws RemoteException
 	 */
 	public Game getGame() throws RemoteException;
 	
@@ -145,10 +146,17 @@ public interface Lobby extends Remote {
 	 * Gets the lobby state.
 	 *
 	 * @return LobbyStates
-	 * @throws RemoteException the remote exception
+	 * @throws RemoteException
 	 */
 	public LobbyStates getLobbyState() throws RemoteException;
 	
+	/**
+	 * Checks if is full.
+	 *
+	 * @return true, if is full
+	 * @throws RemoteException
+	 * @throws LobbyFullException
+	 */
 	public boolean isFull() throws RemoteException, LobbyFullException;
 	
 }
