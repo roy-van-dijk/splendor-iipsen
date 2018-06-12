@@ -1,7 +1,5 @@
 package application.domain;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -9,12 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import application.controllers.ReturnTokenController;
-import application.services.SaveGameDAO;
-import application.util.AlertDialog;
 import application.util.Logger;
 import application.util.Logger.Verbosity;
-import javafx.scene.control.Alert.AlertType;
 
 // TODO: Kees Need to fill the method Endturn()
 /**
@@ -25,9 +19,6 @@ public class EndTurnImpl extends UnicastRemoteObject implements EndTurn, Seriali
 	/**
 	 * 
 	 */
-	public enum LastRound {NOT_LAST_ROUND, LAST_ROUND}
-	
-	private LastRound isLastRound = LastRound.NOT_LAST_ROUND;
 	private static final long serialVersionUID = 5685833325676205128L;
 	private Game game;
 	private PlayingField playingField;

@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,8 +14,6 @@ import java.util.Stack;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 
-import application.domain.Card;
-import application.domain.CardImpl;
 import application.domain.Gem;
 import application.domain.Noble;
 import application.domain.NobleImpl;

@@ -2,20 +2,14 @@ package application.views;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.Arrays;
 import java.util.List;
 
 import application.controllers.GameController;
 import application.domain.Card;
 import application.domain.CardRow;
 import application.domain.CardRowObserver;
-
-import application.domain.Gem;
-import javafx.application.Platform;
-
 import application.domain.TempHand;
-import application.util.Logger;
-import application.util.Logger.Verbosity;
+import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;

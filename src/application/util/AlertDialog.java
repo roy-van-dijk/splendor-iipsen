@@ -2,10 +2,6 @@ package application.util;
 
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.DialogPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-import javafx.stage.Modality;
 import javafx.stage.StageStyle;
 
 /**

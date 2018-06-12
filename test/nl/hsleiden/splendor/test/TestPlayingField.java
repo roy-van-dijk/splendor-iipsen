@@ -32,10 +32,8 @@ import application.domain.TokenImpl;
 class TestPlayingField {
 
 	private PlayingFieldImpl playingField;
-	private List<Player> players;
 	private PlayerImpl player;
 	private GameImpl game;
-	private boolean add;
 	/**
 	 * @throws java.lang.Exception
 	 * void
@@ -90,15 +88,13 @@ class TestPlayingField {
 	}
 	@Test
 	void playersetTest() throws RemoteException {
-		TempHand temphand = playingField.getTempHand();
 		player = new PlayerImpl("kees");
 		game = new GameImpl(1);
 		List<Player> players = new ArrayList<Player>();
 		players.add(player);
 		game.setPlayers(players);
 		
-		assertEquals(game.getPlayers().get(0), player); 
-		
+		assertEquals(game.getPlayers().get(0), player); 	
 	} 
 	
 	@Test

@@ -4,8 +4,6 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
 
-import application.util.Logger;
-import application.util.Logger.Verbosity;
 import application.views.ReturnTokensView;
 
 /**
