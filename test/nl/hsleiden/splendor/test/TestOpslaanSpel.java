@@ -65,7 +65,7 @@ class TestOpslaanSpel {
 	 * Test.
 	 */
 	@Test
-	void test() {
+	void testSaveGame() {
 		File file =  new File(SaveGameDAO.getInstance().createSavePath("Bob.splendor"));
 		long length = file.lastModified();
 		file.length();
