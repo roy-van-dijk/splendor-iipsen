@@ -94,7 +94,7 @@ public class GameController {
 		ConfirmDialog dialog = new ConfirmDialog(AlertType.CONFIRMATION);
 		dialog.setTitle("Confirmation Dialog");
 		dialog.setHeaderText("You are leaving the game");
-		dialog.setContentText("Are you sure you wish to continue?");
+		dialog.setContentText("Are you sure you wish to quit?");
 		
 		
 		Optional<ButtonType> results = dialog.showAndWait();
@@ -201,7 +201,5 @@ public class GameController {
 		game.terminateGame();
 		
 	}
-	
-	
 	
 }
