@@ -1,5 +1,6 @@
 package application.util;
 
+import application.Main;
 import javafx.scene.control.DialogPane;
 import javafx.stage.StageStyle;
 
@@ -31,7 +32,7 @@ public class ConfirmDialog extends javafx.scene.control.Alert{
 		
 		DialogPane dialogPane = this.getDialogPane();
 		
-		dialogPane.getScene().getStylesheets().add(getClass().getResource("../" + Util.getCSSname()).toExternalForm());
+		dialogPane.getScene().getStylesheets().add(Main.class.getResource(Util.getCSSname()).toExternalForm());
 		dialogPane.getScene().setFill(null);
 		dialogPane.getStyleClass().add("alert-dialog");
 		

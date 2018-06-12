@@ -1,5 +1,6 @@
 package application.views;
 
+import application.Main;
 import application.util.Util;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -34,7 +35,7 @@ public class PopUpWindowView {
 		pane = new BorderPane();
 
 		Scene scene = new Scene(pane, 750, 500);
-		scene.getStylesheets().add(getClass().getResource("../" + Util.getCSSname()).toExternalForm());
+		scene.getStylesheets().add(Main.class.getResource(Util.getCSSname()).toExternalForm());
 
 		VBox box = new VBox();
 		box.setAlignment(Pos.CENTER);

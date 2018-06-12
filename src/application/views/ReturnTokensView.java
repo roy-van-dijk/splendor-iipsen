@@ -4,6 +4,7 @@ import java.rmi.RemoteException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import application.Main;
 import application.controllers.ReturnTokenController;
 import application.domain.Gem;
 import application.domain.ReturnTokens;
@@ -87,7 +88,7 @@ public class ReturnTokensView {
 		bpane.getStyleClass().add("modal");
 
 		Scene scene = new Scene(bpane, 1000, 700);
-		scene.getStylesheets().add(getClass().getResource("../" + Util.getCSSname()).toExternalForm());
+		scene.getStylesheets().add(Main.class.getResource(Util.getCSSname()).toExternalForm());
 		scene.setFill(Color.TRANSPARENT);
 
 		stage = new Stage();

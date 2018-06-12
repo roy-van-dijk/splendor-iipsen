@@ -1,5 +1,7 @@
 package application.util;
 
+import application.Main;
+import application.StageManager;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.DialogPane;
 import javafx.stage.StageStyle;
@@ -42,8 +44,7 @@ public class AlertDialog extends javafx.scene.control.Alert {
 		this.setHeaderText("Error");
 		
 		DialogPane dialogPane = this.getDialogPane();
-
-		dialogPane.getScene().getStylesheets().add(getClass().getResource("../" + Util.getCSSname()).toExternalForm());
+		dialogPane.getScene().getStylesheets().add(Main.class.getResource(Util.getCSSname()).toExternalForm());
 		dialogPane.getScene().setFill(null);
 		dialogPane.getStyleClass().add("alert-dialog");
 
