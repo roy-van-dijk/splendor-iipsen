@@ -96,15 +96,13 @@ class TestPlayingField {
 		List<Player> players = new ArrayList<Player>();
 		players.add(player);
 		game.setPlayers(players);
-		///System.out.println(player.getName());
-		//this.player	
 		
 		assertEquals(game.getPlayers().get(0), player); 
 		
 	} 
 	
 	@Test
-	void testWinnarPlaying() throws RemoteException {
+	void testPrestige() throws RemoteException {
 		player = new PlayerImpl("kees");
 		game = new GameImpl(1);
 		List<Player> players = new ArrayList<Player>();
@@ -115,8 +113,7 @@ class TestPlayingField {
 		game.getCurrentPlayer().addCard(card);
 		System.out.println(game.getPlayers().get(0).getPrestige());
 		
-		System.out.println(game.getWinningPlayer());
-		
+		assertEquals(13, game.getPlayers().get(0).getPrestige());
 	}
 
 }
