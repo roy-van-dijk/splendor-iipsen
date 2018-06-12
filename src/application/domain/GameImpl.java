@@ -18,7 +18,7 @@ import application.util.Logger;
 import application.util.Logger.Verbosity;
 import application.views.GameView;
 
-	// TODO: Auto-generated Javadoc
+// TODO: Auto-generated Javadoc
 /**
  * The Class GameImpl.
  *
@@ -213,7 +213,7 @@ public class GameImpl extends UnicastRemoteObject implements Reinitializable, Ga
 	/**
 	 * Sets the players.
 	 *
-	 * @param players
+	 * @param players the new players
 	 */
 	public void setPlayers(List<Player> players) {
 		this.players = players;
@@ -239,7 +239,7 @@ public class GameImpl extends UnicastRemoteObject implements Reinitializable, Ga
 	 * Gets the max players.
 	 *
 	 * @return the max players
-	 * @throws RemoteException
+	 * @throws RemoteException the remote exception
 	 */
 	public int getMaxPlayers() throws RemoteException {
 		return maxPlayers;
@@ -249,7 +249,7 @@ public class GameImpl extends UnicastRemoteObject implements Reinitializable, Ga
 	 * Gets the game state.
 	 *
 	 * @return GameSate
-	 * @throws RemoteException
+	 * @throws RemoteException the remote exception
 	 */
 	public GameState getGameState() throws RemoteException {
 		return gameState;
@@ -379,9 +379,9 @@ public class GameImpl extends UnicastRemoteObject implements Reinitializable, Ga
 	/**
 	 * Adds the card to temp hand.
 	 *
-	 * @param card
-	 * @param tempHand
-	 * @throws RemoteException
+	 * @param card the card
+	 * @param tempHand the temp hand
+	 * @throws RemoteException the remote exception
 	 */
 	private void addCardToTempHand(Card card, TempHand tempHand) throws RemoteException {	
 		MoveType moveType = tempHand.getMoveType();
@@ -405,7 +405,7 @@ public class GameImpl extends UnicastRemoteObject implements Reinitializable, Ga
 	/**
 	 * close the game for everyone.
 	 *
-	 * @throws RemoteException
+	 * @throws RemoteException the remote exception
 	 */
 	public void terminateGame() throws RemoteException
 	{	
@@ -425,7 +425,7 @@ public class GameImpl extends UnicastRemoteObject implements Reinitializable, Ga
 	/**
 	 * disconnect the observers from the game.
 	 *
-	 * @throws RemoteException
+	 * @throws RemoteException the remote exception
 	 */
 	private void disconnectAllPlayers() throws RemoteException {
 		System.out.println("[DEBUG] GameImpl::disconnectAllPlayers()::Disconnecting all observers.");
@@ -442,8 +442,8 @@ public class GameImpl extends UnicastRemoteObject implements Reinitializable, Ga
 	/**
 	 * game over, player has won.
 	 *
-	 * @param winningPlayer
-	 * @throws RemoteException
+	 * @param winningPlayer the winning player
+	 * @throws RemoteException the remote exception
 	 */
 	@Override
 	public void playerHasWon(Player winningPlayer) throws RemoteException {
@@ -472,7 +472,7 @@ public class GameImpl extends UnicastRemoteObject implements Reinitializable, Ga
 	/**
 	 * Sets the registry.
 	 *
-	 * @param registry 
+	 * @param registry the new registry
 	 */
 	public void setRegistry(Registry registry) {
 		this.registry = registry;
@@ -480,11 +480,13 @@ public class GameImpl extends UnicastRemoteObject implements Reinitializable, Ga
 	
 	/* (non-Javadoc)
 	 * @see application.domain.Game#anyCardsPurchasable()
+	/**
+	 * check if the current player can afford any cards from playingfield or the reserved cards from the player
+	 * if the player can buy a card, return true, else return false.
 	 */
 	public boolean anyCardsPurchasable() throws RemoteException {
 		Player player = this.getCurrentPlayer();
 		List<CardRow> playingFieldCardRows = getPlayingField().getCardRows();
-
 
 		for(CardRow cardRow : playingFieldCardRows)
 		{
@@ -506,6 +508,7 @@ public class GameImpl extends UnicastRemoteObject implements Reinitializable, Ga
 		}
 		return false;
 	}
+
 
 	/* (non-Javadoc)
 	 * @see application.domain.Reinitializable#reinitializeObservers()

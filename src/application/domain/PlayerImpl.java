@@ -218,7 +218,7 @@ public class PlayerImpl extends UnicastRemoteObject implements Reinitializable, 
 	 */
 	public int getPrestige() throws RemoteException
 	{
-		int prestige = 14;
+		int prestige = 0;
 		
 		for(Card ownedCard : ownedCards)
 		{
