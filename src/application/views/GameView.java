@@ -114,10 +114,7 @@ public class GameView extends UnicastRemoteObject implements UIComponent, Disabl
 					{
 						gameController.showReturnTokensWindow();
 					}	
-				}
-				if(game.getWinningPlayer() != null) {
-					new PopUpWindowView(game.getWinningPlayer().getName() + " has won the game!", "A player has won");
-				}		
+				}	
 			} catch (RemoteException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -349,18 +346,62 @@ public class GameView extends UnicastRemoteObject implements UIComponent, Disabl
 	public void disconnect(GameState gameState) throws RemoteException {
 		Platform.runLater(() -> {
 			StageManager.getInstance().showMainMenu();
-			
 			AlertDialog dialog;
+
 			if(gameState == GameState.CLOSING)
 			{
-				 dialog = new AlertDialog(AlertType.INFORMATION, "Server has been terminated. You have been disconnected.");
+				new PopUpWindowView("A player has left the game", "The game has stopped.");
+				dialog = new AlertDialog(AlertType.INFORMATION, "Server has been terminated. You have been disconnected.");
+			} else if(gameState == GameState.FINISHED) {
+				String winningPlayer = "A player";
+				try {
+					winningPlayer = game.getWinningPlayer().getName();
+				} catch (RemoteException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				Logger.log("GameView::disconnect()::Winning player = " + winningPlayer, Verbosity.DEBUG);
+				new PopUpWindowView(winningPlayer + " has won the game!", "A player has won");
+				dialog = new AlertDialog(AlertType.INFORMATION, "You have been disconnected from the server.");
 			} else {
 				dialog = new AlertDialog(AlertType.INFORMATION, "You have been disconnected from the server.");
 			}
+			
 			dialog.setHeaderText("");
 			dialog.show();
-		});
-		
+		});		
 	}
 	
+	/**
+	 * close game for player. dialog is commented out because of double message
+	 */
+	@Override
+	public void showWinScreen(GameState gameState, String winningPlayer) throws RemoteException {
+		Platform.runLater(() -> {
+			StageManager.getInstance().showMainMenu();
+			AlertDialog dialog;
+
+			if(gameState == GameState.CLOSING)
+			{
+				new PopUpWindowView("A player has left the game", "The game has stopped.");
+				dialog = new AlertDialog(AlertType.INFORMATION, "Server has been terminated. You have been disconnected.");
+			} else if(gameState == GameState.FINISHED) {
+//				String winningPlayer = "A player";
+//				try {
+//					winningPlayer = game.getWinningPlayer().getName();
+//				} catch (RemoteException e1) {
+//					// TODO Auto-generated catch block
+//					e1.printStackTrace();
+//				}
+				Logger.log("GameView::disconnect()::Winning player = " + winningPlayer, Verbosity.DEBUG);
+				new PopUpWindowView("has won the game!", winningPlayer);
+				dialog = new AlertDialog(AlertType.INFORMATION, "You have been disconnected from the server.");
+			} else {
+				dialog = new AlertDialog(AlertType.INFORMATION, "You have been disconnected from the server.");
+			}
+			
+			dialog.setHeaderText("");
+			dialog.show();
+		});		
+	}
 }

@@ -56,7 +56,7 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 	public GameImpl(int maxPlayers) throws RemoteException {
 		this.maxPlayers = maxPlayers;
 		
-		this.roundNr = 1;
+		this.roundNr = 0;
 		this.currentPlayerIdx = -1;
 		
 		this.players = new ArrayList<Player>();
@@ -133,9 +133,10 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 			for(int i = 0; i < 13; i++)
 			{
 				Gem[] allGems = Gem.values();
-				int randomIdx = (int) (Math.random() * allGems.length);
+				int randomIdx = (int) ((Math.random() * allGems.length));
 				player.debugAddToken(new TokenImpl(allGems[randomIdx]));
 			}
+			
 			
 			this.players.add(player);
 			this.players.add(new PlayerImpl("Bob"));
@@ -421,7 +422,11 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 		System.out.println("[DEBUG] GameImpl::disconnectAllPlayers()::Disconnecting all observers.");
 		for(GameObserver o : observers.keySet())
 		{
-			o.disconnect(gameState);
+			if(this.gameState == GameState.CLOSING) {
+				o.disconnect(gameState);
+			} else if(this.gameState == GameState.FINISHED) {
+				o.showWinScreen(gameState, winningPlayer.getName());
+			}
 		}
 	}
 	
@@ -431,7 +436,17 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 	@Override
 	public void playerHasWon(Player winningPlayer) throws RemoteException {
 		this.winningPlayer = winningPlayer;
-		this.notifyObservers();
+		this.gameState = GameState.FINISHED;
+		this.disconnectAllPlayers();
+		
+		UnicastRemoteObject.unexportObject(this, true);
+		try {
+			this.registry.unbind("game");
+		} catch (NotBoundException e) {
+			e.printStackTrace();
+		}
+		UnicastRemoteObject.unexportObject(this.registry, true);
+		System.out.println("[DEBUG] GameImpl::terminateGame()::Server terminated.");
 	}
 
 	@Override

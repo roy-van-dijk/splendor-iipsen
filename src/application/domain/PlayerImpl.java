@@ -198,7 +198,7 @@ public class PlayerImpl extends UnicastRemoteObject implements Player, Serializa
 	 */
 	public int getPrestige() throws RemoteException
 	{
-		int prestige = 0;
+		int prestige = 14;
 		
 		for(Card ownedCard : ownedCards)
 		{
