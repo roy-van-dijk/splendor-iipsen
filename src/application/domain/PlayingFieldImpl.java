@@ -353,6 +353,9 @@ public class PlayingFieldImpl extends UnicastRemoteObject implements Reinitializ
 		}
 	}
 	
+	/* (non-Javadoc)
+	 * @see application.domain.Reinitializable#reinitializeObservers()
+	 */
 	@Override
 	public void reinitializeObservers() {
 		this.observers = new ArrayList<>();

@@ -8,7 +8,6 @@ import application.util.Logger;
 import application.util.Logger.Verbosity;
 import application.views.ReturnTokensView;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class ReturnTokens.
  */
@@ -42,7 +41,9 @@ public class ReturnTokens {
 		this.player = game.getCurrentPlayer();
 		this.playingField = game.getPlayingField();
 		this.endTurn = game.getEndTurn();
-		this.tokenListNew = new TokenList(player.getTokens());
+		
+		List<Token> copyPlayerTokens = new ArrayList<>(player.getTokens());
+		this.tokenListNew = new TokenList(copyPlayerTokens);
 		
 		this.allowConfirm = false;
 		
@@ -107,8 +108,6 @@ public class ReturnTokens {
 	
 	/**
 	 * Notify view.
-	 *
-	 * @throws RemoteException
 	 */
 	public void notifyView() 
 	{
@@ -141,6 +140,9 @@ public class ReturnTokens {
 		if(allowConfirm)
 		{
 			//Logger.log("ReturnTokens::confirmButton()::Returning tokens", Verbosity.DEBUG);
+			//for(Token token : removedTokens) {
+			//	System.out.println(token.getGemType());
+			//}
 			player.returnTokensToField(removedTokens, playingField);
 			//Logger.log("ReturnTokens::confirmButton()::Tokens returned", Verbosity.DEBUG);
 			this.returningState = ReturnTokenState.DONE;

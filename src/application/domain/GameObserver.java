@@ -5,6 +5,7 @@ import java.rmi.RemoteException;
 
 import application.views.Disableable;
 
+// TODO: Auto-generated Javadoc
 /**
  * An asynchronous update interface for receiving notifications
  * about Game information as the Game is constructed.
@@ -22,12 +23,22 @@ public interface GameObserver extends Remote {
 	public void modelChanged(Game game) throws RemoteException;
 
 	/**
-	 * game is closing
+	 * game is closing.
+	 *
 	 * @param gameState
 	 * @throws RemoteException
 	 */
 	public void disconnect(GameState gameState) throws RemoteException;
 
+	/**
+	 * This method is called when information about an Game
+	 * which was previously requested using an asynchronous
+	 * interface becomes available.
+	 *
+	 * @param gameState
+	 * @param winningPlayer
+	 * @throws RemoteException
+	 */
 	public void showWinScreen(GameState gameState, String winningPlayer) throws RemoteException;
 
 }

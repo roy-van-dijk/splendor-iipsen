@@ -4,7 +4,6 @@ package application.domain;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
-// TODO: Auto-generated Javadoc
 /**
  * An asynchronous update interface for receiving notifications
  * about CardRow information as the CardRow is constructed.

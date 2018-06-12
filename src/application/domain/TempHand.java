@@ -5,7 +5,6 @@ import java.rmi.RemoteException;
 import java.util.List;
 
 
-// TODO: Auto-generated Javadoc
 /**
  * The Interface TempHand.
  */

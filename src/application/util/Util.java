@@ -24,8 +24,8 @@ public final class Util {
 	/**
 	 * String to int.
 	 *
-	 * @param str the str
-	 * @param defaultValue the default value
+	 * @param str
+	 * @param default
 	 * @return int
 	 */
 	public static int StringToInt(String str, int defaultValue)
@@ -56,9 +56,9 @@ public final class Util {
 	/**
 	 * Random number string.
 	 *
-	 * @param min the min
-	 * @param max the max
-	 * @return the string
+	 * @param min
+	 * @param max
+	 * @return String
 	 */
 	// TODO: to be removed
 	public static String randomNumberString(int min, int max)

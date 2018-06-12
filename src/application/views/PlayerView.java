@@ -67,7 +67,7 @@ public class PlayerView extends UnicastRemoteObject implements UIComponent, Disa
 	 * Creates a new player view.
 	 *
 	 * @param player this player.
-	 * @param gameController the game controller
+	 * @param gameController
 	 * @throws RemoteException
 	 */
 	public PlayerView(Player player, GameController gameController) throws RemoteException {
@@ -135,7 +135,7 @@ public class PlayerView extends UnicastRemoteObject implements UIComponent, Disa
 	/**
 	 * Builds the accessibility menu.
 	 *
-	 * @return the v box
+	 * @return VBox
 	 */
 	private VBox buildAccessibilityMenu() {
 		VBox accessibility = new VBox(10);
@@ -188,7 +188,7 @@ public class PlayerView extends UnicastRemoteObject implements UIComponent, Disa
 	/**
 	 * Update player reserved cards.
 	 *
-	 * @param List<Card>cards the cards
+	 * @param List<Card>
 	 */
 	private void updatePlayerReservedCards(List<Card> cards) throws RemoteException {
 		reservedCards.getChildren().clear();
@@ -372,7 +372,7 @@ public class PlayerView extends UnicastRemoteObject implements UIComponent, Disa
 	 * Update player tokens.
 	 *
 	 * @param  gemsCount
-	 * @throws RemoteException the remote exception
+	 * @throws RemoteException
 	 */
 	private void updatePlayerTokens(Map<Gem, Integer> gemsCount) throws RemoteException {
 		tokensGrid.getChildren().clear();
@@ -429,8 +429,8 @@ public class PlayerView extends UnicastRemoteObject implements UIComponent, Disa
 	}
 
 	/**
-	 *
-	 *
+	 * Seperator.
+	 * 
 	 * @return Seperator
 	 */
 	private Separator sep() {

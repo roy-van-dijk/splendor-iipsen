@@ -287,7 +287,7 @@ public class GameView extends UnicastRemoteObject implements UIComponent, Disabl
 	 * Build the box with the player information of the opponents.
 	 *
 	 * @return Pane
-	 * @throws RemoteException the remote exception
+	 * @throws RemoteException
 	 */
 	private Pane buildOpponents() throws RemoteException
 	{
@@ -313,7 +313,7 @@ public class GameView extends UnicastRemoteObject implements UIComponent, Disabl
 	 * Builds the player view. This is the view with the player's own information
 	 *
 	 * @return PlayerView
-	 * @throws RemoteException the remote exception
+	 * @throws RemoteException
 	 */
 	private PlayerView buildPlayer() throws RemoteException
 	{
@@ -341,8 +341,12 @@ public class GameView extends UnicastRemoteObject implements UIComponent, Disabl
 		this.playingFieldView.setDisabled(disabled);
 		this.playerView.setDisabled(disabled);
 	}
+
 /**
  * close game for player. dialog is commented out because of double message
+ *
+ * @param gameState
+ * @throws RemoteException
  */
 	@Override
 	public void disconnect(GameState gameState) throws RemoteException {
@@ -376,6 +380,10 @@ public class GameView extends UnicastRemoteObject implements UIComponent, Disabl
 	
 	/**
 	 * close game for player. dialog is commented out because of double message
+	 *
+	 * @param gameState
+	 * @param winningPlayer
+	 * @throws RemoteException
 	 */
 	@Override
 	public void showWinScreen(GameState gameState, String winningPlayer) throws RemoteException {
