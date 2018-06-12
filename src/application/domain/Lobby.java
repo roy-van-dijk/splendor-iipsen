@@ -3,7 +3,7 @@ package application.domain;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.List;
-import java.util.Map;
+
 import application.domain.LobbyImpl.LobbyStates;
 import application.util.LobbyFullException;
 
