@@ -17,7 +17,7 @@ import application.util.Logger.Verbosity;
  *
  * @author Sanchez
  */
-public class CardRowImpl extends UnicastRemoteObject implements Serializable, CardRow {
+public class CardRowImpl extends UnicastRemoteObject implements Reinitializable, Serializable, CardRow {
 	
 	private static final long serialVersionUID = 7939191665883088567L;
 
@@ -213,5 +213,10 @@ public class CardRowImpl extends UnicastRemoteObject implements Serializable, Ca
 	@Override
 	public int getIndex() throws RemoteException {
 		return index;
+	}
+	
+	@Override
+	public void reinitializeObservers() {
+		this.observers = new ArrayList<>();
 	}
 }

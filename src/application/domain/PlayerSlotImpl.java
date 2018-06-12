@@ -3,6 +3,9 @@ package application.domain;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
+import application.util.Logger;
+import application.util.Logger.Verbosity;
+
 // TODO: Auto-generated Javadoc
 /**
  * The Class PlayerSlotImpl.
@@ -55,6 +58,7 @@ public class PlayerSlotImpl extends UnicastRemoteObject implements PlayerSlot {
 	 */
 	public void setCurrentPlayer(Player currentPlayer) throws RemoteException {
 		this.currentPlayer = currentPlayer;
+		Logger.log(String.format("PlayerSlotImpl::Slot current player = %s", currentPlayer), Verbosity.DEBUG);
 	}
 
 	/* (non-Javadoc)

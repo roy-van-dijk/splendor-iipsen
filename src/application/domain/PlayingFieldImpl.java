@@ -15,7 +15,7 @@ import java.util.Map;
  *
  * @author Sanchez
  */
-public class PlayingFieldImpl extends UnicastRemoteObject implements PlayingField, Serializable {
+public class PlayingFieldImpl extends UnicastRemoteObject implements Reinitializable, PlayingField, Serializable {
 	
 	private static final long serialVersionUID = 6248798862229804286L;
 	
@@ -353,4 +353,13 @@ public class PlayingFieldImpl extends UnicastRemoteObject implements PlayingFiel
 		}
 	}
 	
+	@Override
+	public void reinitializeObservers() {
+		this.observers = new ArrayList<>();
+		for(int i = 0; i < cardRows.size(); i++)
+		{
+			CardRowImpl cardRow = (CardRowImpl) this.cardRows.get(i);
+			cardRow.reinitializeObservers();
+		}
+	}
 }

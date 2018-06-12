@@ -80,9 +80,10 @@ public class SaveGameDAO {
 	 * @throws ClassNotFoundException             Game
 	 */
 	public GameImpl loadSaveGame(String filename) throws FileNotFoundException, IOException, ClassNotFoundException {
-		this.createSavePath("Bob.splendor");
+		basePath = this.createSavePath("Bob.splendor");
 		ObjectInputStream read = new ObjectInputStream(new FileInputStream(basePath));
 		game = (GameImpl) read.readObject();
+		game.reinitializeObservers();
 		
 		read.close();
 		
