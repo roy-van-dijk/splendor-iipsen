@@ -5,7 +5,6 @@ import java.util.List;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Interface Game.
  *
@@ -54,7 +53,7 @@ public interface Game extends Remote {
 	/**
 	 * Find selectable cards.
 	 *
-	 * @param moveType 
+	 * @param moveType
 	 * @throws RemoteException
 	 */
 	public void findSelectableCards(MoveType moveType) throws RemoteException;
@@ -152,21 +151,21 @@ public interface Game extends Remote {
 	/**
 	 * Clean up selections.
 	 *
-	 * @throws RemoteException
+	 * @throws RemoteException the remote exception
 	 */
 	public void cleanUpSelections() throws RemoteException;
 
 	/**
 	 * Update playing field and player view.
 	 *
-	 * @throws RemoteException
+	 * @throws RemoteException the remote exception
 	 */
 	public void updatePlayingFieldAndPlayerView() throws RemoteException;
 
 	/**
 	 * Sets the tokens selectable.
 	 *
-	 * @param moveType
+	 * @param moveType the new tokens selectable
 	 * @throws RemoteException
 	 */
 	public void setTokensSelectable(MoveType moveType) throws RemoteException;
@@ -174,34 +173,48 @@ public interface Game extends Remote {
 	/**
 	 * Adds the token to temp.
 	 *
-	 * @param gemType
+	 * @param gemType the gem type
 	 * @throws RemoteException
 	 */
 	public void addTokenToTemp(Gem gemType) throws RemoteException;
+	
 	/**
-	 * 
-	 * @return
+	 * Reserve card inventory full.
+	 *
+	 * @return true, if successful
 	 * @throws RemoteException
 	 */
 	public boolean reserveCardInventoryFull() throws RemoteException;
+	
 	/**
-	 * close the curent running game
+	 * close the curent running game.
+	 *
 	 * @throws RemoteException
 	 */
 	public void terminateGame() throws RemoteException;
+	
 	/**
-	 * winner of the game
+	 * winner of the game.
+	 *
 	 * @param winningPlayer
 	 * @throws RemoteException
 	 */
 	public void playerHasWon(Player winningPlayer) throws RemoteException;
+	
 	/**
-	 * get the winning player
-	 * @return
+	 * get the winning player.
+	 *
+	 * @return Player
 	 * @throws RemoteException
 	 */
 	public Player getWinningPlayer() throws RemoteException;
 	
+	/**
+	 * Any cards purchasable.
+	 *
+	 * @return true, if successful
+	 * @throws RemoteException
+	 */
 	public boolean anyCardsPurchasable() throws RemoteException;
 
 }

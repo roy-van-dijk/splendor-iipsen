@@ -12,7 +12,6 @@ import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class Main.
  *

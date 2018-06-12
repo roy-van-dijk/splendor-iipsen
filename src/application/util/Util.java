@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
 
-// TODO: Auto-generated Javadoc
 /** 
  * This is a generic helper class
  * Traditionally, this is against the OOP paradigm as it is procedural programming
@@ -28,8 +27,8 @@ public final class Util {
 	/**
 	 * String to int.
 	 *
-	 * @param str the str
-	 * @param defaultValue the default value
+	 * @param str
+	 * @param default
 	 * @return int
 	 */
 	public static int StringToInt(String str, int defaultValue)
@@ -60,9 +59,9 @@ public final class Util {
 	/**
 	 * Random number string.
 	 *
-	 * @param min the min
-	 * @param max the max
-	 * @return the string
+	 * @param min
+	 * @param max
+	 * @return String
 	 */
 	// TODO: to be removed
 	public static String randomNumberString(int min, int max)

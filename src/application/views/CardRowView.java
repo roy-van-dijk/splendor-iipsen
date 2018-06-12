@@ -38,9 +38,9 @@ public class CardRowView extends UnicastRemoteObject implements UIComponent, Car
 	 * Creates a new card row view.
 	 *
 	 * @param cardRow a row of cards on the playing field
-	 * @param gameController
-	 * @param tempHand
-	 * @throws RemoteException
+	 * @param gameController the game controller
+	 * @param tempHand the temp hand
+	 * @throws RemoteException the remote exception
 	 */
 	public CardRowView(CardRow cardRow, GameController gameController, TempHand tempHand) throws RemoteException {
 		this.tempHand = tempHand;
@@ -53,8 +53,8 @@ public class CardRowView extends UnicastRemoteObject implements UIComponent, Car
 	/**
 	 * Update the card row view, like when a card is bought, reserved or selected.
 	 *
-	 * @param cardRow
-	 * @throws RemoteException
+	 * @param cardRow the card row
+	 * @throws RemoteException the remote exception
 	 */	
 	private void updateCardRow(CardRow cardRow) throws RemoteException
 	{
@@ -140,6 +140,9 @@ public class CardRowView extends UnicastRemoteObject implements UIComponent, Car
 		});
 	}
 
+	/**
+	 * Builds the UI.
+	 */
 	private void buildUI()
 	{
 		grid = new GridPane();

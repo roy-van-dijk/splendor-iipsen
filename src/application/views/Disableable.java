@@ -14,8 +14,7 @@ public interface Disableable {
 	/**
 	 * Updates the view to accompany the disabled change.
 	 *
-	 * @param disabled
-	 * @throws RemoteException
+	 * @param disabled the new disabled
 	 */
 	public void setDisabled(boolean disabled);
 }

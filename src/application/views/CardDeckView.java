@@ -12,6 +12,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 
 
+// TODO: Auto-generated Javadoc
 /**
  * Card deck views display the back size of cards. They can be seen on the left
  * side of the playing field
@@ -26,7 +27,7 @@ public class CardDeckView extends CardView {
 	/**
 	 * Creates a new view of a card deck.
 	 *
-	 * @param deck
+	 * @param deck the deck
 	 * @param sizeX the size horizontal
 	 * @param sizeY the size vertical
 	 */
@@ -59,9 +60,9 @@ public class CardDeckView extends CardView {
 		root = new StackPane(rect);
 	}
 
-	/**
-	 * 	 *
-	 * @return String the path for this card's illustration.
+
+	/* (non-Javadoc)
+	 * @see application.views.CardView#getImagePath()
 	 */
 	@Override
 	protected String getImagePath() {

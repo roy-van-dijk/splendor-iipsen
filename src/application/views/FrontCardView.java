@@ -170,7 +170,6 @@ public class FrontCardView extends CardView implements ColorChangeable{
 	 * Updates the card view's circle colours based on the colour blind mode that is applied.
 	 *
 	 * @param mode the mode
-	 * @return void
 	 */
 	@Override
 	public void updateView(ColorBlindModes mode) {

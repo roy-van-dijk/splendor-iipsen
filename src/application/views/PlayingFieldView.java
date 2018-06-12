@@ -64,7 +64,6 @@ public class PlayingFieldView extends UnicastRemoteObject implements UIComponent
 
 	private VBox exitGamePane;
 
-	// What are these lists used for?
 	private List<CardRowView> cardRowViews;
 	private List<NobleView> nobleViews;
 	private List<TokenView> tokenViews;

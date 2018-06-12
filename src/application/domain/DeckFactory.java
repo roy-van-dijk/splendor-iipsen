@@ -7,7 +7,6 @@ import java.util.Stack;
 import application.services.CardsReader;
 import application.services.NoblesReader;
 
-// TODO: Auto-generated Javadoc
 /**
  * A factory for creating Deck objects.
  *

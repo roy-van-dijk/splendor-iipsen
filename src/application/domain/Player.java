@@ -40,12 +40,7 @@ public interface Player extends Remote {
 	 */
 	public void addObserver(PlayerObserver o) throws RemoteException;
 
-	/**
-	 * Removes an observer from the player.
-	 *
-	 * @param card
-	 * @throws RemoteException
-	 */
+	
 	// public void removeObserver(PlayerObserver o) throws RemoteException;
 
 	/**
@@ -89,6 +84,12 @@ public interface Player extends Remote {
 	 */
 	public String getName() throws RemoteException;
 	
+	/**
+	 * Sets the name.
+	 *
+	 * @param name 
+	 * @throws RemoteException
+	 */
 	public void setName(String name) throws RemoteException;
 
 
@@ -104,7 +105,7 @@ public interface Player extends Remote {
 	 * Gets all the cards that the player owns.
 	 *
 	 * @return List<Card>
-	 * @throws RemoteException
+	 * @throws RemoteException 
 	 */
 	public List<Card> getOwnedCards() throws RemoteException;
 
@@ -143,7 +144,7 @@ public interface Player extends Remote {
 	/**
 	 * Adds a token to the player's owned tokens (used for debugging).
 	 *
-	 * @param token
+	 * @param token the token
 	 * @throws RemoteException
 	 */
 	public void debugAddToken(Token token) throws RemoteException;
@@ -159,7 +160,7 @@ public interface Player extends Remote {
 	/**
 	 * Adds a noble to the player's owned nobles list.
 	 *
-	 * @param noble 
+	 * @param noble the noble
 	 * @throws RemoteException
 	 */
 	public void addNoble(Noble noble) throws RemoteException;
@@ -167,7 +168,7 @@ public interface Player extends Remote {
 	/**
 	 * Adds a reserved card to the player's reserved card list.
 	 *
-	 * @param card 
+	 * @param card the card
 	 * @throws RemoteException
 	 */
 	public void addReservedCard(Card card) throws RemoteException;
@@ -175,7 +176,7 @@ public interface Player extends Remote {
 	/**
 	 * Adds a token to the player's owned tokens.
 	 *
-	 * @param token 
+	 * @param token the token
 	 * @throws RemoteException
 	 */
 	public void addToken(Token token) throws RemoteException;

@@ -57,7 +57,7 @@ class TestToken {
 	}
 
 	@Test
-	void test() {
+	void testToken() {
 		try {
 			token = new TokenImpl(Gem.DIAMOND);
 		} catch (RemoteException e) {
