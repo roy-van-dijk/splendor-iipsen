@@ -108,7 +108,7 @@ public class GameController {
 			}
 			
 			StageManager.getInstance().showMainMenu();		
-			new PopUpWindowView("Het spel is be�indigd door een van de spelers.", "Het spel is gestopt");
+			new PopUpWindowView("Het spel is be\u00EBindigd door een van de spelers.", "Het spel is gestopt");
 		}
 	}
 	
