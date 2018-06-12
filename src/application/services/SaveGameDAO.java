@@ -3,8 +3,6 @@
  */
 package application.services;
 
-import java.awt.List;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -12,12 +10,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.nio.file.FileSystems;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.rmi.RemoteException;
-import java.util.ArrayList;
 
-import application.domain.Game;
 import application.domain.GameImpl;
 
 // TODO: Auto-generated Javadoc

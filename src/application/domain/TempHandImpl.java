@@ -8,7 +8,6 @@ import java.util.List;
 
 import application.util.Logger;
 import application.util.Logger.Verbosity;
-import javafx.scene.Node;
 
 /**
  * 

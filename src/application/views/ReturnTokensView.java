@@ -3,6 +3,7 @@ package application.views;
 import java.rmi.RemoteException;
 import java.util.LinkedHashMap;
 import java.util.Map;
+
 import application.controllers.ReturnTokenController;
 import application.domain.Gem;
 import application.domain.ReturnTokens;
@@ -13,7 +14,6 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -22,7 +22,6 @@ import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import javafx.stage.Window;
 
 /**
  * The Class ReturnTokensView.

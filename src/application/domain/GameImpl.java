@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
-import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
@@ -16,7 +15,6 @@ import java.util.Map;
 import application.services.SaveGameDAO;
 import application.util.Logger;
 import application.util.Logger.Verbosity;
-import application.views.GameView;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -118,32 +116,6 @@ public class GameImpl extends UnicastRemoteObject implements Reinitializable, Ga
 			
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * Test create 4 players.
-	 */
-	private void debugCreate4Players()
-	{
-		try {
-			
-			PlayerImpl player = new PlayerImpl("Michael");
-			for(int i = 0; i < 13; i++)
-			{
-				Gem[] allGems = Gem.values();
-				int randomIdx = (int) ((Math.random() * allGems.length));
-				player.debugAddToken(new TokenImpl(allGems[randomIdx]));
-			}
-			
-			
-			this.players.add(player);
-			this.players.add(new PlayerImpl("Bob"));
-			this.players.add(new PlayerImpl("Peter"));
-			this.players.add(new PlayerImpl("Martin"));
-		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

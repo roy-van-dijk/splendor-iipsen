@@ -3,8 +3,6 @@ package application.domain;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
-import application.views.Disableable;
-
 // TODO: Auto-generated Javadoc
 /**
  * An asynchronous update interface for receiving notifications

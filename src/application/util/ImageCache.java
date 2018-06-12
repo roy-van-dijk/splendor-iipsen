@@ -3,7 +3,6 @@ package application.util;
 import java.util.HashMap;
 import java.util.Map;
 
-import application.StageManager;
 import javafx.scene.image.Image;
 
 /**

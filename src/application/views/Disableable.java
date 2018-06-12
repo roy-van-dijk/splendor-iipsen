@@ -1,9 +1,5 @@
 package application.views;
 
-import java.rmi.Remote;
-import java.rmi.RemoteException;
-
-
 /**
  * Is implemented by views that can be disabled.
  *

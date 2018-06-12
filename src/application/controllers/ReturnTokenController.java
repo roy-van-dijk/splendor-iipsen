@@ -1,17 +1,9 @@
 package application.controllers;
 
 import java.rmi.RemoteException;
-import java.util.LinkedHashMap;
 
-import application.domain.Game;
 import application.domain.Gem;
-import application.domain.Player;
-import application.domain.PlayingField;
-import application.domain.PlayingFieldImpl;
 import application.domain.ReturnTokens;
-import application.domain.Token;
-import application.domain.TokenList;
-import application.views.ReturnTokensView;
 
 /**
  * The Class ReturnTokenController.
