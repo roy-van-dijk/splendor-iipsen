@@ -9,12 +9,13 @@ import java.util.List;
 import application.util.Logger;
 import application.util.Logger.Verbosity;
 import javafx.scene.Node;
+
 /**
- * TempHand is tijdelijk hand 
- * @author Kees
+ * 
+ * A number of variables that are only needed every turn are stored here temporarily.
  *
+ * @author Kees
  */
-// TODO: give TempHand a remote interface.
 public class TempHandImpl extends UnicastRemoteObject implements Serializable, TempHand {
 	
 	/**
@@ -34,7 +35,8 @@ public class TempHandImpl extends UnicastRemoteObject implements Serializable, T
 	private List<Gem> selectedGemTypes;
 	
 	/**
-	 * temporary hand of player (basically selected tokens or cards)
+	 * temporary hand of player (basically selected tokens or cards).
+	 *
 	 * @throws RemoteException
 	 */
 	public TempHandImpl() throws RemoteException
@@ -42,38 +44,64 @@ public class TempHandImpl extends UnicastRemoteObject implements Serializable, T
 		this.selectedGemTypes = new ArrayList<>();
 		this.tokenList = new TokenList();
 	}
+	
 	/**
-	 * update information about player
+	 * update who's turn it is.
+	 *
+	 * @param player
+	 * @throws RemoteException
 	 */
 	public void updatePlayer(Player player) throws RemoteException {
 		this.player = player;
 	}
 	
+	/* (non-Javadoc)
+	 * @see application.domain.TempHand#selectCardToBuy(application.domain.Card)
+	 */
 	public void selectCardToBuy(Card card) throws RemoteException {
 		boughtCard = card;
 	}
 	
+	/* (non-Javadoc)
+	 * @see application.domain.TempHand#selectCardToReserve(application.domain.Card)
+	 */
 	public void selectCardToReserve(Card card) throws RemoteException {
 		reservedCard = card;
 	}
 	
+	/* (non-Javadoc)
+	 * @see application.domain.TempHand#getBoughtCard()
+	 */
 	public Card getBoughtCard() throws RemoteException {
 		return boughtCard;
 	}
 	
+	/* (non-Javadoc)
+	 * @see application.domain.TempHand#getReservedCard()
+	 */
 	public Card getReservedCard() throws RemoteException {
 		return reservedCard;
 	}
 	
+	/* (non-Javadoc)
+	 * @see application.domain.TempHand#setTokenList(application.domain.TokenList)
+	 */
 	public void setTokenList(TokenList tokenList) throws RemoteException {
 		this.tokenList = tokenList;
 	}
 	
+	/* (non-Javadoc)
+	 * @see application.domain.TempHand#getTokenList()
+	 */
 	public TokenList getTokenList() throws RemoteException {
 		return tokenList;
 	}
+	
 	/**
-	 * add token to tempHand
+	 * add token to tempHand.
+	 *
+	 * @param token
+	 * @throws RemoteException
 	 */
 	public void addToken(Token token) throws RemoteException {
 		selectedTokensCount++;
@@ -81,20 +109,27 @@ public class TempHandImpl extends UnicastRemoteObject implements Serializable, T
 		selectedGemTypes.add(token.getGemType());
 	}
 	
+	/* (non-Javadoc)
+	 * @see application.domain.TempHand#getSelectedTokensCount()
+	 */
 	public int getSelectedTokensCount() throws RemoteException {
 		return selectedTokensCount;
 	}
+	
 	/**
-	 * 
-	 * @return
-	 * List<Gem>
+	 * Gets the selected gem types.
+	 *
+	 * @return List<Gem>
+	 * @throws RemoteException
 	 */
 	public List<Gem> getSelectedGemTypes() throws RemoteException {
 		return selectedGemTypes;
 	}
+	
 	/**
-	 * Clear the hand of the current player
-	 * @throws RemoteException 
+	 * Clear the TempHand variables of this turn.
+	 *
+	 * @throws RemoteException
 	 */
 	public void emptyHand() throws RemoteException 
 	{
@@ -108,22 +143,34 @@ public class TempHandImpl extends UnicastRemoteObject implements Serializable, T
 	}
 	
 	/**
-	 * clear selected cards and tokens
+	 * Check if TempHand is empty
+	 *
+	 * @return true, if is empty
+	 * @throws RemoteException
 	 */
 	public boolean isEmpty() throws RemoteException {
 		return reservedCard == null && boughtCard == null && tokenList.getAll().isEmpty() && selectedGemTypes.isEmpty();
 	}
 
+	/* (non-Javadoc)
+	 * @see application.domain.TempHand#getMoveType()
+	 */
 	public MoveType getMoveType() throws RemoteException 
 	{
 		return moveType;
 	}
 
+	/* (non-Javadoc)
+	 * @see application.domain.TempHand#setMoveType(application.domain.MoveType)
+	 */
 	public void setMoveType(MoveType moveType) throws RemoteException 
 	{
 		this.moveType = moveType;
 	}
 	
+	/* (non-Javadoc)
+	 * @see application.domain.TempHand#getPlayer()
+	 */
 	public Player getPlayer() throws RemoteException {
 		return player;
 	}
