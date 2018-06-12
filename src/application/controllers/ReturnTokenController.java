@@ -37,7 +37,7 @@ public class ReturnTokenController {
 	 * @throws RemoteException
 	 */
 	public void minusToken(Gem gemType) throws RemoteException {
-		returnTokens.removeToken(gemType);
+		this.returnTokens.removeToken(gemType);
 	}
 
 	/**
@@ -47,7 +47,7 @@ public class ReturnTokenController {
 	 * @throws RemoteException
 	 */
 	public void plusToken(Gem gemType) throws RemoteException {
-		returnTokens.addToken(gemType);
+		this.returnTokens.addToken(gemType);
 	}
 
 	/**
@@ -56,7 +56,7 @@ public class ReturnTokenController {
 	 * @throws RemoteException
 	 */
 	public void confirmButton() throws RemoteException {
-		returnTokens.confirmButton();
+		this.returnTokens.confirmButton();
 	}
 
 }
