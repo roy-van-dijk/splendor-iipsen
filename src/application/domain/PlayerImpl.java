@@ -17,7 +17,7 @@ import application.util.Logger.Verbosity;
  *
  * @author Sanchez
  */
-public class PlayerImpl extends UnicastRemoteObject implements Player, Serializable {
+public class PlayerImpl extends UnicastRemoteObject implements Reinitializable, Player, Serializable {
 	
 	
 	private static final long serialVersionUID = 1L;
@@ -198,7 +198,7 @@ public class PlayerImpl extends UnicastRemoteObject implements Player, Serializa
 	 */
 	public int getPrestige() throws RemoteException
 	{
-		int prestige = 0;
+		int prestige = 14;
 		
 		for(Card ownedCard : ownedCards)
 		{
@@ -277,5 +277,10 @@ public class PlayerImpl extends UnicastRemoteObject implements Player, Serializa
 		this.tokenList.add(token);
 		this.notifyObservers();
 		
+	}
+
+	@Override
+	public void reinitializeObservers() {
+		this.observers = new ArrayList<>();
 	}
 }

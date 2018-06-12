@@ -15,7 +15,7 @@ import java.util.Map;
  *
  * @author Sanchez
  */
-public class PlayingFieldImpl extends UnicastRemoteObject implements PlayingField, Serializable {
+public class PlayingFieldImpl extends UnicastRemoteObject implements Reinitializable, PlayingField, Serializable {
 	
 	private static final long serialVersionUID = 6248798862229804286L;
 	
@@ -317,15 +317,6 @@ public class PlayingFieldImpl extends UnicastRemoteObject implements PlayingFiel
 	}
 
 	/* (non-Javadoc)
-	 * @see application.domain.PlayingField#getSelectableCardsFromField()
-	 */
-	@Override
-	public List<Card> getSelectableCardsFromField() throws RemoteException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/* (non-Javadoc)
 	 * @see application.domain.PlayingField#removeTokens(java.util.List)
 	 */
 	@Override
@@ -362,4 +353,13 @@ public class PlayingFieldImpl extends UnicastRemoteObject implements PlayingFiel
 		}
 	}
 	
+	@Override
+	public void reinitializeObservers() {
+		this.observers = new ArrayList<>();
+		for(int i = 0; i < cardRows.size(); i++)
+		{
+			CardRowImpl cardRow = (CardRowImpl) this.cardRows.get(i);
+			cardRow.reinitializeObservers();
+		}
+	}
 }

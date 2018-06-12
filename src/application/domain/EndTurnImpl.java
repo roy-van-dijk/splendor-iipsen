@@ -96,6 +96,8 @@ public class EndTurnImpl extends UnicastRemoteObject implements EndTurn, Seriali
 				this.getTokens();
 			}
 		}
+		
+		
 		/**
 		 * Create the returntokens if the an player has moren then 10 tokens
 		 */
@@ -107,12 +109,12 @@ public class EndTurnImpl extends UnicastRemoteObject implements EndTurn, Seriali
 			this.game.notifyObservers();
 		} else {
 			this.returningTokens = false;
-			this.checkNobleVisits();		
+			this.checkNobleVisits();	
 			this.cleanUpTurn();
 			this.checkWinner();
 			game.saveGame();	
 			game.nextTurn();
-		}
+		}	
 	}
 
 	/**
@@ -190,30 +192,16 @@ public class EndTurnImpl extends UnicastRemoteObject implements EndTurn, Seriali
 	private void checkWinner() throws RemoteException {
 		
 		if((game.getRoundNr() % game.getPlayers().size()) == 0) {
-			Player winningPlayer = player;
+			Player winningPlayer = this.player;
 			for(Player player : game.getPlayers()) {
 				if(player.getPrestige() > winningPlayer.getPrestige()) {
 					winningPlayer = player;
 				}
 			}
 			if(winningPlayer.getPrestige() >= 15) {
-				// TODO: Speler heeft gewonnen
 				game.playerHasWon(winningPlayer);
 			}
 		}
-		
-		
-		
-//		if(player.getPrestige() >= 15 && (game.getRoundNr() % game.getPlayers().size()) == 0) {
-//			//Speler met hoogste prestige heeft gewonnen
-//			int mostPrestige = 0;
-//			for(Player player : game.getPlayers()) {
-//				if(player.getPrestige() > mostPrestige) {
-//					mostPrestige = player.getPrestige();
-//				}
-//			}
-//			new AlertDialog(AlertType.INFORMATION, "Je hebt gewonnen pik").show();
-//		}
 	}
 
 	/**

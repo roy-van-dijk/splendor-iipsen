@@ -1,6 +1,7 @@
 package application.controllers;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.BindException;
@@ -15,6 +16,8 @@ import application.StageManager;
 import application.domain.GameImpl;
 import application.domain.Lobby;
 import application.domain.LobbyImpl;
+import application.services.SaveGameDAO;
+import application.util.LobbyFullException;
 import application.views.LobbyView;
 
 // TODO: Auto-generated Javadoc
@@ -33,8 +36,9 @@ public class MainMenuController {
 	 * @param playerName 
 	 * @throws RemoteException
 	 * @throws NotBoundException
+	 * @throws LobbyFullException 
 	 */
-	public void joinLobby(String hostIP, String playerName) throws RemoteException, NotBoundException {
+	public void joinLobby(String hostIP, String playerName) throws RemoteException, NotBoundException, LobbyFullException {
 		Lobby lobby = connectToLobby(hostIP);
 		System.out.println("Connected to lobby!");
 
@@ -50,11 +54,12 @@ public class MainMenuController {
 	 * the previous save file, then switches the view.
 	 *
 	 * @param playerName
-	 * @throws RemoteException
-	 * @throws ExportException
+	 * @throws IOException 
+	 * @throws ClassNotFoundException 
+	 * @throws FileNotFoundException 
 	 */
-	public void hostPreviousGame(String playerName) throws RemoteException, ExportException {
-		GameImpl game = new GameImpl(3); // TODO: load from binary savefile
+	public void hostPreviousGame(String playerName) throws FileNotFoundException, ClassNotFoundException, IOException {
+		GameImpl game = SaveGameDAO.getInstance().loadSaveGame("");
 		
 		LobbyImpl lobby = createLobby(game);
 		LobbyController lobbyController = new LobbyController(lobby);
@@ -124,12 +129,16 @@ public class MainMenuController {
 	 * @throws RemoteException
 	 * @throws NotBoundException Lobby
 	 */
-	public Lobby connectToLobby(String hostIP) throws RemoteException, NotBoundException {
+	public Lobby connectToLobby(String hostIP) throws RemoteException, NotBoundException, LobbyFullException {
 		System.out.println("Getting access to RMI registry");
 		Registry registry = LocateRegistry.getRegistry(hostIP); // Default port: 1099
 		System.out.println("Getting the Lobby stub from registry");
 		Lobby lobby = (Lobby) registry.lookup("Lobby");
 		System.out.println("Connected to RMI server.");
+		if(lobby.isFull())
+		{
+			throw new LobbyFullException("The lobby is full!");
+		}
 
 		return lobby;
 	}

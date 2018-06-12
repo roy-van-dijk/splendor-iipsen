@@ -42,9 +42,9 @@ public class LobbyController {
 		StageManager.getInstance().switchScene(gameView.asPane());
 	}
 	
-	public void selectSlot(LobbyObserver o, PlayerSlot slot) throws RemoteException
+	public void selectSlot(LobbyObserver o, int slotIdx) throws RemoteException
 	{
-		lobby.selectSlot(o, slot);
+		lobby.selectSlot(o, slotIdx);
 	}
 	
 	public void readyUp(LobbyObserver o) throws RemoteException

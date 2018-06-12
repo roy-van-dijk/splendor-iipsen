@@ -264,7 +264,7 @@ public class PlayingFieldView extends UnicastRemoteObject implements UIComponent
 		Button exit = new Button("X");
 
 		VBox vbox = new VBox();
-		exit.getStyleClass().addAll("button", "exit-button");
+		exit.getStyleClass().addAll("button", "manual-button");
 		vbox.getChildren().add(exit);
 		
 		exit.setOnAction(e -> {
