@@ -109,9 +109,9 @@ public class GameView extends UnicastRemoteObject implements UIComponent, Disabl
 				if(!disabled)
 				{
 					btnReserveCard.setDisable(gameController.reserveCardInventoryFull());
-					//TODO test of dit werkt
-					btnPurchaseCard.setDisable(game.getPlayingField().getSelectableCardsFromField().size() == 0);
+					btnPurchaseCard.setDisable(!game.anyCardsPurchasable());
 					btnEndTurn.setDisable(game.getPlayingField().getTempHand().isEmpty());
+					
 					if(game.getEndTurn().returningTokens())
 					{
 						gameController.showReturnTokensWindow();

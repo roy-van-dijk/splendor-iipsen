@@ -446,6 +446,30 @@ public class GameImpl extends UnicastRemoteObject implements Game, Serializable 
 	public void setRegistry(Registry registry) {
 		this.registry = registry;
 	}
+	
+	public boolean anyCardsPurchasable() throws RemoteException {
+		Player player = this.getCurrentPlayer();
+		List<CardRow> playingFieldCardRows = getPlayingField().getCardRows();
 
+		for(CardRow cardRow : playingFieldCardRows)
+		{
+			for(Card card : cardRow.getCardSlots()) 
+			{
+				if(player.canAffordCard(card.getCosts()))
+				{
+					return true;
+				}
+			}
+		}
+		
+		for(Card card : player.getReservedCards())
+		{
+			if(player.canAffordCard(card.getCosts()))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
 
 }
