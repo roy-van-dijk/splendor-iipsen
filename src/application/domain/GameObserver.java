@@ -28,4 +28,6 @@ public interface GameObserver extends Remote {
 	 */
 	public void disconnect(GameState gameState) throws RemoteException;
 
+	public void showWinScreen(GameState gameState, String winningPlayer) throws RemoteException;
+
 }

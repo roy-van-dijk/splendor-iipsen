@@ -201,5 +201,7 @@ public interface Game extends Remote {
 	 * @throws RemoteException
 	 */
 	public Player getWinningPlayer() throws RemoteException;
+	
+	public boolean anyCardsPurchasable() throws RemoteException;
 
 }

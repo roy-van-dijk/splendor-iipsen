@@ -317,15 +317,6 @@ public class PlayingFieldImpl extends UnicastRemoteObject implements Reinitializ
 	}
 
 	/* (non-Javadoc)
-	 * @see application.domain.PlayingField#getSelectableCardsFromField()
-	 */
-	@Override
-	public List<Card> getSelectableCardsFromField() throws RemoteException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/* (non-Javadoc)
 	 * @see application.domain.PlayingField#removeTokens(java.util.List)
 	 */
 	@Override

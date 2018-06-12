@@ -62,14 +62,6 @@ public interface PlayingField extends Remote {
 	public void findSelectableCardsFromField() throws RemoteException;
 
 	/**
-	 * Gets all selectable (affordable) cards currently on the field.
-	 *
-	 * @return List<Card>
-	 * @throws RemoteException the remote exception
-	 */
-	public List<Card> getSelectableCardsFromField() throws RemoteException;
-
-	/**
 	 * Adds the passed token to the player's temporary hand.
 	 *
 	 * @param gemType

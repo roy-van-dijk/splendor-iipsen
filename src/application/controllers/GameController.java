@@ -8,6 +8,7 @@ import application.domain.Card;
 import application.domain.CardRow;
 import application.domain.Game;
 import application.domain.GameImpl;
+import application.domain.GameState;
 import application.domain.Gem;
 import application.domain.MoveType;
 import application.domain.ReturnTokens;
@@ -96,19 +97,13 @@ public class GameController {
 		dialog.setHeaderText("You are leaving the game");
 		dialog.setContentText("Are you sure you wish to quit?");
 		
-		
 		Optional<ButtonType> results = dialog.showAndWait();
 		if (results.get() == ButtonType.OK){
 			try {
-				
-				game.saveGame();
 				terminateGame();
 			} catch (RemoteException e) {
 				e.printStackTrace();
 			}
-			
-			StageManager.getInstance().showMainMenu();		
-			new PopUpWindowView("Het spel is be\u00EBindigd door een van de spelers.", "Het spel is gestopt");
 		}
 	}
 	
