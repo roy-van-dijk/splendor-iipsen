@@ -1,7 +1,10 @@
 package application.views;
 
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.Map;
+
+import application.domain.ColorBlindModes;
 import application.domain.Gem;
 import application.domain.Noble;
 import application.util.ImageCache;
@@ -10,6 +13,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
@@ -17,6 +21,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -27,13 +32,14 @@ import javafx.scene.text.FontWeight;
  *
  * @author Sanchez
  */
-public class NobleView implements UIComponent {
+public class NobleView implements UIComponent, ColorChangeable {
 
 	private final static double RECTANGLE_RESIZE_FACTOR = 0.24;
 	private final static double PRESTIGELABEL_RESIZE_FACTOR = 0.30;
 
 	private Noble noble;
 	private Pane root;
+	private ArrayList<Rectangle> requirementRects;
 
 	private double sizeX, sizeY;
 
@@ -48,6 +54,8 @@ public class NobleView implements UIComponent {
 		this.noble = noble;
 		this.sizeX = sizeX;
 		this.sizeY = sizeY;
+		
+		GameView.colorBlindViews.add(this);
 
 		try {
 			this.buildUI();
@@ -74,6 +82,7 @@ public class NobleView implements UIComponent {
 	 */
 	private void buildUI() throws RemoteException {
 		Rectangle rect = new Rectangle(sizeX, sizeY);
+		requirementRects = new ArrayList<Rectangle>();
 
     	Image image = ImageCache.getInstance().fetchImage(getNobleImagePath(), true);
     	ImagePattern imagePattern = new ImagePattern(image);
@@ -117,8 +126,9 @@ public class NobleView implements UIComponent {
 				double rectSizeX = (this.sizeX * 1.0) * RECTANGLE_RESIZE_FACTOR;
 				double rectSizeY = (this.sizeY * 1.2) * RECTANGLE_RESIZE_FACTOR;
 				Rectangle requirementRect = new Rectangle(rectSizeX, rectSizeY);
-				String rectanglePath = String.format("file:resources/requirements/rectangle_%s.png",
-						entry.getKey().toString().toLowerCase());
+				requirementRect.getProperties().put("GemType", entry.getKey().toString().toUpperCase());
+				requirementRects.add(requirementRect);
+				String rectanglePath = String.format("file:resources/requirements/rectangle_%s.png", entry.getKey().toString().toLowerCase());
 				ImagePattern imagePattern = new ImagePattern(new Image(rectanglePath));
 				requirementRect.setFill(imagePattern);
 
@@ -147,6 +157,24 @@ public class NobleView implements UIComponent {
 	 */
 	public Pane asPane() {
 		return root;
+	}
+	
+	/**
+	 * Updates the noble view's circle colours based on the colour blind mode that is applied.
+	 *
+	 * @param mode the mode
+	 * @return void
+	 */
+	@Override
+	public void updateView(ColorBlindModes mode) {
+		for(Rectangle r : requirementRects) {
+			Gem gemType = Gem.valueOf(r.getProperties().get("GemType").toString());
+			double hueOffset = gemType.hueOffset(gemType, mode);
+			ColorAdjust colorAdjust = new ColorAdjust();
+			colorAdjust.setHue(+hueOffset);
+			r.setEffect(colorAdjust);	
+			
+		}
 	}
 
 }

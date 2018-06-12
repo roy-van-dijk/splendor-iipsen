@@ -109,6 +109,8 @@ public class GameView extends UnicastRemoteObject implements UIComponent, Disabl
 				if(!disabled)
 				{
 					btnReserveCard.setDisable(gameController.reserveCardInventoryFull());
+					//TODO test of dit werkt
+					btnPurchaseCard.setDisable(game.getPlayingField().getSelectableCardsFromField().size() == 0);
 					btnEndTurn.setDisable(game.getPlayingField().getTempHand().isEmpty());
 					if(game.getEndTurn().returningTokens())
 					{
@@ -342,7 +344,9 @@ public class GameView extends UnicastRemoteObject implements UIComponent, Disabl
 		this.playingFieldView.setDisabled(disabled);
 		this.playerView.setDisabled(disabled);
 	}
-
+/**
+ * close game for player. dialog is commented out because of double message
+ */
 	@Override
 	public void disconnect(GameState gameState) throws RemoteException {
 		Platform.runLater(() -> {

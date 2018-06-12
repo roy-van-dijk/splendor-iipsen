@@ -266,13 +266,8 @@ public class PlayingFieldView extends UnicastRemoteObject implements UIComponent
 		VBox vbox = new VBox();
 		exit.getStyleClass().addAll("button", "manual-button");
 		vbox.getChildren().add(exit);
-
+		
 		exit.setOnAction(e -> {
-			try {
-				gameController.terminateGame();
-			} catch (RemoteException e1) {
-				e1.printStackTrace();
-			}
 			gameController.leaveGame();
 		});
 		return vbox;

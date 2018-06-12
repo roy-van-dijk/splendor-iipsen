@@ -395,7 +395,9 @@ public class GameImpl extends UnicastRemoteObject implements Reinitializable, Ga
 		this.playingField.addTokenToTemp(gemType);
 		this.notifyObservers();
 	}
-	
+	/**
+	 * close the game for everyone
+	 */
 	public void terminateGame() throws RemoteException
 	{	
 		this.gameState = GameState.CLOSING;
@@ -411,7 +413,10 @@ public class GameImpl extends UnicastRemoteObject implements Reinitializable, Ga
 		System.out.println("[DEBUG] GameImpl::terminateGame()::Server terminated.");
 	}
 
-
+	/**
+	 * disconnect the observers from the game.
+	 * @throws RemoteException
+	 */
 	private void disconnectAllPlayers() throws RemoteException {
 		System.out.println("[DEBUG] GameImpl::disconnectAllPlayers()::Disconnecting all observers.");
 		for(GameObserver o : observers.keySet())
@@ -420,18 +425,24 @@ public class GameImpl extends UnicastRemoteObject implements Reinitializable, Ga
 		}
 	}
 	
+	/**
+	 * game over, player has won 
+	 */
 	@Override
 	public void playerHasWon(Player winningPlayer) throws RemoteException {
 		this.winningPlayer = winningPlayer;
 		this.notifyObservers();
 	}
-	
+
 	@Override
 	public Player getWinningPlayer() {
 		return winningPlayer;
 	}
 
-
+	/**
+	 * 
+	 * @param registry
+	 */
 	public void setRegistry(Registry registry) {
 		this.registry = registry;
 	}

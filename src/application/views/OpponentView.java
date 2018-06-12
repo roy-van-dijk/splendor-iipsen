@@ -106,13 +106,10 @@ public class OpponentView extends UnicastRemoteObject implements UIComponent, Pl
 			CardView cardView;
 			try {
 				if (reservedCard.isReservedFromDeck()) {
-					cardView = new RearCardView(reservedCard, GameView.cardSizeX * CARDS_RESIZE_FACTOR,
-							GameView.cardSizeY * CARDS_RESIZE_FACTOR);
+					cardView = new RearCardView(reservedCard, GameView.cardSizeX * CARDS_RESIZE_FACTOR, GameView.cardSizeY * CARDS_RESIZE_FACTOR);
 				} else {
-					cardView = new FrontCardView(reservedCard, GameView.cardSizeX * CARDS_RESIZE_FACTOR,
-							GameView.cardSizeY * CARDS_RESIZE_FACTOR);
+					cardView = new FrontCardView(reservedCard, GameView.cardSizeX * CARDS_RESIZE_FACTOR, GameView.cardSizeY * CARDS_RESIZE_FACTOR);
 				}
-				cardView.asPane().getStyleClass().addAll("opponent");
 
 				StackPane paneCard = new StackPane(cardView.asPane());
 				paneCard.setAlignment(Pos.CENTER);
@@ -136,8 +133,7 @@ public class OpponentView extends UnicastRemoteObject implements UIComponent, Pl
 		tokensFrame.getChildren().clear();
 
 		for (Map.Entry<Gem, Integer> entry : gemsCount.entrySet()) {
-			VBox tokenGemCountDisplay = createTokenGemCountDisplay(entry.getKey(), entry.getValue(),
-					GameView.tokenSizeRadius);
+			VBox tokenGemCountDisplay = createTokenGemCountDisplay(entry.getKey(), entry.getValue(), GameView.tokenSizeRadius);
 			tokensFrame.getChildren().add(tokenGemCountDisplay);
 		}
 	}

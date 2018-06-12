@@ -74,6 +74,15 @@ public interface Lobby extends Remote {
 	public boolean isAssigned(LobbyObserver o) throws RemoteException;
 
 	/**
+	 * Checks if is ready.
+	 *
+	 * @param o the LobbbyObserver
+	 * @return true, if is ready
+	 * @throws RemoteException
+	 */
+	public boolean isReady(LobbyObserver o) throws RemoteException;
+	
+	/**
 	 * Gets the assigned player.
 	 *
 	 * @param o the LobbyObserver

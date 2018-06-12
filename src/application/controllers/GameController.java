@@ -94,19 +94,21 @@ public class GameController {
 		ConfirmDialog dialog = new ConfirmDialog(AlertType.CONFIRMATION);
 		dialog.setTitle("Confirmation Dialog");
 		dialog.setHeaderText("You are leaving the game");
-		dialog.setContentText("Are you sure you wish to continue?");
+		dialog.setContentText("Are you sure you wish to quit?");
+		
 		
 		Optional<ButtonType> results = dialog.showAndWait();
 		if (results.get() == ButtonType.OK){
-			/*try {
-				//game.saveGame();
-				// TODO: Make leave game method
+			try {
+				
+				game.saveGame();
+				terminateGame();
 			} catch (RemoteException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}*/
+			}
+			
 			StageManager.getInstance().showMainMenu();		
-			new PopUpWindowView("Het spel is be�indigd door een van de spelers.", "Het spel is gestopt");
+			new PopUpWindowView("Het spel is be\u00EBindigd door een van de spelers.", "Het spel is gestopt");
 		}
 	}
 	
@@ -191,12 +193,13 @@ public class GameController {
 		ReturnTokenController controller = new ReturnTokenController(data);
 		ReturnTokensView view = new ReturnTokensView(data, controller);
 	}
-
+/**
+ * 
+ * @throws RemoteException
+ */
 	public void terminateGame() throws RemoteException {
 		game.terminateGame();
 		
 	}
-	
-	
 	
 }

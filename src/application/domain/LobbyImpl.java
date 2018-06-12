@@ -331,6 +331,13 @@ public class LobbyImpl extends UnicastRemoteObject implements Lobby {
 	}
 	
 	/* (non-Javadoc)
+	 * @see application.domain.Lobby#isReady(application.domain.LobbyObserver)
+	 */
+	public boolean isReady(LobbyObserver o) throws RemoteException {
+		return (this.isAssigned(o) && assignedPlayersMap.get(o).isReady());
+	}
+	
+	/* (non-Javadoc)
 	 * @see application.domain.Lobby#getAssignedPlayerSlots()
 	 */
 	public List<PlayerSlot> getAssignedPlayerSlots() throws RemoteException {

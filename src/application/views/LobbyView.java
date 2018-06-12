@@ -222,7 +222,7 @@ public class LobbyView extends UnicastRemoteObject implements UIComponent, Lobby
 			List<PlayerSlot> assignableSlots = lobby.getAssignableSlots();
 			this.updateAssignableSlots(assignableSlots);
 			
-			this.btnReady.setDisable(!lobby.isAssigned(this));
+			this.btnReady.setDisable(lobby.isReady(this) || !lobby.isAssigned(this));
 		}
 	}
 	
