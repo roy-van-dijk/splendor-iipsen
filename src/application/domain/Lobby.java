@@ -5,6 +5,7 @@ import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Map;
 import application.domain.LobbyImpl.LobbyStates;
+import application.util.LobbyFullException;
 
 /**
  * A lobby for players to be able to join.
@@ -58,10 +59,10 @@ public interface Lobby extends Remote {
 	 * Select slot.
 	 *
 	 * @param o the LobbyObserver
-	 * @param slot the PlayerSlot
+	 * @param slotIdx the PlayerSlot
 	 * @throws RemoteException the remote exception
 	 */
-	public void selectSlot(LobbyObserver o, PlayerSlot slot) throws RemoteException;
+	public void selectSlot(LobbyObserver o, int slotIdx) throws RemoteException;
 	
 	/**
 	 * Checks if is assigned.
@@ -138,5 +139,7 @@ public interface Lobby extends Remote {
 	 * @throws RemoteException the remote exception
 	 */
 	public LobbyStates getLobbyState() throws RemoteException;
+	
+	public boolean isFull() throws RemoteException, LobbyFullException;
 	
 }

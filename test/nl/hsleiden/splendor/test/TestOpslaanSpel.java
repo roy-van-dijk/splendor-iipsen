@@ -47,7 +47,7 @@ class TestOpslaanSpel {
 	 */
 	@BeforeEach
 	void setUp() throws Exception {
-		game = new GameImpl();
+		//game = new GameImpl();
 		
 		
 	}

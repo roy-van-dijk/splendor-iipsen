@@ -63,8 +63,8 @@ class TestLobby {
 	 */
 	@BeforeEach
 	void setUp() throws Exception {
-		game = new GameImpl();
-		lobby = new LobbyImpl(game);
+		//game = new GameImpl();
+		//lobby = new LobbyImpl(game);
 	}
 
 	/**

@@ -155,8 +155,9 @@ public class LobbyView extends UnicastRemoteObject implements UIComponent, Lobby
 	 */
 	private void updateAssignableSlots(List<PlayerSlot> slots) throws RemoteException
 	{
-		for(int slotIdx = 0; slotIdx < slots.size(); slotIdx++) 
+		for(int i = 0; i < slots.size(); i++) 
 		{
+			int slotIdx = i;
 			PlayerSlot slot = slots.get(slotIdx);
 			
 			String displayName = String.format("Player %d - empty", slotIdx);
@@ -164,7 +165,7 @@ public class LobbyView extends UnicastRemoteObject implements UIComponent, Lobby
 			label.getStyleClass().add("lobby-slot");
 			label.setOnMouseClicked(e -> {
 				try {
-					lobbyController.selectSlot(this, slot);
+					lobbyController.selectSlot(this, slotIdx);
 				} catch (RemoteException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();

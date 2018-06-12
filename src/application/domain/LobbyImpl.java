@@ -16,7 +16,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import application.util.LobbyFullException;
+import application.util.Logger;
 import application.util.Util;
+import application.util.Logger.Verbosity;
 
 /**
  * The Class LobbyImpl.
@@ -60,7 +63,9 @@ public class LobbyImpl extends UnicastRemoteObject implements Lobby {
 	 */
 	public LobbyImpl(GameImpl game) throws RemoteException {
 		this.game = game;
-		this.maxPlayers = game.getMaxPlayers();
+		this.maxPlayers = game.getPlayers().size();
+		if(this.maxPlayers == 0) this.maxPlayers = game.getMaxPlayers();
+		
 		this.lobbyState = LobbyStates.WAITING;
 		
 		try {
@@ -76,6 +81,11 @@ public class LobbyImpl extends UnicastRemoteObject implements Lobby {
 		this.createPlayerSlots();
 	}
 	
+	public boolean isFull() throws RemoteException, LobbyFullException {
+		return (playersMap.size() >= this.maxPlayers);
+	}
+	
+
 	/**
 	 * Disconnect all players.
 	 *
@@ -142,7 +152,7 @@ public class LobbyImpl extends UnicastRemoteObject implements Lobby {
 		for(int i = 0; i < this.maxPlayers; i++)
 		{
 			PlayerSlotImpl slot = new PlayerSlotImpl();
-			if(previousPlayers.get(i) != null)
+			if(i < previousPlayers.size() && previousPlayers.get(i) != null)
 			{
 				slot.setPreviousPlayer(previousPlayers.get(i));
 			}
@@ -183,7 +193,9 @@ public class LobbyImpl extends UnicastRemoteObject implements Lobby {
 				players.add(player);
 			}
 		}
+		Logger.log("LobbyImpl::startGame()::Players to game = " + players, Verbosity.DEBUG);
 		this.game.setPlayers(players);
+		this.maxPlayers = players.size();
 		this.game.setRegistry(this.registry);
 		this.lobbyState = LobbyStates.STARTED_GAME;
 		this.game.nextTurn();
@@ -229,8 +241,9 @@ public class LobbyImpl extends UnicastRemoteObject implements Lobby {
 	/* (non-Javadoc)
 	 * @see application.domain.Lobby#selectSlot(application.domain.LobbyObserver, application.domain.PlayerSlot)
 	 */
-	public void selectSlot(LobbyObserver o, PlayerSlot slot) throws RemoteException
+	public void selectSlot(LobbyObserver o, int slotIdx) throws RemoteException
 	{
+		PlayerSlot slot = this.getAssignableSlots().get(slotIdx);
 		if(!slot.isAvailable()) return;
 		
 		this.clearPlayerSlot(o); // Clear previous slot
@@ -254,10 +267,17 @@ public class LobbyImpl extends UnicastRemoteObject implements Lobby {
 			if(!slot.isReady()) allReady = false;
 		}
 		
-		if(allReady && assignedPlayersMap.size() >= MIN_PLAYERS_TO_START)
+		int amountCurrentPlayers = assignedPlayersMap.size();
+		
+		if(allReady && amountCurrentPlayers >= MIN_PLAYERS_TO_START)
 		{
-			System.out.println("[DEBUG] LobbyImpl::checkReadyPlayers()::Starting game");
-			this.startGame();
+			int amountPreviousPlayers = game.getPlayers().size();
+			
+			if(amountCurrentPlayers >= amountPreviousPlayers)
+			{
+				System.out.println("[DEBUG] LobbyImpl::checkReadyPlayers()::Starting game");
+				this.startGame();
+			}
 		}
 	}
 	// Probably would've done this onGameStart but this is the way its defined in the technical design.

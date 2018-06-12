@@ -17,7 +17,7 @@ import application.util.Logger.Verbosity;
  *
  * @author Sanchez
  */
-public class PlayerImpl extends UnicastRemoteObject implements Player, Serializable {
+public class PlayerImpl extends UnicastRemoteObject implements Reinitializable, Player, Serializable {
 	
 	
 	private static final long serialVersionUID = 1L;
@@ -276,5 +276,10 @@ public class PlayerImpl extends UnicastRemoteObject implements Player, Serializa
 		this.tokenList.add(token);
 		this.notifyObservers();
 		
+	}
+
+	@Override
+	public void reinitializeObservers() {
+		this.observers = new ArrayList<>();
 	}
 }
