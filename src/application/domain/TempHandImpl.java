@@ -11,11 +11,11 @@ import application.util.Logger.Verbosity;
 import javafx.scene.Node;
 
 /**
- * TempHand is tijdelijk hand .
+ * 
+ * A number of variables that are only needed every turn are stored here temporarily.
  *
  * @author Kees
  */
-// TODO: give TempHand a remote interface.
 public class TempHandImpl extends UnicastRemoteObject implements Serializable, TempHand {
 	
 	/**
@@ -37,7 +37,7 @@ public class TempHandImpl extends UnicastRemoteObject implements Serializable, T
 	/**
 	 * temporary hand of player (basically selected tokens or cards).
 	 *
-	 * @throws RemoteException the remote exception
+	 * @throws RemoteException
 	 */
 	public TempHandImpl() throws RemoteException
 	{
@@ -46,10 +46,10 @@ public class TempHandImpl extends UnicastRemoteObject implements Serializable, T
 	}
 	
 	/**
-	 * update information about player.
+	 * update who's turn it is.
 	 *
-	 * @param player the player
-	 * @throws RemoteException the remote exception
+	 * @param player
+	 * @throws RemoteException
 	 */
 	public void updatePlayer(Player player) throws RemoteException {
 		this.player = player;
@@ -100,8 +100,8 @@ public class TempHandImpl extends UnicastRemoteObject implements Serializable, T
 	/**
 	 * add token to tempHand.
 	 *
-	 * @param token the token
-	 * @throws RemoteException the remote exception
+	 * @param token
+	 * @throws RemoteException
 	 */
 	public void addToken(Token token) throws RemoteException {
 		selectedTokensCount++;
@@ -120,16 +120,16 @@ public class TempHandImpl extends UnicastRemoteObject implements Serializable, T
 	 * Gets the selected gem types.
 	 *
 	 * @return List<Gem>
-	 * @throws RemoteException the remote exception
+	 * @throws RemoteException
 	 */
 	public List<Gem> getSelectedGemTypes() throws RemoteException {
 		return selectedGemTypes;
 	}
 	
 	/**
-	 * Clear the hand of the current player.
+	 * Clear the TempHand variables of this turn.
 	 *
-	 * @throws RemoteException the remote exception
+	 * @throws RemoteException
 	 */
 	public void emptyHand() throws RemoteException 
 	{
@@ -143,10 +143,10 @@ public class TempHandImpl extends UnicastRemoteObject implements Serializable, T
 	}
 	
 	/**
-	 * clear selected cards and tokens.
+	 * Check if TempHand is empty
 	 *
 	 * @return true, if is empty
-	 * @throws RemoteException the remote exception
+	 * @throws RemoteException
 	 */
 	public boolean isEmpty() throws RemoteException {
 		return reservedCard == null && boughtCard == null && tokenList.getAll().isEmpty() && selectedGemTypes.isEmpty();
