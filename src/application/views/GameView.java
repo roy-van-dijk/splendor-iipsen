@@ -22,6 +22,7 @@ import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -60,6 +61,8 @@ public class GameView extends UnicastRemoteObject implements UIComponent, Disabl
 	private Button btnResetTurn;
 	private Button btnEndTurn;
 	
+	private Label currentPlayer;
+	
 	private List<Button> moveButtons;
 	
 
@@ -80,10 +83,11 @@ public class GameView extends UnicastRemoteObject implements UIComponent, Disabl
  * @throws RemoteException
  */
 	public GameView(Game game, GameController gameController, Player player) throws RemoteException {
+	
 		this.game = game;
 		this.gameController = gameController;
 		this.player = player;
-		
+		this.currentPlayer = new Label();
 		colorBlindViews = new ArrayList<>();
 		
 		Logger.log("GameView::Building GameView UI for local player: " + player.getName(), Verbosity.DEBUG);
@@ -100,6 +104,7 @@ public class GameView extends UnicastRemoteObject implements UIComponent, Disabl
 		Platform.runLater(() ->
 		{
 			try {
+				currentPlayer.setText(game.getCurrentPlayer().getName()+ "'s turn");
 				Logger.log("GameView::modelChanged()::Updating UI for local player: " + player.getName(), Verbosity.DEBUG);
 				boolean disabled = game.isDisabled(this);
 				Logger.log("GameView::modelChanged()::Is local player disabled? : " + disabled, Verbosity.DEBUG);
@@ -159,6 +164,7 @@ public class GameView extends UnicastRemoteObject implements UIComponent, Disabl
 			
 			System.out.println("[DEBUG] GameView::Building opponents");
 			opponents = buildOpponents();
+			
 			
 			System.out.println("[DEBUG] GameView::Building player");
 			playerView = buildPlayer();
@@ -301,11 +307,21 @@ public class GameView extends UnicastRemoteObject implements UIComponent, Disabl
 		opponentsRows.setAlignment(Pos.CENTER_LEFT);
 		opponentsRows.getStyleClass().add("opponents");
 		opponentsRows.setPrefWidth(400);
-		
+		VBox currentPlayerBox = new VBox();
+	    
+		currentPlayerBox.setSpacing(10);
+		currentPlayerBox.getChildren().add(currentPlayer);
+		currentPlayer.setText("");
+		currentPlayer.getStyleClass().add("opponent-header");
+		currentPlayer.getStyleClass().add("opponent-name");
+		opponentsRows.getChildren().add(currentPlayer);
 		List<Player> players = game.getPlayers();
 		for(Player player : players)
 		{
-			if(player.equals(this.player)) continue;
+			if(player.equals(this.player)) {
+				
+				continue;
+			}
 			System.out.println("[DEBUG] GameView::buildOpponents():: Building opponent player: " + player.getName());
 			Pane opponentView = new OpponentView(player).asPane();
 			opponentsRows.getChildren().add(opponentView);
@@ -313,6 +329,7 @@ public class GameView extends UnicastRemoteObject implements UIComponent, Disabl
 		
 		return opponentsRows;
 	}
+	
 	
 	/**
 	 * Builds the player view. This is the view with the player's own information
