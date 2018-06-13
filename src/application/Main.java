@@ -46,23 +46,6 @@ public class Main extends Application {
 		
 		Logger.currentVerbosity = Verbosity.DEBUG;
 		
-		// Debug loading-game code below
-		/*
-		try {
-			GameImpl game = SaveGameDAO.getInstance().loadSaveGame(FileSystems.getDefault().getPath("saves").toAbsolutePath().toString() + "/Bob.splendor");
-			System.out.println(game);
-		} catch (FileNotFoundException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (ClassNotFoundException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		*/
-		
 		try {
 			System.out.println(InetAddress.getLocalHost().getHostAddress());
 			System.setProperty("java.rmi.server.hostname", InetAddress.getLocalHost().getHostAddress());

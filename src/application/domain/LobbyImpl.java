@@ -24,7 +24,7 @@ public class LobbyImpl extends UnicastRemoteObject implements Lobby {
 
 	private static final long serialVersionUID = 1L;
 	
-	private static final int MIN_PLAYERS_TO_START = 1;
+	private static final int MIN_PLAYERS_TO_START = 2;
 	
 	/**
 	 * The Enum LobbyStates.

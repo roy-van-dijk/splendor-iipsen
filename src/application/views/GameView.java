@@ -200,12 +200,13 @@ public class GameView extends UnicastRemoteObject implements UIComponent, Disabl
 		
 		this.moveButtons = new ArrayList<>();
 		
-		// Make separate button class
 		btnReserveCard = new Button("Reserve Card");
 		btnReserveCard.getStyleClass().add("move-button");
 		btnReserveCard.setOnAction(e -> {
 			try {
+				btnReserveCard.setDisable(true);
 				gameController.resetTurn();
+				btnReserveCard.setDisable(true);
 				gameController.reserveCard(MoveType.RESERVE_CARD);
 			} catch (RemoteException e1) {
 				// TODO Auto-generated catch block
@@ -217,9 +218,10 @@ public class GameView extends UnicastRemoteObject implements UIComponent, Disabl
 		btnPurchaseCard = new Button("Purchase Card");
 		btnPurchaseCard.getStyleClass().add("move-button");
 		btnPurchaseCard.setOnAction(e -> {
-			// POC -> belongs in GameController
 			try {
+				btnPurchaseCard.setDisable(true);
 				gameController.resetTurn();
+				btnPurchaseCard.setDisable(true);
 				gameController.purchaseCard(MoveType.PURCHASE_CARD);
 			} catch (RemoteException e1) {
 				// TODO Auto-generated catch block
@@ -231,7 +233,9 @@ public class GameView extends UnicastRemoteObject implements UIComponent, Disabl
 		btnTakeTwoTokens.getStyleClass().add("move-button");
 		btnTakeTwoTokens.setOnAction(e ->{
 			try {
+				btnTakeTwoTokens.setDisable(true);
 				gameController.resetTurn();
+				btnTakeTwoTokens.setDisable(true);
 				gameController.takeTokens(MoveType.TAKE_TWO_TOKENS);
 			} catch (RemoteException e1) {
 				e1.printStackTrace();
@@ -243,7 +247,9 @@ public class GameView extends UnicastRemoteObject implements UIComponent, Disabl
 		btnTakeThreeTokens.getStyleClass().add("move-button");		
 		btnTakeThreeTokens.setOnAction(e ->{
 			try {
+				btnTakeThreeTokens.setDisable(true);
 				gameController.resetTurn();
+				btnTakeThreeTokens.setDisable(true);
 				gameController.takeTokens(MoveType.TAKE_THREE_TOKENS);
 			} catch (RemoteException e1) {
 				e1.printStackTrace();
@@ -255,8 +261,8 @@ public class GameView extends UnicastRemoteObject implements UIComponent, Disabl
 		btnResetTurn.getStyleClass().add("move-button");
 		btnResetTurn.setOnAction(e ->{
 			try {
+				btnResetTurn.setDisable(true);
 				gameController.resetTurn();
-				//gameController.debugNextTurn();
 			} catch (RemoteException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -268,6 +274,7 @@ public class GameView extends UnicastRemoteObject implements UIComponent, Disabl
 		//btnEndTurn.setDisable(true);
 		btnEndTurn.setOnAction(e -> {
 				try {
+					btnEndTurn.setDisable(true);
 					gameController.endTurn();
 				} catch (RemoteException e1) {
 					// TODO Auto-generated catch block
