@@ -71,7 +71,7 @@ public class OpponentView extends UnicastRemoteObject implements UIComponent, Pl
 
 		reservedCardsFrame = new HBox();
 		reservedCardsFrame.setAlignment(Pos.CENTER);
-		reservedCardsFrame.setPadding(new Insets(10));
+		reservedCardsFrame.setPadding(new Insets(5));
 
 		tokensFrame = new HBox();
 		tokensFrame.setAlignment(Pos.CENTER);
