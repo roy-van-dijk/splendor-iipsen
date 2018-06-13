@@ -92,7 +92,7 @@ public class GameController {
 		Optional<ButtonType> results = dialog.showAndWait();
 		if (results.get() == ButtonType.OK){
 			try {
-				terminateGame();
+				this.terminateGame();
 			} catch (RemoteException e) {
 				e.printStackTrace();
 			}

@@ -298,11 +298,11 @@ public class LobbyImpl extends UnicastRemoteObject implements Lobby {
 	 */
 	public void disconnectPlayer(LobbyObserver o) throws RemoteException {
 		this.clearPlayerSlot(o);
-		assignedPlayersMap.remove(o);
-		playersMap.remove(o);
+		this.assignedPlayersMap.remove(o);
+		this.playersMap.remove(o);
 		this.notifyObservers();
 	}
-
+	
 	/**
 	 * Notify observers.
 	 *
@@ -313,8 +313,13 @@ public class LobbyImpl extends UnicastRemoteObject implements Lobby {
 		System.out.println("[DEBUG] LobbyImpl::notifyObservers()::Notifying all lobby observers of change");
 		for(LobbyObserver o : playersMap.keySet())
 		{
-			o.modelChanged(this);
+			try {
+				o.modelChanged(this);
+			} catch (RemoteException e) {
+				this.disconnectPlayer(o);
+			}	
 		}
+
 	}
 	
 	/* (non-Javadoc)

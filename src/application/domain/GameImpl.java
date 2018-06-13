@@ -237,7 +237,12 @@ public class GameImpl extends UnicastRemoteObject implements Reinitializable, Ga
 		System.out.println("[DEBUG] GameImpl::notifyObservers()::Notifying all game observers of change");
 		for(GameObserver o : observers.keySet())
 		{
-			o.modelChanged(this);
+			try {
+				o.modelChanged(this);
+			} catch (RemoteException e) {
+				this.observers.remove(o);
+				this.terminateGame();
+			}	
 		}
 	}
 
