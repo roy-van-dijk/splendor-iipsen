@@ -9,15 +9,20 @@ import application.domain.Card;
 import application.domain.Gem;
 import application.domain.Player;
 import application.domain.PlayerObserver;
+import application.util.ImageCache;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
@@ -41,6 +46,7 @@ public class OpponentView extends UnicastRemoteObject implements UIComponent, Pl
 
 	private HBox reservedCardsFrame;
 	private HBox tokensFrame;
+	private HBox bonusFrame;
 
 	private Label lblOpponentName;
 	private Label lblOpponentPrestige;
@@ -69,8 +75,11 @@ public class OpponentView extends UnicastRemoteObject implements UIComponent, Pl
 
 		tokensFrame = new HBox();
 		tokensFrame.setAlignment(Pos.CENTER);
+		
+		bonusFrame = new HBox();
+		bonusFrame.setAlignment(Pos.CENTER);
 
-		root = new VBox(topFrame, tokensFrame, reservedCardsFrame);
+		root = new VBox(topFrame, tokensFrame, bonusFrame, reservedCardsFrame);
 		root.getStyleClass().add("opponent");
 	}
 
@@ -86,6 +95,7 @@ public class OpponentView extends UnicastRemoteObject implements UIComponent, Pl
 				lblOpponentPrestige.setText(String.valueOf(opponent.getPrestige()));
 				
 				this.updateOpponentTokens(opponent.getTokensGemCount());
+				this.updateOpponentBonus(opponent.getBonus());
 				this.updateOpponentsReservedCards(opponent.getReservedCards());
 			} catch (RemoteException e) {
 				// TODO Auto-generated catch block
@@ -132,8 +142,22 @@ public class OpponentView extends UnicastRemoteObject implements UIComponent, Pl
 		tokensFrame.getChildren().clear();
 
 		for (Map.Entry<Gem, Integer> entry : gemsCount.entrySet()) {
-			VBox tokenGemCountDisplay = createTokenGemCountDisplay(entry.getKey(), entry.getValue(), GameView.tokenSizeRadius);
+			StackPane tokenGemCountDisplay = createTokenGemCountDisplay(entry.getKey(), entry.getValue(), GameView.tokenSizeRadius);
 			tokensFrame.getChildren().add(tokenGemCountDisplay);
+		}
+	}
+	
+	/**
+	 * Update opponent bonus.
+	 *
+	 * @param bonus
+	 */
+	private void updateOpponentBonus(Map<Gem, Integer> bonus) {
+		bonusFrame.getChildren().clear();
+
+		for (Map.Entry<Gem, Integer> entry : bonus.entrySet()) {
+			StackPane bonusDisplay = createBonusDisplay(entry.getKey(), entry.getValue());
+			bonusFrame.getChildren().add(bonusDisplay);
 		}
 	}
 
@@ -170,16 +194,51 @@ public class OpponentView extends UnicastRemoteObject implements UIComponent, Pl
 	 * @param gemType
 	 * @param count
 	 * @param radius
+	 * @return StackPane
+	 */
+	private StackPane createBonusDisplay(Gem gemType, int count) {
+		
+		Rectangle r = new Rectangle(45, 45);
+		String imagePath = String.format("resources/gems/%s.png", gemType.name().toLowerCase());
+		Image image = ImageCache.getInstance().fetchImage(imagePath, true);
+        ImagePattern imagePattern = new ImagePattern(image);
+        
+        r.setFill(imagePattern);
+        r.setOpacity(0.5);
+
+		Label bonusLabel = new Label(String.valueOf(count));
+		bonusLabel.setAlignment(Pos.CENTER);
+		bonusLabel.setFont(Font.font("Arial", FontWeight.EXTRA_BOLD, 25));
+		bonusLabel.setTextFill(Color.WHITE);
+		bonusLabel.getStyleClass().add("dropshadow");
+		
+		StackPane bonusFrame = new StackPane(r, bonusLabel);
+		bonusFrame.setAlignment(Pos.CENTER);
+		bonusFrame.setPadding(new Insets(5));
+		HBox.setHgrow(bonusFrame, Priority.ALWAYS);
+
+		return bonusFrame;
+	}
+	
+	/**
+	 * Creates the bonus display.
+	 *
+	 * @param gemType
+	 * @param count
+	 * @param radius
 	 * @return VBox
 	 */
-	private VBox createTokenGemCountDisplay(Gem gemType, int count, int radius) {
+	private StackPane createTokenGemCountDisplay(Gem gemType, int count, int radius) {
 		TokenView tokenView = new TokenView(gemType, radius * TOKENS_RESIZE_FACTOR);
 
+		tokenView.asPane().setOpacity(0.5);
+		
 		Label tokenCountLabel = new Label(String.valueOf(count));
 		tokenCountLabel.setAlignment(Pos.CENTER);
-		tokenCountLabel.setFont(Font.font("Arial", FontWeight.EXTRA_BOLD, 20));
-
-		VBox tokenFrame = new VBox(10, tokenView.asPane(), tokenCountLabel);
+		tokenCountLabel.setFont(Font.font("Arial", FontWeight.EXTRA_BOLD, 25));
+		tokenCountLabel.setTextFill(Color.WHITE);
+		
+		StackPane tokenFrame = new StackPane(tokenView.asPane(), tokenCountLabel);
 		tokenFrame.setAlignment(Pos.CENTER);
 		tokenFrame.setPadding(new Insets(5));
 		HBox.setHgrow(tokenFrame, Priority.ALWAYS);
