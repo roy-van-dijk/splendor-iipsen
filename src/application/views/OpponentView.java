@@ -200,7 +200,7 @@ public class OpponentView extends UnicastRemoteObject implements UIComponent, Pl
 	}
 
 	/**
-	 * Creates the token gem count display.
+	 * Creates the bonus display.
 	 *
 	 * @param gemType
 	 * @param count
@@ -208,14 +208,9 @@ public class OpponentView extends UnicastRemoteObject implements UIComponent, Pl
 	 * @return StackPane
 	 */
 	private StackPane createBonusDisplay(Gem gemType, int count) {
+		GemView gemView = new GemView(gemType, 45);
 		
-		Rectangle r = new Rectangle(45, 45);
-		String imagePath = String.format("resources/gems/%s.png", gemType.name().toLowerCase());
-		Image image = ImageCache.getInstance().fetchImage(imagePath, true);
-        ImagePattern imagePattern = new ImagePattern(image);
-        
-        r.setFill(imagePattern);
-        r.setOpacity(0.5);
+		gemView.asPane().setOpacity(0.5);
 
 		Label bonusLabel = new Label(String.valueOf(count));
 		bonusLabel.setAlignment(Pos.CENTER);
@@ -223,7 +218,7 @@ public class OpponentView extends UnicastRemoteObject implements UIComponent, Pl
 		bonusLabel.setTextFill(Color.WHITE);
 		bonusLabel.getStyleClass().add("dropshadow");
 		
-		StackPane bonusFrame = new StackPane(r, bonusLabel);
+		StackPane bonusFrame = new StackPane(gemView.asPane(), bonusLabel);
 		bonusFrame.setAlignment(Pos.CENTER);
 		bonusFrame.setPadding(new Insets(5));
 		HBox.setHgrow(bonusFrame, Priority.ALWAYS);

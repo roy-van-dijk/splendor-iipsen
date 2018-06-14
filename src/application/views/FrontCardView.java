@@ -14,7 +14,6 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.StackPane;
@@ -106,18 +105,10 @@ public class FrontCardView extends CardView implements ColorChangeable{
 		prestigeLabel.setFont(Font.font("Arial", FontWeight.EXTRA_BOLD, prestigeLabelSize));
 
 		Gem bonusGem = card.getBonusGem();
-		String gemPath = String.format("resources/gems/%s.png", bonusGem.toString().toLowerCase());
-		ImageView bonusImage = new ImageView(new Image(gemPath));
-		// System.out.printf("Card dimensions: X: %.2f, Y: %.2f\n", this.sizeX,
-		// this.sizeY);
-		double imageWidth = this.sizeX * GEM_RESIZE_FACTOR;
-		bonusImage.setFitWidth(imageWidth);
-		bonusImage.setPreserveRatio(true);
-		bonusImage.setSmooth(true);
-		bonusImage.setCache(true);
+		GemView gemView = new GemView(bonusGem, this.sizeX * GEM_RESIZE_FACTOR);
 
 		prestigeAndBonus.setLeft(prestigeLabel);
-		prestigeAndBonus.setRight(bonusImage);
+		prestigeAndBonus.setRight(gemView.asPane());
 		BorderPane.setAlignment(prestigeLabel, Pos.CENTER);
 
 		FlowPane costs = new FlowPane(Orientation.VERTICAL);
