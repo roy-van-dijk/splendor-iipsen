@@ -235,7 +235,7 @@ public class LobbyImpl extends UnicastRemoteObject implements Lobby {
 	/* (non-Javadoc)
 	 * @see application.domain.Lobby#selectSlot(application.domain.LobbyObserver, application.domain.PlayerSlot)
 	 */
-	public void selectSlot(LobbyObserver o, int slotIdx) throws RemoteException
+	public synchronized void selectSlot(LobbyObserver o, int slotIdx) throws RemoteException
 	{
 		PlayerSlot slot = this.getAssignableSlots().get(slotIdx);
 		if(!slot.isAvailable()) return;
@@ -278,7 +278,7 @@ public class LobbyImpl extends UnicastRemoteObject implements Lobby {
 	/* (non-Javadoc)
 	 * @see application.domain.Lobby#createPlayer(application.domain.LobbyObserver, java.lang.String)
 	 */
-	public void createPlayer(LobbyObserver o, String playerName) throws RemoteException {
+	public synchronized void createPlayer(LobbyObserver o, String playerName) throws RemoteException {
 		System.out.printf("[DEBUG] LobbyImpl::createPlayer()::Player '%s' has connected to the lobby!\n", playerName);
 		
 		PlayerImpl player = new PlayerImpl(playerName);
@@ -296,7 +296,7 @@ public class LobbyImpl extends UnicastRemoteObject implements Lobby {
 	/* (non-Javadoc)
 	 * @see application.domain.Lobby#disconnectPlayer(application.domain.LobbyObserver)
 	 */
-	public void disconnectPlayer(LobbyObserver o) throws RemoteException {
+	public synchronized void disconnectPlayer(LobbyObserver o) throws RemoteException {
 		this.clearPlayerSlot(o);
 		this.assignedPlayersMap.remove(o);
 		this.playersMap.remove(o);
@@ -308,7 +308,7 @@ public class LobbyImpl extends UnicastRemoteObject implements Lobby {
 	 *
 	 * @throws RemoteException
 	 */
-	private void notifyObservers() throws RemoteException
+	private synchronized void notifyObservers() throws RemoteException
 	{
 		System.out.println("[DEBUG] LobbyImpl::notifyObservers()::Notifying all lobby observers of change");
 		for(LobbyObserver o : playersMap.keySet())

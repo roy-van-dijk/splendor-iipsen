@@ -102,7 +102,7 @@ public class GameView extends UnicastRemoteObject implements UIComponent, Disabl
 			try {
 				Logger.log("GameView::modelChanged()::Updating UI for local player: " + player.getName(), Verbosity.DEBUG);
 				boolean disabled = game.isDisabled(this);
-				Logger.log("GameView::modelChanged()::Is local player disabled? : " + disabled, Verbosity.DEBUG);
+				Logger.log("GameView::modelChanged()::Is local player UI disabled? (aka not his turn): " + disabled, Verbosity.DEBUG);
 				this.setDisabled(disabled);
 				if(!disabled)
 				{

@@ -240,6 +240,7 @@ public class GameImpl extends UnicastRemoteObject implements Reinitializable, Ga
 			try {
 				o.modelChanged(this);
 			} catch (RemoteException e) {
+				Logger.log(String.format("GameImpl::notifyObservers()::Lost connection to observer: %s", o.toString()), Verbosity.DEBUG);
 				this.observers.remove(o);
 				this.terminateGame();
 			}	
@@ -384,7 +385,7 @@ public class GameImpl extends UnicastRemoteObject implements Reinitializable, Ga
 	 *
 	 * @throws RemoteException the remote exception
 	 */
-	public void terminateGame() throws RemoteException
+	public synchronized void terminateGame() throws RemoteException
 	{	
 		this.gameState = GameState.CLOSING;
 		this.disconnectAllPlayers();
