@@ -61,10 +61,9 @@ public class GameView extends UnicastRemoteObject implements UIComponent, Disabl
 	private Button btnResetTurn;
 	private Button btnEndTurn;
 	
-	private Label currentPlayer;
 	
 	private List<Button> moveButtons;
-	
+	private List<OpponentView> opponentViews;
 
 	private Pane buttons;
 	private Pane opponents;
@@ -87,13 +86,20 @@ public class GameView extends UnicastRemoteObject implements UIComponent, Disabl
 		this.game = game;
 		this.gameController = gameController;
 		this.player = player;
-		this.currentPlayer = new Label();
 		colorBlindViews = new ArrayList<>();
+		
+		this.opponentViews = new ArrayList<>();
 		
 		Logger.log("GameView::Building GameView UI for local player: " + player.getName(), Verbosity.DEBUG);
 		this.buildUI();
 		
 		game.addObserver(this, player);
+	}
+	
+	private void updateOpponentViews(String currentPlayerName) {
+		for(OpponentView opponentView : this.opponentViews) {
+			opponentView.updateCurrentPlayer(currentPlayerName.equals(opponentView.getPlayerName()));
+		}
 	}
 	
 	/* (non-Javadoc)
@@ -104,19 +110,19 @@ public class GameView extends UnicastRemoteObject implements UIComponent, Disabl
 		Platform.runLater(() ->
 		{
 			try {
-				currentPlayer.setText(game.getCurrentPlayer().getName()+ "'s turn");
 				Logger.log("GameView::modelChanged()::Updating UI for local player: " + player.getName(), Verbosity.DEBUG);
 				boolean disabled = game.isDisabled(this);
 				Logger.log("GameView::modelChanged()::Is local player UI disabled? (aka not his turn): " + disabled, Verbosity.DEBUG);
 				this.setDisabled(disabled);
-				if(!disabled)
-				{
+				
+				this.updateOpponentViews(game.getCurrentPlayer().getName());
+				
+				if(!disabled) {
 					btnReserveCard.setDisable(gameController.reserveCardInventoryFull());
 					btnPurchaseCard.setDisable(!game.anyCardsPurchasable());
 					btnEndTurn.setDisable(game.getPlayingField().getTempHand().isEmpty());
 					
-					if(game.getEndTurn().returningTokens())
-					{
+					if(game.getEndTurn().returningTokens()) {
 						gameController.showReturnTokensWindow();
 					}	
 				}	
@@ -187,8 +193,7 @@ public class GameView extends UnicastRemoteObject implements UIComponent, Disabl
 	 * @return PlayingFieldView
 	 * @throws RemoteException
 	 */
-	private PlayingFieldView buildPlayingField() throws RemoteException
-	{
+	private PlayingFieldView buildPlayingField() throws RemoteException {
 		return new PlayingFieldView(game.getPlayingField(), gameController);
 	}
 	
@@ -198,8 +203,7 @@ public class GameView extends UnicastRemoteObject implements UIComponent, Disabl
 	 * @return HBox
 	 * @throws RemoteException 
 	 */
-	private HBox buildButtons() throws RemoteException
-	{
+	private HBox buildButtons() throws RemoteException {
 		HBox buttons = new HBox(20);
 		buttons.getStyleClass().add("buttons-view");
 		buttons.setAlignment(Pos.CENTER);
@@ -307,24 +311,17 @@ public class GameView extends UnicastRemoteObject implements UIComponent, Disabl
 		opponentsRows.setAlignment(Pos.CENTER_LEFT);
 		opponentsRows.getStyleClass().add("opponents");
 		opponentsRows.setPrefWidth(400);
-		VBox currentPlayerBox = new VBox();
-	    
-		currentPlayerBox.setSpacing(10);
-		currentPlayerBox.getChildren().add(currentPlayer);
-		currentPlayer.setText("");
-		currentPlayer.getStyleClass().add("opponent-header");
-		currentPlayer.getStyleClass().add("opponent-name");
-		opponentsRows.getChildren().add(currentPlayer);
+		
 		List<Player> players = game.getPlayers();
 		for(Player player : players)
 		{
-			if(player.equals(this.player)) {
-				
-				continue;
-			}
+			if(player.equals(this.player)) continue;
 			System.out.println("[DEBUG] GameView::buildOpponents():: Building opponent player: " + player.getName());
-			Pane opponentView = new OpponentView(player).asPane();
-			opponentsRows.getChildren().add(opponentView);
+			
+			OpponentView opponentView = new OpponentView(player);
+			this.opponentViews.add(opponentView);
+			Pane opponentPane = opponentView.asPane();
+			opponentsRows.getChildren().add(opponentPane);
 		}
 		
 		return opponentsRows;

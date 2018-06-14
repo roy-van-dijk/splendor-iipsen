@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import application.domain.Card;
+import application.domain.Game;
 import application.domain.Gem;
 import application.domain.Player;
 import application.domain.PlayerObserver;
@@ -44,6 +45,7 @@ public class OpponentView extends UnicastRemoteObject implements UIComponent, Pl
 
 	private Pane root;
 
+	private HBox topFrame;
 	private HBox reservedCardsFrame;
 	private HBox tokensFrame;
 	private HBox bonusFrame;
@@ -67,7 +69,8 @@ public class OpponentView extends UnicastRemoteObject implements UIComponent, Pl
 	 * Builds the UI.
 	 */
 	private void buildUI() {
-		HBox topFrame = buildOpponentHeaderDisplay();
+		topFrame = buildOpponentHeaderDisplay();
+		this.updateCurrentPlayer(false);
 
 		reservedCardsFrame = new HBox();
 		reservedCardsFrame.setAlignment(Pos.CENTER);
@@ -82,6 +85,15 @@ public class OpponentView extends UnicastRemoteObject implements UIComponent, Pl
 		root = new VBox(topFrame, tokensFrame, bonusFrame, reservedCardsFrame);
 		root.getStyleClass().add("opponent");
 	}
+	
+	public void updateCurrentPlayer(boolean isNowPlaying) {
+		if(isNowPlaying) {
+			topFrame.setStyle("-fx-background-color: rgb(43, 57, 163);");
+		} else {
+			topFrame.setStyle("-fx-background-color: rgb(43, 57, 63);");
+		}
+	}
+	
 
 	/* (non-Javadoc)
 	 * @see application.domain.PlayerObserver#modelChanged(application.domain.Player)
@@ -168,7 +180,6 @@ public class OpponentView extends UnicastRemoteObject implements UIComponent, Pl
 	 */
 	private HBox buildOpponentHeaderDisplay() {
 		HBox topFrame = new HBox(10);
-		topFrame.getStyleClass().add("opponent-header");
 
 		topFrame.setAlignment(Pos.CENTER);
 
@@ -244,6 +255,10 @@ public class OpponentView extends UnicastRemoteObject implements UIComponent, Pl
 		HBox.setHgrow(tokenFrame, Priority.ALWAYS);
 
 		return tokenFrame;
+	}
+	
+	public String getPlayerName() {
+		return lblOpponentName.getText();
 	}
 
 	/* (non-Javadoc)
