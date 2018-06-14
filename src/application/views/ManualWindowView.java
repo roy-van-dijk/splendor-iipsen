@@ -64,7 +64,7 @@ public class ManualWindowView {
 		String page = pane.getStyleClass().get(1);
 		int currentPage = Integer.parseInt(page.substring(page.length() - 1));
 
-		if (currentPage < 4) {
+		if (currentPage < 3) {
 			currentPage = currentPage + 1;
 		} else {
 			currentPage = 1;

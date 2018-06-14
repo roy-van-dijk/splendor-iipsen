@@ -156,7 +156,6 @@
 .page-1 { -fx-background-image: url("../../resources/resources/manual/page-1.png"); }
 .page-2 { -fx-background-image: url("../../resources/resources/manual/page-2.png"); }
 .page-3 { -fx-background-image: url("../../resources/resources/manual/page-3.png"); }
-.page-4 { -fx-background-image: url("../../resources/resources/manual/page-4.png"); }
 
 .lobby-grid .label {
 	-fx-text-fill: gray;
