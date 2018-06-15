@@ -248,6 +248,18 @@ public class PlayingFieldImpl extends UnicastRemoteObject implements Reinitializ
 		this.notifyObservers();
 	}
 	
+	/* (non-Javadoc)
+	 * @see application.domain.PlayingField#removeTokenFromTemp(application.domain.Gem)
+	 */
+	@Override
+	public void removeTokenFromTemp(Gem gemType) throws RemoteException {
+		tempHand.removeToken(new TokenImpl(gemType));
+		if(tempHand.getMoveType() == MoveType.TAKE_TWO_TOKENS) {
+			tempHand.removeToken(new TokenImpl(gemType));
+		}
+		this.notifyObservers();
+	}
+	
 	/**
 	 * Notify observers.
 	 *

@@ -217,4 +217,12 @@ public interface Game extends Remote {
 	 */
 	public boolean anyCardsPurchasable() throws RemoteException;
 
+	/**
+	 * removes the token from temp.
+	 *
+	 * @param gemType the gem type
+	 * @throws RemoteException
+	 */
+	public void removeTokenFromTemp(Gem gemType) throws RemoteException;
+
 }
