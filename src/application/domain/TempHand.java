@@ -129,4 +129,12 @@ public interface TempHand extends Remote {
 	 * @throws RemoteException
 	 */
 	public Player getPlayer() throws RemoteException;
+
+	/**
+	 * Removes the token.
+	 *
+	 * @param token
+	 * @throws RemoteException
+	 */
+	public void removeToken(Token token) throws RemoteException;
 }

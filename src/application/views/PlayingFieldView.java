@@ -207,12 +207,30 @@ public class PlayingFieldView extends UnicastRemoteObject implements UIComponent
 	private HBox createTokenGemCountDisplay(Gem gemType, int count, List<Gem> selectableTokens,TempHand tempHand) throws RemoteException {
 		int radius = GameView.tokenSizeRadius;
 		TokenView tokenView = new TokenView(gemType, radius);
-		if (selectableTokens.contains(gemType)) {
-			tokenView.asPane().getStyleClass().add("selectable");
-			if (gemType != Gem.JOKER) {
-				if ((tempHand.getMoveType() == MoveType.TAKE_TWO_TOKENS && tempHand.getSelectedTokensCount() < 1)
-						|| (tempHand.getMoveType() == MoveType.TAKE_THREE_TOKENS && tempHand.getSelectedTokensCount() < 3
-								&& !tempHand.getSelectedGemTypes().contains(gemType))) {
+		
+		if(selectableTokens.contains(gemType)) {
+			
+			if(tempHand.getMoveType() == MoveType.TAKE_TWO_TOKENS) {
+				tokenView.asPane().setOnMouseClicked(e -> {
+					try {
+						tempHand.emptyHand();
+						gameController.onFieldTokenClicked(gemType);
+					} catch (RemoteException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				});
+			} else if(tempHand.getMoveType() == MoveType.TAKE_THREE_TOKENS) {
+				if(tempHand.getSelectedGemTypes().contains(gemType)) {
+					tokenView.asPane().setOnMouseClicked(e -> {
+						try {
+							gameController.selectedTokenClicked(gemType);
+						} catch (RemoteException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+					});
+				} else if(tempHand.getSelectedTokensCount() < 3) {
 					tokenView.asPane().setOnMouseClicked(e -> {
 						try {
 							gameController.onFieldTokenClicked(gemType);
@@ -221,20 +239,21 @@ public class PlayingFieldView extends UnicastRemoteObject implements UIComponent
 							e1.printStackTrace();
 						}
 					});
-	
 				}
-	
-				
-				if (tempHand.getTokenList().getTokenGemCount().get(gemType) > 0) {
-					tokenView.asPane().getStyleClass().remove("selectable");
-					tokenView.asPane().getStyleClass().add("selected");
-				}
+			}
+			
+			if(tempHand.getSelectedGemTypes().contains(gemType)) {
+				tokenView.asPane().getStyleClass().remove("selectable");
+				tokenView.asPane().getStyleClass().add("selected");
+			} else {
+				tokenView.asPane().getStyleClass().remove("selected");
+				tokenView.asPane().getStyleClass().add("selectable");
 			}
 		}
 
 		Label tokenCountLabel = new Label(String.valueOf(count));
-		tokenCountLabel.getStyleClass().add("token-count");
 		tokenCountLabel.setFont(Font.font(radius * 2));
+		tokenCountLabel.getStyleClass().add("token-count");
 
 		HBox tokenRow = new HBox(15, tokenView.asPane(), tokenCountLabel);
 		tokenRow.setAlignment(Pos.CENTER);

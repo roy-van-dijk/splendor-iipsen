@@ -141,6 +141,16 @@ public class GameController {
 	}
 	
 	/**
+	 * On field selected token clicked.
+	 *
+	 * @param gemType
+	 * @throws RemoteException
+	 */
+	public void selectedTokenClicked(Gem gemType) throws RemoteException {
+		game.removeTokenFromTemp(gemType);
+	}
+	
+	/**
 	 * Gets the temp hand.
 	 *
 	 * @return TempHand
