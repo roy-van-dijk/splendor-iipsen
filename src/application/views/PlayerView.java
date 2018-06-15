@@ -335,6 +335,7 @@ public class PlayerView extends UnicastRemoteObject implements UIComponent, Disa
 	 *
 	 * @param cards
 	 * @param count 
+	 * @param gemType
 	 * @param sizeX the size horizontal
 	 * @param sizeY the size vertical
 	 * @return VBox
