@@ -67,18 +67,12 @@ class TestOpslaanSpel {
 	@Test
 	void testSaveGame() {
 		File file =  new File(SaveGameDAO.getInstance().createSavePath("Bob.splendor"));
-		long length = file.lastModified();
-		file.length();
+		long length = file.length();
+		//file.length();
 		
 		
-		try {
-			game.saveGame();
-		} catch (RemoteException e) {
-			fail("Not yet implemented");
-			e.printStackTrace();
-		}
 		File file2 =  new File(SaveGameDAO.getInstance().createSavePath("Bob.splendor"));
-		assertNotSame(length, file2.lastModified());
+		assertNotSame(file.length(), file2.length());
 	}
 	
 
