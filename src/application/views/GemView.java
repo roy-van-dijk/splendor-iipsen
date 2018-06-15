@@ -62,6 +62,7 @@ public class GemView implements UIComponent, ColorChangeable {
         ImagePattern imagePattern = new ImagePattern(image);
         rectangle.setFill(imagePattern);
        
+        this.updateColors();
 		root = new StackPane(rectangle);
 	}
 
@@ -88,14 +89,11 @@ public class GemView implements UIComponent, ColorChangeable {
 
 	/**
 	 * Updates the gem view's colour based on the colour blind mode that is applied.
-	 *
-	 * @param mode the mode
-	 * @return void
 	 */
 	@Override
-	public void updateView(ColorBlindModes mode) {
+	public void updateColors() {
 		// Switches hue offset for color blind mode based on data in Gem class
-		double hueOffset = this.gemType.hueOffset(this.gemType, mode);
+		double hueOffset = this.gemType.hueOffset(this.gemType, ColorBlindModes.CURRENT_MODE);
 		ColorAdjust colorAdjust = new ColorAdjust();
 		colorAdjust.setHue(+hueOffset);
 		rectangle.setEffect(colorAdjust);

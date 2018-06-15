@@ -89,6 +89,7 @@ public class NobleView implements UIComponent, ColorChangeable {
 
 		rect.setArcHeight(10);
 		rect.setArcWidth(10);
+		this.updateColors();
 
 		root = new StackPane(rect, addNobleInformation());
 	}
@@ -163,14 +164,12 @@ public class NobleView implements UIComponent, ColorChangeable {
 	
 	/**
 	 * Updates the noble view's circle colours based on the colour blind mode that is applied.
-	 *
-	 * @param mode
 	 */
 	@Override
-	public void updateView(ColorBlindModes mode) {
+	public void updateColors() {
 		for(Rectangle r : requirementRects) {
 			Gem gemType = Gem.valueOf(r.getProperties().get("GemType").toString());
-			double hueOffset = gemType.hueOffset(gemType, mode);
+			double hueOffset = gemType.hueOffset(gemType, ColorBlindModes.CURRENT_MODE);
 			ColorAdjust colorAdjust = new ColorAdjust();
 			colorAdjust.setHue(+hueOffset);
 			r.setEffect(colorAdjust);	
