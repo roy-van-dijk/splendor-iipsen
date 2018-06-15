@@ -298,34 +298,34 @@ public class PlayerView extends UnicastRemoteObject implements UIComponent, Disa
 		ArrayList<Card> emeraldCards = new ArrayList<Card>();
 		ArrayList<Card> rubyCards = new ArrayList<Card>();
 		ArrayList<Card> onyxCards = new ArrayList<Card>();
-
+		
 		for (Card c : cards) {
 			switch (c.getBonusGem()) {
-			case DIAMOND:
-				diamondCards.add(c);
-				break;
-			case SAPPHIRE:
-				sapphireCards.add(c);
-				break;
-			case EMERALD:
-				emeraldCards.add(c);
-				break;
-			case RUBY:
-				rubyCards.add(c);
-				break;
-			case ONYX:
-				onyxCards.add(c);
-				break;
-			default:
-				break;
+				case DIAMOND:
+					diamondCards.add(c);
+					break;
+				case SAPPHIRE:
+					sapphireCards.add(c);
+					break;
+				case EMERALD:
+					emeraldCards.add(c);
+					break;
+				case RUBY:
+					rubyCards.add(c);
+					break;
+				case ONYX:
+					onyxCards.add(c);
+					break;
+				default:
+					break;
 			}
 		}
 
-		VBox diamondDisplay = createCardDisplay(diamondCards, diamondCards.size(), 110, 160);
-		VBox sapphireDisplay = createCardDisplay(sapphireCards, sapphireCards.size(), 110, 160);
-		VBox emeraldDisplay = createCardDisplay(emeraldCards, emeraldCards.size(), 110, 160);
-		VBox rubyDisplay = createCardDisplay(rubyCards, rubyCards.size(), 110, 160);
-		VBox onyxDisplay = createCardDisplay(onyxCards, onyxCards.size(), 110, 160);
+		VBox diamondDisplay = createCardDisplay(diamondCards, diamondCards.size(), Gem.DIAMOND, 110, 160);
+		VBox sapphireDisplay = createCardDisplay(sapphireCards, sapphireCards.size(), Gem.SAPPHIRE, 110, 160);
+		VBox emeraldDisplay = createCardDisplay(emeraldCards, emeraldCards.size(), Gem.EMERALD, 110, 160);
+		VBox rubyDisplay = createCardDisplay(rubyCards, rubyCards.size(), Gem.RUBY, 110, 160);
+		VBox onyxDisplay = createCardDisplay(onyxCards, onyxCards.size(), Gem.ONYX, 110, 160);
 
 		ownedCards.getChildren().addAll(diamondDisplay, sapphireDisplay, emeraldDisplay, rubyDisplay, onyxDisplay);
 	}
@@ -335,25 +335,31 @@ public class PlayerView extends UnicastRemoteObject implements UIComponent, Disa
 	 *
 	 * @param cards
 	 * @param count 
+	 * @param gemType
 	 * @param sizeX the size horizontal
 	 * @param sizeY the size vertical
 	 * @return VBox
+	 * @throws RemoteException 
 	 */
-	private VBox createCardDisplay(ArrayList<Card> cards, int count, int sizeX, int sizeY) {
+	private VBox createCardDisplay(ArrayList<Card> cards, int count, Gem gemType, int sizeX, int sizeY) throws RemoteException {
 		int offset = 60;
 
 		StackPane cardStack = new StackPane();
-
+		
 		Label cardCountLabel = new Label(String.valueOf(count));
-		cardCountLabel.setAlignment(Pos.TOP_CENTER);
+		cardCountLabel.setAlignment(Pos.CENTER);
+		cardCountLabel.setTranslateY(5);
 		cardCountLabel.getStyleClass().add("card-count");
 		cardCountLabel.setFont(Font.font("Times New Roman", FontWeight.BOLD, 40));
 		cardCountLabel.setPrefWidth(125);
 		cardCountLabel.setTextFill(Color.WHITE);
-
-		cardStack.getChildren().add(cardCountLabel);
-
-		for (Card card : cards) {
+		
+		GemView gemView = new GemView(gemType, 55.0);
+		gemView.asPane().setOpacity(0.5);
+		
+		cardStack.getChildren().addAll(gemView.asPane(), cardCountLabel);
+		
+		for (Card card : cards) {	
 			CardView cardView = new FrontCardView(card, sizeX, sizeY);
 			cardView.asPane().setTranslateY(offset);
 			cardView.asPane().getStyleClass().add("dropshadow");
