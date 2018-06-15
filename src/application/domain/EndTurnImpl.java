@@ -100,7 +100,6 @@ public class EndTurnImpl extends UnicastRemoteObject implements EndTurn, Seriali
 			this.game.notifyObservers();
 		} else {
 			this.returningTokens = false;
-			this.checkNobleVisits();	
 			this.cleanUpTurn();
 			this.checkWinner();
 			game.saveGame();	
@@ -109,7 +108,7 @@ public class EndTurnImpl extends UnicastRemoteObject implements EndTurn, Seriali
 	}
 
 	/**
-	 * Check noble visits.
+	 * have Noble visit player, if player has enough bonus.
 	 *
 	 * @throws RemoteException
 	 */
