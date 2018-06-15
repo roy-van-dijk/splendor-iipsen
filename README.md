@@ -1,7 +1,7 @@
 # Splendor - IIPSEN Project
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/roy-van-dijk/IIPSEN/master/resources/misc/splendor-icon.png?token=AVKglyRlvcHnZUpsfHAlmiah13-c5sxDks5bINUjwA%3D%3D" width="350"/>
+  <img src="https://i0.wp.com/appaddict.net/wordpress/wp-content/uploads/2016/01/splendor-icon.jpg?w=600&ssl=1" width="350"/>
 </p>
 
 De laatste jaren worden er steeds meer verschillende soorten bordspellen uitgebracht. Er zijn steeds

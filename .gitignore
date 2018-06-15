@@ -106,5 +106,7 @@ hs_err_pid*
 
 # Splendor savegames
 saves/*.splendor
+*.splendor
+
 #Docs
 doc/
