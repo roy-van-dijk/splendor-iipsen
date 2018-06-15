@@ -62,8 +62,10 @@ public class GemView implements UIComponent, ColorChangeable {
         ImagePattern imagePattern = new ImagePattern(image);
         rectangle.setFill(imagePattern);
        
-        this.updateColors();
+        
 		root = new StackPane(rectangle);
+		
+		this.updateColors();
 	}
 
 	/**

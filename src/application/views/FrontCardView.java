@@ -81,10 +81,11 @@ public class FrontCardView extends CardView implements ColorChangeable{
         
         root = new StackPane();
         root.setMaxSize(rect.getWidth(), rect.getHeight());
+
+        root.getChildren().addAll(rect, addCardInformation());
+        
         
         this.updateColors();
-        
-        root.getChildren().addAll(rect, addCardInformation());        
 	}
 
 	/**

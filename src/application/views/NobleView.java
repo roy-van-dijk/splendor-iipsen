@@ -89,9 +89,10 @@ public class NobleView implements UIComponent, ColorChangeable {
 
 		rect.setArcHeight(10);
 		rect.setArcWidth(10);
-		this.updateColors();
 
 		root = new StackPane(rect, addNobleInformation());
+		
+		this.updateColors();
 	}
 
 	/**

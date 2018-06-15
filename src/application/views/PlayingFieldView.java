@@ -204,7 +204,7 @@ public class PlayingFieldView extends UnicastRemoteObject implements UIComponent
 	 * @return HBox
 	 * @throws RemoteException
 	 */
-	private HBox createTokenGemCountDisplay(Gem gemType, int count, List<Gem> selectableTokens,TempHand tempHand) throws RemoteException {
+	private synchronized HBox createTokenGemCountDisplay(Gem gemType, int count, List<Gem> selectableTokens,TempHand tempHand) throws RemoteException {
 		int radius = GameView.tokenSizeRadius;
 		TokenView tokenView = new TokenView(gemType, radius);
 		
