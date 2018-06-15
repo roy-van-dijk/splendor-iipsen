@@ -14,6 +14,7 @@ import application.domain.Lobby;
 import application.domain.LobbyImpl;
 import application.services.SaveGameDAO;
 import application.util.LobbyFullException;
+import application.util.NameTakenException;
 import application.views.LobbyView;
 
 // TODO: Auto-generated Javadoc
@@ -33,9 +34,10 @@ public class MainMenuController {
 	 * @throws RemoteException
 	 * @throws NotBoundException
 	 * @throws LobbyFullException 
+	 * @throws NameTakenException 
 	 */
-	public void joinLobby(String hostIP, String playerName) throws RemoteException, NotBoundException, LobbyFullException {
-		Lobby lobby = connectToLobby(hostIP);
+	public void joinLobby(String hostIP, String playerName) throws RemoteException, NotBoundException, LobbyFullException, NameTakenException {
+		Lobby lobby = connectToLobby(hostIP, playerName);
 		System.out.println("Connected to lobby!");
 
 		LobbyController lobbyController = new LobbyController(lobby);
@@ -121,11 +123,13 @@ public class MainMenuController {
 	 * Connects to a lobby.
 	 *
 	 * @param hostIP
+	 * @param playerName 
 	 * @return Lobby
 	 * @throws RemoteException
 	 * @throws NotBoundException Lobby
+	 * @throws NameTakenException 
 	 */
-	public Lobby connectToLobby(String hostIP) throws RemoteException, NotBoundException, LobbyFullException {
+	public Lobby connectToLobby(String hostIP, String playerName) throws RemoteException, NotBoundException, LobbyFullException, NameTakenException {
 		System.out.println("Getting access to RMI registry");
 		Registry registry = LocateRegistry.getRegistry(hostIP); // Default port: 1099
 		System.out.println("Getting the Lobby stub from registry");
@@ -134,6 +138,10 @@ public class MainMenuController {
 		if(lobby.isFull())
 		{
 			throw new LobbyFullException("The lobby is full!");
+		}
+		if(lobby.isNameTaken(playerName))
+		{
+			throw new NameTakenException("This name is already taken.");
 		}
 
 		return lobby;

@@ -154,7 +154,7 @@ public class OpponentView extends UnicastRemoteObject implements UIComponent, Pl
 		tokensFrame.getChildren().clear();
 
 		for (Map.Entry<Gem, Integer> entry : gemsCount.entrySet()) {
-			StackPane tokenGemCountDisplay = createTokenGemCountDisplay(entry.getKey(), entry.getValue(), GameView.tokenSizeRadius);
+			StackPane tokenGemCountDisplay = createTokenGemCountDisplay(entry.getKey(), entry.getValue());
 			tokensFrame.getChildren().add(tokenGemCountDisplay);
 		}
 	}
@@ -214,7 +214,7 @@ public class OpponentView extends UnicastRemoteObject implements UIComponent, Pl
 
 		Label bonusLabel = new Label(String.valueOf(count));
 		bonusLabel.setAlignment(Pos.CENTER);
-		bonusLabel.setFont(Font.font("Arial", FontWeight.EXTRA_BOLD, 25));
+		bonusLabel.setFont(Font.font("Times New Roman", FontWeight.EXTRA_BOLD, 25));
 		bonusLabel.setTextFill(Color.WHITE);
 		bonusLabel.getStyleClass().add("dropshadow");
 		
@@ -231,17 +231,17 @@ public class OpponentView extends UnicastRemoteObject implements UIComponent, Pl
 	 *
 	 * @param gemType
 	 * @param count
-	 * @param radius
 	 * @return VBox
 	 */
-	private StackPane createTokenGemCountDisplay(Gem gemType, int count, int radius) {
+	private StackPane createTokenGemCountDisplay(Gem gemType, int count) {
+		int radius = GameView.tokenSizeRadius;
 		TokenView tokenView = new TokenView(gemType, radius * TOKENS_RESIZE_FACTOR);
 
 		tokenView.asPane().setOpacity(0.5);
 		
 		Label tokenCountLabel = new Label(String.valueOf(count));
 		tokenCountLabel.setAlignment(Pos.CENTER);
-		tokenCountLabel.setFont(Font.font("Arial", FontWeight.EXTRA_BOLD, 25));
+		tokenCountLabel.setFont(Font.font("Times New Roman", FontWeight.EXTRA_BOLD, 25));
 		tokenCountLabel.setTextFill(Color.WHITE);
 		
 		StackPane tokenFrame = new StackPane(tokenView.asPane(), tokenCountLabel);

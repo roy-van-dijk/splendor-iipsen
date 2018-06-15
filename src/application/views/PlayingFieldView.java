@@ -188,7 +188,7 @@ public class PlayingFieldView extends UnicastRemoteObject implements UIComponent
 		tokensPane.getChildren().clear();
 
 		for (Map.Entry<Gem, Integer> entry : gemsCount.entrySet()) {
-			HBox tokenGemCountDisplay = createTokenGemCountDisplay(entry.getKey(), entry.getValue(), GameView.tokenSizeRadius, selectableTokens, tempHand);
+			HBox tokenGemCountDisplay = createTokenGemCountDisplay(entry.getKey(), entry.getValue(), selectableTokens, tempHand);
 			tokensPane.getChildren().add(tokenGemCountDisplay);
 		}
 	}
@@ -199,14 +199,13 @@ public class PlayingFieldView extends UnicastRemoteObject implements UIComponent
 	 *
 	 * @param gemType
 	 * @param count
-	 * @param radius
 	 * @param selectableTokens
 	 * @param tempHand
 	 * @return HBox
 	 * @throws RemoteException
 	 */
-	private HBox createTokenGemCountDisplay(Gem gemType, int count, int radius, List<Gem> selectableTokens,
-			TempHand tempHand) throws RemoteException {
+	private HBox createTokenGemCountDisplay(Gem gemType, int count, List<Gem> selectableTokens,TempHand tempHand) throws RemoteException {
+		int radius = GameView.tokenSizeRadius;
 		TokenView tokenView = new TokenView(gemType, radius);
 		if (selectableTokens.contains(gemType)) {
 			tokenView.asPane().getStyleClass().add("selectable");

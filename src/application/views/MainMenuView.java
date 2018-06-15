@@ -11,6 +11,7 @@ import application.StageManager;
 import application.controllers.MainMenuController;
 import application.util.AlertDialog;
 import application.util.LobbyFullException;
+import application.util.NameTakenException;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert.AlertType;
@@ -119,6 +120,9 @@ public class MainMenuView implements UIComponent {
 				e1.printStackTrace();
 			} catch (LobbyFullException e1) {
 				new AlertDialog(AlertType.ERROR, "The server is full.").show();
+				e1.printStackTrace();
+			} catch (NameTakenException e1) {
+				new AlertDialog(AlertType.ERROR, "This name is already taken.").show();
 				e1.printStackTrace();
 			}
 		});

@@ -6,6 +6,7 @@ import java.util.List;
 
 import application.domain.LobbyImpl.LobbyStates;
 import application.util.LobbyFullException;
+import application.util.NameTakenException;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -158,5 +159,15 @@ public interface Lobby extends Remote {
 	 * @throws LobbyFullException
 	 */
 	public boolean isFull() throws RemoteException, LobbyFullException;
+
+	/**
+	 * Checks if a player with the given name already exists in the lobby.
+	 * Ignores case.
+	 *
+	 * @return true, if is full
+	 * @throws RemoteException
+	 * @throws NameTakenException
+	 */
+	public boolean isNameTaken(String name) throws RemoteException, NameTakenException; 
 	
 }

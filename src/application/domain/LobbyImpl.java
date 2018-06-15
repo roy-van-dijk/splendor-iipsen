@@ -14,6 +14,7 @@ import java.util.Map;
 import application.util.LobbyFullException;
 import application.util.Logger;
 import application.util.Logger.Verbosity;
+import application.util.NameTakenException;
 
 /**
  * The Class LobbyImpl.
@@ -402,12 +403,25 @@ public class LobbyImpl extends UnicastRemoteObject implements Lobby {
 	
 	
 	/**
-	* Sets the registry.
+	* Sets the RMI registry.
  	*
  	* @param registry the new registry
  	*/
 	public void setRegistry(Registry registry) {
 		this.registry = registry;
+	}
+	
+
+	/* (non-Javadoc)
+	 * @see application.domain.Lobby#isNameTaken(java.lang.String)
+	 */
+	@Override
+	public boolean isNameTaken(String name) throws RemoteException, NameTakenException {
+		for(Player player : playersMap.values())
+		{
+			if(name.equalsIgnoreCase(player.getName())) return true;
+		}
+		return false;
 	}
 
 
