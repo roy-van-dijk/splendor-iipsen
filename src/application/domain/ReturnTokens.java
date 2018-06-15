@@ -26,6 +26,8 @@ public class ReturnTokens {
 	private ReturnTokensView view;
 	
 	private boolean allowConfirm;
+	
+	private final static int TOKENS_IN_HAND = 10;	
 
 	/**
 	 * Instantiates a new return tokens.
@@ -73,7 +75,7 @@ public class ReturnTokens {
 	 */
 	public void removeToken(Gem gemType) throws RemoteException 
 	{
-		if(tokenListNew.getAll().size() > 10 && tokenListNew.getTokenGemCount().get(gemType) > 0) 
+		if(tokenListNew.getAll().size() > TOKENSINHAND && tokenListNew.getTokenGemCount().get(gemType) > 0) 
 		{
 			Token token = this.getTokenFromGemType(tokenListNew.getAll(), gemType);
 			tokenListNew.remove(token);
@@ -119,7 +121,7 @@ public class ReturnTokens {
 	 */
 	public void validateNewTokens()
 	{
-		if(tokenListNew.getAll().size() == 10) 
+		if(tokenListNew.getAll().size() == TOKENS_IN_HAND) 
 		{
 			this.allowConfirm = true;
 		} else {

@@ -156,4 +156,12 @@ public interface PlayingField extends Remote {
 	 */
 	public void setDeckDeselected() throws RemoteException;
 
+	/**
+	 * Removes the passed token from the player's temporary hand.
+	 *
+	 * @param gemType
+	 * @throws RemoteException
+	 */
+	public void removeTokenFromTemp(Gem gemType) throws RemoteException;
+
 }

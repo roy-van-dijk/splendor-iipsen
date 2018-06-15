@@ -82,6 +82,8 @@ public class FrontCardView extends CardView implements ColorChangeable{
         root = new StackPane();
         root.setMaxSize(rect.getWidth(), rect.getHeight());
         
+        this.updateColors();
+        
         root.getChildren().addAll(rect, addCardInformation());        
 	}
 
@@ -162,14 +164,12 @@ public class FrontCardView extends CardView implements ColorChangeable{
 
 	/**
 	 * Updates the card view's circle colours based on the colour blind mode that is applied.
-	 *
-	 * @param mode the mode
 	 */
 	@Override
-	public void updateView(ColorBlindModes mode) {
+	public void updateColors() {
 		for(Circle c : costCircles) {
 			Gem gemType = Gem.valueOf(c.getProperties().get("GemType").toString());
-			double hueOffset = gemType.hueOffset(gemType, mode);
+			double hueOffset = gemType.hueOffset(gemType, ColorBlindModes.CURRENT_MODE);
 			ColorAdjust colorAdjust = new ColorAdjust();
 			colorAdjust.setHue(+hueOffset);
 			c.setEffect(colorAdjust);	

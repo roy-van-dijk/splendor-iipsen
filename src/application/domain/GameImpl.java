@@ -380,6 +380,15 @@ public class GameImpl extends UnicastRemoteObject implements Reinitializable, Ga
 		this.notifyObservers();
 	}
 	
+	/* (non-Javadoc)
+	 * @see application.domain.Game#removeTokenFromTemp(application.domain.Gem)
+	 */
+	@Override
+	public void removeTokenFromTemp(Gem gemType) throws RemoteException {
+		this.playingField.removeTokenFromTemp(gemType);
+		this.notifyObservers();
+	}
+	
 	/**
 	 * close the game for everyone.
 	 *

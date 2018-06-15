@@ -108,6 +108,12 @@ public class TempHandImpl extends UnicastRemoteObject implements Serializable, T
 		selectedGemTypes.add(token.getGemType());
 	}
 	
+	public void removeToken(Token token) throws RemoteException {
+		selectedTokensCount--;
+		tokenList.remove(token);
+		selectedGemTypes.remove(token.getGemType());
+	}
+	
 	/* (non-Javadoc)
 	 * @see application.domain.TempHand#getSelectedTokensCount()
 	 */
