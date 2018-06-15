@@ -139,6 +139,7 @@ public class GameView extends UnicastRemoteObject implements UIComponent, Disabl
 	 * @param mode
 	 */
 	public static void changeColorBlindMode(ColorBlindModes mode) {
+		ColorBlindModes.CURRENT_MODE = mode;
 		Iterator<ColorChangeable> i = colorBlindViews.iterator();
 		while (i.hasNext()) {
 			ColorChangeable view = i.next(); 
@@ -146,7 +147,7 @@ public class GameView extends UnicastRemoteObject implements UIComponent, Disabl
 				i.remove();
 			}
 			else {
-				view.updateView(mode);
+				view.updateColors();
 			}
 		}
 	}

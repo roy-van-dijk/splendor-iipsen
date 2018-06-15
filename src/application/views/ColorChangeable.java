@@ -13,8 +13,7 @@ public interface ColorChangeable {
 	/**
 	 * Updates the view to accompany the colour blind mode setting change.
 	 *
-	 * @param mode 
 	 */
-	public void updateView(ColorBlindModes mode);
+	public void updateColors();
 
 }

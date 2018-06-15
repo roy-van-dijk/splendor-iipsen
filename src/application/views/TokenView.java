@@ -38,7 +38,7 @@ public class TokenView implements UIComponent, ColorChangeable {
 		this.radius = radius;
 
 		GameView.colorBlindViews.add(this);
-
+	
 		this.buildUI();
 	}
 
@@ -62,6 +62,7 @@ public class TokenView implements UIComponent, ColorChangeable {
 		Image image = ImageCache.getInstance().fetchImage(imagePath, true);
         ImagePattern imagePattern = new ImagePattern(image);
         circle.setFill(imagePattern);
+        this.updateColors();
        
 		root = new StackPane(circle);
 	}
@@ -94,9 +95,9 @@ public class TokenView implements UIComponent, ColorChangeable {
 	 * @return void
 	 */
 	@Override
-	public void updateView(ColorBlindModes mode) {
+	public void updateColors() {
 		// Switches hue offset for color blind mode based on data in Gem class
-		double hueOffset = this.gemType.hueOffset(this.gemType, mode);
+		double hueOffset = this.gemType.hueOffset(this.gemType, ColorBlindModes.CURRENT_MODE);
 		ColorAdjust colorAdjust = new ColorAdjust();
 		colorAdjust.setHue(+hueOffset);
 		circle.setEffect(colorAdjust);

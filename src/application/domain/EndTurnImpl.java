@@ -25,6 +25,8 @@ public class EndTurnImpl extends UnicastRemoteObject implements EndTurn, Seriali
 	private TempHand tempHand;
 	private Player player;
 	private boolean returningTokens;
+	
+	private static final int PRESTIGE_TO_WIN  = 15;
 	/**
 	 * 
 	 * @param game
@@ -189,7 +191,7 @@ public class EndTurnImpl extends UnicastRemoteObject implements EndTurn, Seriali
 					winningPlayer = player;
 				}
 			}
-			if(winningPlayer.getPrestige() >= 15) {
+			if(winningPlayer.getPrestige() >= PRESTIGE_TO_WIN) {
 				game.playerHasWon(winningPlayer);
 			}
 		}
