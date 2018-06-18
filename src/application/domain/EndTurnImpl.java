@@ -102,6 +102,7 @@ public class EndTurnImpl extends UnicastRemoteObject implements EndTurn, Seriali
 			this.game.notifyObservers();
 		} else {
 			this.returningTokens = false;
+			this.checkNobleVisits();
 			this.cleanUpTurn();
 			this.checkWinner();
 			game.saveGame();	
